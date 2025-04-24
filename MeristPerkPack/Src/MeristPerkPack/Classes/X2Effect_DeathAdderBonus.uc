@@ -10,8 +10,8 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     XComGameState NewGameState)
 {
-    local XComGameState_Unit	TargetUnit;
-    local int					ExtraDamage;
+    local XComGameState_Unit    TargetUnit;
+    local int                   ExtraDamage;
 
     if (AbilityState.GetMyTemplateName() == 'M31_DeathAdder')
     {

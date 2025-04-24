@@ -779,8 +779,8 @@ static function X2AbilityTemplate SidewinderMove()
     CooldownEffect = new class'X2Effect_Persistent';
     CooldownEffect.EffectName = default.SidewinderCooldownEffectName;
     CooldownEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_Sidewinder_Cooldown"), false, true, false, eGameRule_PlayerTurnBegin);
-    CooldownEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, `GetLocalizedString("M31_PA_Sidewinder_CooldownText"), Template.IconImage,,, Template.AbilitySourceName);
-    Template.AddTargetEffect(ActionPointEffect);
+    CooldownEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_PA_Sidewinder_CooldownText"), Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(CooldownEffect);
 
     Template.bShowActivation = true;
 

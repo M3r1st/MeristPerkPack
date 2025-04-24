@@ -252,7 +252,7 @@ static function PatchTemplarShield(X2AbilityTemplate Template)
                 ShieldEffect = new class'X2Effect_MeristTemplarShield';
                 ShieldEffect.ShieldPriority = 100;
                 ShieldEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
-                ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+                // ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
                 Template.AbilityTargetEffects.InsertItem(i, ShieldEffect);
             }
         }
@@ -293,23 +293,23 @@ static function ChangeEffectDisplayInfo(X2AbilityTemplate Template)
 
 static function AddEffectsToGrenades()
 {
-    local X2ItemTemplateManager			ItemManager;
-    local array<name>					TemplateNames;
-    local array<X2DataTemplate>			TemplateAllDifficulties;
-    local X2DataTemplate				Template;
-    local X2GrenadeTemplate				GrenadeTemplate;
-    local X2Condition_AbilityProperty	AbilityCondition;
-    local name							TemplateName;
+    local X2ItemTemplateManager         ItemManager;
+    local array<name>                   TemplateNames;
+    local array<X2DataTemplate>         TemplateAllDifficulties;
+    local X2DataTemplate                Template;
+    local X2GrenadeTemplate             GrenadeTemplate;
+    local X2Condition_AbilityProperty   AbilityCondition;
+    local name                          TemplateName;
 
-    local X2Condition_UnitProperty		FriendCondition;
-    local X2Condition_UnitProperty		EnemyCondition;
-    local X2Condition_UnitProperty		OrganicCondition;
-    local X2Condition_UnitProperty		RobotCondition;
+    local X2Condition_UnitProperty      FriendCondition;
+    local X2Condition_UnitProperty      EnemyCondition;
+    local X2Condition_UnitProperty      OrganicCondition;
+    local X2Condition_UnitProperty      RobotCondition;
 
-    local X2Effect_Persistent			DisorientedEffect;
-    local X2Effect_Persistent			RobotocDisorientedEffect;
-    local X2Effect_Stunned				StunnedEffect;
-    local X2Effect_Persistent			BleedingEffect;
+    local X2Effect_Persistent           DisorientedEffect;
+    local X2Effect_Persistent           RobotocDisorientedEffect;
+    local X2Effect_Stunned              StunnedEffect;
+    local X2Effect_Persistent           BleedingEffect;
 
     FriendCondition = new class'X2Condition_UnitProperty';
     FriendCondition.ExcludeFriendlyToSource = false;

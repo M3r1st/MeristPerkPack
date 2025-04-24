@@ -69,9 +69,11 @@ function int GetAttackingDamageModifier(
         {
             Bonus += CritDamageBonus;
         }
+        
+        return Bonus;
     }
 
-    return Bonus;
+    return 0;
 }
 
 function int GetExtraArmorPiercing(

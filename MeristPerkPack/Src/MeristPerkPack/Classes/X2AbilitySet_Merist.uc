@@ -1160,9 +1160,9 @@ function bool SparkfireDamagePreview(XComGameState_Ability AbilityState, StateOb
 
 static function X2AbilityTemplate SuperheavyOrdnance()
 {
-    local X2AbilityTemplate							Template;
-    local X2Effect_SuperheavyOrdnanceRange			RangeEffect;
-    local XMBEffect_AddItemCharges					ChargesEffect;
+    local X2AbilityTemplate                     Template;
+    local X2Effect_SuperheavyOrdnanceRange      RangeEffect;
+    local XMBEffect_AddItemCharges              ChargesEffect;
 
     Template = Passive('M31_SuperheavyOrdnance', "img:///UILibrary_MZChimeraIcons.Ability_Barrage", false, true);
 
@@ -1240,6 +1240,31 @@ static function X2AbilityTemplate SuppressingFireAddActions()
     Effect.NumActionPoints = 1;
     Effect.PointType = class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint;
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SuppressingFireRemoveActions()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+
+    Template = SelfTargetTrigger('M31_SuppressingFire_Dummy', "img:///UILibrary_XPerkIconPack.UIPerk_suppression_shot_2");
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'M31_SuppressingFire_Suppress';
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    Trigger.ListenerData.Priority = 59;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.AllowedTypes.Length = 0;
+    ActionPointCost.AllowedTypes.AddItem(class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint);
+    Template.AbilityCosts.AddItem(ActionPointCost);
 
     return Template;
 }
