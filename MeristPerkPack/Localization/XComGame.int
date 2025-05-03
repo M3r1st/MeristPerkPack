@@ -266,7 +266,7 @@ LocFriendlyName="Caustic Terror"
 LocFriendlyName="Exsanguination"
 LocLongDescription="Your <Ability:BoundWeaponName_M31> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> Turn(s)."
 LocHelpText="Your <Ability:BoundWeaponName_M31> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> Turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:BoundWeaponName_M31> attacks.<br><Bullet> Damage based on max HP is reduced by half against Alien Rulers and the Chosen."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:BoundWeaponName_M31> attacks.<br><Bullet> Damage based on max HP is reduced by half against the Chosen and does not apply against the Alien Rulers."
 
 [M31_BleedingRounds_Attack X2AbilityTemplate]
 LocFriendlyName="Exsanguination"
@@ -275,7 +275,7 @@ LocFriendlyName="Exsanguination"
 LocFriendlyName="Bloodlet"
 LocLongDescription="Your <Ability:BoundWeaponName_M31> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> Turn(s)."
 LocHelpText="Your <Ability:BoundWeaponName_M31> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> Turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:BoundWeaponName_M31> attacks.<br><Bullet> Damage based on max HP is reduced by half against Alien Rulers and the Chosen."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:BoundWeaponName_M31> attacks.<br><Bullet> Damage based on max HP is reduced by half against the Chosen and does not apply against the Alien Rulers."
 
 [M31_Bloodlet_Attack X2AbilityTemplate]
 LocFriendlyName="Bloodlet"

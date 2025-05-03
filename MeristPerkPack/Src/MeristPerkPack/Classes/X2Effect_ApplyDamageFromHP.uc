@@ -14,7 +14,9 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
     TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID));
     if (TargetUnit != none)
     {
-        if (TargetUnit.IsChosen() || class'X2Helpers_DLC_Day60'.static.IsUnitAlienRuler(TargetUnit))
+        if (class'X2Helpers_DLC_Day60'.static.IsUnitAlienRuler(TargetUnit))
+            fDmgFromHP = 0;
+        else if (TargetUnit.IsChosen())
             fDmgFromHP = TargetUnit.GetMaxStat(eStat_HP) * fPrcDmg / 100 * 0.5;
         else
             fDmgFromHP = TargetUnit.GetMaxStat(eStat_HP) * fPrcDmg / 100;
@@ -35,7 +37,9 @@ function GetDamageBrackets(XComGameState_Unit SourceUnit, XComGameState_Unit Tar
 
     if (TargetUnit != none)
     {
-        if (TargetUnit.IsChosen() || class'X2Helpers_DLC_Day60'.static.IsUnitAlienRuler(TargetUnit))
+        if (class'X2Helpers_DLC_Day60'.static.IsUnitAlienRuler(TargetUnit))
+            fDmgFromHP = 0;
+        else if (TargetUnit.IsChosen())
             fDmgFromHP = TargetUnit.GetMaxStat(eStat_HP) * fPrcDmg / 100 * 0.5;
         else
             fDmgFromHP = TargetUnit.GetMaxStat(eStat_HP) * fPrcDmg / 100;
