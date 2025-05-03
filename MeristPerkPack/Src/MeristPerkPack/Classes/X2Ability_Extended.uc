@@ -236,7 +236,7 @@ static function AddActionPointCost(X2AbilityTemplate Template, EActionPointCost 
 // Helper function for creating an X2AbilityCost_ActionPoints.
 static function X2AbilityCost_ActionPoints ActionPointCost(EActionPointCost Cost)
 {
-    local X2AbilityCost_ActionPoints			AbilityCost;
+    local X2AbilityCost_ActionPoints AbilityCost;
 
     AbilityCost = new class'X2AbilityCost_ActionPoints';
     switch (Cost)

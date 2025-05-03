@@ -123,10 +123,10 @@ static function X2AbilityTemplate GlacialArmorTrigger()
 
 static function X2AbilityTemplate GlacialArmorCleanse()
 {
-    local X2AbilityTemplate						Template;
-    local X2AbilityTrigger_EventListener		EventListener;
-    local X2Effect_RemoveEffects				RemoveEffect;
-    local X2Condition_UnitEffects				RequireEffect;
+    local X2AbilityTemplate                     Template;
+    local X2AbilityTrigger_EventListener        EventListener;
+    local X2Effect_RemoveEffects                RemoveEffect;
+    local X2Condition_UnitEffects               RequireEffect;
 
     Template = Passive('M31_PA_WS_GlacialArmor_Cleanse', "img:///KetarosPkg_Abilities.UIPerk_punisher", false, false);
 

@@ -11,7 +11,7 @@ function GetToHitAsTargetModifiers(
 {
     local ShotModifierInfo	ModInfo;
 
-    if (Target.IsUnitAffectedByEffectName('AA_UnitIsBound'))
+    if (Target.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName))
     {
         ModInfo.ModType = eHit_Graze;
         ModInfo.Reason = FriendlyName;

@@ -1088,8 +1088,6 @@ static function X2AbilityTemplate Sparkfire()
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_Visibility            VisibilityCondition;
-    local X2Condition_UnitImmunities        UnitImmunityCondition;
-    local X2Effect_Burning                  BurningEffect;
     local X2Effect_TriggerEvent             InsanityEvent;
 
     Template = Attack('M31_Sparkfire', "img:///UILibrary_MZChimeraIcons.Ability_TargetGrenade", false, true);
@@ -1109,14 +1107,7 @@ static function X2AbilityTemplate Sparkfire()
     AddCooldown(Template, `GetConfigInt("M31_Sparkfire_Cooldown"));
     AddCharges(Template, `GetConfigInt("M31_Sparkfire_Charges"));
 
-    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
-    UnitImmunityCondition.AddExcludeDamageType('Fire');
-    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
-
-    BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(
-        `GetConfigInt("M31_Sparkfire_BurnDamage"), `GetConfigInt("M31_Sparkfire_BurnDamage_Spread"));
-    BurningEffect.TargetConditions.AddItem(UnitImmunityCondition);
-    Template.AddTargetEffect(BurningEffect);
+    Template.AddTargetEffect(CreateSparkfireBurningEffect());
 
     InsanityEvent = new class'X2Effect_TriggerEvent';
     InsanityEvent.TriggerEventName = class'X2Ability_PsiOperativeAbilitySet'.default.FuseEventName;
@@ -1127,6 +1118,22 @@ static function X2AbilityTemplate Sparkfire()
     Template.DamagePreviewFn = SparkfireDamagePreview;
 
     return Template;
+}
+
+static function X2Effect_Burning CreateSparkfireBurningEffect()
+{
+    local X2Condition_UnitImmunities        UnitImmunityCondition;
+    local X2Effect_Burning                  BurningEffect;
+
+    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+    UnitImmunityCondition.AddExcludeDamageType('Fire');
+    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
+
+    BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(
+        `GetConfigInt("M31_Sparkfire_BurnDamage"), `GetConfigInt("M31_Sparkfire_BurnDamage_Spread"));
+    BurningEffect.TargetConditions.AddItem(UnitImmunityCondition);
+
+    return BurningEffect;
 }
 
 function bool SparkfireDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
@@ -1160,9 +1167,9 @@ function bool SparkfireDamagePreview(XComGameState_Ability AbilityState, StateOb
 
 static function X2AbilityTemplate SuperheavyOrdnance()
 {
-    local X2AbilityTemplate							Template;
-    local X2Effect_SuperheavyOrdnanceRange			RangeEffect;
-    local XMBEffect_AddItemCharges					ChargesEffect;
+    local X2AbilityTemplate                     Template;
+    local X2Effect_SuperheavyOrdnanceRange      RangeEffect;
+    local XMBEffect_AddItemCharges              ChargesEffect;
 
     Template = Passive('M31_SuperheavyOrdnance', "img:///UILibrary_MZChimeraIcons.Ability_Barrage", false, true);
 
@@ -1240,6 +1247,31 @@ static function X2AbilityTemplate SuppressingFireAddActions()
     Effect.NumActionPoints = 1;
     Effect.PointType = class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint;
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SuppressingFireRemoveActions()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+
+    Template = SelfTargetTrigger('M31_SuppressingFire_Dummy', "img:///UILibrary_XPerkIconPack.UIPerk_suppression_shot_2");
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'M31_SuppressingFire_Suppress';
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    Trigger.ListenerData.Priority = 59;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.AllowedTypes.Length = 0;
+    ActionPointCost.AllowedTypes.AddItem(class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint);
+    Template.AbilityCosts.AddItem(ActionPointCost);
 
     return Template;
 }
@@ -1403,18 +1435,20 @@ static function X2AbilityTemplate AcidRoundsAttackPassive()
 static function X2AbilityTemplate AcidRoundsAttack()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_Burning                  AcidBurningEffect;
-
-    AcidBurningEffect = class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(
-        `GetConfigInt("M31_AcidRounds_BurnDamage"), `GetConfigInt("M31_AcidRounds_BurnSpread"));
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_AcidRounds_Attack',
         "img:///UILibrary_MZChimeraIcons.Grenade_Acid",
-        AcidBurningEffect
+        CreateAcidRoundsBurningEffect()
     );
 
     return Template;
+}
+
+static function X2Effect_Burning CreateAcidRoundsBurningEffect()
+{
+    return class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(
+        `GetConfigInt("M31_AcidRounds_BurnDamage"), `GetConfigInt("M31_AcidRounds_BurnDamage_Spread"));
 }
 
 static function X2AbilityTemplate BleedingRoundsAttackPassive()
@@ -1438,18 +1472,29 @@ static function X2AbilityTemplate BleedingRoundsAttackPassive()
 static function X2AbilityTemplate BleedingRoundsAttack()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_Persistent               BleedingEffect;
-
-    BleedingEffect = class'X2StatusEffects'.static.CreateBleedingStatusEffect(
-        `GetConfigInt("M31_BleedingRounds_BleedDuration"), `GetConfigInt("M31_BleedingRounds_BleedDamage"));
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_BleedingRounds_Attack',
         "img:///UILibrary_MZChimeraIcons.Ability_RendingSlash",
-        BleedingEffect
+        CreateBleedingRoundsBleedingEffect()
     );
 
     return Template;
+}
+
+static function X2Effect_Persistent CreateBleedingRoundsBleedingEffect()
+{
+
+    local X2Effect_Persistent BleedingEffect;
+    
+    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+        `GetConfigInt("M31_BleedingRounds_BleedDuration"),
+        `GetConfigInt("M31_BleedingRounds_BleedDamage"),
+        `GetConfigInt("M31_BleedingRounds_BleedDamage_Spread"),
+        `GetConfigFloat("M31_BleedingRounds_BleedDamage_Prc"));
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_BleedingRoundsBleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+
+    return BleedingEffect;
 }
 
 static function X2AbilityTemplate Bloodlet()
@@ -1473,18 +1518,45 @@ static function X2AbilityTemplate Bloodlet()
 static function X2AbilityTemplate BloodletAttack()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_Persistent               BleedingEffect;
-
-    BleedingEffect = class'X2StatusEffects'.static.CreateBleedingStatusEffect(
-        `GetConfigInt("M31_Bloodlet_BleedDuration"), `GetConfigInt("M31_Bloodlet_BleedDamage"));
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_Bloodlet_Attack',
         "img:///UILibrary_FavidsPerkPack.Perk_Ph_Bloodlet",
-        BleedingEffect
+        CreateBloodletBleedingEffect()
     );
 
     return Template;
+}
+
+static function X2Effect_Persistent CreateBloodletBleedingEffect()
+{
+    local X2Effect_Persistent BleedingEffect;
+    
+    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+        `GetConfigInt("M31_Bloodlet_BleedDuration"),
+        `GetConfigInt("M31_Bloodlet_BleedDamage"),
+        `GetConfigInt("M31_Bloodlet_BleedDamage_Spread"),
+        `GetConfigFloat("M31_Bloodlet_BleedDamage_Prc"));
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_BloodletBleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+
+    return BleedingEffect;
+}
+
+static function X2Effect_Persistent CreatePipeBombsBleedingEffect()
+{
+    local X2Effect_Persistent BleedingEffect;
+    
+    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+        `GetConfigInt("M31_Bloodlet_BleedDuration"),
+        `GetConfigInt("M31_Bloodlet_BleedDamage"),
+        `GetConfigInt("M31_Bloodlet_BleedDamage_Spread"),
+        `GetConfigFloat("M31_Bloodlet_BleedDamage_Prc"));
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_PipeBombsBleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+
+    return BleedingEffect;
+
+    return class'X2StatusEffects'.static.CreateBleedingStatusEffect(  
+        `GetConfigInt("M31_PipeBombs_BleedDuration"), `GetConfigInt("M31_PipeBombs_BleedDamage"));
 }
 
 static function X2AbilityTemplate ThermalShock()

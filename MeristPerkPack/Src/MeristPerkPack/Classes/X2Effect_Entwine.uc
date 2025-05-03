@@ -4,7 +4,7 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 {
     local ShotModifierInfo	ModInfo;
 
-    if (Target.IsUnitAffectedByEffectName('AA_UnitIsBound'))
+    if (Target.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName))
     {
         ModInfo.ModType = eHit_Success;
         ModInfo.Reason = FriendlyName;
@@ -15,15 +15,15 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-	local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo	ModInfo;
 
-	if (class'X2AbilitySet_PlayableAliens'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
-	{
-		ModInfo.ModType = eHit_Success;
-		ModInfo.Value = `GetConfigInt("M31_PA_Entwine_AimBonus");
-		ModInfo.Reason = FriendlyName;
-		ShotModifiers.AddItem(ModInfo);
-	}
+    if (class'X2AbilitySet_PlayableAliens'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
+    {
+        ModInfo.ModType = eHit_Success;
+        ModInfo.Value = `GetConfigInt("M31_PA_Entwine_AimBonus");
+        ModInfo.Reason = FriendlyName;
+        ShotModifiers.AddItem(ModInfo);
+    }
 }
 
 function int GetAttackingDamageModifier(

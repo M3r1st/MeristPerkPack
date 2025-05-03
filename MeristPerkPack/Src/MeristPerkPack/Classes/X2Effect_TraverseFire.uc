@@ -8,8 +8,8 @@ var name EventName;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-    local XComGameState_Unit		UnitState;
-    local Object					EffectObj;
+    local XComGameState_Unit        UnitState;
+    local Object                    EffectObj;
 
     EffectObj = EffectGameState;
     UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));

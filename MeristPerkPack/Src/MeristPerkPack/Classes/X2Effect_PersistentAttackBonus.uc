@@ -1,8 +1,8 @@
 class X2Effect_PersistentAttackBonus extends X2Effect_Persistent;
 
 struct PersistentAttackBonusInfo {
-    var int Damage;
-    var int CritDamage;
+    var float Damage;
+    var float CritDamage;
     var int Aim;
     var int Crit;
 };
@@ -130,7 +130,7 @@ function GetToHitModifiers(
     out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo AimInfo;
-	local ShotModifierInfo CritInfo;
+    local ShotModifierInfo CritInfo;
     local int AimBonus;
     local int CritBonus;
 
@@ -195,14 +195,14 @@ function int GetAttackingDamageModifier(
 }
 
 function float GetPostDefaultAttackingDamageModifier_CH(
-	XComGameState_Effect EffectState,
-	XComGameState_Unit SourceUnit,
-	Damageable Target,
+    XComGameState_Effect EffectState,
+    XComGameState_Unit SourceUnit,
+    Damageable Target,
     XComGameState_Ability AbilityState,
-	const out EffectAppliedData ApplyEffectParameters,
-	float CurrentDamage,
-	X2Effect_ApplyWeaponDamage WeaponDamageEffect,
-	XComGameState NewGameState) 
+    const out EffectAppliedData ApplyEffectParameters,
+    float CurrentDamage,
+    X2Effect_ApplyWeaponDamage WeaponDamageEffect,
+    XComGameState NewGameState) 
 {
     local XComGameState_Unit TargetUnit;
     local float DamageBonusPrc;

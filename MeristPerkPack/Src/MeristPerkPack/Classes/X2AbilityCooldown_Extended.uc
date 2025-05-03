@@ -71,5 +71,5 @@ simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState
         }
     }
 
-	return x;
+    return x;
 }
