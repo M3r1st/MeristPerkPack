@@ -269,5 +269,8 @@
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_Distance.uc" />
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_UnitValue.uc" />
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_Visibility.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ApplyDamageFromHP.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ApplyDamageFromHPWithRank.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ApplyDamageWithRank.uc" />
   </ItemGroup>
 </Project>

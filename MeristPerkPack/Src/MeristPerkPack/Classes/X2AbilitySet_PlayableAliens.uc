@@ -5,6 +5,7 @@ var config bool bLockjaw_AllowCrit;
 var config bool bViperBite_AllowCrit;
 var config bool bSpit_RequireVisibility;
 var config bool bPoisonSpit_DealsDamage;
+var config bool bPoisonSpit_AppliesPoisonToWorld;
 var config bool bFrostBreath_DealsDamage;
 var config bool bPersonalShield_AllowWhileDisoriented;
 var config bool bBayonetCharge_AllowWhileDisoriented;
@@ -58,7 +59,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(FrostSpit());
     Templates.AddItem(FrostbiteSpit());
     Templates.AddItem(FrostBreath());
-    Templates.AddItem(ViperDamageScaling());
+    // Templates.AddItem(ViperDamageScaling());
 
     Templates.AddItem(PersonalShield());
     Templates.AddItem(Aegis());
@@ -488,7 +489,7 @@ static function X2AbilityTemplate LockjawAttack()
     local X2AbilityTemplate                         Template;
     local X2AbilityToHitCalc_StandardMelee          ToHitCalc;
     local X2AbilityTrigger_EventListener            Trigger;
-    local X2Effect_ApplyWeaponDamage                PhysicalDamageEffect;
+    local X2Effect_ApplyDamageWithRank              PhysicalDamageEffect;
     local X2Effect_Persistent                       BladestormTargetEffect;
     local X2Condition_UnitEffectsWithAbilitySource	BladestormTargetCondition;
     local X2Condition_UnitProperty                  SourceNotConcealedCondition;
@@ -569,8 +570,10 @@ static function X2AbilityTemplate LockjawAttack()
     StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(1, 100, false);
     Template.AddTargetEffect(StunnedEffect);
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
     PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_Lockjaw_Damage");
+    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_DamagePerRank");
+    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank");
     PhysicalDamageEffect.HideVisualizationOfResultsAdditional.AddItem('AA_HitResultFailure');
     Template.AddTargetEffect(PhysicalDamageEffect);
     
@@ -600,7 +603,7 @@ static function X2AbilityTemplate LockjawAttack()
     Template.bFrameEvenWhenUnitIsHidden = true;
     Template.DefaultSourceItemSlot = eInvSlot_Unknown;
 
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
     return Template;
 }
@@ -643,10 +646,10 @@ static function X2AbilityTemplate RattleTrigger()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
-    local X2AbilityToHitCalc_PercentChance	PercentChanceToHit;
-    local X2AbilityMultiTarget_Radius		RadiusMultiTarget;
-    local X2Condition_UnitProperty			UnitPropertyCondition;
-    local X2Effect_Panicked					PanickedEffect;
+    local X2AbilityToHitCalc_PercentChance  PercentChanceToHit;
+    local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Effect_Panicked                 PanickedEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_Rattle_Trigger');
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -790,7 +793,7 @@ static function X2AbilityTemplate SidewinderMove()
 static function X2AbilityTemplate Slither()
 {
     local X2AbilityTemplate                 Template;
-    local X2AbilityCooldown					Cooldown;
+    local X2AbilityCooldown                 Cooldown;
     local X2Effect_PersistentStatChange     SlitherEffect;
     
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_Slither');
@@ -843,9 +846,9 @@ static function X2AbilityTemplate ViperBite()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
-    local X2AbilityTarget_MovingMelee_Extended  MeleeTarget;
-    local X2Condition_UnitProperty			UnitPropCondition;
-    local X2Effect_ApplyWeaponDamage        PhysicalDamageEffect;
+    local X2AbilityTarget_MovingMelee_Extended MeleeTarget;
+    local X2Condition_UnitProperty          UnitPropCondition;
+    local X2Effect_ApplyDamageWithRank      PhysicalDamageEffect;
     local X2AbilityCost_ActionPoints        ActionPointCost;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_ViperBite');
@@ -901,9 +904,11 @@ static function X2AbilityTemplate ViperBite()
     class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToTarget(Template);
     class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToTarget(Template);
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
     PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_ViperBite_Damage");
     PhysicalDamageEffect.EffectDamageValue.Rupture = `GetConfigInt("M31_PA_ViperBite_Rupture");
+    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_ViperBite_DamagePerRank");
+    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_ViperBite_CritDamagePerRank");
     Template.AddTargetEffect(PhysicalDamageEffect);
     
     Template.bSkipMoveStop = true;
@@ -923,7 +928,7 @@ static function X2AbilityTemplate ViperBite()
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
     return Template;
 }
@@ -934,7 +939,7 @@ static function X2AbilityTemplate PoisonSpit()
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
-    local X2Effect_ApplyWeaponDamage        DamageEffect;
+    local X2Effect_ApplyDamageWithRank      DamageEffect;
 
     Template = CreateViperSpitAbility('M31_PA_PoisonSpit', "img:///UILibrary_PerkIcons.UIPerk_viper_poisonspit");
 
@@ -959,16 +964,18 @@ static function X2AbilityTemplate PoisonSpit()
 
     if (default.bPoisonSpit_DealsDamage)
     {
-        DamageEffect = new class'X2Effect_ApplyWeaponDamage';
-        DamageEffect.bIgnoreBaseDamage = true;
+        DamageEffect = new class'X2Effect_ApplyDamageWithRank';
         DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_PoisonSpit_Damage");
+        DamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_PoisonSpit_DamagePerRank");
+        Template.AddMultiTargetEffect(DamageEffect);
     }
 
-    Template.AddMultiTargetEffect(DamageEffect);
+    if (default.bPoisonSpit_AppliesPoisonToWorld)
+    {
+        Template.AddMultiTargetEffect(new class'X2Effect_ApplyPoisonToWorld');
+    }
 
-    Template.AddMultiTargetEffect(new class'X2Effect_ApplyPoisonToWorld');
-
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
     Template.CustomFireAnim = 'HL_PoisonSpit';
 
@@ -1010,10 +1017,10 @@ static function X2AbilityTemplate BlindingPoison()
 static function X2AbilityTemplate FrostSpit()
 {
     local X2AbilityTemplate                 Template;	
-    local X2Condition_UnitImmunities		UnitImmunityCondition;
-    local X2AbilityCost_ActionPoints		ActionPointCost;
-    local X2AbilityCooldown					Cooldown;
-    local X2Effect_ApplyWeaponDamage		DamageEffect;
+    local X2Condition_UnitImmunities        UnitImmunityCondition;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2AbilityCooldown                 Cooldown;
+    local X2Effect_ApplyDamageWithRank      DamageEffect;
 
     Template = CreateViperSpitAbility('M31_PA_FrostSpit', "img:///UILibrary_PerkIcons.UIPerk_viper_poisonspit");
 
@@ -1035,15 +1042,14 @@ static function X2AbilityTemplate FrostSpit()
 
     class'BitterfrostHelper'.static.AddBitterfrostToMultiTarget(Template);
 
-    DamageEffect = new class'X2Effect_ApplyWeaponDamage';
-    DamageEffect.bIgnoreBaseDamage = true;
+    DamageEffect = new class'X2Effect_ApplyDamageWithRank';
     DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_FrostSpit_Damage");
-
+    DamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_FrostSpit_DamagePerRank");
     Template.AddMultiTargetEffect(DamageEffect);
 
     Template.CustomFireAnim = 'HL_FrostBite';
 
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     
     return Template;
 }
@@ -1069,7 +1075,7 @@ static function X2AbilityTemplate FrostBreath()
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
-    local X2Effect_ApplyWeaponDamage        DamageEffect;
+    local X2Effect_ApplyDamageWithRank      DamageEffect;
 
     Template = CreateViperSpitAbility('M31_PA_FrostBreath', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath");
 
@@ -1091,21 +1097,22 @@ static function X2AbilityTemplate FrostBreath()
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_FrostBreath_Cooldown");
     Template.AbilityCooldown = Cooldown;
 
+    AddCharges(Template, `GetConfigInt("M31_PA_FrostBreath_Charges"));
+
     Template.AddMultiTargetEffect(class'BitterfrostHelper'.static.FreezeEffect(false));
     Template.AddMultiTargetEffect(class'BitterfrostHelper'.static.FreezeCleanse(false));
 
     if (default.bFrostBreath_DealsDamage)
     {
-        DamageEffect = new class'X2Effect_ApplyWeaponDamage';
-        DamageEffect.bIgnoreBaseDamage = true;
+        DamageEffect = new class'X2Effect_ApplyDamageWithRank';
         DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_FrostBreath_Damage");
+        DamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_FrostBreath_DamagePerRank");
+        Template.AddMultiTargetEffect(DamageEffect);
     }
-
-    Template.AddMultiTargetEffect(DamageEffect);
 
     Template.CustomFireAnim = 'HL_FrostBite';
 
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
 
     return Template;
@@ -1686,7 +1693,7 @@ static function X2AbilityTemplate CripplingBlow()
     Template.AbilitySourceName = 'eAbilitySource_Perk';
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 
-    AddCooldown(Template, `GetConfigInt("M31_PA_CripplingBlowCooldown"));
+    AddCooldown(Template, `GetConfigInt("M31_PA_CripplingBlow_Cooldown"));
 
     Template.AbilityCosts.Length = 0;
     AddActionPointCost(Template, eCost_SingleConsumeAll);

@@ -91,16 +91,16 @@ LocFlyOverText="Vicious Bite"
 
 [M31_PA_PoisonSpit X2AbilityTemplate]
 LocFriendlyName="Poison Spit"
-LocLongDescription="Spit deadly venom that poisons any targets within the area and leaves a poison cloud. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
-LocHelpText="Spit deadly venom that poisons any targets within the area and leaves a poison cloud."
-LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> damage per turn.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> The poison is affected by Enhanced Poison and Blinding Poison."
+LocLongDescription="Spit deadly venom that poisons any targets within the area. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
+LocHelpText="Spit deadly venom that poisons any targets within the area."
+LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced by half against Alien Rulers and the Chosen.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> The poison is affected by Enhanced Poison and Blinding Poison."
 LocFlyOverText="Poison Spit"
 
 [M31_PA_EnhancedPoison X2AbilityTemplate]
 LocFriendlyName="Enhanced Poison"
 LocLongDescription="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
 LocHelpText="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
-LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> damage per turn.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
+LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced by half against Alien Rulers and the Chosen.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
 LocFlyOverText="Enhanced Poison"
 
 [M31_PA_BlindingPoison X2AbilityTemplate]
@@ -126,7 +126,7 @@ LocFlyOverText="Frostbite Spit"
 
 [M31_PA_FrostBreath X2AbilityTemplate]
 LocFriendlyName="Frost Breath"
-LocLongDescription="Project an icy blast at long range that freezes enemies in place. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
+LocLongDescription="Project an icy blast at long range that freezes enemies in place. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown and <Ability:SlefCharges_M31> charges per mission."
 LocHelpText="Project an icy blast at long range that freezes enemies in place."
 ; LocPromotionPopupText=""
 LocFlyOverText="Frost Breath"

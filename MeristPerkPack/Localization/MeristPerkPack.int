@@ -25,3 +25,9 @@ M31_ThermalShock_DebuffText                 = "Suffering from Thermal Shock. Aim
 M31_PA_CripplingBlow_DebuffText             = "The unit is crippled. Aim, mobility and dodge are reduced."
 
 M31_PA_Sidewinder_CooldownText              = "Sidewinder is unavailable."
+
+M31_PA_ViperPoison_DebuffText               = "The unit is poisoned. Its aim and mobility are reduced, and it takes <Ability:M31_PA_Poison_DamagePerTurn_Debuff> damage at the start of each turn."
+M31_PA_ViperEnhancedPoison_DebuffText       = "The unit is poisoned. Its aim and mobility are reduced, and it takes <Ability:M31_PA_EnhancedPoison_DamagePerTurn_Debuff> damage at the start of each turn."
+M31_BloodletBleeding_DebuffText             = "The unit is bleeding. It takes <Ability:M31_Bloodlet_BleedDamage_Debuff> damage at the start of each turn."
+M31_BleedingRoundsBleeding_DebuffText       = "The unit is bleeding. It takes <Ability:M31_BleedingRounds_BleedDamage_Debuff> damage at the start of each turn."
+M31_PipeBombsBleeding_DebuffText            = "The unit is bleeding. It takes <Ability:M31_PipeBombs_BleedDamage> damage at the start of each turn."
