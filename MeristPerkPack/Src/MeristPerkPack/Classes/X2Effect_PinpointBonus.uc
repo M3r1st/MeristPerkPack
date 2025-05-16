@@ -3,7 +3,8 @@ class X2Effect_PinpointBonus extends X2Effect_Persistent;
 function float GetPostDefaultAttackingDamageModifier_CH(
     XComGameState_Effect EffectState,
     XComGameState_Unit SourceUnit,
-    Damageable Target, XComGameState_Ability AbilityState,
+    Damageable Target,
+    XComGameState_Ability AbilityState,
     const out EffectAppliedData ApplyEffectParameters,
     float CurrentDamage,
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,

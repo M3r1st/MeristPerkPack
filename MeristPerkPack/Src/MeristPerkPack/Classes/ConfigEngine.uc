@@ -52,13 +52,13 @@ class ConfigEngine extends Object config(GameData_SoldierSkills) abstract;
 +Configs = (N = "SomeIntProperty", V = "20", Priority = 55)
 
 +Configs = (N = "SomeCostProperty",\\
-	Cost = (ResourceCosts[0] = (ItemTemplateName = "Supplies", Quantity = 48),\\
-			ResourceCosts[1] = (ItemTemplateName = "AlienAlloy", Quantity = 6),\\
-			ResourceCosts[2] = (ItemTemplateName = "EleriumDust", Quantity = 6)))
-			
+    Cost = (ResourceCosts[0] = (ItemTemplateName = "Supplies", Quantity = 48),\\
+            ResourceCosts[1] = (ItemTemplateName = "AlienAlloy", Quantity = 6),\\
+            ResourceCosts[2] = (ItemTemplateName = "EleriumDust", Quantity = 6)))
+            
 +Configs = (N = "SomeRequirementsProperty",\\
-	Requirements = (RequiredTechs[0] = "AutopsyArchon", RequiredEngineeringScore=20, bVisibleIfPersonnelGatesNotMet=true))
-	
+    Requirements = (RequiredTechs[0] = "AutopsyArchon", RequiredEngineeringScore=20, bVisibleIfPersonnelGatesNotMet=true))
+    
 */
 //=======================================================================================
 //                              GETTING CONFIG ENTRIES
@@ -86,126 +86,126 @@ IntArray = `GetConfigArrayInt("SomeIntArrayProperty");
 
 struct ConfigStruct
 {
-	// Config property name
-	var string				N; 
+    // Config property name
+    var string				N; 
 
-	// Properties
-	var string				V;	// Value of the property
-	var array<string>		VA; // Array of values (when appropriate)
-	var WeaponDamageValue	Damage;
-	var StrategyCost		Cost;
-	var StrategyRequirement	Requirements;
+    // Properties
+    var string				V;	// Value of the property
+    var array<string>		VA; // Array of values (when appropriate)
+    var WeaponDamageValue	Damage;
+    var StrategyCost		Cost;
+    var StrategyRequirement	Requirements;
 
-	var array<name>			RDLC;		// List of required modnames for this config entry to be considered
-	var int					Priority;	// Priority. If several config entries share the same name N, the entry with highest priority will be used. 
-										// If priority matches, the latest entry in config load order will be used.
-	structdefaultproperties
-	{
-		Priority = 50
-	}
+    var array<name>			RDLC;		// List of required modnames for this config entry to be considered
+    var int					Priority;	// Priority. If several config entries share the same name N, the entry with highest priority will be used. 
+                                        // If priority matches, the latest entry in config load order will be used.
+    structdefaultproperties
+    {
+        Priority = 50
+    }
 };
 var private config array<ConfigStruct> Configs;
 
 static final function ConfigStruct GetConfig(const coerce string ConfigName, optional bool bCanBeNull)
 {
-	local ConfigStruct ReturnConfig;
-	local ConfigStruct CycleConfig;
-	local ConfigStruct EmptyConfig;
+    local ConfigStruct ReturnConfig;
+    local ConfigStruct CycleConfig;
+    local ConfigStruct EmptyConfig;
 
-	foreach default.Configs(CycleConfig)
-	{
-		if (!class'Help'.static.AreModsActive(CycleConfig.RDLC))
-		{
-			continue;
-		}
-		if (CycleConfig.N == ConfigName && CycleConfig.Priority >= ReturnConfig.Priority)
-		{
-			ReturnConfig = CycleConfig;
-		}
-	}
+    foreach default.Configs(CycleConfig)
+    {
+        if (!class'Help'.static.AreModsActive(CycleConfig.RDLC))
+        {
+            continue;
+        }
+        if (CycleConfig.N == ConfigName && CycleConfig.Priority >= ReturnConfig.Priority)
+        {
+            ReturnConfig = CycleConfig;
+        }
+    }
 
-	if (ReturnConfig == EmptyConfig && !bCanBeNull)
-	{
-		`redscreen("WARNING :: Failed to find Config with N name:" @ ConfigName);
-		`redscreen(GetScriptTrace());
-	}
+    if (ReturnConfig == EmptyConfig && !bCanBeNull)
+    {
+        `redscreen("WARNING :: Failed to find Config with N name:" @ ConfigName);
+        `redscreen(GetScriptTrace());
+    }
 
-	return ReturnConfig;
+    return ReturnConfig;
 }
 
 static final function string GetConfigValue(const coerce string ConfigName)
 {
-	return GetConfig(ConfigName).V;
+    return GetConfig(ConfigName).V;
 }
 
 static final function bool GetConfigBool(const coerce string ConfigName)
 {
-	return bool(GetConfigValue(ConfigName));
+    return bool(GetConfigValue(ConfigName));
 }
 
 static final function int GetConfigInt(const coerce string ConfigName)
 {
-	return int(GetConfigValue(ConfigName));
+    return int(GetConfigValue(ConfigName));
 }
 
 static final function float GetConfigFloat(const coerce string ConfigName)
 {
-	return float(GetConfigValue(ConfigName));
+    return float(GetConfigValue(ConfigName));
 }
 
 static final function name GetConfigName(const coerce string ConfigName)
 {
-	return name(GetConfigValue(ConfigName));
+    return name(GetConfigValue(ConfigName));
 }
 
 static final function string GetConfigString(const coerce string ConfigName)
 {
-	return GetConfigValue(ConfigName);
+    return GetConfigValue(ConfigName);
 }
 
 static final function array<int> GetConfigArrayInt(const coerce string ConfigName)
 {
-	local array<string>	StringArray;
-	local array<int>	ReturnArray;
-	local int			Index;
+    local array<string>	StringArray;
+    local array<int>	ReturnArray;
+    local int			Index;
 
-	StringArray = GetConfig(ConfigName).VA;
-	for (Index = 0; Index < StringArray.Length; Index++)
-	{
-		ReturnArray.AddItem(int(StringArray[Index]));
-	}
+    StringArray = GetConfig(ConfigName).VA;
+    for (Index = 0; Index < StringArray.Length; Index++)
+    {
+        ReturnArray.AddItem(int(StringArray[Index]));
+    }
 
-	return ReturnArray;
+    return ReturnArray;
 }
 
 static final function array<float> GetConfigArrayFloat(const coerce string ConfigName)
 {
-	local array<string>	StringArray;
-	local array<float>	ReturnArray;
-	local int			Index;
+    local array<string>	StringArray;
+    local array<float>	ReturnArray;
+    local int			Index;
 
-	StringArray = GetConfig(ConfigName).VA;
-	for (Index = 0; Index < StringArray.Length; Index++)
-	{
-		ReturnArray.AddItem(float(StringArray[Index]));
-	}
+    StringArray = GetConfig(ConfigName).VA;
+    for (Index = 0; Index < StringArray.Length; Index++)
+    {
+        ReturnArray.AddItem(float(StringArray[Index]));
+    }
 
-	return ReturnArray;
+    return ReturnArray;
 }
 
 static final function array<name> GetConfigArrayName(const coerce string ConfigName, optional bool bCanBeNull)
 {
-	local array<string>	StringArray;
-	local array<name>	ReturnArray;
-	local int			Index;
+    local array<string>	StringArray;
+    local array<name>	ReturnArray;
+    local int			Index;
 
-	StringArray = GetConfig(ConfigName, bCanBeNull).VA;
-	for (Index = 0; Index < StringArray.Length; Index++)
-	{
-		ReturnArray.AddItem(name(StringArray[Index]));
-	}
+    StringArray = GetConfig(ConfigName, bCanBeNull).VA;
+    for (Index = 0; Index < StringArray.Length; Index++)
+    {
+        ReturnArray.AddItem(name(StringArray[Index]));
+    }
 
-	return ReturnArray;
+    return ReturnArray;
 }
 
 static final function WeaponDamageValue GetConfigDamage(const coerce string ConfigName)
