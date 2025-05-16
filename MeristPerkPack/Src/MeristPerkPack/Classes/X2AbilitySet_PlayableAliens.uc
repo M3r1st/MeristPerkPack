@@ -490,7 +490,6 @@ static function X2AbilityTemplate LockjawAttack()
     local X2AbilityTemplate                         Template;
     local X2AbilityToHitCalc_StandardMelee          ToHitCalc;
     local X2AbilityTrigger_EventListener            Trigger;
-    local X2Effect_ApplyDamageWithRank              PhysicalDamageEffect;
     local X2Effect_Persistent                       BladestormTargetEffect;
     local X2Condition_UnitEffectsWithAbilitySource	BladestormTargetCondition;
     local X2Condition_UnitProperty                  SourceNotConcealedCondition;
@@ -571,12 +570,7 @@ static function X2AbilityTemplate LockjawAttack()
     StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(1, 100, false);
     Template.AddTargetEffect(StunnedEffect);
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
-    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_Lockjaw_Damage");
-    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_DamagePerRank");
-    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank");
-    PhysicalDamageEffect.HideVisualizationOfResultsAdditional.AddItem('AA_HitResultFailure');
-    Template.AddTargetEffect(PhysicalDamageEffect);
+    Template.AddTargetEffect(GetLockjawDamageEffect());
     
     BladestormTargetEffect = new class'X2Effect_Persistent';
     BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
@@ -607,6 +601,19 @@ static function X2AbilityTemplate LockjawAttack()
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
     return Template;
+}
+
+static function X2Effect_ApplyDamageWithRank GetLockjawDamageEffect()
+{
+    local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
+
+    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
+    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_Lockjaw_Damage");
+    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_DamagePerRank");
+    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank");
+    PhysicalDamageEffect.HideVisualizationOfResultsAdditional.AddItem('AA_HitResultFailure');
+
+    return PhysicalDamageEffect;
 }
 
 static function EventListenerReturn LockjawConcealmentListener(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
