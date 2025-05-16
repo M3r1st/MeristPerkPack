@@ -10,11 +10,17 @@ function GetToHitAsTargetModifiers(
     out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo	ModInfo;
+    local int CritResistance;
 
-    ModInfo.ModType = eHit_Crit;
-    ModInfo.Reason = FriendlyName;
-    ModInfo.Value = -1 * `GetConfigInt("M31_PA_WS_ReinforcedScales_CritResistance");
-    ShotModifiers.AddItem(ModInfo);
+    CritResistance = `GetConfigInt("M31_PA_WS_ReinforcedScales_CritResistance");
+
+    if (CritResistance != 0)
+    {
+        ModInfo.ModType = eHit_Crit;
+        ModInfo.Reason = FriendlyName;
+        ModInfo.Value = -1 * CritResistance;
+        ShotModifiers.AddItem(ModInfo);
+    }
 }
 
 function int GetDefendingDamageModifier(
@@ -27,10 +33,5 @@ function int GetDefendingDamageModifier(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     optional XComGameState NewGameState)
 {
-    if (CurrentDamage >= `GetConfigInt("M31_PA_WS_ReinforcedScales_DamageReduction"))
-    {
-        return -1 * `GetConfigInt("M31_PA_WS_ReinforcedScales_DamageReduction");
-    }
-
-    return 0;
+    return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_ReinforcedScales_DamageReduction"));
 }

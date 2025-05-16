@@ -1,5 +1,7 @@
 class X2Effect_WS_BoltBonus extends X2Effect_Persistent;
 
+var array<name> AllowedAbilities;
+
 protected function bool IsSourceWeaponBallista(const XComGameState_Ability AbilityState)
 {
     local name ItemTemplateName;

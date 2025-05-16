@@ -1,0 +1,11 @@
+[M31_PA_WS_Hide X2AbilityTemplate]
+LocFriendlyName="Sentinel's Hide"
+LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
+LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
+; LocPromotionPopupText=""
+
+[M31_PA_WS_NorthernWinds X2AbilityTemplate]
+LocFriendlyName="Northern Winds"
+LocLongDescription="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> frost damage and a stack of bitterfrost."
+LocHelpText="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> frost damage and a stack of bitterfrost."
+LocPromotionPopupText="<Bullet> Deals frost damage and ignores armor.<br><Bullet> Requires line of sight: <Ability:M31_PA_WS_NorthernWinds_bRequireVisibility>.<br><Bullet> Works while burning: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileBurning>.<br><Bullet> Works while concealed: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileConcealed>.<br><Bullet> If <font color='#1abc9c'>Northern Winds</font> affect any enemy while <Ability:ClassName> is concealed, their concealment will be broken.<br><Bullet> Reduces the electricity bill for AC usage on the Avenger."

@@ -1,0 +1,1 @@
+class X2Effect_WS_BoltBonus_Rupture extends X2Effect_WS_BoltBonus;

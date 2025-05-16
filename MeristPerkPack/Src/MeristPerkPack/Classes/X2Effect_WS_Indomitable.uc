@@ -1,4 +1,4 @@
-class X2Effect_WS_Hide extends X2Effect_Persistent;
+class X2Effect_WS_Indomitable extends X2Effect_PersistentStatChange;
 
 function int GetDefendingDamageModifier(
     XComGameState_Effect EffectState,
@@ -10,5 +10,5 @@ function int GetDefendingDamageModifier(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     optional XComGameState NewGameState)
 {
-    return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_Hide_DamageReduction"));
+    return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_Indomitable_DamageReduction"));
 }
