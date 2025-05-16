@@ -50,6 +50,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(SupplyPack());
     Templates.AddItem(SuppressingFire());
         Templates.AddItem(SuppressingFireAddActions());
+        Templates.AddItem(SuppressingFireRemoveActions());
     Templates.AddItem(Suppression());
     Templates.AddItem(TrainedSniper_Squadsight());
     Templates.AddItem(TrainedSniper_LongWatch());
@@ -135,7 +136,7 @@ static function X2AbilityTemplate AlphaStrike()
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2Effect_GrantActionPoints        ActionPointEffect;
-    local X2AbilityMultiTarget_Radius		RadiusMultiTarget;
+    local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
 
     Template = SelfTargetActivated('M31_AlphaStrike', "img:///UILibrary_MZChimeraIcons.Ability_Dash", false);
 
@@ -1187,7 +1188,7 @@ static function X2AbilityTemplate SuperheavyOrdnance()
 
 static function X2AbilityTemplate SupplyPack()
 {
-    local X2AbilityTemplate										Template;
+    local X2AbilityTemplate                 Template;
 
     Template = Passive('M31_SupplyPack', "img:///IRIDenmotherUI.UIPerk_SupplyRun", false, false);
 
@@ -1223,6 +1224,7 @@ static function X2AbilityTemplate SuppressingFire()
     Template.PostActivationEvents.AddItem('M31_SuppressingFire_Suppress');
 
     Template.AdditionalAbilities.AddItem('M31_SuppressingFire_Trigger');
+    Template.AdditionalAbilities.AddItem('M31_SuppressingFire_Dummy');
 
     return Template;
 }
