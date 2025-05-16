@@ -52,6 +52,7 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(SidewinderMove());
     Templates.AddItem(Slither());
     Templates.AddItem(ViperBite());
+    Templates.AddItem(IronskinBite());
 
     Templates.AddItem(PoisonSpit());
         Templates.AddItem(EnhancedPoison());
@@ -930,6 +931,60 @@ static function X2AbilityTemplate ViperBite()
 
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
+    return Template;
+}
+
+static function X2AbilityTemplate IronskinBite()
+{
+    local X2AbilityTemplate                         Template;
+    local X2Condition_UnitProperty                  UnitPropertyCondition;
+    local X2Effect_RemoveEffects                    RemoveEffect;
+    local X2Effect_PersonalShield                   Effect;
+
+    Template = SelfTargetActivated('M31_PA_IronskinBite', "img:///UILibrary_LW_PerkPack.LW_AbilityIronSkin", false);
+
+    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
+    Template.AddShooterEffectExclusions();
+
+    AddActionPointCost(Template, eCost_Single);
+    AddCooldown(Template, `GetConfigInt("M31_PA_IronskinBite_Cooldown"));
+    AddCharges(Template, `GetConfigInt("M31_PA_IronskinBite_Charges"));
+
+    Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeHostileToSource = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = false;
+    UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = 144;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    Template.bSkipFireAction = false;
+    Template.CustomFireAnim = 'FF_Melee_FnekA';
+    Template.bShowActivation = true;
+
+    RemoveEffect = new class'X2Effect_RemoveEffects';
+    RemoveEffect.EffectNamesToRemove.AddItem('M31_PA_IronskinBite_Buff');
+    RemoveEffect.bDoNotVisualize = true;
+    Template.AddTargetEffect(RemoveEffect);
+
+    Effect = new class'X2Effect_PersonalShield';
+    Effect.EffectName = 'M31_PA_IronskinBite_Buff';
+    Effect.ShieldAmountBase = `GetConfigInt("M31_PA_IronskinBite_ShieldAmount");
+    Effect.ShieldPriority = `GetConfigInt("M31_PA_IronskinBite_ShieldPriority");
+    Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_IronskinBite_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Shield_BonusText"), Template.IconImage,, , Template.AbilitySourceName);
+    Effect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
+    Template.AddTargetEffect(Effect);
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentNormalLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
+
+    Template.AdditionalAbilities.AddItem('ViperMelee_Animation');
+    
     return Template;
 }
 

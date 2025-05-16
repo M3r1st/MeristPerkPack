@@ -89,6 +89,14 @@ LocHelpText="Bite any enemy within blue movement range. Applies poison and <Abil
 LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_ViperBite_Damage> points of damage and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Can crit for +<Ability:M31_PA_ViperBite_CritDamage> damage.<br><Bullet> Vicious Bite has innate +<Ability:M31_PA_ViperBite_AimBonus> aim and +<Ability:M31_PA_ViperBite_CritBonus> critical chance.<br><Bullet> The poison is the same as Poison Spit's and is affected by Enhanced Poison and Blinding Poison.<br><Bullet> Cannot target robots and environmental objects."
 LocFlyOverText="Vicious Bite"
 
+[M31_PA_IronskinBite X2AbilityTemplate]
+LocFriendlyName="Ironskin Bite"
+LocLongDescription="Not-so-gently bite an adjacent friendly unit, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> Turn(s). Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown. Cannot target robots."
+LocHelpText="Bite an adjacent friendly unit, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> Turn(s)."
+LocPromotionPopupText="<Bullet> Shield priority: <Ability:M31_PA_IronskinBite_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
+LocFlyOverText="Ironskin Bite"
+
+
 [M31_PA_PoisonSpit X2AbilityTemplate]
 LocFriendlyName="Poison Spit"
 LocLongDescription="Spit deadly venom that poisons all targets within the area. Does not leave a cloud. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
