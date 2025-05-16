@@ -1294,11 +1294,11 @@ static function X2DataTemplate PersonalShield()
     Effect = new class'X2Effect_PersonalShield';
     Effect.EffectName = 'M31_PA_PersonalShield';
     Effect.ShieldAmount = `GetConfigArrayInt("M31_PA_PersonalShield_ShieldAmount");
-    Effect.ShieldPriority = 20;
+    Effect.ShieldPriority = `GetConfigInt("M31_PA_PersonalShield_ShieldPriority");
     Effect.bGetShieldAmountFromArmor = true;
     Effect.AddAdditionalShieldAmount('M31_PA_HardenedShield', `GetConfigInt("M31_PA_HardenedShield_ShieldAmount"));
     Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_PersonalShield_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
-    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Shield_BonusText"), Template.IconImage,, , Template.AbilitySourceName);
     Effect.EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization;
     Template.AddTargetEffect(Effect);
 
