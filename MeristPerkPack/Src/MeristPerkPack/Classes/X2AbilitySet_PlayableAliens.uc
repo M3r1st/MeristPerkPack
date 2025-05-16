@@ -1105,6 +1105,7 @@ static function X2AbilityTemplate FrostSpit()
     Template.CustomFireAnim = 'HL_FrostBite';
 
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
+    Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
     
     return Template;
 }
