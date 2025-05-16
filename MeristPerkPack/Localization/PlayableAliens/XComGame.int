@@ -86,21 +86,21 @@ LocFlyOverText="Slither"
 LocFriendlyName="Vicious Bite"
 LocLongDescription="Bite any enemy within blue movement range. Deals <Ability:M31_PA_ViperBite_Damage> points of damage and applies poison and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown. Cannot target robots and environmental objects."
 LocHelpText="Bite any enemy within blue movement range. Applies poison and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Cannot target robots."
-LocPromotionPopupText="Deals <Ability:M31_PA_ViperBite_Damage> points of damage and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Can crit for +<Ability:M31_PA_ViperBite_CritDamage> damage.<br><Bullet> Vicious Bite has innate +<Ability:M31_PA_ViperBite_AimBonus> aim and +<Ability:M31_PA_ViperBite_CritBonus> critical chance.<br><Bullet> The poison is the same as Poison Spit's and is affected by Enhanced Poison and Blinding Poison.<br><Bullet> Cannot target robots and environmental objects."
+LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_ViperBite_Damage> points of damage and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Can crit for +<Ability:M31_PA_ViperBite_CritDamage> damage.<br><Bullet> Vicious Bite has innate +<Ability:M31_PA_ViperBite_AimBonus> aim and +<Ability:M31_PA_ViperBite_CritBonus> critical chance.<br><Bullet> The poison is the same as Poison Spit's and is affected by Enhanced Poison and Blinding Poison.<br><Bullet> Cannot target robots and environmental objects."
 LocFlyOverText="Vicious Bite"
 
 [M31_PA_PoisonSpit X2AbilityTemplate]
 LocFriendlyName="Poison Spit"
 LocLongDescription="Spit deadly venom that poisons all targets within the area. Does not leave a cloud. Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
 LocHelpText="Spit deadly venom that poisons any targets within the area. Does not leave a cloud."
-LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced by half against the Chosen and does not apply against the Alien Rulers.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> The poison is affected by Enhanced Poison and Blinding Poison."
+LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> The poison is affected by Enhanced Poison and Blinding Poison."
 LocFlyOverText="Poison Spit"
 
 [M31_PA_EnhancedPoison X2AbilityTemplate]
 LocFriendlyName="Enhanced Poison"
 LocLongDescription="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
 LocHelpText="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
-LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced by half against the Chosen and does not apply against the Alien Rulers.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
+LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
 LocFlyOverText="Enhanced Poison"
 
 [M31_PA_BlindingPoison X2AbilityTemplate]

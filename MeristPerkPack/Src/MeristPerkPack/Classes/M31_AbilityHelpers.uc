@@ -129,13 +129,15 @@ static function X2Effect_PersistentStatChange CreatePoisonedEffect()
     PersistentStatChangeEffect.TargetConditions.AddItem(UnitPropertyCondition);
 
     DamageEffect = new class'X2Effect_ApplyDamageFromHPWithRank';
-    DamageEffect.EffectDamageValue.DamageType = 'Poison';
     DamageEffect.EffectDamageValue.Damage = `GetConfigInt("M31_PA_Poison_DamagePerTurn");
     DamageEffect.EffectDamageValue.Spread = `GetConfigInt("M31_PA_Poison_DamagePerTurn_Spread");
     DamageEffect.fPrcDmg = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc");
     DamageEffect.fPrcDmgPerRank = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_PerRank");
     DamageEffect.fBaseDmgPerRank = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_PerRank");
+    DamageEffect.fPrcDamage_RulerMultiplier = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_RulerMult");
+    DamageEffect.fPrcDamage_ChosenMultiplier = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_ChosenMult");
     DamageEffect.bCeiling = true;
+    DamageEffect.EffectDamageValue.DamageType = 'Poison';
 
     DamageEffect.DamageTypes.AddItem('Poison');
     DamageEffect.bIgnoreBaseDamage = true;
@@ -188,13 +190,15 @@ static function X2Effect_PersistentStatChange CreateEnhancedPoisonedEffect()
     PersistentStatChangeEffect.TargetConditions.AddItem(UnitPropertyCondition);
 
     DamageEffect = new class'X2Effect_ApplyDamageFromHPWithRank';
-    DamageEffect.EffectDamageValue.DamageType = 'Poison';
     DamageEffect.EffectDamageValue.Damage = `GetConfigInt("M31_PA_EnhancedPoison_DamagePerTurn");
     DamageEffect.EffectDamageValue.Spread = `GetConfigInt("M31_PA_EnhancedPoison_DamagePerTurn_Spread");
     DamageEffect.fPrcDmg = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc");
     DamageEffect.fPrcDmgPerRank = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_PerRank");
     DamageEffect.fBaseDmgPerRank = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_PerRank");
+    DamageEffect.fPrcDamage_RulerMultiplier = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_RulerMult");
+    DamageEffect.fPrcDamage_ChosenMultiplier = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_ChosenMult");
     DamageEffect.bCeiling = true;
+    DamageEffect.EffectDamageValue.DamageType = 'Poison';
 
     DamageEffect.DamageTypes.AddItem('Poison');
     DamageEffect.bIgnoreBaseDamage = true;
@@ -308,11 +312,11 @@ static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int
     PersistentEffect.TargetConditions.AddItem(UnitPropCondition);
 
     DamageEffect = new class'X2Effect_ApplyDamageFromHP';
-    DamageEffect.EffectDamageValue.DamageType = 'Bleeding';
     DamageEffect.EffectDamageValue.Damage = BleedDamage;
     DamageEffect.EffectDamageValue.Spread = BleedDamageSpread;
     DamageEffect.fPrcDmg = BleedDamagePrc;
     DamageEffect.bCeiling = true;
+    DamageEffect.EffectDamageValue.DamageType = 'Bleeding';
 
     DamageEffect.DamageTypes.AddItem('Bleeding');
     DamageEffect.bIgnoreBaseDamage = true;
@@ -339,7 +343,7 @@ static function AddAdjacencyCondition(out X2AbilityTemplate Template)
 static function X2AbilityTemplate CreateAnimSetPassive(name TemplateName, string AnimSetPath)
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_AdditionalAnimSets        AnimSetEffect;
+    local X2Effect_AdditionalAnimSets       AnimSetEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 
