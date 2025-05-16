@@ -4,6 +4,10 @@ M31_DefaultWeapon                           = "weapon"
 
 M31_PerRank                                 = "per rank"
 
+M31_FreeAction                              = "Free action."
+
+M31_Shield_BonusText                        = "Shield remaining: <Ability:M31_ShieldRemaining>.<br>Shield priority: <Ability:M31_ShieldPriority>."
+
 M31_CA_Escalation_BonusText                 = "While Escalation is active, gain +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
 
 M31_CA_KillingSpree_BonusText               = "+<Ability:M31_CA_KillingSpree_DamageBonus> damage, +<Ability:M31_CA_KillingSpree_CritBonus> critical chance."

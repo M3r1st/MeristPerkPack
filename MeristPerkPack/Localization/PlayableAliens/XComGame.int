@@ -138,7 +138,7 @@ LocFriendlyName="Rank"
 LocFriendlyName="Personal Shield"
 LocLongDescription="Activate to gain <Ability:M31_PA_PersonalShield_ShieldAmount> points of ablative HP for <Ability:M31_PA_PersonalShield_Duration> Turn(s). Costs a single action and doesn't end the turn. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
 LocHelpText="Gain bonus ablative HP for <Ability:M31_PA_PersonalShield_Duration> Turn(s)."
-LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level."
+LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_PA_IronskinBite_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
 LocFlyOverText="Personal Shield"
 
 [M31_PA_Aegis X2AbilityTemplate]

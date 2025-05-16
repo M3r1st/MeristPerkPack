@@ -31,7 +31,7 @@ LocPromotionPopupText="<Bullet> Combat Presence can be used to get squadmates ou
 
 [M31_Botnet X2AbilityTemplate]
 LocFriendlyName="Botnet"
-LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> Turn(s). Has a <Ability:SelfCooldown_M31> Turn(s) cooldown. Free action."
+LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> Turn(s). Has a <Ability:SelfCooldown_M31> Turn(s) cooldown. <Ability:M31_FreeAction>"
 LocHelpText="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> Turn(s)."
 LocPromotionPopupText="<Bullet> Lasts for <Ability:M31_Botnet_Duration> Turn(s).<br><Bullet> Your squad's standard shots permanently reduce target's hack defense by <Ability:M31_Botnet_HackDefenseChange>.<br><Bullet> Hack defense reduction can stack.<br><Bullet> Botnet has a <Ability:SelfCooldown_M31> Turn(s) cooldown.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up, Pistol Shot and Snap Shot."
 LocFlyOverText="Botnet"
@@ -169,8 +169,8 @@ LocHelpText="Your damaging grenades inflict bleeding, dealing <Ability:M31_PipeB
 
 [M31_Relentless X2AbilityTemplate]
 LocFriendlyName="Relentless"
-LocLongDescription="Once per turn, gain an additional move action after taking a standard shot with your <Ability:BoundWeaponName_M31>."
-LocHelpText="Once per turn, gain an additional move action after taking a standard shot with your <Ability:BoundWeaponName_M31>."
+LocLongDescription="Once per turn, gain an additional movement action after taking a standard shot with your <Ability:BoundWeaponName_M31>."
+LocHelpText="Once per turn, gain an additional movement action after taking a standard shot with your <Ability:BoundWeaponName_M31>."
 LocPromotionPopupText="<Bullet> Can activate once per turn.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up and Pistol Shot."
 LocFlyOverText="Relentless"
 
