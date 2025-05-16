@@ -23,9 +23,9 @@ LocFlyOverText="Ambush"
 
 [M31_PA_Coil X2AbilityTemplate]
 LocFriendlyName="Coil"
-LocLongDescription="The <Ability:ClassName> coils its body tightly, increasing its defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>, and gaining an extra action on the next turn. Only works in cover. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
-LocHelpText="Increase defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>, and gain an extra action on the next turn. Only works in cover."
-LocPromotionPopupText="<Bullet> Additionaly, the first non-movement action you take on the next turn will not be turn-ending.<br><Bullet> Coil has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
+LocLongDescription="The <Ability:ClassName> coils its body tightly, increasing its defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>, and gaining an extra action on the next turn. The first non-movement action you take on the next turn will not be turn-ending. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
+LocHelpText="Increase defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>, and gain an extra action on the next turn. The first non-movement action you take on the next turn will not be turn-ending."
+LocPromotionPopupText="<Bullet> Can be used without cover, but defense and dodge bonuses won't apply against flanking shots.<br><Bullet> Coil has a <Ability:SelfCooldown_M31> Turn(s) cooldown."
 LocFlyOverText="Coil"
 
 [M31_PA_Entwine X2AbilityTemplate]

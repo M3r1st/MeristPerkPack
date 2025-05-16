@@ -279,12 +279,12 @@ static function X2AbilityTemplate Coil()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityCost_ActionPoints        ActionPointCost;
-    local X2AbilityCooldown					Cooldown;
+    local X2AbilityCooldown                 Cooldown;
     local X2Condition_UnitProperty          PropertyCondition;
-    local X2Condition_UnitEffects			EffectsCondition;
+    local X2Condition_UnitEffects           EffectsCondition;
     local X2AbilityTrigger_PlayerInput      InputTrigger;
     local array<name>                       SkipExclusions;
-    local X2Effect_HunkerDown_LW			HunkerDownEffect;
+    local X2Effect_HunkerDown_LW            HunkerDownEffect;
     
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_Coil');
     // img:///UILibrary_PerkIcons.UIPerk_takecover
@@ -308,7 +308,7 @@ static function X2AbilityTemplate Coil()
     PropertyCondition = new class'X2Condition_UnitProperty';	
     PropertyCondition.ExcludeDead = true;                           // Can't hunkerdown while dead
     PropertyCondition.ExcludeFriendlyToSource = false;              // Self targeted
-    PropertyCondition.ExcludeNoCover = true;                        // Unit must be in cover.
+    // PropertyCondition.ExcludeNoCover = true;                        // Unit must be in cover.
     Template.AbilityShooterConditions.AddItem(PropertyCondition);
 
     EffectsCondition = new class'X2Condition_UnitEffects';
