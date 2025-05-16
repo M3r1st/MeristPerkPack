@@ -14,11 +14,11 @@ class Help extends Object abstract;
 
 static final function CreateAndSubmitGameState()
 {
-	local XComGameState NewGameState;
+    local XComGameState NewGameState;
 
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Optional Debug Comment");
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Optional Debug Comment");
 
-	`GAMERULES.SubmitGameState(NewGameState);
+    `GAMERULES.SubmitGameState(NewGameState);
 }
 
 //=======================================================================================
@@ -111,9 +111,9 @@ History = `XCOMHISTORY;
 foreach UnitState.AffectedByEffects(EffectRef)
 {
     EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
-	if (EffectState == none || EffectState.bRemoved)
-		continue;
-		
+    if (EffectState == none || EffectState.bRemoved)
+        continue;
+        
     // Do stuff with EffectState
 }
 
@@ -220,76 +220,76 @@ static final function bool UnitHasItemEquipped(const XComGameState_Unit UnitStat
 
 static final function int TileDistanceBetweenUnitAndTile(const XComGameState_Unit UnitState, const TTile TileLocation)
 {
-	local XComWorldData WorldData;
-	local vector UnitLoc, TargetLoc;
-	local float Dist;
-	local int Tiles;
+    local XComWorldData WorldData;
+    local vector UnitLoc, TargetLoc;
+    local float Dist;
+    local int Tiles;
 
-	if (UnitState.TileLocation == TileLocation)
-		return 0;
+    if (UnitState.TileLocation == TileLocation)
+        return 0;
 
-	WorldData = `XWORLD;
-	UnitLoc = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
-	TargetLoc = WorldData.GetPositionFromTileCoordinates(TileLocation);
-	Dist = VSize(UnitLoc - TargetLoc);
-	Tiles = Dist / WorldData.WORLD_StepSize;
+    WorldData = `XWORLD;
+    UnitLoc = WorldData.GetPositionFromTileCoordinates(UnitState.TileLocation);
+    TargetLoc = WorldData.GetPositionFromTileCoordinates(TileLocation);
+    Dist = VSize(UnitLoc - TargetLoc);
+    Tiles = Dist / WorldData.WORLD_StepSize;
 
-	return Tiles;
+    return Tiles;
 }
 
 // Calculate Tile Distance Between Tiles
 static final function int GetTileDistanceBetweenTiles(const TTile TileA, const TTile TileB) 
 {
-	local XComWorldData WorldData;
-	local vector LocA;
-	local vector LocB;
-	local float Dist;
-	local int TileDistance;
+    local XComWorldData WorldData;
+    local vector LocA;
+    local vector LocB;
+    local float Dist;
+    local int TileDistance;
 
-	WorldData = `XWORLD;
-	LocA = WorldData.GetPositionFromTileCoordinates(TileA);
-	LocB = WorldData.GetPositionFromTileCoordinates(TileB);
+    WorldData = `XWORLD;
+    LocA = WorldData.GetPositionFromTileCoordinates(TileA);
+    LocB = WorldData.GetPositionFromTileCoordinates(TileB);
 
-	Dist = VSize(LocA - LocB);
-	TileDistance = Dist / WorldData.WORLD_StepSize;
-	
-	return TileDistance;
+    Dist = VSize(LocA - LocB);
+    TileDistance = Dist / WorldData.WORLD_StepSize;
+    
+    return TileDistance;
 }
 
 // Rank = 0 for Squaddie
 // Note: ModifyEarnedSoldierAbilities DLC hook is usually better for non-temporary ability granting.
 static function GiveSoldierAbilityToUnit(const name AbilityName, const int Rank, XComGameState_Unit UnitState, XComGameState NewGameState)
 {	
-	local SoldierClassAbilityType AbilityStruct;
-	local int Index;
+    local SoldierClassAbilityType AbilityStruct;
+    local int Index;
 
-	AbilityStruct.AbilityName = AbilityName;
-	UnitState.AbilityTree[Rank].Abilities.AddItem(AbilityStruct);
+    AbilityStruct.AbilityName = AbilityName;
+    UnitState.AbilityTree[Rank].Abilities.AddItem(AbilityStruct);
 
-	Index = UnitState.AbilityTree[Rank].Abilities.Length - 1;
+    Index = UnitState.AbilityTree[Rank].Abilities.Length - 1;
 
-	UnitState.BuySoldierProgressionAbility(NewGameState, Rank, Index, 0); // 0 = ability points cost
+    UnitState.BuySoldierProgressionAbility(NewGameState, Rank, Index, 0); // 0 = ability points cost
 }
 
 static final function array<XComGameState_Unit> GetSquadUnitStates()
 {
-	local XComGameState_HeadquartersXCom	XComHQ;
-	local StateObjectReference				SquadUnitRef;
-	local array<XComGameState_Unit>			UnitStates;
-	local XComGameState_Unit				UnitState;
-	local XComGameStateHistory				History;
+    local XComGameState_HeadquartersXCom	XComHQ;
+    local StateObjectReference				SquadUnitRef;
+    local array<XComGameState_Unit>			UnitStates;
+    local XComGameState_Unit				UnitState;
+    local XComGameStateHistory				History;
 
-	XComHQ = `XCOMHQ;
-	History = `XCOMHISTORY;
-	foreach XComHQ.Squad(SquadUnitRef)
-	{
-		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(SquadUnitRef.ObjectID));
-		if (UnitState != none)
-		{
-			UnitStates.AddItem(UnitState);
-		}
-	}
-	return UnitStates;
+    XComHQ = `XCOMHQ;
+    History = `XCOMHISTORY;
+    foreach XComHQ.Squad(SquadUnitRef)
+    {
+        UnitState = XComGameState_Unit(History.GetGameStateForObjectID(SquadUnitRef.ObjectID));
+        if (UnitState != none)
+        {
+            UnitStates.AddItem(UnitState);
+        }
+    }
+    return UnitStates;
 }
 
 //=======================================================================================
@@ -321,42 +321,42 @@ static final function bool IsInStrategy()
 
 static final function bool ReallyIsInStrategy()
 {
-	return `HQGAME  != none && `HQPC != None && `HQPRES != none;
+    return `HQGAME  != none && `HQPC != None && `HQPRES != none;
 }
 
 static final function PlayStrategySoundEvent(string strKey, Actor InActor)
 {
-	local string	SoundEventPath;
-	local AkEvent	SoundEvent;
+    local string	SoundEventPath;
+    local AkEvent	SoundEvent;
 
-	foreach class'XComStrategySoundManager'.default.SoundEventPaths(SoundEventPath)
-	{
-		if (InStr(SoundEventPath, strKey) != INDEX_NONE)
-		{
-			SoundEvent = AkEvent(`CONTENT.RequestGameArchetype(SoundEventPath));
-			if (SoundEvent != none)
-			{
-				InActor.WorldInfo.PlayAkEvent(SoundEvent);
-				return;
-			}
-		}
-	}
+    foreach class'XComStrategySoundManager'.default.SoundEventPaths(SoundEventPath)
+    {
+        if (InStr(SoundEventPath, strKey) != INDEX_NONE)
+        {
+            SoundEvent = AkEvent(`CONTENT.RequestGameArchetype(SoundEventPath));
+            if (SoundEvent != none)
+            {
+                InActor.WorldInfo.PlayAkEvent(SoundEvent);
+                return;
+            }
+        }
+    }
 }
 
 static final function int GetForceLevel()
 {
-	local XComGameStateHistory		History;
-	local XComGameState_BattleData	BattleData;
+    local XComGameStateHistory		History;
+    local XComGameState_BattleData	BattleData;
 
-	History = `XCOMHISTORY;
-	BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData', true));
-	if (BattleData == none)
-	{
-		`AMLOG("WARNING :: No Battle Data!" @ GetScriptTrace());
-		return -1;
-	}
+    History = `XCOMHISTORY;
+    BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData', true));
+    if (BattleData == none)
+    {
+        `AMLOG("WARNING :: No Battle Data!" @ GetScriptTrace());
+        return -1;
+    }
 
-	return BattleData.GetForceLevel();
+    return BattleData.GetForceLevel();
 }
 
 static final function AddItemToHQInventory(const name TemplateName)
@@ -372,26 +372,26 @@ static final function AddItemToHQInventory(const name TemplateName)
     ItemTemplate = ItemMgr.FindItemTemplate(TemplateName);
 
     if (ItemTemplate == none)
-	{
-		`AMLOG("WARNING :: No Item Template!" @ TemplateName @ GetScriptTrace());
-		return;
-	}
+    {
+        `AMLOG("WARNING :: No Item Template!" @ TemplateName @ GetScriptTrace());
+        return;
+    }
     
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding item to HQ Inventory");
-	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', `XCOMHQ.ObjectID));
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Adding item to HQ Inventory");
+    XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', `XCOMHQ.ObjectID));
 
-	ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);     
-	
-	if (ItemTemplate.bInfiniteItem)
-	{
-		// XComHQ.PutItemInInventory() is unable to work with infinite items.
-		XComHQ.AddItemToHQInventory(ItemState);
-	}
-	else
-	{
-		XComHQ.PutItemInInventory(NewGameState, ItemState);
-	}
-	`GAMERULES.SubmitGameState(NewGameState);
+    ItemState = ItemTemplate.CreateInstanceFromTemplate(NewGameState);     
+    
+    if (ItemTemplate.bInfiniteItem)
+    {
+        // XComHQ.PutItemInInventory() is unable to work with infinite items.
+        XComHQ.AddItemToHQInventory(ItemState);
+    }
+    else
+    {
+        XComHQ.PutItemInInventory(NewGameState, ItemState);
+    }
+    `GAMERULES.SubmitGameState(NewGameState);
 }
 
 //=======================================================================================
@@ -408,7 +408,7 @@ static final function AddItemToHQInventory(const name TemplateName)
 
 static final function string GetLocalizedString(const coerce string StringName)
 {
-	return Localize("Help", StringName, "MeristPerkPack");
+    return Localize("Help", StringName, "MeristPerkPack");
 }
 
 //=======================================================================================
@@ -440,19 +440,19 @@ YourString = `GetLocalizedString('StringName');
 // Create a single big string out of an array of smaller strings, separated by an optional delimiter.
 static final function string JoinStrings(array<string> Arr, optional string Delim = "")
 {
-	local string ReturnString;
-	local int i;
+    local string ReturnString;
+    local int i;
 
-	// Handle it this way so there's no delim after the final member.
-	for (i = 0; i < Arr.Length - 1; i++)
-	{
-		ReturnString $= Arr[i] $ Delim;
-	}
-	if (Arr.Length > 0)
-	{
-		ReturnString $= Arr[Arr.Length - 1];
-	}
-	return ReturnString;
+    // Handle it this way so there's no delim after the final member.
+    for (i = 0; i < Arr.Length - 1; i++)
+    {
+        ReturnString $= Arr[i] $ Delim;
+    }
+    if (Arr.Length > 0)
+    {
+        ReturnString $= Arr[Arr.Length - 1];
+    }
+    return ReturnString;
 }
 
 //=======================================================================================
@@ -461,31 +461,31 @@ static final function string JoinStrings(array<string> Arr, optional string Deli
 
 static final function bool AreItemTemplatesMutuallyExclusive(const X2ItemTemplate TemplateA, const X2ItemTemplate TemplateB)
 {
-	return TemplateA.ItemCat == TemplateB.ItemCat || 
-			X2WeaponTemplate(TemplateA) != none && X2WeaponTemplate(TemplateB) != none && 
-			X2WeaponTemplate(TemplateA).WeaponCat == X2WeaponTemplate(TemplateB).WeaponCat;
+    return TemplateA.ItemCat == TemplateB.ItemCat || 
+            X2WeaponTemplate(TemplateA) != none && X2WeaponTemplate(TemplateB) != none && 
+            X2WeaponTemplate(TemplateA).WeaponCat == X2WeaponTemplate(TemplateB).WeaponCat;
 }
 
 
 static final function bool IsItemUniqueEquipInSlot(X2ItemTemplateManager ItemMgr, const X2ItemTemplate ItemTemplate, const EInventorySlot Slot)
 {
-	local X2WeaponTemplate WeaponTemplate;
+    local X2WeaponTemplate WeaponTemplate;
 
-	if (class'X2TacticalGameRulesetDataStructures'.static.InventorySlotBypassesUniqueRule(Slot))
-		return false;
+    if (class'X2TacticalGameRulesetDataStructures'.static.InventorySlotBypassesUniqueRule(Slot))
+        return false;
 
-	WeaponTemplate = X2WeaponTemplate(ItemTemplate);
+    WeaponTemplate = X2WeaponTemplate(ItemTemplate);
 
-	return ItemMgr.ItemCategoryIsUniqueEquip(ItemTemplate.ItemCat) || WeaponTemplate != none && ItemMgr.ItemCategoryIsUniqueEquip(WeaponTemplate.WeaponCat);
+    return ItemMgr.ItemCategoryIsUniqueEquip(ItemTemplate.ItemCat) || WeaponTemplate != none && ItemMgr.ItemCategoryIsUniqueEquip(WeaponTemplate.WeaponCat);
 }
 
 static final function bool WeaponHasUpgrade(const XComGameState_Item ItemState, const name UpgradeName)
 {
-	local array<name> UpgradeNames;
+    local array<name> UpgradeNames;
 
-	UpgradeNames = ItemState.GetMyWeaponUpgradeTemplateNames();
+    UpgradeNames = ItemState.GetMyWeaponUpgradeTemplateNames();
 
-	return UpgradeNames.Find(UpgradeName) != INDEX_NONE;
+    return UpgradeNames.Find(UpgradeName) != INDEX_NONE;
 }
 
 //=======================================================================================
@@ -511,14 +511,14 @@ static final function bool IsModActive(name ModName)
 
 static final function bool AreModsActive(const array<name> ModNames)
 {
-	local name ModName;
+    local name ModName;
 
-	foreach ModNames(ModName)
-	{
-		if (!IsModActive(ModName))
-		{
-			return false;
-		}
-	}
-	return true;
+    foreach ModNames(ModName)
+    {
+        if (!IsModActive(ModName))
+        {
+            return false;
+        }
+    }
+    return true;
 }
