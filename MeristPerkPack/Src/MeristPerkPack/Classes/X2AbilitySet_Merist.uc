@@ -634,7 +634,7 @@ static function X2AbilityTemplate Frostbane()
     Effect.CritPerTier = `GetConfigInt("M31_Frostbane_CritBonusPerTier");
     Effect.PierceBase = `GetConfigInt("M31_Frostbane_PiercingBonus");
     Effect.PiercePerTier = `GetConfigInt("M31_Frostbane_PiercingBonusPerTier");
-    Effect.bCheckSourceWeapon = default.bFrostbane_CheckSourceWeapon;
+    Effect.bCheckSourceWeapon = `GetConfigBool("M31_Frostbane_bCheckSourceWeapon");
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 

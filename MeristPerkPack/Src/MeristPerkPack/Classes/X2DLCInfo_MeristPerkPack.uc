@@ -553,6 +553,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = ColorText_Auto(UnitState, `GetConfigInt(InString) $ "%");
             return true;
 
+        case "M31_Frostbane_bCheckSourceWeapon":
+        case "M31_TrackingFire_bAllowResetFromBladestorm":
+            OutString = ColorText_Auto(UnitState, `GetConfigBool(InString));
+            return true;
         case "M31_CA_BlindSpot_CritBonus":
         case "M31_CA_BlindSpot_CritDamageBonus":
         case "M31_CA_ChaosDriver_Duration":

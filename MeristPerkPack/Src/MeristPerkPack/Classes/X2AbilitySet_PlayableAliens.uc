@@ -1,18 +1,5 @@
 class X2AbilitySet_PlayableAliens extends X2Ability_Extended config(GameData_SoldierSkills);
 
-var config bool bCoil_AllowDeepCover;
-var config bool bLockjaw_AllowCrit;
-var config bool bViperBite_AllowCrit;
-var config bool bSpit_RequireVisibility;
-var config bool bPoisonSpit_DealsDamage;
-var config bool bPoisonSpit_AppliesPoisonToWorld;
-var config bool bFrostBreath_DealsDamage;
-var config bool bPersonalShield_AllowWhileDisoriented;
-var config bool bBayonetCharge_AllowWhileDisoriented;
-var config bool bCounterattack_OnlyOnEnemyTurn;
-var config bool bCripplingBlow_InfiniteDuration;
-var config bool bCripplingBlow_AllowStack;
-
 var config array<name> ViperSpit_Abilities;
 var config array<name> GetOverHere_Abilities;
 var config array<name> Bind_Abilities;
@@ -295,7 +282,7 @@ static function X2AbilityTemplate Coil()
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.iNumPoints = 1;
     ActionPointCost.bConsumeAllPoints = true;
-    if (default.bCoil_AllowDeepCover)
+    if (`GetConfigBool("M31_PA_Coil_bAllowDeepCover"))
     {
         ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.DeepCoverActionPoint);
     }
@@ -503,7 +490,7 @@ static function X2AbilityTemplate LockjawAttack()
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.bReactionFire = true;
-    ToHitCalc.bAllowCrit = default.bLockjaw_AllowCrit;
+    ToHitCalc.bAllowCrit = `GetConfigBool("M31_PA_Lockjaw_bAllowCrit");
     Template.AbilityToHitCalc = ToHitCalc;
     Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 
@@ -881,7 +868,7 @@ static function X2AbilityTemplate ViperBite()
     StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
     StandardMelee.BuiltInHitMod = `GetConfigInt("M31_PA_ViperBite_AimBonus");
     StandardMelee.BuiltInCritMod = `GetConfigInt("M31_PA_ViperBite_CritBonus");
-    StandardMelee.bAllowCrit = default.bViperBite_AllowCrit;
+    StandardMelee.bAllowCrit = `GetConfigBool("M31_PA_ViperBite_bAllowCrit");
     Template.AbilityToHitCalc = StandardMelee;
 
     MeleeTarget = new class'X2AbilityTarget_MovingMelee_Extended';
@@ -1019,7 +1006,7 @@ static function X2AbilityTemplate PoisonSpit()
     class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToMultiTarget(Template);
     class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToMultiTarget(Template);
 
-    if (default.bPoisonSpit_DealsDamage)
+    if (`GetConfigBool("M31_PA_PoisonSpit_bDealsDamage"))
     {
         DamageEffect = new class'X2Effect_ApplyDamageWithRank';
         DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_PoisonSpit_Damage");
@@ -1027,7 +1014,7 @@ static function X2AbilityTemplate PoisonSpit()
         Template.AddMultiTargetEffect(DamageEffect);
     }
 
-    if (default.bPoisonSpit_AppliesPoisonToWorld)
+    if (`GetConfigBool("M31_PA_PoisonSpit_bAppliesPoisonToWorld"))
     {
         Template.AddMultiTargetEffect(new class'X2Effect_ApplyPoisonToWorld');
     }
@@ -1160,7 +1147,7 @@ static function X2AbilityTemplate FrostBreath()
     Template.AddMultiTargetEffect(class'BitterfrostHelper'.static.FreezeEffect(false));
     Template.AddMultiTargetEffect(class'BitterfrostHelper'.static.FreezeCleanse(false));
 
-    if (default.bFrostBreath_DealsDamage)
+    if (`GetConfigBool("M31_PA_FrostBreath_bDealsDamage"))
     {
         DamageEffect = new class'X2Effect_ApplyDamageWithRank';
         DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_FrostBreath_Damage");
@@ -1196,7 +1183,7 @@ static function X2AbilityTemplate CreateViperSpitAbility(
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     CylinderMultiTarget = new class'X2AbilityMultiTarget_Cylinder';
-    CylinderMultiTarget.bIgnoreBlockingCover = default.bSpit_RequireVisibility;
+    CylinderMultiTarget.bIgnoreBlockingCover = `GetConfigBool("M31_PA_Spit_bRequireVisibility");
     CylinderMultiTarget.bUseWeaponRadius = false;
     CylinderMultiTarget.fTargetRadius = 2.5;
     CylinderMultiTarget.fTargetHeight = `GetConfigFloat("M31_PA_ViperSpit_Height");
@@ -1213,7 +1200,7 @@ static function X2AbilityTemplate CreateViperSpitAbility(
 
     CursorTarget = new class'X2AbilityTarget_Cursor';
     // CursorTarget.bRestrictToWeaponRange = true;
-    CursorTarget.bRestrictToSquadsightRange = default.bSpit_RequireVisibility;
+    CursorTarget.bRestrictToSquadsightRange = `GetConfigBool("M31_PA_Spit_bRequireVisibility");
     CursorTarget.FixedAbilityRange = `TILESTOMETERS(`GetConfigInt("M31_PA_ViperSpit_Range"));
     Template.AbilityTargetStyle = CursorTarget;
 
@@ -1266,7 +1253,7 @@ static function X2DataTemplate PersonalShield()
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-    if (default.bPersonalShield_AllowWhileDisoriented)
+    if (`GetConfigBool("M31_PA_PersonalShield_bAllowWhileDisoriented"))
     {
         SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
     }
@@ -1498,7 +1485,7 @@ static function X2AbilityTemplate CreateBayonetChargeAbility(name TemplateName)
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
-    if (default.bBayonetCharge_AllowWhileDisoriented)
+    if (`GetConfigBool("M31_PA_BayonetCharge_bAllowWhileDisoriented"))
     {
         SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
     }
@@ -1654,7 +1641,7 @@ function EventListenerReturn MeleeCounterattackListener(Object EventData, Object
         (AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt) &&
         (AbilityContext.InputContext.PrimaryTarget == OwnerStateObject) &&
         (AbilityContext.ResultContext.HitResult == eHit_CounterAttack) &&
-        (!default.bCounterattack_OnlyOnEnemyTurn || TacticalRules.GetUnitActionTeam() != OwnerState.GetTeam()))
+        (!`GetConfigBool("M31_PA_Counterattack_bOnlyOnEnemyTurn") || TacticalRules.GetUnitActionTeam() != OwnerState.GetTeam()))
     {
         // A dodge happened and this was a melee attack
         // Activate the counterattack ability (if the unit is not impaired)
@@ -1745,9 +1732,9 @@ static function X2AbilityTemplate CripplingBlow()
     Effect.AddPersistentStatChange(eStat_Defense, -1 * `GetConfigInt("M31_PA_CripplingBlow_DefensePenalty"));
     Effect.AddPersistentStatChange(eStat_Dodge, -1 * `GetConfigInt("M31_PA_CripplingBlow_DodgePenalty"));
     Effect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_PA_CripplingBlow_MobilityPenalty"));
-    Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_CripplingBlow_Duration"), default.bCripplingBlow_InfiniteDuration, false, true, eGameRule_PlayerTurnBegin);
+    Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_CripplingBlow_Duration"), `GetConfigBool("M31_PA_CripplingBlow_bInfiniteDuration"), false, true, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_PA_CripplingBlow_DebuffText"), Template.IconImage,,, Template.AbilitySourceName);
-    if (default.bCripplingBlow_AllowStack)
+    if (`GetConfigBool("M31_PA_CripplingBlow_bAllowStack"))
     {
         Effect.DuplicateResponse = eDupe_Allow;
     }
