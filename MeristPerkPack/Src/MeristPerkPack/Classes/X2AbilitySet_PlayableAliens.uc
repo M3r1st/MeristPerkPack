@@ -10,10 +10,6 @@ var config bool bFrostBreath_DealsDamage;
 var config bool bPersonalShield_AllowWhileDisoriented;
 var config bool bBayonetCharge_AllowWhileDisoriented;
 var config bool bCounterattack_OnlyOnEnemyTurn;
-var config bool bViperScaling_ApplyToSpit;
-var config bool bViperScaling_ApplyToBind;
-var config bool bViperScaling_ApplyToBindSustained;
-var config bool bViperScaling_ApplyToBite;
 var config bool bCripplingBlow_InfiniteDuration;
 var config bool bCripplingBlow_AllowStack;
 
@@ -60,7 +56,6 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(FrostSpit());
     Templates.AddItem(FrostbiteSpit());
     Templates.AddItem(FrostBreath());
-    // Templates.AddItem(ViperDamageScaling());
 
     Templates.AddItem(PersonalShield());
     Templates.AddItem(Aegis());
@@ -1177,23 +1172,6 @@ static function X2AbilityTemplate FrostBreath()
 
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
-
-    return Template;
-}
-
-static function X2AbilityTemplate ViperDamageScaling()
-{
-    local X2AbilityTemplate             Template;
-    local X2Effect_ViperDamageScaling   Effect;
-
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_ViperDamagePerRank');
-
-    Template = Passive('M31_PA_ViperDamagePerRank', "img:///UILibrary_PerkIcons.UIPerk_standard", false, false);
-
-    Effect = new class'X2Effect_ViperDamageScaling';
-    Effect.EffectName = 'M31_PA_ViperDamagePerRank';
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
 
     return Template;
 }
