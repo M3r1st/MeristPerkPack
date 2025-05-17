@@ -21,10 +21,10 @@ static function array<X2DataTemplate> CreateTemplates()
 
 static function X2AbilityTemplate BlindSpot()
 {
-    local X2AbilityTemplate						Template;
-    local X2Condition_UnitProperty				UnitPropertyCondition;
+    local X2AbilityTemplate                     Template;
+    local X2Condition_UnitProperty              UnitPropertyCondition;
     local X2Condition_Visibility                VisCondition;
-    local XMBEffect_ConditionalBonus			Effect;
+    local XMBEffect_ConditionalBonus            Effect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_BlindSpot');
 
@@ -407,9 +407,9 @@ static function X2AbilityTemplate PhantomStride()
 
 static function X2AbilityTemplate PhantomStrideCooldownReduction()
 {
-    local X2AbilityTemplate						Template;
-    local X2AbilityTrigger_EventListener		EventListener;	
-    local X2Effect_ReduceCooldowns				ReduceCooldownsEffect;
+    local X2AbilityTemplate                     Template;
+    local X2AbilityTrigger_EventListener        EventListener;	
+    local X2Effect_ReduceCooldowns              ReduceCooldownsEffect;
         
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_PhantomStride_CooldownReduction');
     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_partingsilk";
