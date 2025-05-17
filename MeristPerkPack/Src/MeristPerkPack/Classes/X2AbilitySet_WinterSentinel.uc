@@ -43,7 +43,6 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Entwine());
     Templates.AddItem(ReinforcedScales());
     Templates.AddItem(GlacialArmor());
-        Templates.AddItem(GlacialArmorBuff());
         Templates.AddItem(GlacialArmorUpdate());
     Templates.AddItem(Indomitable());
     Templates.AddItem(RagingSerpent());
@@ -146,29 +145,19 @@ static function X2AbilityTemplate ReinforcedScales()
 
 static function X2AbilityTemplate GlacialArmor()
 {
-    local X2AbilityTemplate     Template;
+    local X2AbilityTemplate             Template;
+    local X2Effect_WS_GlacialArmor      Effect;
 
     Template = Passive('M31_PA_WS_GlacialArmor', "img:///UILibrary_MZChimeraIcons.Ability_KineticArmor", false, true);
 
-    Template.AdditionalAbilities.AddItem('M31_PA_WS_GlacialArmor_Buff');
-    Template.AdditionalAbilities.AddItem('M31_PA_WS_GlacialArmor_Update');
-
-    return Template;
-}
-
-static function X2AbilityTemplate GlacialArmorBuff()
-{
-    local X2AbilityTemplate                 Template;
-    local X2Effect_WS_GlacialArmor          Effect;
-
-    Template = Passive('M31_PA_WS_GlacialArmor_Buff', "img:///UILibrary_MZChimeraIcons.Ability_KineticArmor", false, false);
-
     Effect = new class'X2Effect_WS_GlacialArmor';
-    Effect.EffectName = 'M31_PA_WS_GlacialArmor_Buff';
+    Effect.EffectName = 'M31_PA_WS_GlacialArmor';
     Effect.ActivationsPerTurn = `GetConfigInt("M31_PA_WS_GlacialArmor_ActivationsPerTurn");
     Effect.BuildPersistentEffect(1, true);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
-    Template.AddShooterEffect(Effect);
+    Template.AddTargetEffect(Effect);
+
+    Template.AdditionalAbilities.AddItem('M31_PA_WS_GlacialArmor_Update');
 
     return Template;
 }
