@@ -3,6 +3,7 @@
 M31_DefaultWeapon                           = "weapon"
 
 M31_PerRank                                 = "per rank"
+M31_Turns                                   = "Turn(s)"
 
 M31_FreeAction                              = "Free action."
 
@@ -21,6 +22,13 @@ M31_PA_Coil_FriendlyName                    = "Coiled"
 M31_PA_Coil_BonusText                       = "Your next action will not end the turn."
 
 M31_PA_HardenedShield_FriendlyName          = "Hardened Shield"
+
+M31_BloodThirst_BuffText                    = "<Ability:M31_BloodThirst_BuffText>"
+M31_BloodThirst_BuffText_NoStacks           = "The unit doesn't have any stacks of Blood Thirst."
+M31_BloodThirst_BuffText_Stacks             = "The unit has"
+M31_BloodThirst_BuffText_Stacks2            = "stacks of Blood Thirst."
+M31_BloodThirst_BuffText_StacksHelp         = "stacks will be lost in"
+M31_BloodThirst_BuffText_StacksHelpFirst    = "stacks will be lost at the start of the next turn."
 
 M31_Duskborn_BonusText                      = "Duskborn is still active."
 

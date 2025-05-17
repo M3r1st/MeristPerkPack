@@ -461,6 +461,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_AlphaStrike_Radius":
         case "M31_AlphaStrike_Charges":
         case "M31_Bandit_AmmoToReload":
+        case "M31_BloodThirst_MaxStacks":
+        case "M31_BloodThirst_MaxStacksPerTurn":
+        case "M31_BloodThirst_StackDuration":
         case "M31_Botnet_HackDefenseChange":
         case "M31_Botnet_Duration":
         case "M31_BattlePresence_CooldownReduction":
@@ -553,10 +556,18 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = ColorText_Auto(UnitState, `GetConfigInt(InString) $ "%");
             return true;
 
+        case "M31_BloodThirst_bRefreshDuration":
+        case "M31_BloodThirst_bApplyToAnyMelee":
+        case "M31_BloodThirst_bIncreaseOnlyOnHit":
         case "M31_Frostbane_bCheckSourceWeapon":
         case "M31_TrackingFire_bAllowResetFromBladestorm":
             OutString = ColorText_Auto(UnitState, `GetConfigBool(InString));
             return true;
+
+        case "M31_BloodThirst_BuffText":
+            OutString = ColorText_Auto(UnitState, GetBloodThirstOutString(ParseObj, StrategyParseOb, GameState));
+            return true;
+
         case "M31_CA_BlindSpot_CritBonus":
         case "M31_CA_BlindSpot_CritDamageBonus":
         case "M31_CA_ChaosDriver_Duration":
@@ -1109,6 +1120,58 @@ static private function int GetItemTech(X2ItemTemplate ItemTemplate)
     return Index;
 }
 
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function string GetBloodThirstOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Effect              EffectState;
+    local XCGS_Effect_BloodThirst           BloodThirstEffectState;
+    local X2Effect_BloodThirst              BloodThirstEffect;
+    local string OutString;
+    local int Index;
+    local int iCount;
+    local bool bFirst;
+
+    EffectState = XComGameState_Effect(ParseObj);
+    if (EffectState != none)
+    {
+        BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
+        if (BloodThirstEffectState != none)
+        {
+            iCount = BloodThirstEffectState.GetTotalStacksRemaining();
+            if (iCount == 0)
+                return `GetLocalizedString("M31_BloodThirst_BuffText_NoStacks");
+            else
+                OutString = `GetLocalizedString("M31_BloodThirst_BuffText_Stacks") $ " " $ iCount $ " " $ `GetLocalizedString("M31_BloodThirst_BuffText_Stacks2") $ "<br><br>";
+
+            BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
+
+            bFirst = true;
+            for (Index = 0; Index < BloodThirstEffect.iMaxStacks; Index++)
+            {
+                if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
+                {
+                    if (bFirst)
+                        bFirst = false;
+                    else
+                        OutString $= "<br>";
+                        
+                    OutString $= BloodThirstEffectState.arrStacksRemaining[Index] $ " ";
+                    
+                    if (Index == 0)
+                        OutString $= `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
+                    else
+                        OutString $= `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp") $ " " $ Index + 1 $ " " $ `GetLocalizedString("M31_Turns") $ ".";
+                }
+            }
+            return OutString;
+        }
+    }
+    return "?";
+}
 
 // Purpose: helper function for AbilityTagExpandHandler_CH().
 // Use:

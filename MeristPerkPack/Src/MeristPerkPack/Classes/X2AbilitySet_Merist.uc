@@ -19,6 +19,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(AlphaStrike());
     Templates.AddItem(Bandit());
     Templates.AddItem(BattalionCommander());
+    Templates.AddItem(BloodThirst());
     Templates.AddItem(Botnet());
     Templates.AddItem(ColdBlooded());
     Templates.AddItem(ConcussiveGrenades());
@@ -202,6 +203,27 @@ static function X2AbilityTemplate BattalionCommander()
 
     Template = Passive('M31_BattalionCommander', "img:///UILibrary_MZChimeraIcons.Ability_Resilience", false, true);
     
+    return Template;
+}
+
+static function X2AbilityTemplate BloodThirst()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_BloodThirst              Effect;
+    
+    Template = Passive('M31_BloodThirst', "img:///UILibrary_FavidsPerkPack.Perk_Ph_ColdBlooded", false, true);
+
+    Effect = new class'X2Effect_BloodThirst';
+    Effect.iMaxStacks = `GetConfigInt("M31_BloodThirst_MaxStacks");
+    Effect.iMaxStacksPerTurn = `GetConfigInt("M31_BloodThirst_MaxStacksPerTurn");
+    Effect.iStackDuration = `GetConfigInt("M31_BloodThirst_StackDuration");
+    Effect.bRefreshDuration = `GetConfigBool("M31_BloodThirst_bRefreshDuration");
+    Effect.bApplyToAnyMelee = `GetConfigBool("M31_BloodThirst_bApplyToAnyMelee");
+    Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_BloodThirst_bIncreaseOnlyOnHit");
+    Effect.BuildPersistentEffect(1, true);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_BloodThirst_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
     return Template;
 }
 
