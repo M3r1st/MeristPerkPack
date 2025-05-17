@@ -12,8 +12,8 @@ function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_
 {
     if (ValidateEffect(UnitState))
         return `GetConfigInt("M31_PA_WS_GlacialArmor_ArmorBonus");
-    else
-        return 0;
+
+    return 0;
 }
 
 function GetToHitAsTargetModifiers(
@@ -36,8 +36,44 @@ function GetToHitAsTargetModifiers(
     }
 }
 
+function int GetDefendingDamageModifier(
+    XComGameState_Effect EffectState,
+    XComGameState_Unit Attacker,
+    Damageable TargetDamageable,
+    XComGameState_Ability AbilityState,
+    const out EffectAppliedData AppliedData,
+    const int CurrentDamage,
+    X2Effect_ApplyWeaponDamage WeaponDamageEffect,
+    optional XComGameState NewGameState)
+{
+    if (ValidateEffect(XComGameState_Unit(TargetDamageable)))
+        return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_GlacialArmor_DamageReduction"));
+    
+    return 0;
+}
+
+function float GetPostDefaultDefendingDamageModifier_CH(
+    XComGameState_Effect EffectState,
+    XComGameState_Unit SourceUnit,
+    XComGameState_Unit TargetUnit,
+    XComGameState_Ability AbilityState,
+    const out EffectAppliedData ApplyEffectParameters,
+    float WeaponDamage,
+    X2Effect_ApplyWeaponDamage WeaponDamageEffect,
+    XComGameState NewGameState)
+{
+    
+    if (ValidateEffect(TargetUnit))
+        return -1 * Min(WeaponDamage, WeaponDamage * `GetConfigInt("M31_PA_WS_GlacialArmor_DamageReduction_Prc") / 100); 
+
+    return 0;
+}
+
 function bool ValidateEffect(XComGameState_Unit UnitState)
 {
+    if (UnitState == none)
+        return false;
+
     return GetCurrentStackCount(UnitState) < ActivationsPerTurn
         && (`GetConfigBool("M31_PA_WS_GlacialArmor_bAllowWhileBurning") || !UnitState.IsBurning());
 }
