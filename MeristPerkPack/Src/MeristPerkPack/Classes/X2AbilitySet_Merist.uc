@@ -52,6 +52,8 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(SuppressingFireAddActions());
         Templates.AddItem(SuppressingFireRemoveActions());
     Templates.AddItem(Suppression());
+    Templates.AddItem(TrackingFire());
+        Templates.AddItem(TrackingFireResetCooldown());
     Templates.AddItem(TrainedSniper_Squadsight());
     Templates.AddItem(TrainedSniper_LongWatch());
     Templates.AddItem(TrainedSniper_RangeFinder());
@@ -1298,6 +1300,65 @@ static function X2AbilityTemplate Suppression()
     CannonAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
     CannonAbilityEffect.TargetConditions.AddItem(CannonCondition);
     Template.AddTargetEffect(CannonAbilityEffect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate TrackingFire()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+
+    Template = Attack('M31_TrackingFire', "img:///UILibrary_LW_PerkPack.LW_AbilitySnapShot", false, true);
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bFreeCost = true;
+    ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_TrackingFire_Cooldown"));
+
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = true;
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+    Template.AdditionalAbilities.AddItem('M31_TrackingFire_ResetCooldown');
+
+    return Template;
+}
+
+static function X2AbilityTemplate TrackingFireResetCooldown()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    EventListener;
+    local X2Effect_ReduceCooldowns          Effect;
+
+    Template = SelfTargetTrigger('M31_TrackingFire_ResetCooldown', "img:///UILibrary_LW_PerkPack.LW_AbilitySnapShot");
+
+    EventListener = new class'X2AbilityTrigger_EventListener';
+    EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+    EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    EventListener.ListenerData.EventID = 'SlashActivated';
+    EventListener.ListenerData.Filter = eFilter_Unit;
+    Template.AbilityTriggers.AddItem(EventListener);
+
+    if (`GetConfigBool("M31_TrackingFire_bAllowResetFromBladestorm"))
+    {
+        EventListener = new class'X2AbilityTrigger_EventListener';
+        EventListener.ListenerData.Deferral = ELD_OnStateSubmitted;
+        EventListener.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+        EventListener.ListenerData.EventID = 'BladestormActivated';
+        EventListener.ListenerData.Filter = eFilter_Unit;
+        Template.AbilityTriggers.AddItem(EventListener);
+    }
+
+    Effect = new class'X2Effect_ReduceCooldowns';
+    Effect.ReduceAll = true;
+    Effect.AbilitiesToTick.AddItem('M31_TrackingFire');
+    Template.AddTargetEffect(Effect);
 
     return Template;
 }

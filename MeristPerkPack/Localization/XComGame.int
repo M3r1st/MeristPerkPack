@@ -221,6 +221,13 @@ LocLongDescription="Gain <font color='#1abc9c'>Suppression</font>. Additionally,
 LocHelpText="Gain <font color='#1abc9c'>Suppression</font>. Additionally, gain <font color='#1abc9c'>Area Suppression</font> when a cannon is equipped as this soldier's primary weapon."
 ; LocPromotionPopupText=""
 
+[M31_TrackingFire X2AbilityTemplate]
+LocFriendlyName="Tracking Fire"
+LocLongDescription="Take a shot at the target. <Ability:M31_FreeAction> Counts as reaction fire. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown, but resets after a melee attack."
+LocHelpText="Take a shot at the target. <Ability:M31_FreeAction> Counts as reaction fire. Cooldown resets after a melee attack."
+LocPromotionPopupText="<Bullet> Can be reset by Bladestorm: <Ability:M31_TrackingFire_bAllowResetFromBladestorm>."
+LocFlyOverText="Tracking Fire"
+
 [M31_TrainedSniper_Squadsight X2AbilityTemplate]
 LocFriendlyName="Trained Sniper (Squadsight)"
 LocLongDescription="Gain <font color='#1abc9c'>Squadsight</font> when a sniper rifle is equipped as a primary weapon."
