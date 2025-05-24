@@ -206,7 +206,7 @@ static function AddImprovedSuppressionToAbility(X2AbilityTemplate Template)
         DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
         Template.AddTargetEffect(DisorientedEffect);
 
-        if (default.bImprovedSuppression_ApplyToRobotic)
+        if (`GetConfigBool("M31_ImprovedSuppression_bApplyToRobotic"))
         {
             RobotocDisorientedEffect = class'M31_AbilityHelpers'.static.CreateRoboticDisorientedStatusEffect();
             RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
