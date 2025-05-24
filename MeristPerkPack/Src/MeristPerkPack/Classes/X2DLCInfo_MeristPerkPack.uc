@@ -1259,7 +1259,7 @@ static private function string GetOutStringWithRank(int BaseValue, float PerRank
     OutString $= ColorText_Auto(SourceUnit, BaseValue $ strExtra);
     
     if (bStrategy && PerRankValue != 0 && iRank < iMaxRank)
-        OutString $= ColorText_Grey(" (+" $  TruncateFloat(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+        OutString $= ColorText_Grey(" ( " $ BaseValue $ " + " $  TruncateFloat(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
     
     return OutString;
 }
@@ -1347,8 +1347,15 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
     local int           iMaxRank;
     local int           iDamageLow;
     local int           iDamageHigh;
+    local int           iDamageLowBase;
+    local int           iDamageHighBase;
     local float         fDamagePrc;
     local bool          bNeedsPlus;
+
+    local X2Effect_ApplyDamageFromHPWithRank    DamageEffectHPRank;
+    local X2Effect_ApplyDamageFromHP            DamageEffectHP;
+    local X2Effect_ApplyDamageWithRank          DamageEffectRank;
+    local X2Effect_ApplyWeaponDamage            DamageEffect;
 
     if (SourceUnit != none)
     {
@@ -1357,13 +1364,17 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
             iMaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
     }
 
-    if (X2Effect_ApplyDamageFromHPWithRank(Effect) != none)
+    DamageEffectHPRank = X2Effect_ApplyDamageFromHPWithRank(Effect);
+    DamageEffectHP = X2Effect_ApplyDamageFromHP(Effect);
+    DamageEffectRank = X2Effect_ApplyDamageWithRank(Effect);
+    DamageEffect = X2Effect_ApplyWeaponDamage(Effect);
+    if (DamageEffectHPRank != none)
     {
         if (bStrategy || TargetUnit == none)
         {
-            X2Effect_ApplyDamageFromHPWithRank(Effect).GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh);
-            X2Effect_ApplyDamageFromHPWithRank(Effect).GetDamagePrc(SourceUnit, none, fDamagePrc);
-            if (iDamageLow != 0 || iDamageHigh != 0 || X2Effect_ApplyDamageFromHPWithRank(Effect).fBaseDmgPerRank != 0)
+            DamageEffectHPRank.GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh, iDamageLowBase, iDamageHighBase);
+            DamageEffectHPRank.GetDamagePrc(SourceUnit, none, fDamagePrc);
+            if (iDamageLow != 0 || iDamageHigh != 0 || DamageEffectHPRank.fBaseDmgPerRank != 0)
             {
                 bNeedsPlus = true;
                 if (iDamageLow < iDamageHigh)
@@ -1371,28 +1382,38 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
                 else
                     OutString $= ColorText_Auto(SourceUnit, iDamageLow);
                 
-                if (X2Effect_ApplyDamageFromHPWithRank(Effect).fBaseDmgPerRank > 0 && iRank < iMaxRank)
+                if (bStrategy && DamageEffectHPRank.fBaseDmgPerRank > 0 && iRank < iMaxRank)
                 {
-                    OutString $= ColorText_Grey(" (+" $  TruncateFloat(X2Effect_ApplyDamageFromHPWithRank(Effect).fBaseDmgPerRank)
-                        $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+                    if (iDamageLowBase < iDamageHighBase)
+                        OutString $= ColorText_Grey(" (" $ iDamageLowBase $ "-" $ iDamageHighBase
+                            $ " + " $  TruncateFloat(DamageEffectHPRank.fBaseDmgPerRank)
+                            $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+                    else
+                        OutString $= ColorText_Grey(" (" $ iDamageLowBase
+                            $ " + " $  TruncateFloat(DamageEffectHPRank.fBaseDmgPerRank)
+                            $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                 }
             }
-            if (fDamagePrc != 0 || X2Effect_ApplyDamageFromHPWithRank(Effect).fPrcDmgPerRank != 0)
+            if (fDamagePrc != 0 || DamageEffectHPRank.fPrcDmgPerRank != 0)
             {
                 if (bNeedsPlus)
                     OutString $= " + ";
 
                 OutString $= ColorText_Auto(SourceUnit, TruncateFloat(fDamagePrc) $ "%", false);
-                if (X2Effect_ApplyDamageFromHPWithRank(Effect).fPrcDmgPerRank > 0 && iRank < iMaxRank)
+                if (bStrategy && DamageEffectHPRank.fPrcDmgPerRank > 0 && iRank < iMaxRank)
                 {
-                    OutString $= ColorText_Grey(" (+" $  TruncateFloat(X2Effect_ApplyDamageFromHPWithRank(Effect).fPrcDmgPerRank)
-                        $ "% " $ `GetLocalizedString("M31_PerRank") $ ")");
+                    OutString $= ColorText_Grey(" (" $ DamageEffectHPRank.fPrcDmg $ "%"
+                        $ " + " $  TruncateFloat(DamageEffectHPRank.fPrcDmgPerRank) $ "% "
+                        $ `GetLocalizedString("M31_PerRank") $ ")");
                 }
             }
         }
         else
         {
-            X2Effect_ApplyDamageFromHPWithRank(Effect).GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
+            DamageEffectHPRank.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
+            iDamageLow = Min(iDamageLow, DamageEffectHPRank.iMinDamage);
+            iDamageHigh = Min(iDamageHigh, DamageEffectHPRank.iMinDamage);
+            
             if (iDamageLow < iDamageHigh)
                 OutString $= ColorText_Auto(SourceUnit, iDamageLow $ " - " $ iDamageHigh);
             else
@@ -1400,12 +1421,12 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
         }
         return true;
     }
-    else if (X2Effect_ApplyDamageFromHP(Effect) != none)
+    else if (DamageEffectHP != none)
     {
         if (bStrategy || TargetUnit == none)
         {
-            X2Effect_ApplyDamageFromHP(Effect).GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh);
-            fDamagePrc = X2Effect_ApplyDamageFromHP(Effect).fPrcDmg;
+            DamageEffectHP.GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh);
+            fDamagePrc = DamageEffectHP.fPrcDmg;
             if (iDamageLow != 0 || iDamageHigh != 0)
             {
                 bNeedsPlus = true;
@@ -1424,7 +1445,9 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
         }
         else
         {
-            X2Effect_ApplyDamageFromHP(Effect).GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
+            DamageEffectHP.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
+            iDamageLow = Min(iDamageLow, DamageEffectHPRank.iMinDamage);
+            iDamageHigh = Min(iDamageHigh, DamageEffectHPRank.iMinDamage);
             if (iDamageLow < iDamageHigh)
                 OutString $= ColorText_Auto(SourceUnit, iDamageLow $ " - " $ iDamageHigh);
             else
@@ -1432,21 +1455,25 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
         }
         return true;
     }
-    else if (X2Effect_ApplyDamageWithRank(Effect) != none)
+    else if (DamageEffectRank != none)
     {
 
-        X2Effect_ApplyDamageWithRank(Effect).GetDamageBrackets(SourceUnit, iDamageLow, iDamageHigh);
-        if (iDamageLow != 0 || iDamageHigh != 0 || X2Effect_ApplyDamageWithRank(Effect).fDamagePerRank != 0)
+        DamageEffectRank.GetDamageBrackets(SourceUnit, iDamageLow, iDamageHigh, iDamageLowBase, iDamageHighBase);
+        if (iDamageLow != 0 || iDamageHigh != 0 || DamageEffectRank.fDamagePerRank != 0)
         {
             if (iDamageLow < iDamageHigh)
                 OutString $= ColorText_Auto(SourceUnit, iDamageLow $ " - " $ iDamageHigh);
             else
                 OutString $= ColorText_Auto(SourceUnit, iDamageLow);
             
-            if (bStrategy && X2Effect_ApplyDamageWithRank(Effect).fDamagePerRank != 0 && iRank < iMaxRank)
+            if (bStrategy && DamageEffectRank.fDamagePerRank != 0 && iRank < iMaxRank)
             {
-                OutString $= ColorText_Grey(" (+" $  TruncateFloat(X2Effect_ApplyDamageWithRank(Effect).fDamagePerRank)
-                    $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+                if (iDamageLowBase < iDamageHighBase)
+                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ "-" $ iDamageHighBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
+                        $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+                else
+                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
+                        $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
             }
             return true;
         }
@@ -1455,9 +1482,9 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
             return false;
         }
     }
-    else if (X2Effect_ApplyWeaponDamage(Effect) != none)
+    else if (DamageEffect != none)
     {
-        Damage = X2Effect_ApplyWeaponDamage(Effect).EffectDamageValue;
+        Damage = DamageEffect.EffectDamageValue;
         iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne == 100 ? 1 : 0);
         iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
         if (iDamageLow < iDamageHigh)

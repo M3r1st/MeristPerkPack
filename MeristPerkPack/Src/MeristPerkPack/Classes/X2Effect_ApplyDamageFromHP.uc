@@ -36,7 +36,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 }
 
 function GetDamageBrackets(XComGameState_Unit SourceUnit, XComGameState_Unit TargetUnit,
-    out int iDmgLow, out int iDmgHigh)
+    out int iDmgLow, out int iDmgHigh, optional out int iDmgLowBase, optional out int iDmgHighBase)
 {
     local float fDmgFromHP;
 
@@ -50,19 +50,19 @@ function GetDamageBrackets(XComGameState_Unit SourceUnit, XComGameState_Unit Tar
             fDmgFromHP = TargetUnit.GetMaxStat(eStat_HP) * fPrcDmg / 100;
     }
         
+    iDmgLowBase = EffectDamageValue.Damage - EffectDamageValue.Spread + (EffectDamageValue.PlusOne == 100 ? 1 : 0);
+    iDmgHighBase = EffectDamageValue.Damage + EffectDamageValue.Spread + (EffectDamageValue.PlusOne > 0 ? 1 : 0);
+
     if (bCeiling)
     {
-        iDmgLow = EffectDamageValue.Damage - EffectDamageValue.Spread + (EffectDamageValue.PlusOne == 100 ? 1 : 0) + FCeil(fDmgFromHP);
-        iDmgHigh = EffectDamageValue.Damage + EffectDamageValue.Spread + (EffectDamageValue.PlusOne > 0 ? 1 : 0) + FCeil(fDmgFromHP);
+        iDmgLow = iDmgLowBase + FCeil(fDmgFromHP);
+        iDmgHigh = iDmgHighBase + FCeil(fDmgFromHP);
     }
     else
     {
-        iDmgLow = EffectDamageValue.Damage - EffectDamageValue.Spread + (EffectDamageValue.PlusOne == 100 ? 1 : 0) + int(fDmgFromHP);
-        iDmgHigh = EffectDamageValue.Damage + EffectDamageValue.Spread + (EffectDamageValue.PlusOne > 0 ? 1 : 0) + int(fDmgFromHP);
+        iDmgLow = iDmgLowBase + int(fDmgFromHP);
+        iDmgHigh = iDmgHighBase + int(fDmgFromHP);
     }
-
-    iDmgLow = Max(iDmgLow, iMinDamage);
-    iDmgHigh = Max(iDmgHigh, iMinDamage);
 }
 
 defaultproperties

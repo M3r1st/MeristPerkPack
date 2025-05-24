@@ -20,15 +20,18 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
 }
 
 function GetDamageBrackets(XComGameState_Unit SourceUnit,
-    out int iDmgLow, out int iDmgHigh)
+    out int iDmgLow, out int iDmgHigh, optional out int iDmgLowBase, optional out int iDmgHighBase)
 {
     local int iRank;
 
     if (SourceUnit != none)
         iRank = SourceUnit.GetSoldierRank();
     
-    iDmgLow = EffectDamageValue.Damage - EffectDamageValue.Spread + (EffectDamageValue.PlusOne == 100 ? 1 : 0) + int(iRank * fDamagePerRank);
-    iDmgHigh = EffectDamageValue.Damage + EffectDamageValue.Spread + (EffectDamageValue.PlusOne > 0 ? 1 : 0) + int(iRank * fDamagePerRank);
+    iDmgLowBase = EffectDamageValue.Damage - EffectDamageValue.Spread + (EffectDamageValue.PlusOne == 100 ? 1 : 0);
+    iDmgHighBase = EffectDamageValue.Damage + EffectDamageValue.Spread + (EffectDamageValue.PlusOne > 0 ? 1 : 0);
+
+    iDmgLow = iDmgLowBase + int(iRank * fDamagePerRank);
+    iDmgHigh = iDmgHighBase + int(iRank * fDamagePerRank);
 }
 
 function GetCritDamage(XComGameState_Unit SourceUnit,
