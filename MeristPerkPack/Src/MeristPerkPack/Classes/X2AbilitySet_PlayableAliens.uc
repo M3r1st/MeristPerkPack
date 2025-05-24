@@ -289,7 +289,7 @@ static function X2AbilityTemplate Coil()
     }
     Template.AbilityCosts.AddItem(ActionPointCost);
     
-    PropertyCondition = new class'X2Condition_UnitProperty';	
+    PropertyCondition = new class'X2Condition_UnitProperty';
     PropertyCondition.ExcludeDead = true;                           // Can't hunkerdown while dead
     PropertyCondition.ExcludeFriendlyToSource = false;              // Self targeted
     // PropertyCondition.ExcludeNoCover = true;                        // Unit must be in cover.
@@ -474,7 +474,7 @@ static function X2AbilityTemplate LockjawAttack()
     local X2AbilityToHitCalc_StandardMelee          ToHitCalc;
     local X2AbilityTrigger_EventListener            Trigger;
     local X2Effect_Persistent                       BladestormTargetEffect;
-    local X2Condition_UnitEffectsWithAbilitySource	BladestormTargetCondition;
+    local X2Condition_UnitEffectsWithAbilitySource  BladestormTargetCondition;
     local X2Condition_UnitProperty                  SourceNotConcealedCondition;
     local X2Condition_Visibility                    TargetVisibilityCondition;
     local X2Condition_UnitProperty                  ExcludeSquadmatesCondition;
@@ -540,7 +540,7 @@ static function X2AbilityTemplate LockjawAttack()
     UnitPropertyCondition.ExcludeRobotic = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
-    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);	
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
     SourceNotConcealedCondition = new class'X2Condition_UnitProperty';
@@ -605,7 +605,7 @@ static function EventListenerReturn LockjawConcealmentListener(Object EventData,
     local XComGameState_Unit ConcealmentBrokenUnit;
     local XComGameState_Ability BladestormState;
 
-    ConcealmentBrokenUnit = XComGameState_Unit(EventSource);	
+    ConcealmentBrokenUnit = XComGameState_Unit(EventSource);
     if (ConcealmentBrokenUnit == None)
         return ELR_NoInterrupt;
 
@@ -704,7 +704,7 @@ static function X2AbilityTemplate Salamander()
     Template = Passive('M31_PA_Salamander', "img:///UILibrary_MPP.fireshield", false, true);
 
     ImmunityEffect = new class'X2Effect_DamageImmunityByTypes';
-    ImmunityEffect.EffectName = 'M31_PA_Salamander_Radius';
+    ImmunityEffect.EffectName = 'M31_PA_Salamander_Immunity';
     ImmunityEffect.DamageImmunities.AddItem('Fire');
     ImmunityEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(ImmunityEffect);
@@ -1041,7 +1041,7 @@ static function X2AbilityTemplate IronskinBite()
 
 static function X2AbilityTemplate PoisonSpit()
 {
-    local X2AbilityTemplate                 Template;	
+    local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
@@ -1122,7 +1122,7 @@ static function X2AbilityTemplate BlindingPoison()
 
 static function X2AbilityTemplate FrostSpit()
 {
-    local X2AbilityTemplate                 Template;	
+    local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
@@ -1153,7 +1153,7 @@ static function X2AbilityTemplate FrostSpit()
     DamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_FrostSpit_DamagePerRank");
     Template.AddMultiTargetEffect(DamageEffect);
 
-    Template.CustomFireAnim = 'HL_FrostBite';
+    Template.CustomFireAnim = 'M31_HL_FrostBite';
 
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
@@ -1178,7 +1178,7 @@ static function X2AbilityTemplate FrostbiteSpit()
 
 static function X2AbilityTemplate FrostBreath()
 {
-    local X2AbilityTemplate                 Template;	
+    local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
@@ -1217,7 +1217,7 @@ static function X2AbilityTemplate FrostBreath()
         Template.AddMultiTargetEffect(DamageEffect);
     }
 
-    Template.CustomFireAnim = 'HL_FrostBite';
+    Template.CustomFireAnim = 'M31_HL_FrostBite';
 
     // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
@@ -1274,7 +1274,7 @@ static function X2AbilityTemplate CreateViperSpitAbility(
     Template.CinescriptCameraType = "_PoisonSpit";
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
     
     Template.bDisplayInUITooltip = false;
@@ -1364,13 +1364,13 @@ static function X2DataTemplate PersonalShield()
 
 final static function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
-	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+    local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
 
-	if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
-	{
-		SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
-		SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
-	}
+    if (XGUnit(ActionMetadata.VisualizeActor).IsAlive())
+    {
+        SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+        SoundAndFlyOver.SetSoundAndFlyOverParameters(None, class'XLocalizedData'.default.ShieldRemovedMsg, '', eColor_Bad, , 0.75, true);
+    }
 }
 
 static function X2AbilityTemplate Aegis()
@@ -1482,12 +1482,12 @@ static function X2AbilityTemplate CreateBayonetAbility(name TemplateName, bool b
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
     if (bCounterattack)
-        Template.MergeVisualizationFn = class'X2Ability_Muton'.static.CounterAttack_MergeVisualization;	
+        Template.MergeVisualizationFn = class'X2Ability_Muton'.static.CounterAttack_MergeVisualization;
 
     if (!bCounterattack)
         Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-    Template.bFrameEvenWhenUnitIsHidden = true;	
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
     Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
     Template.SourceMissSpeech = 'SwordMiss';
@@ -1566,7 +1566,7 @@ static function X2AbilityTemplate CreateBayonetChargeAbility(name TemplateName)
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.BuildInterruptGameStateFn = TypicalMoveEndAbility_BuildInterruptGameState;
 
-    Template.bFrameEvenWhenUnitIsHidden = true;	
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
     Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
     Template.SourceMissSpeech = 'SwordMiss';
