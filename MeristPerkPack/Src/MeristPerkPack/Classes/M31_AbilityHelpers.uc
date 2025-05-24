@@ -150,6 +150,8 @@ static function X2Effect_PersistentStatChange CreatePoisonedEffect()
     EffectCondition.AddExcludeEffect('M31_PA_EnhancedPoison_Valid', 'AA_AbilityUnavailable');
     PersistentStatChangeEffect.TargetConditions.AddItem(EffectCondition);
 
+    PersistentStatChangeEffect.EffectRank = 1;
+
     return PersistentStatChangeEffect;
 }
 
@@ -210,6 +212,8 @@ static function X2Effect_PersistentStatChange CreateEnhancedPoisonedEffect()
     EffectCondition = new class'X2Condition_UnitEffectsOnSource';
     EffectCondition.AddRequireEffect('M31_PA_EnhancedPoison_Valid', 'AA_MissingRequiredEffect');
     PersistentStatChangeEffect.TargetConditions.AddItem(EffectCondition);
+
+    PersistentStatChangeEffect.EffectRank = 2;
 
     return PersistentStatChangeEffect;
 }
