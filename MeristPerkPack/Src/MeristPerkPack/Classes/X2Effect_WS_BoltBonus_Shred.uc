@@ -1,1 +1,0 @@
-class X2Effect_WS_BoltBonus_Shred extends X2Effect_WS_BoltBonus;

@@ -21,7 +21,7 @@ function GetToHitModifiers(
         return;
 
     if (!Target.CanTakeCover()
-        || `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
+        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked") && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
     {
         AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;
@@ -49,7 +49,7 @@ function int GetExtraShredValue(
         return 0;
 
     if (!TargetUnit.CanTakeCover()
-        || `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
+        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked") && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
     {
         return `GetConfigInt("M31_PA_WS_Fracture_ShredBonus");
     }

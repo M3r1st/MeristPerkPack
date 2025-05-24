@@ -19,10 +19,10 @@ function float GetPostDefaultAttackingDamageModifier_CH(
         return 0;
 
     if (!TargetUnit.CanTakeCover())
-        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonus_Unflankable");
+        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable");
     
     if (TargetUnit.UnitSize > 1)
-        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonus_Large");
+        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonusPrc_Large");
 
     return CurrentDamage * fModifier / 100;
 }
