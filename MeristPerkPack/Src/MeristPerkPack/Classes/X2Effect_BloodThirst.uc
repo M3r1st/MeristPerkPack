@@ -6,6 +6,7 @@ var int iStackDuration;
 var bool bRefreshDuration;
 var bool bApplyToAnyMelee;
 var bool bIncreaseOnlyOnHit;
+var bool bChosenVersion;
 
 struct DamagePerStackInfo
 {
@@ -28,8 +29,11 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     EventMgr.RegisterForEvent(EffectObj, 'SlashActivated', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
     EventMgr.RegisterForEvent(EffectObj, 'BladestormActivated', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
-    // EventMgr.RegisterForEvent(EffectObj, 'PartingSilkActivated', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
-    // EventMgr.RegisterForEvent(EffectObj, 'HarborWaveDealtDamage', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
+    if (bChosenVersion)
+    {
+        EventMgr.RegisterForEvent(EffectObj, 'PartingSilkActivated', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
+        EventMgr.RegisterForEvent(EffectObj, 'HarborWaveDealtDamage', AbilityTriggerEventListener_BloodThirst, ELD_OnStateSubmitted,, SourceUnitState,, EffectObj);
+    }
 }
 
 static function EventListenerReturn AbilityTriggerEventListener_BloodThirst(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
