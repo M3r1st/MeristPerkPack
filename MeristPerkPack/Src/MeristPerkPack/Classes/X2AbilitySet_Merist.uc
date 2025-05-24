@@ -71,6 +71,7 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(ThermalShockAttack());
     Templates.AddItem(ToxicNightmare());
         Templates.AddItem(ToxicNightmareAttack());
+
     return Templates;
 }
 
@@ -499,7 +500,7 @@ static function X2AbilityTemplate Entrench()
     local X2AbilityTemplate                 Template;
     local X2AbilityCost_ActionPoints        AbilityActionPointCost;
     local X2Condition_UnitProperty          PropertyCondition;
-    local X2Effect_HunkerDown_LW	        HunkerDownEffect;
+    local X2Effect_HunkerDown_LW            HunkerDownEffect;
     local X2Condition_UnitEffects           UnitEffectsCondition;
     local array<name>                       SkipExclusions;
     local X2Effect_SetUnitValue             UnitValueEffect;
@@ -518,7 +519,7 @@ static function X2AbilityTemplate Entrench()
     AbilityActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.DeepCoverActionPoint);
     Template.AbilityCosts.AddItem(AbilityActionPointCost);
     
-    PropertyCondition = new class'X2Condition_UnitProperty';	
+    PropertyCondition = new class'X2Condition_UnitProperty';
     PropertyCondition.ExcludeDead = true;                           // Can't hunkerdown while dead
     PropertyCondition.ExcludeFriendlyToSource = false;              // Self targeted
     PropertyCondition.ExcludeNoCover = true;                        // Unit must be in cover.
@@ -604,8 +605,8 @@ static function X2AbilityTemplate EntrenchTrigger()
 
 static function X2AbilityTemplate EyeOnTarget()
 {
-    local X2AbilityTemplate										Template;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget			Effect;
+    local X2AbilityTemplate                                 Template;
+    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget      Effect;
 
     Template = Passive('M31_EyeOnTarget', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, false);
 
@@ -620,8 +621,8 @@ static function X2AbilityTemplate EyeOnTarget()
 
 static function X2AbilityTemplate Escalation()
 {
-    local X2AbilityTemplate				Template;
-    local X2Effect_Escalation			Effect;
+    local X2AbilityTemplate             Template;
+    local X2Effect_Escalation           Effect;
 
     Template = SelfTargetActivated('M31_Escalation', "img:///UILibrary_MZChimeraIcons.Ability_Supercharge", false);
 
@@ -793,7 +794,7 @@ static function X2AbilityTemplate NeurotoxicShot()
     PoisonedEffect.TargetConditions.AddItem(UnitImmunityCondition);
     Template.AddTargetEffect(PoisonedEffect);
 
-    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect();
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(,, false);
     DisorientedEffect.TargetConditions.AddItem(UnitImmunityCondition);
     Template.AddTargetEffect(DisorientedEffect);
 
@@ -804,9 +805,9 @@ static function X2AbilityTemplate NeurotoxicShot()
 
 static function X2AbilityTemplate Overseer()
 {
-    local X2AbilityTemplate										Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory		SniperRifleCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget			SniperRifleAbilityEffect;
+    local X2AbilityTemplate                                     Template;
+    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        SniperRifleCondition;
+    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          SniperRifleAbilityEffect;
 
     Template = Passive('M31_Overseer', "img:///KetarosPkg_Abilities.UIPerk_SniperRifle05", false, false);
     
@@ -844,7 +845,7 @@ static function X2AbilityTemplate PerfectHandling()
 
 static function X2AbilityTemplate Pinpoint()
 {
-    local X2AbilityTemplate					Template;
+    local X2AbilityTemplate             Template;
 
     Template = Attack('M31_Pinpoint', "img:///UILibrary_MZChimeraIcons.WeaponMod_LaserSight_Sup", false, true);
 
@@ -859,8 +860,8 @@ static function X2AbilityTemplate Pinpoint()
 
 static function X2AbilityTemplate PinpointBonus()
 {
-    local X2AbilityTemplate					Template;
-    local X2Effect_PinpointBonus			Effect;
+    local X2AbilityTemplate                 Template;
+    local X2Effect_PinpointBonus            Effect;
 
     Template = Passive('M31_Pinpoint_Bonus', "img:///UILibrary_MZChimeraIcons.WeaponMod_LaserSight_Sup", false, false);
 
@@ -873,7 +874,7 @@ static function X2AbilityTemplate PinpointBonus()
 
 static function X2AbilityTemplate PipeBombs()
 {
-    local X2AbilityTemplate	Template;
+    local X2AbilityTemplate                 Template;
 
     Template = Passive('M31_PipeBombs', "img:///UILibrary_MZChimeraIcons.Ability_ShrapnelGrenade", false, true);
     
@@ -901,15 +902,15 @@ static function X2AbilityTemplate Relentless()
 
 static function X2AbilityTemplate SnipersOverwatch()
 {
-    local X2AbilityTemplate							Template;
-    local X2AbilityCooldown							Cooldown;
-    local X2AbilityCost_Ammo						AmmoCost;
-    local X2AbilityCost_ActionPoints				ActionPointCost;
-    local X2AbilityTarget_Cursor					CursorTarget;
-    local X2AbilityMultiTarget_Cone					ConeMultiTarget;
-    local X2Effect_ReserveActionPoints				ReservePointsEffect;
-    local X2Effect_MarkValidActivationTiles			MarkTilesEffect;
-    local X2Condition_UnitEffects					SuppressedCondition;
+    local X2AbilityTemplate                         Template;
+    local X2AbilityCooldown                         Cooldown;
+    local X2AbilityCost_Ammo                        AmmoCost;
+    local X2AbilityCost_ActionPoints                ActionPointCost;
+    local X2AbilityTarget_Cursor                    CursorTarget;
+    local X2AbilityMultiTarget_Cone                 ConeMultiTarget;
+    local X2Effect_ReserveActionPoints              ReservePointsEffect;
+    local X2Effect_MarkValidActivationTiles         MarkTilesEffect;
+    local X2Condition_UnitEffects                   SuppressedCondition;
     
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_SnipersOverwatch');
 
@@ -1378,7 +1379,8 @@ static function X2AbilityTemplate TrackingFireResetCooldown()
     }
 
     Effect = new class'X2Effect_ReduceCooldowns';
-    Effect.ReduceAll = true;
+    Effect.ReduceAll = (`GetConfigInt("M31_TrackingFire_CooldownReduction") > 0 ? false : true);
+    Effect.Amount = `GetConfigInt("M31_TrackingFire_CooldownReduction");
     Effect.AbilitiesToTick.AddItem('M31_TrackingFire');
     Template.AddTargetEffect(Effect);
 
