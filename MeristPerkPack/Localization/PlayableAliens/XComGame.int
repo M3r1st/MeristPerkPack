@@ -68,10 +68,14 @@ LocFlyOverText="Salamander"
 LocFriendlyName="Sidewinder"
 LocLongDescription="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_PA_Sidewinder_Cooldown> Turn(s)."
 LocHelpText="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_PA_Sidewinder_Cooldown> Turn(s)."
-LocPromotionPopupText="<Bullet> Sidewinder will not activate if the <Ability:ClassName> is currently binding a target.<br><Bullet> Sidewinder does not trigger against reaction fire."
+LocPromotionPopupText="<Bullet> Sidewinder can activate while disoriented: <Ability:M31_PA_Sidewinder_bAllowWhileDisoriented>.<br><Bullet> Sidewinder can activate while burning: <Ability:M31_PA_Sidewinder_bAllowWhileBurning>.<br><Bullet> Sidewinder will not activate during <Ability:ClassName>'s own turn: <Ability:M31_PA_Sidewinder_bOnlyOnEnemyTurn>.<br><Bullet> Sidewinder will not activate if the <Ability:ClassName> is currently binding a target.<br><Bullet> Sidewinder will not activate against reaction fire."
 LocFlyOverText="Sidewinder"
 
 [M31_PA_Sidewinder_Move X2AbilityTemplate]
+LocFriendlyName="Sidewinder"
+LocFlyOverText="Sidewinder"
+
+[M31_PA_Sidewinder_AddMovementAction X2AbilityTemplate]
 LocFriendlyName="Sidewinder"
 LocFlyOverText="Sidewinder"
 
