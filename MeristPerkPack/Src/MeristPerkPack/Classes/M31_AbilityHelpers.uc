@@ -288,7 +288,7 @@ static function AddBlindingPoisonEffectToMultiTarget(out X2AbilityTemplate Templ
     Template.AddMultiTargetEffect(BlindEffectEnhanced);
 }
 
-static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int BleedDamage, int BleedDamageSpread, float BleedDamagePrc)
+static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int BleedDamage, optional int BleedDamageSpread, optional float BleedDamagePrc)
 {
     local X2Effect_Persistent PersistentEffect;
     local X2Effect_ApplyDamageFromHP DamageEffect;
@@ -319,6 +319,8 @@ static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int
     DamageEffect.EffectDamageValue.Damage = BleedDamage;
     DamageEffect.EffectDamageValue.Spread = BleedDamageSpread;
     DamageEffect.fPrcDmg = BleedDamagePrc;
+    DamageEffect.fPrcDamage_ChosenMultiplier = 0.5;
+    DamageEffect.fPrcDamage_RulerMultiplier = 0.5;
     DamageEffect.bCeiling = true;
     DamageEffect.EffectDamageValue.DamageType = 'Bleeding';
 
