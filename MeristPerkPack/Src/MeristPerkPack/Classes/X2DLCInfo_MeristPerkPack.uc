@@ -14,6 +14,7 @@ var config(GameData_SoldierSkills) array<name> Botnet2_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> Aim_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> AddImpairingAttack;
 var config(GameData_SoldierSkills) array<name> AttackGrenades;
+var config(GameData_SoldierSkills) array<name> GrenadeAbilities;
 var config(GameData_SoldierSkills) array<name> SuppressingFire_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> ImprovedSuppression_AllowedAbilities;
 var config(GameData_SoldierSkills) bool bUpdateTemplarShield;
@@ -389,7 +390,7 @@ static function AddEffectsToGrenades()
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(BleedingEffect);
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(BleedingEffect);
                 }
-                if (class'X2AbilitySet_WinterSentinel'.default.ChillingMist_AllowedGrenades.Find(GrenadeTemplate.DataName) != INDEX_NONE)
+                if (class'X2AbilitySet_WinterSentinel'.default.FrostGrenades.Find(GrenadeTemplate.DataName) != INDEX_NONE)
                 {
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(HypothermiaEffect);
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(HypothermiaEffect);
