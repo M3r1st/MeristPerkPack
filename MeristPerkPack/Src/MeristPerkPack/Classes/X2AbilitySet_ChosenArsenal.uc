@@ -63,9 +63,9 @@ static function X2AbilityTemplate BlindSpot()
 
 static function X2AbilityTemplate ChaosDriver()
 {
-    local X2AbilityTemplate				Template;
-    local X2Effect_ChaosDriver			Effect;
-    local X2AbilityCharges 				Charges;
+    local X2AbilityTemplate             Template;
+    local X2Effect_ChaosDriver          Effect;
+    local X2AbilityCharges              Charges;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_ChaosDriver');
 
@@ -115,9 +115,9 @@ static function X2AbilityTemplate ChaosDriver()
 
 static function X2AbilityTemplate ChaosDriverCharges()
 {
-    local X2AbilityTemplate					Template;
-    local X2Condition_UnitEffects			NoEffectCondition;
-    local XMBEffect_AddAbilityCharges		Effect;
+    local X2AbilityTemplate                 Template;
+    local X2Condition_UnitEffects           NoEffectCondition;
+    local XMBEffect_AddAbilityCharges       Effect;
 
     Effect = new class'XMBEffect_AddAbilityCharges';
     Effect.AbilityNames.AddItem('M31_CA_ChaosDriver');
@@ -145,8 +145,8 @@ static function X2AbilityTemplate ChaosDriverCharges()
 
 static function X2AbilityTemplate CollectBounty()
 {
-    local X2AbilityTemplate					Template;
-    local X2Effect_Shredder				    WeaponDamageEffect;
+    local X2AbilityTemplate                 Template;
+    local X2Effect_Shredder                 WeaponDamageEffect;
 
     WeaponDamageEffect = new class'X2Effect_Shredder';
     WeaponDamageEffect.bBypassSustainEffects = true;
@@ -167,8 +167,8 @@ static function X2AbilityTemplate CollectBounty()
 
 static function X2AbilityTemplate CollectBountyDamage()
 {
-    local X2AbilityTemplate					Template;
-    local X2Effect_CollectBountyBonus		Effect;
+    local X2AbilityTemplate                 Template;
+    local X2Effect_CollectBountyBonus       Effect;
 
     Effect = new class'X2Effect_CollectBountyBonus';
     
@@ -181,9 +181,9 @@ static function X2AbilityTemplate CollectBountyDamage()
 
 static function X2AbilityTemplate KillingSpree()
 {
-    local X2AbilityTemplate						Template;
-    local XMBEffect_ConditionalBonus			Effect;
-    local X2AbilityTrigger_EventListener		EventListenerTrigger;
+    local X2AbilityTemplate                     Template;
+    local XMBEffect_ConditionalBonus            Effect;
+    local X2AbilityTrigger_EventListener        EventListenerTrigger;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_KillingSpree');
 
@@ -224,10 +224,10 @@ static function X2AbilityTemplate KillingSpree()
 
 static function X2AbilityTemplate MarkForDeath()
 {
-    local X2AbilityTemplate				Template;
-    local X2Condition_Visibility		TargetVisibilityCondition;
-    local X2Condition_UnitEffects		UnitEffectsCondition;
-    local X2Effect_MarkForDeath			MarkEffect;
+    local X2AbilityTemplate             Template;
+    local X2Condition_Visibility        TargetVisibilityCondition;
+    local X2Condition_UnitEffects       UnitEffectsCondition;
+    local X2Effect_MarkForDeath         MarkEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_MarkForDeath');
 
@@ -293,9 +293,9 @@ static function X2AbilityTemplate MarkForDeath()
 
 static function X2AbilityTemplate MarkForDeathRefund()
 {
-    local X2AbilityTemplate							Template;
+    local X2AbilityTemplate                         Template;
     local XMBEffect_AbilityCostRefund               Effect;
-    local X2Condition_UnitEffects					EffectCondition;
+    local X2Condition_UnitEffects                   EffectCondition;
 
     Effect = new class'XMBEffect_AbilityCostRefund';
     Effect.EffectName = 'M31_CA_MarkForDeath_Refund';
@@ -319,9 +319,9 @@ static function X2AbilityTemplate MarkForDeathRefund()
 
 static function X2AbilityTemplate MistTrail()
 {
-    local X2AbilityTemplate					Template;
+    local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardAim    StandardAim;
-    local X2Effect_Blind					BlindEffect;
+    local X2Effect_Blind                    BlindEffect;
 
     Template = Attack('M31_CA_MistTrail', "img:///UILibrary_MZChimeraIcons.Ability_CascadeLance", false, , , eCost_Single, 1);
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY + 1;
@@ -347,7 +347,7 @@ static function X2AbilityTemplate PhantomStride()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
-    local X2AbilityTarget_MovingMelee_Extended  MeleeTarget;
+    local X2AbilityTarget_MovingMelee_FixedRange MeleeTarget;
     local X2Effect_ApplyWeaponDamage        WeaponDamageEffect;
     local X2AbilityCooldown                 Cooldown;
     local X2AbilityCost_ActionPoints        ActionPointCost;
@@ -374,9 +374,8 @@ static function X2AbilityTemplate PhantomStride()
     StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
     Template.AbilityToHitCalc = StandardMelee;
     
-    MeleeTarget = new class'X2AbilityTarget_MovingMelee_Extended';
+    MeleeTarget = new class'X2AbilityTarget_MovingMelee_FixedRange';
     MeleeTarget.iFixedRange = 1;
-    MeleeTarget.bUseFixedRange = true;
     Template.AbilityTargetStyle = MeleeTarget;
     Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
 
@@ -408,7 +407,7 @@ static function X2AbilityTemplate PhantomStride()
 static function X2AbilityTemplate PhantomStrideCooldownReduction()
 {
     local X2AbilityTemplate                     Template;
-    local X2AbilityTrigger_EventListener        EventListener;	
+    local X2AbilityTrigger_EventListener        EventListener;
     local X2Effect_ReduceCooldowns              ReduceCooldownsEffect;
         
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_PhantomStride_CooldownReduction');

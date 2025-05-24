@@ -899,7 +899,7 @@ static function X2AbilityTemplate ViperBite()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
-    local X2AbilityTarget_MovingMelee_Extended MeleeTarget;
+    local X2AbilityTarget_MovingMelee_FixedRange MeleeTarget;
     local X2Condition_UnitProperty          UnitPropCondition;
     local X2Effect_ApplyDamageWithRank      PhysicalDamageEffect;
     local X2AbilityCost_ActionPoints        ActionPointCost;
@@ -934,9 +934,8 @@ static function X2AbilityTemplate ViperBite()
     StandardMelee.bAllowCrit = `GetConfigBool("M31_PA_ViperBite_bAllowCrit");
     Template.AbilityToHitCalc = StandardMelee;
 
-    MeleeTarget = new class'X2AbilityTarget_MovingMelee_Extended';
+    MeleeTarget = new class'X2AbilityTarget_MovingMelee_FixedRange';
     MeleeTarget.iFixedRange = 1;
-    MeleeTarget.bUseFixedRange = true;
     Template.AbilityTargetStyle = MeleeTarget;
     Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
 
