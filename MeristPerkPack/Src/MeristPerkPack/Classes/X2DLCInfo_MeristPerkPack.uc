@@ -16,7 +16,6 @@ var config(GameData_SoldierSkills) array<name> AddImpairingAttack;
 var config(GameData_SoldierSkills) array<name> AttackGrenades;
 var config(GameData_SoldierSkills) array<name> SuppressingFire_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> ImprovedSuppression_AllowedAbilities;
-var config(GameData_SoldierSkills) bool bImprovedSuppression_ApplyToRobotic;
 var config(GameData_SoldierSkills) bool bUpdateTemplarShield;
 var config(TooManyTooltips) bool bEnableTooManyTooltips;
 var config(TooManyTooltips) array<name> TooManyTooltips_AbilitiesToPatch;
@@ -561,6 +560,22 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_BloodThirst_bIncreaseOnlyOnHit":
         case "M31_Frostbane_bCheckSourceWeapon":
         case "M31_TrackingFire_bAllowResetFromBladestorm":
+
+        case "M31_PA_Coil_bAllowDeepCover":
+        case "M31_PA_Lockjaw_bAllowCrit":
+        case "M31_PA_ViperBite_bAllowCrit":
+        case "M31_PA_Spit_bRequireVisibility":
+        case "M31_PA_PoisonSpit_bDealsDamage":
+        case "M31_PA_PoisonSpit_bAppliesPoisonToWorld":
+        case "M31_PA_FrostBreath_bDealsDamage":
+        case "M31_PA_PersonalShield_bAllowWhileDisoriented":
+        case "M31_PA_BayonetCharge_bAllowWhileDisoriented":
+        case "M31_PA_Counterattack_bOnlyOnEnemyTurn":
+        case "M31_PA_CripplingBlow_bInfiniteDuration":
+        case "M31_PA_CripplingBlow_bAllowStack":
+        case "M31_PA_Sidewinder_bOnlyOnEnemyTurn":
+        case "M31_PA_Sidewinder_bAllowWhileDisoriented":
+        case "M31_PA_Sidewinder_bAllowWhileBurning":
             OutString = ColorText_Auto(UnitState, `GetConfigBool(InString));
             return true;
 
