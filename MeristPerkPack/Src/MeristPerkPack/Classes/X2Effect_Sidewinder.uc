@@ -4,8 +4,8 @@ var bool bDisableForFriendlyFire;
 
 function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, bool bIsPrimaryTarget, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult)
 {
-    local X2AbilityTemplate					AbilityTemplate;
-    local X2AbilityToHitCalc_StandardAim	StandardAimHitCalc;
+    local X2AbilityTemplate                 AbilityTemplate;
+    local X2AbilityToHitCalc_StandardAim    StandardAimHitCalc;
     local bool bDealsDamage;
 
     if (!class'XComGameStateContext_Ability'.static.IsHitResultHit(CurrentResult))
@@ -29,7 +29,7 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
         }
         if (TargetUnit.IsAbleToAct())
         {
-            if (!TargetUnit.IsUnitAffectedByEffectName('AA_UnitIsBound') &&
+            if (!TargetUnit.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName) &&
                 !TargetUnit.IsUnitAffectedByEffectName(class'X2AbilitySet_PlayableAliens'.default.SidewinderCooldownEffectName))
             {
                 NewHitResult = eHit_Miss;
