@@ -225,7 +225,7 @@ LocHelpText="Gain <font color='#1abc9c'>Suppression</font>. Additionally, gain <
 LocFriendlyName="Tracking Fire"
 LocLongDescription="Take a shot at the target. <Ability:M31_FreeAction> Counts as reaction fire. Has a <Ability:SelfCooldown_M31> Turn(s) cooldown, but resets after a melee attack."
 LocHelpText="Take a shot at the target. <Ability:M31_FreeAction> Counts as reaction fire. Cooldown resets after a melee attack."
-LocPromotionPopupText="<Bullet> Can be reset by Bladestorm: <Ability:M31_TrackingFire_bAllowResetFromBladestorm>."
+LocPromotionPopupText="<Bullet> Can be used while the <Ability:ClassName> has at least one standard, Run and Gun or movement-only action.<br><Bullet> Cooldown can be reset by Bladestorm: <Ability:M31_TrackingFire_bAllowResetFromBladestorm>."
 LocFlyOverText="Tracking Fire"
 
 [M31_TrainedSniper_Squadsight X2AbilityTemplate]
