@@ -89,7 +89,9 @@ LocFriendlyName="Duskborn"
 LocLongDescription="Gain +<Ability:M31_Duskborn_AimBonus> aim and +<Ability:M31_Duskborn_CritBonus> critical chance while concealed and for <Ability:M31_Duskborn_Duration> Turn(s) after your concealment is broken."
 ; LocLongDescription="Gain +<Ability:M31_Duskborn_AimBonus> aim and +<Ability:M31_Duskborn_CritBonus> critical chance while concealed and for <Ability:M31_Duskborn_Duration> Turn(s) after your concealment is broken. Quack-quack."
 LocHelpText="Gain +<Ability:M31_Duskborn_AimBonus> aim and +<Ability:M31_Duskborn_CritBonus> critical chance while concealed and for <Ability:M31_Duskborn_Duration> Turn(s) after your concealment is broken."
-LocFlyOverText="Duckborn"
+LocFlyOverText="Duskborn"
+; LocFlyOverText="Duckborn"
+
 
 [M31_Duskborn_Trigger X2AbilityTemplate]
 LocFriendlyName="Duckborn"
