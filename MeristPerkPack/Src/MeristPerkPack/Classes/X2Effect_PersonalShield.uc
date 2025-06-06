@@ -39,16 +39,14 @@ simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectPa
 
 simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit    SourceUnit;
+    local XComGameState_Unit SourceUnit;
     local AdditionalShieldAmountInfo Info;
-    local int                   Shield;
+    local int Shield;
 
     if (AdditionalShieldAmount.Length == 0)
         return 0;
 
-    SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-    if (SourceUnit == none)
-        SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
     if (SourceUnit != none)
     {

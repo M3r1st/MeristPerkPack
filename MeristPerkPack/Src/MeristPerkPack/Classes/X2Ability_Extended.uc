@@ -1,4 +1,4 @@
-class X2Ability_Extended extends X2Ability;
+class X2Ability_Extended extends X2Ability dependson(X2AbilityCooldown_Extended);
 
 // Used by ActionPointCost and related functions
 enum EActionPointCost
@@ -108,7 +108,7 @@ static function X2AbilityTemplate SelfTargetTrigger(
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+    // Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
     Template.bSkipFireAction = true;
 

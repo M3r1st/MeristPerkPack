@@ -3,6 +3,7 @@ class X2Effect_WS_RebelYell extends X2Effect_ModifyStats config(GameData_Soldier
 var array<StatChange> m_aStatChanges;
 var array<StatChange> m_aStatChangesAlt;
 
+var config array<name> CharacterGroupsAlt;
 var config array<name> CharacterNamesAlt;
 
 simulated function AddPersistentStatChange(ECharStatType StatType, float StatAmount, optional bool AltStat, optional EStatModOp InModOp=MODOP_Addition)
@@ -26,7 +27,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     if (TargetUnit != none)
     {
-        if (CharacterNamesAlt.Find(TargetUnit.GetMyTemplateName()) != -1)
+        if (CharacterGroupsAlt.Find(TargetUnit.GetMyTemplate().CharacterGroupName) != INDEX_NONE
+            || CharacterNamesAlt.Find(TargetUnit.GetMyTemplateName()) != INDEX_NONE)
             NewEffectState.StatChanges = m_aStatChangesAlt;
         else
             NewEffectState.StatChanges = m_aStatChanges;
@@ -43,4 +45,5 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 defaultproperties
 {
     EffectName = M31_PA_WS_RebelYell
+    DuplicateResponse = eDupe_Refresh;
 }

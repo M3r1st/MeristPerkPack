@@ -1,14 +1,14 @@
 class X2Condition_SourceAbilityInSlot extends X2Condition;
 
-var array<name>		RequiredAbilities;
-var bool			bRequireAll;
-var EInventorySlot	Slot;
+var array<name>     RequiredAbilities;
+var bool            bRequireAll;
+var EInventorySlot  Slot;
 
 event name CallMeetsCondition(XComGameState_BaseObject kTarget)
 {
-    local XComGameState_Unit	TargetUnit;
-    local XComGameState_Item	Item;
-    local name					Ability;
+    local XComGameState_Unit    TargetUnit;
+    local XComGameState_Item    Item;
+    local name                  Ability;
 
     // `LOG("Condition triggered");
     TargetUnit = XComGameState_Unit(kTarget);

@@ -10,8 +10,8 @@ var name EventName;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-    local XComGameState_Unit		UnitState;
-    local Object					EffectObj;
+    local XComGameState_Unit        UnitState;
+    local Object                    EffectObj;
 
     EffectObj = EffectGameState;
     UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
@@ -20,10 +20,10 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
-    local XComGameState_Ability                 AbilityState;
-    local XComGameState_Unit                    TargetUnit;
-    local int                                   iCounter;
-    local UnitValue                             UnitValue;
+    local XComGameState_Ability     AbilityState;
+    local XComGameState_Unit        TargetUnit;
+    local UnitValue                 UnitValue;
+    local int                       iCounter;
 
     if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
         return false;

@@ -1,11 +1,10 @@
 class X2Condition_SuppressingFire extends X2Condition;
 
-var name SuppressionAbilityName;
-
 event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGameState_BaseObject kSource)
 {
     local XComGameState_Unit        TargetState, SourceState;
     local XComGameState_Ability     SuppressionState;
+    local name                      SuppressionAbilityName;
 
     TargetState = XComGameState_Unit(kTarget);
     if (TargetState == none)
@@ -15,14 +14,12 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
     if (SourceState == none)
         return 'AA_NotAUnit';
 
-    SuppressionState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceState.FindAbility(SuppressionAbilityName).ObjectID));
-    if (SuppressionState == none)
-        return 'AA_AbilityUnavailable';
+    foreach class'X2DLCInfo_MeristPerkPack'.default.SuppressingFire_AllowedAbilities(SuppressionAbilityName)
+    {
+        SuppressionState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(SourceState.FindAbility(SuppressionAbilityName).ObjectID));
+        if (SuppressionState != none && SuppressionState.CanActivateAbilityForObserverEvent(kTarget) == 'AA_Success')
+            return 'AA_Success';
+    }
 
-    return SuppressionState.CanActivateAbilityForObserverEvent(kTarget);
-}
-
-defaultproperties
-{
-    SuppressionAbilityName = "Suppression_LW"
+    return 'AA_AbilityUnavailable';
 }

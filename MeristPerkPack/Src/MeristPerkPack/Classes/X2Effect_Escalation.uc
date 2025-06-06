@@ -32,13 +32,13 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) 
 {
-    local XComGameStateHistory							History;
-    local XComGameState_Ability							SourceAbility;
-    local XComGameState_Item							SourceWeapon;
-    local X2AbilityTemplate								Template;
-    local XCGS_Effect_HackBreakdown						HackBreakdown;
-    local int											CritChance;
-    local X2Effect_ApplyWeaponDamage					DamageEffect;
+    local XComGameStateHistory          History;
+    local XComGameState_Ability         SourceAbility;
+    local XComGameState_Item            SourceWeapon;
+    local X2AbilityTemplate             Template;
+    local XCGS_Effect_HackBreakdown     HackBreakdown;
+    local X2Effect_ApplyWeaponDamage    DamageEffect;
+    local int                           CritChance;
 
     if (Attacker == none)
         return 0;

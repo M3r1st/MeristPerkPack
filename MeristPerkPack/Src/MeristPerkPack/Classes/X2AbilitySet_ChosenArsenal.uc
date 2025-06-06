@@ -286,7 +286,7 @@ static function X2AbilityTemplate MarkForDeath()
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
     
-    Template.AdditionalAbilities.AddItem('M31_CA_MarkForDeathRefund');
+    Template.AdditionalAbilities.AddItem('M31_CA_MarkForDeath_Refund');
 
     return Template;
 }

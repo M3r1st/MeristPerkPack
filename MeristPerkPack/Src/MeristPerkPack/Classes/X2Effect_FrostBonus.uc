@@ -169,9 +169,9 @@ private function int GetCurrentTier(optional XComGameState_Unit SourceUnit = non
 private function bool IsDisabled(optional XComGameState_Unit SourceUnit = none, optional XComGameState_Unit TargetUnit = none)
 {
     return SourceUnit != none &&
-            ((bDisabledByBurningOnSource && SourceUnit.AffectedByEffectNames.Find('Burning') != INDEX_NONE) ||
+            ((bDisabledByBurningOnSource && SourceUnit.IsBurning()) ||
             (bDisabledByFrostImmunityOnSource && SourceUnit.IsImmuneToDamage('Frost'))) ||
         TargetUnit != none &&
-            ((bDisabledByBurningOnTarget && TargetUnit.AffectedByEffectNames.Find('Burning') != INDEX_NONE) ||
+            ((bDisabledByBurningOnTarget && TargetUnit.IsBurning()) ||
             (bDisabledByFrostImmunityOnTarget && TargetUnit.IsImmuneToDamage('Frost')));
 }

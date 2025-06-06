@@ -2,7 +2,6 @@ class X2Effect_WS_ApplyBoltDamage extends X2Effect_Shredder;
 
 var bool bRuptureBolt;
 var bool bShredBolt;
-var bool bMaelstromBolt;
 var bool bCritBolt;
 
 function WeaponDamageValue GetBonusEffectDamageValue(
@@ -11,10 +10,8 @@ function WeaponDamageValue GetBonusEffectDamageValue(
     XComGameState_Item SourceWeapon,
     StateObjectReference TargetRef)
 {
-    local XComGameState_Unit    TargetUnit;
     local WeaponDamageValue     BonusValue;
     local X2WeaponTemplate      SourceWeaponTemplate;
-    local float fModifier;
     local bool bBallista;
 
     BonusValue = super.GetBonusEffectDamageValue(AbilityState, SourceUnit, SourceWeapon, TargetRef);
@@ -39,26 +36,6 @@ function WeaponDamageValue GetBonusEffectDamageValue(
                 BonusValue.Shred += `GetConfigInt("M31_PA_WS_Bolt_Shred_ShredBonus_Ballista");
             else
                 BonusValue.Shred += `GetConfigInt("M31_PA_WS_Bolt_Shred_ShredBonus");
-        }
-
-        if (bMaelstromBolt)
-        {
-            TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetRef.ObjectID));
-            if (TargetUnit != none)
-            {
-                if (class'X2Helpers_DLC_Day60'.static.IsUnitAlienRuler(TargetUnit))
-                    fModifier = `GetConfigFloat("M31_PA_WS_Bolt_Maelstrom_HPToDamage_RulerMult");
-                else if (TargetUnit.IsChosen())
-                    fModifier = `GetConfigFloat("M31_PA_WS_Bolt_Maelstrom_HPToDamage_ChosenMult");
-                else
-                    fModifier = 1.0;
-
-
-                if (bBallista)
-                    BonusValue.Damage += TargetUnit.GetMaxStat(eStat_HP) * (`GetConfigFloat("M31_PA_WS_Bolt_Maelstrom_HPToDamagePrc_Ballista") / 100) * fModifier;
-                else
-                    BonusValue.Damage += TargetUnit.GetMaxStat(eStat_HP) * (`GetConfigFloat("M31_PA_WS_Bolt_Maelstrom_HPToDamagePrc") / 100) * fModifier;         
-            }
         }
 
         if (bCritBolt)

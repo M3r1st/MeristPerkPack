@@ -31,7 +31,7 @@ function GetToHitAsTargetModifiers(
     {
         ModInfo.ModType = eHit_Graze;
         ModInfo.Reason = FriendlyName;
-        ModInfo.Value = -1 * `GetConfigInt("M31_PA_WS_GlacialArmor_DodgeBonus");
+        ModInfo.Value = `GetConfigInt("M31_PA_WS_GlacialArmor_DodgeBonus");
         ShotModifiers.AddItem(ModInfo);
     }
 }

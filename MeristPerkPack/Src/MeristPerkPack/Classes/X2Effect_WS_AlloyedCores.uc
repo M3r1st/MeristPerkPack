@@ -21,7 +21,7 @@ function GetToHitModifiers(
 
     if (Attacker.TileDistanceBetween(Target) < `GetConfigInt("M31_PA_WS_AlloyedCores_Range"))
     {
-        AimInfo.ModType = eHit_Success;
+        AimInfo.ModType = eHit_Crit;
         AimInfo.Reason = FriendlyName;
         AimInfo.Value = `GetConfigInt("M31_PA_WS_AlloyedCores_CritBonus");
         ShotModifiers.AddItem(AimInfo);

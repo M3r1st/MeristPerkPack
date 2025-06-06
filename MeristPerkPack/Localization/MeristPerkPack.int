@@ -5,9 +5,12 @@ M31_DefaultWeapon                           = "weapon"
 M31_PerRank                                 = "per rank"
 M31_Turns                                   = "Turn(s)"
 
-M31_FreeAction                              = "Free action."
+M31_FreeAction                              = "Free action"
 
 M31_Shield_BonusText                        = "Shield remaining: <Ability:M31_ShieldRemaining>.<br>Shield priority: <Ability:M31_ShieldPriority>."
+
+M31_ShadowstepAid_FriendlyName              = "Shadowstep Aid"
+M31_ShadowstepAid_BuffText                  = "This soldier is given temporary Shadowstep and does not trigger overwatch or reaction fire."
 
 M31_CA_Escalation_BonusText                 = "While Escalation is active, gain +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
 
@@ -31,6 +34,7 @@ M31_BloodThirst_BuffText_StacksHelp         = "stacks will be lost in"
 M31_BloodThirst_BuffText_StacksHelpFirst    = "stacks will be lost at the start of the next turn."
 
 M31_Duskborn_BonusText                      = "Duskborn is still active."
+; M31_Duskborn_BonusText                      = "Duckborn is still active. <Ability:ClassName> is still quacking."
 
 M31_ThermalShock_DebuffText                 = "Suffering from Thermal Shock. Aim and defense are reduced."
 
@@ -43,3 +47,20 @@ M31_PA_ViperEnhancedPoison_DebuffText       = "The unit is poisoned. Its aim and
 M31_BloodletBleeding_DebuffText             = "The unit is bleeding. It takes <Ability:M31_Bloodlet_BleedDamage_Debuff> damage at the start of each turn."
 M31_BleedingRoundsBleeding_DebuffText       = "The unit is bleeding. It takes <Ability:M31_BleedingRounds_BleedDamage_Debuff> damage at the start of each turn."
 M31_PipeBombsBleeding_DebuffText            = "The unit is bleeding. It takes <Ability:M31_PipeBombs_BleedDamage> damage at the start of each turn."
+M31_PA_VeryAngryBite_DebuffText             = "The unit is bleeding. It takes <Ability:M31_PA_VeryAngryBite_BleedDamage_Debuff> damage at the start of each turn."
+
+
+M31_PA_WS_Bolt_Maelstrom_FriendlyName       = "Maelstrom"
+M31_PA_WS_StupidSexySnake_BuffText          = ""
+M31_PA_WS_RebelYell_BuffText                = ""
+M31_PA_WS_Thrill_BuffText                   = ""
+
+[BitterfrostHelper]
+ChillEffectName="Chilled"
+ChillEffectDesc="Mobility and Dodge reduced."
+BitterChillEffectName="Bitter Chilled"
+BitterChillEffectDesc="Mobility reduced and unable to dodge. Vulnerable to freezing."
+
+[MZ_Effect_Hypothermia]
+HypothermiaEffectName = "Hypothermia"
+HypothermiaEffectDesc = "Cold damage at the begining of each turn depending on degree of chill."

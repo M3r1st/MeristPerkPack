@@ -25,6 +25,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Coil());
         Templates.AddItem(CoilTrigger());
         Templates.AddItem(CoilCleanse());
+        Templates.AddItem(CoilHunker());
     Templates.AddItem(Entwine());
     Templates.AddItem(Lockjaw());
         Templates.AddItem(LockjawAttack());
@@ -37,6 +38,11 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Slither());
     Templates.AddItem(ViperBite());
     Templates.AddItem(IronskinBite());
+    Templates.AddItem(AngryBite());
+        Templates.AddItem(AngryBiteAttack());
+    Templates.AddItem(VeryAngryBite());
+    Templates.AddItem(CrystallineCornea());
+    Templates.AddItem(MalevolentFocus());
 
     Templates.AddItem(PoisonSpit());
         Templates.AddItem(EnhancedPoison());
@@ -57,7 +63,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(CripplingBlow());
     Templates.AddItem(Bladestorm());
 
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_FrostSpit_Anims', "PA_ViperKing_ANIM.Anims.AS_ViperKing"));
+    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_FrostSpit_Anims', "M31_PA_Vipers.Anims.AS_ViperKing"));
     Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_ViperBash_Anims', "Viper_FireAndMeleeAnims.Anims.AS_Viper"));
 
     return Templates;
@@ -262,73 +268,43 @@ static function X2AbilityTemplate AmbushTrigger()
 static function X2AbilityTemplate Coil()
 {
     local X2AbilityTemplate                 Template;
-    local X2AbilityCost_ActionPoints        ActionPointCost;
-    local X2AbilityCooldown                 Cooldown;
-    local X2Condition_UnitProperty          PropertyCondition;
     local X2Condition_UnitEffects           EffectsCondition;
-    local X2AbilityTrigger_PlayerInput      InputTrigger;
     local array<name>                       SkipExclusions;
-    local X2Effect_HunkerDown_LW            HunkerDownEffect;
+    local X2Effect_CoilHunker               HunkerDownEffect;
     
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_Coil');
-    // img:///UILibrary_PerkIcons.UIPerk_takecover
-    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_one_for_all";
+    Template = SelfTargetActivated('M31_PA_Coil', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
+
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY;
 
-    Template.AbilitySourceName = 'eAbilitySource_Perk';
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HunkerDownAbility_BuildVisualization;
+    Template.Hostility = eHostility_Defensive;
+    Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
 
-    ActionPointCost = new class'X2AbilityCost_ActionPoints';
-    ActionPointCost.iNumPoints = 1;
-    ActionPointCost.bConsumeAllPoints = true;
-    if (`GetConfigBool("M31_PA_Coil_bAllowDeepCover"))
-    {
-        ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.DeepCoverActionPoint);
-    }
-    Template.AbilityCosts.AddItem(ActionPointCost);
-    
-    PropertyCondition = new class'X2Condition_UnitProperty';
-    PropertyCondition.ExcludeDead = true;                           // Can't hunkerdown while dead
-    PropertyCondition.ExcludeFriendlyToSource = false;              // Self targeted
-    // PropertyCondition.ExcludeNoCover = true;                        // Unit must be in cover.
-    Template.AbilityShooterConditions.AddItem(PropertyCondition);
+    Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HunkerDownAbility_BuildVisualization;
+    Template.bSkipFireAction = false;
+
+    AddCooldown(Template, `GetConfigInt("M31_PA_Coil_Cooldown"));
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
 
     EffectsCondition = new class'X2Condition_UnitEffects';
     EffectsCondition.AddExcludeEffect('HunkerDown', 'AA_UnitIsImmune');
-    EffectsCondition.AddExcludeEffect('M31_PA_Coil', 'AA_UnitIsImmune');
     Template.AbilityTargetConditions.AddItem(EffectsCondition);
     
-    SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
-    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    // SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+    // SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
     Template.AddShooterEffectExclusions(SkipExclusions);
-    
-    Template.AbilityToHitCalc = default.DeadEye;
-    
-    Template.AbilityTargetStyle = default.SelfTarget;
 
-    Cooldown = new class'X2AbilityCooldown';
-    Cooldown.iNumTurns = `GetConfigInt("M31_PA_Coil_Cooldown");
-    Template.AbilityCooldown = Cooldown;
-
-    InputTrigger = new class'X2AbilityTrigger_PlayerInput';
-    Template.AbilityTriggers.AddItem(InputTrigger);
-
-    HunkerDownEffect = class'X2Effect_HunkerDown_LW'.static.HunkerDownEffect();
+    HunkerDownEffect = new class'X2Effect_CoilHunker';
+    HunkerDownEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
     HunkerDownEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage);
     HunkerDownEffect.EffectRemovedFn = Coil_EffectRemoved;
     Template.AddTargetEffect(HunkerDownEffect);
 
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
 
-    Template.Hostility = eHostility_Defensive;
-    Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
-
-    Template.bDontDisplayInAbilitySummary = false;
-
     Template.AdditionalAbilities.AddItem('M31_PA_Coil_Trigger');
     Template.AdditionalAbilities.AddItem('M31_PA_Coil_Cleanse');
+    Template.AdditionalAbilities.AddItem('M31_PA_Coil_Hunker');
+
     return Template;
 }
 
@@ -385,8 +361,6 @@ static function X2AbilityTemplate CoilCleanse()
 
     RemoveEffects = new class'X2Effect_RemoveEffects';
     RemoveEffects.EffectNamesToRemove.AddItem('DLC_3Overdrive');
-    RemoveEffects.bApplyOnHit = true;
-    RemoveEffects.bApplyOnMiss = true;
     Template.AddTargetEffect(RemoveEffects);
 
     return Template;
@@ -439,6 +413,52 @@ static function EventListenerReturn CoilCleanseListener(Object EventData, Object
     }
 
     return ELR_NoInterrupt;
+}
+
+static function X2AbilityTemplate CoilHunker()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_UnitEffects           EffectsCondition;
+    local array<name>                       SkipExclusions;
+    local X2AbilityCost_ActionPoints        ActionPointsCost;
+    local X2Effect_CoilHunker               HunkerDownEffect;
+    local X2Effect_RemoveEffects            RemoveEffects;
+    
+    Template = SelfTargetActivated('M31_PA_Coil_Hunker', "img:///UILibrary_PerkIcons.UIPerk_takecover");
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY + 1;
+
+    Template.Hostility = eHostility_Defensive;
+    Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
+
+    Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HunkerDownAbility_BuildVisualization;
+    Template.bSkipFireAction = false;
+
+    ActionPointsCost = ActionPointCost(eCost_SingleConsumeAll);
+    if (`GetConfigBool("M31_PA_Coil_Hunker_bAllowDeepCover"))
+        ActionPointsCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.DeepCoverActionPoint);
+    Template.AbilityCosts.AddItem(ActionPointsCost);
+
+    EffectsCondition = new class'X2Condition_UnitEffects';
+    EffectsCondition.AddExcludeEffect('HunkerDown', 'AA_UnitIsImmune');
+    Template.AbilityTargetConditions.AddItem(EffectsCondition);
+    
+    SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+
+    RemoveEffects = new class'X2Effect_RemoveEffects';
+    RemoveEffects.EffectNamesToRemove.AddItem('DLC_3Overdrive');
+    Template.AddTargetEffect(RemoveEffects);
+
+    HunkerDownEffect = new class'X2Effect_CoilHunker';
+    HunkerDownEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+    HunkerDownEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage);
+    Template.AddTargetEffect(HunkerDownEffect);
+
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
+
+    return Template;
 }
 
 static function X2AbilityTemplate Entwine()
@@ -496,7 +516,7 @@ static function X2AbilityTemplate LockjawAttack()
     Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 
     Cooldown = new class'X2AbilityCooldown_Extended';
-    Cooldown.iNumTurns = 1;
+    Cooldown.iNumTurns = `GetConfigInt("M31_PA_Lockjaw_Cooldown");
     Cooldown.bApplyOnlyOnHit = true;
     Template.AbilityCooldown = Cooldown;
 
@@ -553,7 +573,7 @@ static function X2AbilityTemplate LockjawAttack()
     StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(1, 100, false);
     Template.AddTargetEffect(StunnedEffect);
 
-    Template.AddTargetEffect(GetLockjawDamageEffect());
+    Template.AddTargetEffect(CreateLockjawDamageEffect());
     
     BladestormTargetEffect = new class'X2Effect_Persistent';
     BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
@@ -581,12 +601,10 @@ static function X2AbilityTemplate LockjawAttack()
     Template.bFrameEvenWhenUnitIsHidden = true;
     Template.DefaultSourceItemSlot = eInvSlot_Unknown;
 
-    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
-
     return Template;
 }
 
-static function X2Effect_ApplyDamageWithRank GetLockjawDamageEffect()
+static function X2Effect_ApplyDamageWithRank CreateLockjawDamageEffect()
 {
     local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
 
@@ -594,7 +612,6 @@ static function X2Effect_ApplyDamageWithRank GetLockjawDamageEffect()
     PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_Lockjaw_Damage");
     PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_DamagePerRank");
     PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank");
-    PhysicalDamageEffect.HideVisualizationOfResultsAdditional.AddItem('AA_HitResultFailure');
 
     return PhysicalDamageEffect;
 }
@@ -606,16 +623,16 @@ static function EventListenerReturn LockjawConcealmentListener(Object EventData,
     local XComGameState_Ability BladestormState;
 
     ConcealmentBrokenUnit = XComGameState_Unit(EventSource);
-    if (ConcealmentBrokenUnit == None)
+    if (ConcealmentBrokenUnit == none)
         return ELR_NoInterrupt;
 
     // Do not trigger if the Bladestorm Ranger himself moved to cause the concealment break - only when an enemy moved and caused it.
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext().GetFirstStateInEventChain().GetContext());
-    if (AbilityContext != None && AbilityContext.InputContext.SourceObject != ConcealmentBrokenUnit.ConcealmentBrokenByUnitRef)
+    if (AbilityContext != none && AbilityContext.InputContext.SourceObject != ConcealmentBrokenUnit.ConcealmentBrokenByUnitRef)
         return ELR_NoInterrupt;
 
     BladestormState = XComGameState_Ability(CallbackData);
-    if (BladestormState == None)
+    if (BladestormState == none)
         return ELR_NoInterrupt;
     
     BladestormState.AbilityTriggerAgainstSingleTarget(ConcealmentBrokenUnit.ConcealmentBrokenByUnitRef, false);
@@ -749,7 +766,6 @@ static function X2AbilityTemplate SidewinderMove()
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
     local array<name>                       SkipExclusions;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2Effect_Sidewinder_Move          InterruptTurnEffect;
     local X2Effect_Persistent               CooldownEffect;
     
@@ -759,24 +775,15 @@ static function X2AbilityTemplate SidewinderMove()
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = default.SidewinderEventName;
     Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.Priority = 60;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    Trigger.ListenerData.Priority = 50;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_SidewinderMove;
     Template.AbilityTriggers.AddItem(Trigger);
-
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
 
     if (`GetConfigBool("M31_PA_Sidewinder_bAllowWhileDisoriented"))
         SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
     if (`GetConfigBool("M31_PA_Sidewinder_bAllowWhileBurning"))
         SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeDead = true;
-    UnitPropertyCondition.ExcludeAlive = false;
-    UnitPropertyCondition.ExcludeStunned = true;
-    UnitPropertyCondition.ExcludePanicked = true;
-    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
 
     InterruptTurnEffect = new class'X2Effect_Sidewinder_Move';
     InterruptTurnEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
@@ -791,6 +798,43 @@ static function X2AbilityTemplate SidewinderMove()
     Template.bShowActivation = true;
 
     return Template;
+}
+
+static function EventListenerReturn AbilityTriggerEventListener_SidewinderMove(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameState_Unit            SourceUnit;
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState                 NewGameState;
+    local XComGameState_Ability         AbilityState;
+
+    AbilityState = XComGameState_Ability(CallbackData);
+    SourceUnit = XComGameState_Unit(EventSource);
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+
+    if (AbilityContext != none)
+    {
+        `assert(SourceUnit != none);
+        if (!SourceUnit.IsAbleToAct(true))
+        {
+            return ELR_NoInterrupt;
+        }
+
+        if (`TACTICALRULES.GetUnitActionTeam() == SourceUnit.GetTeam())
+            return ELR_NoInterrupt;
+
+        if (AbilityState.CanActivateAbilityForObserverEvent(SourceUnit) == 'AA_Success')
+        {
+            if (AbilityState.AbilityTriggerAgainstSingleTarget(SourceUnit.GetReference(), false))
+            {
+                SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SourceUnit.ObjectID));
+                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Viper Interrupt Initiative");
+                `TACTICALRULES.InterruptInitiativeTurn(NewGameState, SourceUnit.GetGroupMembership().GetReference());
+                `TACTICALRULES.SubmitGameState(NewGameState);
+            }
+        }
+    }
+
+    return ELR_NoInterrupt;
 }
 
 static function X2AbilityTemplate SidewinderAddMovementAction()
@@ -808,7 +852,7 @@ static function X2AbilityTemplate SidewinderAddMovementAction()
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = default.SidewinderEventName;
     Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.Priority = 60;
+    Trigger.ListenerData.Priority = 55;
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
     Template.AbilityTriggers.AddItem(Trigger);
 
@@ -980,8 +1024,6 @@ static function X2AbilityTemplate ViperBite()
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
-    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
-
     return Template;
 }
 
@@ -1039,6 +1081,279 @@ static function X2AbilityTemplate IronskinBite()
     return Template;
 }
 
+static function X2AbilityTemplate AngryBite()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_PA_AngryBite', "img:///UILibrary_MZChimeraIcons.Ability_QuickBite", false, true);
+
+    Template.AdditionalAbilities.AddItem('M31_PA_AngryBite_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate AngryBiteAttack()
+{
+    local X2AbilityTemplate                         Template;
+    local X2AbilityToHitCalc_StandardMelee          StandardMelee;
+    local X2AbilityTrigger_EventListener            Trigger;
+    local X2Effect_Persistent                       BladestormTargetEffect;
+    local X2Condition_UnitEffectsWithAbilitySource  BladestormTargetCondition;
+    local X2Condition_UnitProperty                  SourceNotConcealedCondition;
+    local X2Condition_Visibility                    TargetVisibilityCondition;
+    local X2Condition_UnitProperty                  ExcludeSquadmatesCondition;
+    local X2Condition_NotItsOwnTurn                 NotItsOwnTurnCondition;
+    local X2AbilityCooldown_Extended                Cooldown;
+    local X2Condition_UnitProperty                  UnitPropertyCondition;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_AngryBite_Attack');
+
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.IconImage = "img:///UILibrary_MZChimeraIcons.Ability_QuickBite";
+
+    StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+    StandardMelee.BuiltInHitMod = `GetConfigInt("M31_PA_AngryBite_AimBonus");
+    StandardMelee.BuiltInCritMod = `GetConfigInt("M31_PA_AngryBite_CritBonus");
+    StandardMelee.bAllowCrit = `GetConfigBool("M31_PA_AngryBite_bAllowCrit");
+    StandardMelee.bReactionFire = true;
+    Template.AbilityToHitCalc = StandardMelee;
+    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
+
+    if (`GetConfigBool("M31_PA_AngryBite_bHasCooldown"))
+    {
+        Cooldown = new class'X2AbilityCooldown_Extended';
+        Cooldown.iNumTurns = `GetConfigInt("M31_PA_AngryBite_Cooldown");
+        Cooldown.bApplyOnlyOnHit = `GetConfigBool("M31_PA_AngryBite_bCooldownOnlyOnHit");
+        Template.AbilityCooldown = Cooldown;
+    }
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'ObjectMoved';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'AbilityActivated';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'UnitConcealmentBroken';
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Trigger.ListenerData.EventFn = LockjawConcealmentListener;
+    Trigger.ListenerData.Priority = 55;
+    Template.AbilityTriggers.AddItem(Trigger);
+    
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    TargetVisibilityCondition = new class'X2Condition_Visibility';
+    TargetVisibilityCondition.bRequireGameplayVisible = true;
+    TargetVisibilityCondition.bRequireBasicVisibility = true;
+    TargetVisibilityCondition.bDisablePeeksOnMovement = true;
+    Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    ExcludeSquadmatesCondition = new class'X2Condition_UnitProperty';
+    ExcludeSquadmatesCondition.ExcludeSquadmates = true;
+    Template.AbilityTargetConditions.AddItem(ExcludeSquadmatesCondition);
+
+    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeRobotic = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
+
+    SourceNotConcealedCondition = new class'X2Condition_UnitProperty';
+    SourceNotConcealedCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(SourceNotConcealedCondition);
+
+    Template.AddTargetEffect(CreateAngryBiteDamageEffect());
+    
+    BladestormTargetEffect = new class'X2Effect_Persistent';
+    BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
+    BladestormTargetEffect.EffectName = 'M31_PA_AngryBite_MarkTarget';
+    BladestormTargetEffect.bApplyOnMiss = true;
+    Template.AddTargetEffect(BladestormTargetEffect);
+    
+    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    BladestormTargetCondition.AddExcludeEffect('M31_PA_AngryBite_MarkTarget', 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
+
+    Template.CustomFireAnim = 'HL_ViciousBite';
+
+    NotItsOwnTurnCondition = new class'X2Condition_NotItsOwnTurn';
+    Template.AbilityShooterConditions.AddItem(NotItsOwnTurnCondition);
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.bShowActivation = true;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NormalChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
+
+    Template.bFrameEvenWhenUnitIsHidden = true;
+    Template.DefaultSourceItemSlot = eInvSlot_Unknown;
+
+    return Template;
+}
+
+static function X2Effect_ApplyDamageWithRank CreateAngryBiteDamageEffect()
+{
+    local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
+
+    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
+    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_AngryBite_Damage");
+    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_AngryBite_DamagePerRank");
+    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_AngryBite_CritDamagePerRank");
+
+    return PhysicalDamageEffect;
+}
+
+static function X2AbilityTemplate VeryAngryBite()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+    local X2Condition_UnitProperty          UnitPropCondition;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_PA_VeryAngryBite');
+
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.Hostility = eHostility_Offensive;
+    Template.IconImage = "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite";
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    Template.bCrossClassEligible = false;
+
+    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_AlwaysShow;
+    Template.bDisplayInUITooltip = true;
+    Template.bDisplayInUITacticalText = true;
+
+    Template.bShowActivation = true;
+    Template.DisplayTargetHitChance = true;
+    Template.bSkipFireAction = false;
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = false;
+    ActionPointCost.bFreeCost = `GetConfigBool("M31_PA_VeryAngryBite_bFreeAction");
+    if (`GetConfigBool("M31_PA_VeryAngryBite_bAllowMovementActionPoint"))
+        ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_PA_VeryAngryBite_Cooldown"));
+
+    StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+    StandardMelee.BuiltInHitMod = `GetConfigInt("M31_PA_VeryAngryBite_AimBonus");
+    StandardMelee.BuiltInCritMod = `GetConfigInt("M31_PA_VeryAngryBite_CritBonus");
+    StandardMelee.bAllowCrit = `GetConfigBool("M31_PA_VeryAngryBite_bAllowCrit");
+    StandardMelee.bReactionFire = `GetConfigBool("M31_PA_VeryAngryBite_bIsReactonFire");
+    Template.AbilityToHitCalc = StandardMelee;
+
+    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
+
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    UnitPropCondition = new class'X2Condition_UnitProperty';
+    UnitPropCondition.ExcludeRobotic = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropCondition);
+
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_BerserkerDevastatingPunch');
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+    Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
+
+    Template.AddTargetEffect(CreateVeryAngryBiteDamageEffect());
+    Template.AddTargetEffect(CreateVeryAngryBiteBleedingEffect());
+    
+    Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
+    Template.SourceMissSpeech = 'SwordMiss';
+
+    Template.bOverrideMeleeDeath = false;
+
+    Template.CustomFireAnim = 'HL_ViciousBite';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
+
+    return Template;
+}
+
+static function X2Effect_ApplyDamageWithRank CreateVeryAngryBiteDamageEffect()
+{
+    local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
+
+    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
+    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_VeryAngryBite_Damage");
+    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_DamagePerRank");
+    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_CritDamagePerRank");
+
+    return PhysicalDamageEffect;
+}
+
+static function X2Effect_Persistent CreateVeryAngryBiteBleedingEffect()
+{
+
+    local X2Effect_Persistent BleedingEffect;
+    
+    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+        `GetConfigInt("M31_PA_VeryAngryBite_BleedDuration"),
+        `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage"),
+        `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage_Spread"),
+        `GetConfigFloat("M31_PA_VeryAngryBite_BleedDamage_Prc"));
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_PA_VeryAngryBite_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+
+    return BleedingEffect;
+}
+
+static function X2AbilityTemplate CrystallineCornea()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_CrystallineCornea        Effect;
+    
+    Template = Passive('M31_PA_CrystallineCornea', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_horror", false, true);
+
+    Effect = new class'X2Effect_CrystallineCornea';
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate MalevolentFocus()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_MalevolentFocus          Effect;
+    
+    Template = Passive('M31_PA_MalevolentFocus', "img:///UILibrary_MeristPerkIcons.UIPerk_MalevolentFocus", false, true);
+
+    Effect = new class'X2Effect_MalevolentFocus';
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Effect.BuildPersistentEffect(1, true, false);
+    
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate PoisonSpit()
 {
     local X2AbilityTemplate                 Template;
@@ -1080,8 +1395,6 @@ static function X2AbilityTemplate PoisonSpit()
     {
         Template.AddMultiTargetEffect(new class'X2Effect_ApplyPoisonToWorld');
     }
-
-    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
 
     Template.CustomFireAnim = 'HL_PoisonSpit';
 
@@ -1153,9 +1466,8 @@ static function X2AbilityTemplate FrostSpit()
     DamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_FrostSpit_DamagePerRank");
     Template.AddMultiTargetEffect(DamageEffect);
 
-    Template.CustomFireAnim = 'M31_HL_FrostBite';
+    Template.CustomFireAnim = 'HL_M31_FrostBite';
 
-    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
     
     return Template;
@@ -1217,9 +1529,8 @@ static function X2AbilityTemplate FrostBreath()
         Template.AddMultiTargetEffect(DamageEffect);
     }
 
-    Template.CustomFireAnim = 'M31_HL_FrostBite';
+    Template.CustomFireAnim = 'HL_M31_FrostBite';
 
-    // Template.AdditionalAbilities.AddItem('M31_PA_ViperDamagePerRank');
     Template.AdditionalAbilities.AddItem('M31_PA_FrostSpit_Anims');
 
     return Template;
@@ -1289,7 +1600,6 @@ static function X2AbilityTemplate CreateViperSpitAbility(
 
     return Template;
 }
-
 
 static function X2DataTemplate PersonalShield()
 {
