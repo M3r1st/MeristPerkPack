@@ -94,8 +94,10 @@ LocFlyOverText="Duskborn"
 
 
 [M31_Duskborn_Trigger X2AbilityTemplate]
-LocFriendlyName="Duckborn"
-LocFlyOverText="Duckborn"
+LocFriendlyName="Duskborn"
+LocFlyOverText="Duskborn"
+; LocFriendlyName="Duckborn"
+; LocFlyOverText="Duckborn"
 
 [M31_EnemyUnknown X2AbilityTemplate]
 LocFriendlyName="Enemy Unknown"
