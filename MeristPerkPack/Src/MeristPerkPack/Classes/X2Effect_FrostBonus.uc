@@ -11,7 +11,8 @@ var bool bDisabledByBurningOnSource;
 var bool bDisabledByBurningOnTarget;
 var bool bDisabledByFrostImmunityOnSource;
 var bool bDisabledByFrostImmunityOnTarget;
-var bool bCheckSourceWeapon;
+var bool bMatchSourceWeapon;
+var bool bApplyToDOT;
 
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
@@ -29,7 +30,7 @@ function GetToHitModifiers(
     if (IsDisabled(Attacker, Target))
         return;
 
-    if (bCheckSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
+    if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return;
 
     Tier = GetCurrentTier(Attacker, Target);
@@ -72,17 +73,23 @@ function int GetAttackingDamageModifier(
     if (IsDisabled(SourceUnit, TargetUnit))
         return 0;
 
-    if (bCheckSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
+    if (!bApplyToDOT && EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+        return 0;
+
+    if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
     Tier = GetCurrentTier(SourceUnit, TargetUnit);
 
-    if (CurrentDamage > 0)
+    if (class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult))
     {
-        DamageBonus = DamageBase + Tier * DamagePerTier;
-        if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+        if (CurrentDamage > 0)
         {
-            DamageBonus += CritDamageBase + Tier * CritDamagePerTier;
+            DamageBonus = DamageBase + Tier * DamagePerTier;
+            if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+            {
+                DamageBonus += CritDamageBase + Tier * CritDamagePerTier;
+            }
         }
     }
 
@@ -106,7 +113,7 @@ function int GetExtraArmorPiercing(
     if (IsDisabled(SourceUnit, TargetUnit))
         return 0;
 
-    if (bCheckSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
+    if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
     Tier = GetCurrentTier(SourceUnit, TargetUnit);
@@ -131,7 +138,7 @@ function int GetExtraShredValue(
     if (IsDisabled(SourceUnit, TargetUnit))
         return 0;
 
-    if (bCheckSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
+    if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
     Tier = GetCurrentTier(SourceUnit, TargetUnit);

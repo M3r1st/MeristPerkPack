@@ -38,9 +38,9 @@ function TemplarShieldTakesDamage(X2Effect_EnergyShieldExtended ShieldEffect, XC
 
 private function OnShieldRemoved_BuildVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
-    local X2Action_PlayAnimation		PlayAnimation;
-    local XGUnit						Unit;
-    local XComUnitPawn					UnitPawn;
+    local X2Action_PlayAnimation        PlayAnimation;
+    local XGUnit                        Unit;
+    local XComUnitPawn                  UnitPawn;
 
     // Exit if the effect did not expire naturally.
     // We don't want the animation to play here if the effect was removed by damage, visualization for that is handled elsewhere.
@@ -133,9 +133,9 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 // Requires CHL Issue #1114 - create psionic flashes when projectiles hit the shield.
 private static function EventListenerReturn TemplarShield_OnOverrideHitEffects(Object EventData, Object EventSource, XComGameState NullGameState, Name Event, Object CallbackData)
 {
-    local XComUnitPawn				Pawn;
-    local XComLWTuple				Tuple;
-    local XComAnimTreeController	AnimTreeController;
+    local XComUnitPawn              Pawn;
+    local XComLWTuple               Tuple;
+    local XComAnimTreeController    AnimTreeController;
 
     Pawn = XComUnitPawn(EventSource);
     if (Pawn == none)
@@ -154,7 +154,7 @@ private static function EventListenerReturn TemplarShield_OnOverrideHitEffects(O
         if (Tuple == none)
             return ELR_NoInterrupt;
 
-        Tuple.Data[0].b = false;		// Setting to *not* override the Hit Effect, cuz we want it to play.
+        Tuple.Data[0].b = false;        // Setting to *not* override the Hit Effect, cuz we want it to play.
                                         // Just in case some other listener disabled it.
         Tuple.Data[7].i = eHit_Reflect; // HitResult - Using eHit_Reflect to make hit effects spawn on the left hand. Purely visual change and only for this Hit Effect.
     }
@@ -165,9 +165,9 @@ private static function EventListenerReturn TemplarShield_OnOverrideHitEffects(O
 // Requires CHL Issue #1116 - remove blood gushing out of the target unit when projectiles hit the shield.
 private static function EventListenerReturn TemplarShield_OnOverrideMetaHitEffect(Object EventData, Object EventSource, XComGameState NullGameState, Name Event, Object CallbackData)
 {
-    local XComUnitPawn				Pawn;
-    local XComLWTuple				Tuple;
-    local XComAnimTreeController	AnimTreeController;
+    local XComUnitPawn              Pawn;
+    local XComLWTuple               Tuple;
+    local XComAnimTreeController    AnimTreeController;
 
     Pawn = XComUnitPawn(EventSource);
     if (Pawn == none)
@@ -193,10 +193,10 @@ private static function EventListenerReturn TemplarShield_OnOverrideMetaHitEffec
 
 private static function EventListenerReturn TemplarShield_OnAbilityActivated(Object EventData, Object EventSource, XComGameState NewGameState, Name Event, Object CallbackData)
 {
-    local XComGameStateContext_Ability	AbilityContext;
-    local XComGameState_Unit			TargetUnit;
-    local StateObjectReference			UnitRef;
-    local XComGameStateHistory			History;
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Unit            TargetUnit;
+    local StateObjectReference          UnitRef;
+    local XComGameStateHistory          History;
         
     AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
     if (AbilityContext == none || AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
@@ -236,37 +236,37 @@ private static function EventListenerReturn TemplarShield_OnAbilityActivated(Obj
 // This function alters the visualization tree for units affected by the Templar Shield effect when they are attacked.
 private static function ReplaceHitAnimation_PostBuildVis(XComGameState VisualizeGameState)
 {
-    local XComGameStateContext_Ability						AbilityContext;
-    local XComGameStateVisualizationMgr						VisMgr;
-    local array<X2Action>									FindActions;
-    local X2Action											FindAction;
-    local X2Action											ChildAction;
-    local VisualizationActionMetadata						ActionMetadata;
-    local XComGameState_Unit								OldUnitState;
-    local XComGameState_Unit								NewUnitState;
-    local X2Action_ApplyWeaponDamageToUnit					DamageAction;
-    local X2Action_PlayAnimation							AdditionalAnimationAction;
-    local X2Action_TemplarShield_ApplyWeaponDamageToUnit	ReplaceAction;
-    local X2Action_MarkerNamed								EmptyAction;
-    local X2Action											ParentAction;
-    local array<X2Action>									ExitCoverActions;
-    local array<X2Action>									ExitCoverParentActions;
-    local array<X2Action>									FireActions;
-    local X2Action_PlayAnimation							PlayAnimation;
-    local name												InputEvent;
-    local X2Action_MoveTurn									MoveTurnAction;
-    local XComGameState_Unit								SourceUnit;
-    local XComGameState_Ability								AbilityState;
-    local array<int>										HandledUnits;
-    local X2AbilityTemplate									AbilityTemplate;
-    local XComGameStateHistory								History;
-    local X2Action											CycleAction;
-    local X2Action_TimedWait								TimedWait;
-    local bool												bGrenadeLikeAbility;
-    local bool												bAreaTargetedAbility;
-    local X2Action_WaitForAnotherAction						WaitForAction;
-    local array<X2Action>									WaitForActions;
-    local array<X2Action>									DamageUnitActions;
+    local XComGameStateContext_Ability                      AbilityContext;
+    local XComGameStateVisualizationMgr                     VisMgr;
+    local array<X2Action>                                   FindActions;
+    local X2Action                                          FindAction;
+    local X2Action                                          ChildAction;
+    local VisualizationActionMetadata                       ActionMetadata;
+    local XComGameState_Unit                                OldUnitState;
+    local XComGameState_Unit                                NewUnitState;
+    local X2Action_ApplyWeaponDamageToUnit                  DamageAction;
+    local X2Action_PlayAnimation                            AdditionalAnimationAction;
+    local X2Action_TemplarShield_ApplyWeaponDamageToUnit    ReplaceAction;
+    local X2Action_MarkerNamed                              EmptyAction;
+    local X2Action                                          ParentAction;
+    local array<X2Action>                                   ExitCoverActions;
+    local array<X2Action>                                   ExitCoverParentActions;
+    local array<X2Action>                                   FireActions;
+    local X2Action_PlayAnimation                            PlayAnimation;
+    local name                                              InputEvent;
+    local X2Action_MoveTurn                                 MoveTurnAction;
+    local XComGameState_Unit                                SourceUnit;
+    local XComGameState_Ability                             AbilityState;
+    local array<int>                                        HandledUnits;
+    local X2AbilityTemplate                                 AbilityTemplate;
+    local XComGameStateHistory                              History;
+    local X2Action                                          CycleAction;
+    local X2Action_TimedWait                                TimedWait;
+    local bool                                              bGrenadeLikeAbility;
+    local bool                                              bAreaTargetedAbility;
+    local X2Action_WaitForAnotherAction                     WaitForAction;
+    local array<X2Action>                                   WaitForActions;
+    local array<X2Action>                                   DamageUnitActions;
 
     AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
     if (AbilityContext == none)
@@ -288,7 +288,7 @@ private static function ReplaceHitAnimation_PostBuildVis(XComGameState Visualize
     if (AbilityContext.InputContext.TargetLocations.Length > 0 && ClassIsChildOf(AbilityTemplate.TargetingMethod, class'X2TargetingMethod_Grenade'))
     {
         bAreaTargetedAbility = true;
-        bGrenadeLikeAbility = AbilityTemplate.TargetingMethod.static.UseGrenadePath();	
+        bGrenadeLikeAbility = AbilityTemplate.TargetingMethod.static.UseGrenadePath();
     }
     
     // Cycle through all Damage Unit actions created by the ability. If the ability affected multiple units, all of them will be covered.
@@ -345,7 +345,7 @@ private static function ReplaceHitAnimation_PostBuildVis(XComGameState Visualize
             MoveTurnAction.m_vFacePoint = AbilityContext.InputContext.TargetLocations[0];
         }
         else // Otherwise face the attacker.
-        {	 // In this case Move Turn action is specifically inserted between Exit Cover's parents and Exit Cover itself,
+        {   // In this case Move Turn action is specifically inserted between Exit Cover's parents and Exit Cover itself,
             // so Exit Cover won't begin playing until Move Turn action finishes.
             // This is necessary because some Fire Actions take very little time between the Fire Action starting and damage hitting the target, 
             // so we have to make sure the target unit is already facing the source when the Fire Action begins.
@@ -423,12 +423,12 @@ private static function ReplaceHitAnimation_PostBuildVis(XComGameState Visualize
 
             // If unit didn't take any damage, but the shield was fully depleted by the attack, then play a different "absorb damage" animation that puts the shield away at the end.
             if (class'X2Effect_MeristTemplarShield'.static.WasShieldFullyConsumed(OldUnitState, NewUnitState))
-            {	
+            {
                 AdditionalAnimationAction.Params.AnimName = 'HL_Shield_AbsorbAndFold';
             }
         }
         else if (class'X2Effect_MeristTemplarShield'.static.WasShieldFullyConsumed(OldUnitState, NewUnitState))
-        {	 
+        {
             // If the unit did in fact take some health damage despite being shielded (i.e. damage broke through the shield),
             // Then we keep the original Damage Unit action in the tree. Its "unit hit" animation will interrupt the "absorb damage" animation from the additional action
             // whenever the attack connects with the unit.
@@ -445,7 +445,7 @@ private static function ReplaceHitAnimation_PostBuildVis(XComGameState Visualize
             foreach DamageAction.InputEventIDs(InputEvent)
             {
                 PlayAnimation.AddInputEvent(InputEvent);
-            }		
+            }
 
             foreach DamageAction.ChildActions(ChildAction)
             {

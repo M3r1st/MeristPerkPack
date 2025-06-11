@@ -1,6 +1,8 @@
-class X2Effect_WS_Thrill extends X2Effect_Persistent;
+class X2Effect_WS_Thrill extends X2Effect_Persistent config(GameData_SoldierSkills);
 
 var privatewrite name UnitValueName;
+var config array<name> Thrill_ExcludeCharacterTemplates;
+var config array<name> Thrill_ExcludeCharacterGroups;
 
 function GetToHitModifiers(
     XComGameState_Effect EffectState,

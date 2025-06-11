@@ -60,7 +60,7 @@ static function X2Effect_PersistentStatChange CreateHackDefenseReductionStatusEf
 static function X2Effect_PersistentStatChange CreateRoboticDisorientedStatusEffect(optional bool bExcludeFriendlyToSource=false, float DelayVisualizationSec=0.0f)
 {
     local X2Effect_PersistentStatChange     PersistentStatChangeEffect;
-    local X2Condition_UnitProperty			UnitPropCondition;
+    local X2Condition_UnitProperty          UnitPropCondition;
 
     PersistentStatChangeEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(,, false);
     PersistentStatChangeEffect.TargetConditions.Length = 0;
@@ -222,12 +222,29 @@ static function AddEnhancedPoisonEffectToTarget(out X2AbilityTemplate Template)
 {
     Template.AddTargetEffect(CreateEnhancedPoisonedEffect());
     Template.AddTargetEffect(CreatePoisonedEffect());
+    Template.AddTargetEffect(CreateNeuroPoisonEffect());
 }
 
 static function AddEnhancedPoisonEffectToMultiTarget(out X2AbilityTemplate Template)
 {
     Template.AddMultiTargetEffect(CreateEnhancedPoisonedEffect());
     Template.AddMultiTargetEffect(CreatePoisonedEffect());
+    Template.AddMultiTargetEffect(CreateNeuroPoisonEffect());
+}
+
+static function X2Effect_Persistent CreateNeuroPoisonEffect()
+{
+    local X2Effect_Persistent DisorientedEffect;
+    local X2Condition_AbilityProperty AbilityCondition;
+
+    AbilityCondition = new class'X2Condition_AbilityProperty';
+    AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_PA_NeuroPoison');
+
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(, , false);
+    DisorientedEffect.DamageTypes.AddItem('Poison');
+    DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
+
+    return DisorientedEffect;
 }
 
 static function AddBlindingPoisonEffectToTarget(out X2AbilityTemplate Template)
@@ -387,6 +404,108 @@ static final function int GetActionPoints(const XComGameState_Unit Unit, array<n
     return Count;
 }
 
+static function array<X2Effect> CreateRadiationEffects(
+    optional int RadiationRadBurnApplyChance = 33, optional int RadiationRadBurnDamage = 3, optional int RadiationRadBurnDamageSpread = 2,
+    optional int RadiationBoilingBloodApplyChance = 25, optional int RadiationBoilingBloodDamage = 4, optional int RadiationBoilingBloodDamageSpread = 2,
+    optional int RadiationIrradiateApplyChance = 75, optional int RadiationPanicApplyChance = 10)
+{
+    local array<X2Effect> Effects;
+    // 33, 3, 2
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateRadBurningStatusEffect(RadiationRadBurnApplyChance, RadiationRadBurnDamage, RadiationRadBurnDamageSpread));
+    // 25, 4, 2
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateRadBleedingStatusEffect(RadiationBoilingBloodApplyChance, RadiationBoilingBloodDamage, RadiationBoilingBloodDamageSpread));
+    // 75
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateRadDisorientedStatusEffect(RadiationIrradiateApplyChance, , ,false));
+    // 10
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateRadPanickedStatusEffect(RadiationPanicApplyChance));
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    ////////////////////////////
+    /////// This Needs to be here so the Lost can benefit from having Radiation applied on them
+    ///////////////////////////
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateLostRadRegenStatusEffect(100));
+    ////////////////////////////
+    /////// This Needs to be here so the Lost can benefit from having Radiation applied on them
+    ///////////////////////////
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    ///////////////////////////
+    /////// These apply the stat debuffs for Radiation Burn, and Boiling Blood, they will only activate if said effects are successfully applied
+    ///////////////////////////
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateRadBurnDodgeStatusEffect());
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateBoilingBloodMobilityStatusEffect());
+    ///////////////////////////
+    /////// These apply the stat debuffs for Radiation Burn, and Boiling Blood, they will only activate if said effects are successfully applied
+    ///////////////////////////
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    ////////////////////////////
+    /////// This applies additional debuffs to robotic units affected by Irradiate
+    ///////////////////////////
+    Effects.AddItem(class'X2StatusEffects_Radiation'.static.CreateIrradiatedRoboticDebuffStatusEffect());
+    ////////////////////////////
+    /////// This applies additional debuffs to robotic units affected by Irradiate
+    ///////////////////////////
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    //--------------------------------------------------------------------------------------------------------------------------------------------------\\
+    return Effects;
+}
+
+static function AddRadiationToTarget(out X2AbilityTemplate Template,
+    optional int RadiationRadBurnApplyChance = 33, optional int RadiationRadBurnDamage = 3, optional int RadiationRadBurnDamageSpread = 2,
+    optional int RadiationBoilingBloodApplyChance = 25, optional int RadiationBoilingBloodDamage = 4, optional int RadiationBoilingBloodDamageSpread = 2,
+    optional int RadiationIrradiateApplyChance = 75, optional int RadiationPanicApplyChance = 10)
+{
+    local array<X2Effect> Effects;
+    local X2Effect Effect;
+    
+    Effects = CreateRadiationEffects(RadiationRadBurnApplyChance, RadiationRadBurnDamage, RadiationRadBurnDamageSpread,
+        RadiationBoilingBloodApplyChance, RadiationBoilingBloodDamage, RadiationBoilingBloodDamageSpread,
+        RadiationIrradiateApplyChance, RadiationPanicApplyChance);
+    
+    foreach Effects(Effect)
+        Template.AddTargetEffect(Effect);
+}
+
+static function AddRadiationToMultiTarget(out X2AbilityTemplate Template,
+    optional int RadiationRadBurnApplyChance = 33, optional int RadiationRadBurnDamage = 3, optional int RadiationRadBurnDamageSpread = 2,
+    optional int RadiationBoilingBloodApplyChance = 25, optional int RadiationBoilingBloodDamage = 4, optional int RadiationBoilingBloodDamageSpread = 2,
+    optional int RadiationIrradiateApplyChance = 75, optional int RadiationPanicApplyChance = 10)
+{
+    local array<X2Effect> Effects;
+    local X2Effect Effect;
+    
+    Effects = CreateRadiationEffects(RadiationRadBurnApplyChance, RadiationRadBurnDamage, RadiationRadBurnDamageSpread,
+        RadiationBoilingBloodApplyChance, RadiationBoilingBloodDamage, RadiationBoilingBloodDamageSpread,
+        RadiationIrradiateApplyChance, RadiationPanicApplyChance);
+    
+    foreach Effects(Effect)
+        Template.AddMultiTargetEffect(Effect);
+}
+
+static function EventListenerReturn KillMailListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameState_Unit                SourceUnit;
+    local XComGameState_Ability             AbilityState;
+    local XComGameStateContext_Ability      AbilityContext;
+
+    SourceUnit = XComGameState_Unit(EventSource);
+    AbilityState = XComGameState_Ability(CallbackData);
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
+    {
+        if (AbilityState.OwnerStateObject.ObjectID == SourceUnit.ObjectID)
+        {
+            return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
+        }
+    }
+
+    return ELR_NoInterrupt;
+}
+
 // Helpers_LW.uc
 static final function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitState)
 {
@@ -397,67 +516,29 @@ static final function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitSt
 }
 
 // Iridar's Perk Pack
-// final static function FollowUpShot_BuildVisualization(XComGameState VisualizeGameState)
-// {	
-// 	local XComGameStateVisualizationMgr		VisMgr;
-// 	local XComGameStateContext_Ability		AbilityContext;
-// 	local array<X2Action>					FindActions;
-// 	local X2Action							FindAction;
-// 	local X2Action							ChildAction;
-// 	local VisualizationActionMetadata		ActionMetadata;
-// 	local X2Action_MarkerNamed				EmptyAction;
-// 	local X2Action_ApplyWeaponDamageToTerrain			DamageTerrainAction;
-// 	local X2Action_ApplyWeaponDamageToTerrain_NoFlinch	NoFlinchAction;
-
-// 	class'X2Ability'.static.TypicalAbility_BuildVisualization(VisualizeGameState);
-
-// 	VisMgr = `XCOMVISUALIZATIONMGR;
-// 	AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-
-// 	VisMgr.GetNodesOfType(VisMgr.BuildVisTree, class'X2Action_ApplyWeaponDamageToTerrain', FindActions);
-
-// 	foreach FindActions(FindAction)
-// 	{
-// 		DamageTerrainAction = X2Action_ApplyWeaponDamageToTerrain(FindAction);
-// 		ActionMetadata = DamageTerrainAction.Metadata;
-
-// 		NoFlinchAction = X2Action_ApplyWeaponDamageToTerrain_NoFlinch(class'X2Action_ApplyWeaponDamageToTerrain_NoFlinch'.static.AddToVisualizationTree(ActionMetadata, AbilityContext,,, DamageTerrainAction.ParentActions));
-
-// 		foreach DamageTerrainAction.ChildActions(ChildAction)
-// 		{
-// 			VisMgr.ConnectAction(ChildAction, VisMgr.BuildVisTree, false, NoFlinchAction);
-// 		}
-
-// 		// Nuke the original action out of the tree.
-// 		EmptyAction = X2Action_MarkerNamed(class'X2Action'.static.CreateVisualizationActionClass(class'X2Action_MarkerNamed', AbilityContext));
-// 		EmptyAction.SetName("ReplaceDamageTerrainAction");
-// 		VisMgr.ReplaceNode(EmptyAction, DamageTerrainAction);
-// 	}
-// }
-
 
 final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2Action VisualizationTree)
 {
-    local XComGameStateVisualizationMgr		VisMgr;
-    local array<X2Action>					FindActions;
-    local X2Action							FindAction;
-    local X2Action							FireAction;
-    local X2Action_MarkerTreeInsertBegin	MarkerStart;
-    local X2Action_MarkerTreeInsertEnd		MarkerEnd;
-    local X2Action							WaitAction;
-    local X2Action							ChildAction;
-    local X2Action_MarkerNamed				MarkerAction;
-    local array<X2Action>					MarkerActions;
-    local array<X2Action>					DamageUnitActions;
-    local array<X2Action>					DamageTerrainActions;
-    local XComGameStateContext_Ability		AbilityContext;
-    local VisualizationActionMetadata		ActionMetadata;
-    local bool								bFoundHistoryIndex;
+    local XComGameStateVisualizationMgr     VisMgr;
+    local array<X2Action>                   FindActions;
+    local X2Action                          FindAction;
+    local X2Action                          FireAction;
+    local X2Action_MarkerTreeInsertBegin    MarkerStart;
+    local X2Action_MarkerTreeInsertEnd      MarkerEnd;
+    local X2Action                          WaitAction;
+    local X2Action                          ChildAction;
+    local X2Action_MarkerNamed              MarkerAction;
+    local array<X2Action>                   MarkerActions;
+    local array<X2Action>                   DamageUnitActions;
+    local array<X2Action>                   DamageTerrainActions;
+    local XComGameStateContext_Ability      AbilityContext;
+    local VisualizationActionMetadata       ActionMetadata;
+    local bool                              bFoundHistoryIndex;
 
     VisMgr = `XCOMVISUALIZATIONMGR;
     AbilityContext = XComGameStateContext_Ability(BuildTree.StateChangeContext);
     
-    //	Find all Fire Actions in the triggering ability's Vis Tree performed by the unit that used the FollowUpShot.
+    //  Find all Fire Actions in the triggering ability's Vis Tree performed by the unit that used the FollowUpShot.
     VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_Fire', FindActions,, AbilityContext.InputContext.SourceObject.ObjectID);
     
     // Find all Damage Unit / Damage Terrain actions in the triggering ability visualization tree that are playing on the primary target of the follow up shot.
@@ -471,7 +552,7 @@ final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2
     foreach FindActions(FireAction)
     {
         if (FireAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
-        {	
+        {
             foreach FireAction.ChildActions(ChildAction)
             {
                 if (DamageTerrainActions.Find(ChildAction) != INDEX_NONE)
@@ -507,11 +588,11 @@ final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2
     // Will need these later to tie the shoelaces.
     VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_MarkerNamed', MarkerActions);
 
-    //	Add a Wait For Effect Action after the triggering ability's Fire Action. This will allow Singe's Effects to visualize the moment the triggering ability connects with the target.
+    //  Add a Wait For Effect Action after the triggering ability's Fire Action. This will allow Singe's Effects to visualize the moment the triggering ability connects with the target.
     ActionMetaData = FireAction.Metadata;
     WaitAction = class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetaData, AbilityContext, false, FireAction);
 
-    //	Insert the Singe's Vis Tree right after the Wait For Effect Action
+    //  Insert the Singe's Vis Tree right after the Wait For Effect Action
     VisMgr.ConnectAction(MarkerStart, VisualizationTree, false, WaitAction);
 
     // Main part of Merge Vis is done, now we just tidy up the ending part. 
@@ -523,10 +604,10 @@ final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2
 
         if (MarkerAction.MarkerName == 'Join' && MarkerAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
         {
-            //	TBH can't imagine circumstances where MarkerEnd wouldn't exist, but okay
+            //  TBH can't imagine circumstances where MarkerEnd wouldn't exist, but okay
             if (MarkerEnd != none)
             {
-                //	"tie the shoelaces". Vis Tree won't move forward until both Singe Vis Tree and Triggering Shot's Fire action are fully visualized.
+                //  "tie the shoelaces". Vis Tree won't move forward until both Singe Vis Tree and Triggering Shot's Fire action are fully visualized.
                 VisMgr.ConnectAction(MarkerEnd, VisualizationTree,,, MarkerAction.ParentActions);
                 VisMgr.ConnectAction(MarkerAction, BuildTree,, MarkerEnd);
             }
@@ -538,25 +619,4 @@ final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2
             break;
         }
     }
-}
-
-static function EventListenerReturn KillMailListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameState_Unit                SourceUnit;
-    local XComGameState_Ability             AbilityState;
-    local XComGameStateContext_Ability      AbilityContext;
-
-    SourceUnit = XComGameState_Unit(EventSource);
-    AbilityState = XComGameState_Ability(CallbackData);
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
-    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
-    {
-        if (AbilityState.OwnerStateObject.ObjectID == SourceUnit.ObjectID)
-        {
-            return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
-        }
-    }
-
-    return ELR_NoInterrupt;
 }

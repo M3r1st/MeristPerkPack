@@ -5,11 +5,17 @@ LocHelpText="Hunker Down now confers +<Ability:M31_SharpshooterAim_AimBonus> aim
 LocFlyOverText="Hunker Down - Aim"
 LocPromotionPopupText="<Bullet> The bonus granted by aim can apply to any weapon shot.<br><Bullet> Also affects Entrench, Shield Wall and Coil."
 
+[M31_AdvancedAidProtocol X2AbilityTemplate]
+LocFriendlyName="Advanced Aid Protocol"
+LocLongDescription="<font color='#1abc9c'>Aid Protocol</font> and <font color='#1abc9c'>Strongold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being criticaly hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
+LocHelpText="<font color='#1abc9c'>Aid Protocol</font> and <font color='#1abc9c'>Strongold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being criticaly hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
+; LocPromotionPopupText=""
+
 [M31_AlphaStrike X2AbilityTemplate]
 LocFriendlyName="Alpha Strike"
-LocLongDescription="Spend two actions to give all allies within <Ability:M31_AlphaStrike_Radius> tiles an extra action. Usable once per mission."
+LocLongDescription="Spend two actions to give all allies within <Ability:M31_AlphaStrike_Radius> tiles an extra action. Usable <Ability:M31_SelfCharges> time(s) per mission. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
 LocHelpText="Activate to grant an extra action to all allies within <Ability:M31_AlphaStrike_Radius> tiles."
-LocPromotionPopupText="<Bullet> Usable once per mission.<br><Bullet> This ability does not provide the bonus to stunned or panicked allies."
+LocPromotionPopupText="<Bullet> This ability does not provide the bonus to stunned or panicked allies."
 LocFlyOverText="Alpha Strike"
 
 [M31_Assassin X2AbilityTemplate]
@@ -285,10 +291,20 @@ LocHelpText="Take a shot with your <Ability:M31_BoundWeaponName>. If the target 
 LocPromotionPopupText="<Bullet> Suppressing Fire requires <font color='#ffd700'>3</font> ammo to use, but the shot consumes only <font color='#ffd700'>1</font>.<br><Bullet> Suppressing Fire has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
 LocFlyOverText="Suppressing Fire"
 
+[M31_SuppressingFire_Trigger X2AbilityTemplate]
+LocFriendlyName="Suppressing Fire"
+LocFlyOverText="Suppressing Fire"
+
 [M31_Suppression X2AbilityTemplate]
 LocFriendlyName="Oppressor"
 LocLongDescription="Gain <font color='#1abc9c'>Suppression</font>. Additionally, gain <font color='#1abc9c'>Area Suppression</font> when a cannon is equipped as the primary weapon."
 LocHelpText="Gain <font color='#1abc9c'>Suppression</font>. Additionally, gain <font color='#1abc9c'>Area Suppression</font> when a cannon is equipped as the primary weapon."
+; LocPromotionPopupText=""
+
+[M31_TargetingAid X2AbilityTemplate]
+LocFriendlyName="Targeting Aid"
+LocLongDescription="<font color='#1abc9c'>Aid Protocol</font> and <font color='#1abc9c'>Strongold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
+LocHelpText="<font color='#1abc9c'>Aid Protocol</font> and <font color='#1abc9c'>Strongold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
 ; LocPromotionPopupText=""
 
 [M31_TrackingFire X2AbilityTemplate]

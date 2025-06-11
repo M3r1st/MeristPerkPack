@@ -10,7 +10,13 @@ M31_FreeAction                              = "Free action"
 M31_Shield_BonusText                        = "Shield remaining: <Ability:M31_ShieldRemaining>.<br>Shield priority: <Ability:M31_ShieldPriority>."
 
 M31_ShadowstepAid_FriendlyName              = "Shadowstep Aid"
-M31_ShadowstepAid_BuffText                  = "This soldier is given temporary Shadowstep and does not trigger overwatch or reaction fire."
+M31_ShadowstepAid_BuffText                  = "This unit is given temporary Shadowstep and does not trigger overwatch or reaction fire."
+
+M31_TargetingAid_FriendlyName               = "Targeting Aid"
+M31_TargetingAid_BuffText                   = "This unit's aim is incrased by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
+
+M31_AdvancedAidProtocol_FriendlyName        = "Advanced Aid"
+M31_AdvancedAidProtocol_BuffText            = "This unit is protected. Their dodge is increased by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and the chance of being criticaly hit reduced by <Ability:M31_AdvancedAidProtocol_CritResistance>."
 
 M31_CA_Escalation_BonusText                 = "While Escalation is active, gain +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
 
@@ -27,11 +33,10 @@ M31_PA_Coil_BonusText                       = "Your next action will not end the
 M31_PA_HardenedShield_FriendlyName          = "Hardened Shield"
 
 M31_BloodThirst_BuffText                    = "<Ability:M31_BloodThirst_BuffText>"
-M31_BloodThirst_BuffText_NoStacks           = "The unit doesn't have any stacks of Blood Thirst."
-M31_BloodThirst_BuffText_Stacks             = "The unit has"
-M31_BloodThirst_BuffText_Stacks2            = "stacks of Blood Thirst."
-M31_BloodThirst_BuffText_StacksHelp         = "stacks will be lost in"
-M31_BloodThirst_BuffText_StacksHelpFirst    = "stacks will be lost at the start of the next turn."
+M31_BloodThirst_BuffText_NoStacks           = "Thos unit doesn't have any stacks of Blood Thirst."
+M31_BloodThirst_BuffText_Stacks             = "This unit has [X] stack(s) of Blood Thirst."
+M31_BloodThirst_BuffText_StacksHelp         = "[X] stack(s) will be lost in [Y] Turn(s)."
+M31_BloodThirst_BuffText_StacksHelpFirst    = "[X] stack(s) will be lost at the start of the next turn."
 
 M31_Duskborn_BonusText                      = "Duskborn is still active."
 ; M31_Duskborn_BonusText                      = "Duckborn is still active. <Ability:ClassName> is still quacking."
@@ -49,11 +54,14 @@ M31_BleedingRoundsBleeding_DebuffText       = "The unit is bleeding. It takes <A
 M31_PipeBombsBleeding_DebuffText            = "The unit is bleeding. It takes <Ability:M31_PipeBombs_BleedDamage> damage at the start of each turn."
 M31_PA_VeryAngryBite_DebuffText             = "The unit is bleeding. It takes <Ability:M31_PA_VeryAngryBite_BleedDamage_Debuff> damage at the start of each turn."
 
+M31_ENEMY_ViperPoison_DebuffText            = ""
+M31_ENEMY_ViperEnhPoison_DebuffText         = ""
 
 M31_PA_WS_Bolt_Maelstrom_FriendlyName       = "Maelstrom"
-M31_PA_WS_StupidSexySnake_BuffText          = ""
-M31_PA_WS_RebelYell_BuffText                = ""
-M31_PA_WS_Thrill_BuffText                   = ""
+M31_PA_WS_StupidSexySnake_BuffText          = "This unit is enchanted. Its aim, crit, and dodge are increased."
+M31_PA_WS_RebelYell_BuffText                = "This unit is inspired. It gains various stat bonuses."
+M31_PA_WS_Thrill_BuffText                   = "<Ability:M31_PA_WS_Thrill_BuffText>"
+M31_PA_WS_Thrill_Stacks                     = "This unit gains +[X] aim and +[Y] critical chance from [Z] stack(s) of Thrill."
 
 [BitterfrostHelper]
 ChillEffectName="Chilled"
@@ -64,3 +72,33 @@ BitterChillEffectDesc="Mobility reduced and unable to dodge. Vulnerable to freez
 [MZ_Effect_Hypothermia]
 HypothermiaEffectName = "Hypothermia"
 HypothermiaEffectDesc = "Cold damage at the begining of each turn depending on degree of chill."
+
+[X2StatusEffects_Radiation]
+RadBurningFriendlyName="Radiation Burn"
+RadBurningFriendlyDesc="Radiation Burned units take damage over time, and have decreased dodge, and defense"
+RadBurningEffectAcquiredString="<XGParam:StrValue0/!UnitName/> is radiation burning."
+RadBurningEffectTickedString="<XGParam:StrValue0/!UnitName/> is still radiation burning."
+RadBurningEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer radiation burning."
+
+BoilingBloodFriendlyName="Boiling Blood"
+BoilingBloodFriendlyDesc="Units afflicted with boiling blood take highly irregular damage over time, have reduced aim, and mobility"
+BoilingBloodEffectAcquiredString="<XGParam:StrValue0/!UnitName/> has boiling blood."
+BoilingBloodEffectTickedString="<XGParam:StrValue0/!UnitName/> is still afflicted with boiling blood."
+BoilingBloodEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer afflicted with boiling blood."
+
+IrradiatedFriendlyName="Irradiated"
+IrradiatedFriendlyDesc="Irradiated units suffer aim and movement penalties, machines are affected too and their hacking defense decreases"
+IrradiatedEffectAcquiredString="<XGParam:StrValue0/!UnitName/> is irradiated."
+IrradiatedEffectTickedString="<XGParam:StrValue0/!UnitName/> is still irradiated."
+IrradiatedEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer irradiated."
+
+LostRadRegenFriendlyName="Radiation Regeneration"
+LostRadRegenFriendlyDesc="Lost units regenerate when affected by radiation"
+LostRadRegenEffectAcquiredString="<XGParam:StrValue0/!UnitName/> is regenerating."
+LostRadRegenEffectTickedString="<XGParam:StrValue0/!UnitName/> is still regenerating."
+LostRadRegenEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer regenerating."
+
+[UIEventNoticesTactical_Radiation]
+RadBurningTitle="Radiation Burn"
+RadBleedingTitle="Boiling Blood"
+RadDisorientedTitle="Irradiated"

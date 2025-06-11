@@ -18,6 +18,9 @@ function float GetPreDefaultAttackingDamageModifier_CH(
         TargetUnit = XComGameState_Unit(Target);
         if (TargetUnit != none)
         {
+            if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+                return 0;
+
             if (class'XComGameStateContext_Ability'.static.IsHitResultHit(ApplyEffectParameters.AbilityResultContext.HitResult))
             {
                 ExtraDamage = Min((TargetUnit.GetMaxStat(eStat_HP) - TargetUnit.GetCurrentStat(eStat_HP)) * (`GetConfigFloat("M31_DeathAdder_HPToDamage") / 100),

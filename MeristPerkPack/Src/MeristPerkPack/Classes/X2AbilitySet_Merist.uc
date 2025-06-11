@@ -19,6 +19,7 @@ static function array<X2DataTemplate> CreateTemplates()
     
     // Templates.AddItem(Adrenaline());
     //     Templates.AddItem(AdrenalineTrigger());
+    Templates.AddItem(AdvancedAidProtocol());
     Templates.AddItem(Aim());
     Templates.AddItem(AlphaStrike());
     Templates.AddItem(Assassin());
@@ -47,6 +48,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Frostbane());
     Templates.AddItem(FutureWarfare());
         Templates.AddItem(FutureWarfareTrigger());
+    Templates.AddItem(ImprovedSuppression());
     Templates.AddItem(GenevaSuggestion());
     Templates.AddItem(Meld());
     Templates.AddItem(NeurotoxicShot());
@@ -68,6 +70,7 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(SuppressingFireAddActions());
         Templates.AddItem(SuppressingFireRemoveActions());
     Templates.AddItem(Suppression());
+    Templates.AddItem(TargetingAid());
     Templates.AddItem(TrackingFire());
         Templates.AddItem(TrackingFireResetCooldown());
     Templates.AddItem(TrainedSniper_Squadsight());
@@ -141,6 +144,15 @@ static function X2AbilityTemplate AdrenalineTrigger()
     return Template;
 }
 
+static function X2AbilityTemplate AdvancedAidProtocol()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_AdvancedAidProtocol', "img:///UILibrary_MZChimeraIcons.Ability_ArmorSystem", false, true);
+    
+    return Template;
+}
+
 static function X2AbilityTemplate Aim()
 {
     local X2AbilityTemplate                 Template;
@@ -189,7 +201,7 @@ static function X2AbilityTemplate AlphaStrike()
     Template.bSkipFireAction = false;
     Template.bSkipExitCoverWhenFiring = true;
     
-    Template.CustomFireAnim = 'HL_SignalPositiveA';
+    Template.CustomFireAnim = 'HL_SignalPositive';
     Template.CinescriptCameraType = "Skirmisher_CombatPresence";
 
     Template.AbilityConfirmSound = "Combat_Presence_Activate";
@@ -713,7 +725,7 @@ simulated function EnergyShield_BuildVisualization(XComGameState VisualizeGameSt
     ActionMetadata.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
     PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-    PlayAnimationAction.Params.AnimName = 'M31_HL_EnergyShield';
+    PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
 }
 
 static function X2AbilityTemplate EnhancedLowProfile()
@@ -889,7 +901,7 @@ static function X2AbilityTemplate Frostbane()
     Effect.CritPerTier = `GetConfigInt("M31_Frostbane_CritBonusPerTier");
     Effect.PierceBase = `GetConfigInt("M31_Frostbane_PiercingBonus");
     Effect.PiercePerTier = `GetConfigInt("M31_Frostbane_PiercingBonusPerTier");
-    Effect.bCheckSourceWeapon = `GetConfigBool("M31_Frostbane_bCheckSourceWeapon");
+    Effect.bMatchSourceWeapon = `GetConfigBool("M31_Frostbane_bMatchSourceWeapon");
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
@@ -1570,6 +1582,8 @@ static function X2AbilityTemplate SuppressingFire()
     Template.AdditionalAbilities.AddItem('M31_SuppressingFire_Trigger');
     Template.AdditionalAbilities.AddItem('M31_SuppressingFire_Dummy');
 
+    Template.bShowActivation = true;
+
     return Template;
 }
 
@@ -1593,6 +1607,8 @@ static function X2AbilityTemplate SuppressingFireAddActions()
     Effect.NumActionPoints = 1;
     Effect.PointType = class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint;
     Template.AddTargetEffect(Effect);
+
+    // Template.bShowActivation = true;
 
     return Template;
 }
@@ -1643,6 +1659,15 @@ static function X2AbilityTemplate Suppression()
     CannonAbilityEffect.TargetConditions.AddItem(CannonCondition);
     Template.AddTargetEffect(CannonAbilityEffect);
 
+    return Template;
+}
+
+static function X2AbilityTemplate TargetingAid()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_TargetingAid', "img:///UILibrary_MZChimeraIcons.Ability_CombatProtocol", false, true);
+    
     return Template;
 }
 
@@ -2055,3 +2080,5 @@ static function X2AbilityTemplate ToxicNightmareAttack()
 
     return Template;
 }
+
+// Texture2D'UILibrary_PerkIcons.UIPerk_hithurts'

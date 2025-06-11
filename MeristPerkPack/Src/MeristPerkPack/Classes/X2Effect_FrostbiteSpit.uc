@@ -1,5 +1,7 @@
 class X2Effect_FrostbiteSpit extends X2Effect_Persistent;
 
+var bool bApplyToDOT;
+
 function bool AllowCritOverride()
 {
     return true;
@@ -51,6 +53,9 @@ function int GetAttackingDamageModifier(
     local float DamageBonus;
 
     if (!class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult) || CurrentDamage == 0)
+        return 0;
+
+    if (!bApplyToDOT && EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (Attacker != none)

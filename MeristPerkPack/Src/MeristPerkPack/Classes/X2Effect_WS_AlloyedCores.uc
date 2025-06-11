@@ -42,6 +42,9 @@ function int GetExtraArmorPiercing(
     if (AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
+    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+        return 0;
+
     if (TargetUnit == none)
         return 0;
 

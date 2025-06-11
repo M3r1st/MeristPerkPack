@@ -16,11 +16,8 @@ enum EActionPointCost
                                 // the enemy turn. You should use eCost_Free for activated abilities.
 };
 
-static function X2AbilityTemplate Passive(
-    name TemplateName,
-    string IconImage,
-    optional bool bCrossClassEligible = false,
-    optional bool bDisplayInUI = false)
+static function X2AbilityTemplate Passive( name TemplateName, string IconImage,
+    optional bool bCrossClassEligible = false, optional bool bDisplayInUI = false)
 {
     local X2AbilityTemplate             Template;
     local X2Effect_Persistent           PersistentEffect;
@@ -54,9 +51,7 @@ static function X2AbilityTemplate Passive(
     return Template;
 }
 
-static function X2AbilityTemplate SelfTargetActivated(
-    name TemplateName,
-    string IconImage,
+static function X2AbilityTemplate SelfTargetActivated(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false)
 {
     local X2AbilityTemplate     Template;
@@ -87,11 +82,9 @@ static function X2AbilityTemplate SelfTargetActivated(
     return Template;
 }
 
-static function X2AbilityTemplate SelfTargetTrigger(
-    name TemplateName,
-    string IconImage)
+static function X2AbilityTemplate SelfTargetTrigger(name TemplateName, string IconImage)
 {
-    local X2AbilityTemplate     Template;
+    local X2AbilityTemplate Template;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 
@@ -117,11 +110,8 @@ static function X2AbilityTemplate SelfTargetTrigger(
     return Template;
 }
 
-static function X2AbilityTemplate Attack(
-    name TemplateName,
-    string IconImage,
-    optional bool bCrossClassEligible = false,
-    optional bool bAddDefaultEffects = true)
+static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
+    optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
 {
     local X2AbilityTemplate                 Template;	
     local X2Condition_Visibility            VisibilityCondition;
@@ -182,7 +172,7 @@ static function X2AbilityTemplate Attack(
 
     Template.bCrossClassEligible = bCrossClassEligible;
 
-    return Template;	
+    return Template;
 }
 
 static function AddCooldown(X2AbilityTemplate Template, int iNumTurns)

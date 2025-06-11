@@ -1,0 +1,77 @@
+[M31_ENEMY_Sidewinder X2AbilityTemplate]
+LocFriendlyName="Sidewinder"
+LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> Turn(s). Will not activate if the unit is disoriented or burning."
+LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> Turn(s). Will not activate if the unit is disoriented or burning."
+LocFlyOverText="Sidewinder"
+
+[M31_ENEMY_Sidewinder_Move X2AbilityTemplate]
+LocFriendlyName="Sidewinder"
+LocFlyOverText="Sidewinder"
+
+
+[M31_ENEMY_MuchSidewinder X2AbilityTemplate]
+LocFriendlyName="Sidewinder Elite"
+LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can activate once per turn. Will not activate if the unit is disoriented, burning, or otherwise impaired."
+LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action.  Can activate once per turn. Will not activate if the unit is disoriented, burning, or otherwise impaired."
+LocFlyOverText="Sidewinder Elite"
+
+[M31_ENEMY_MuchSidewinder_Move X2AbilityTemplate]
+LocFriendlyName="Sidewinder"
+LocFlyOverText="Sidewinder"
+
+
+[M31_ENEMY_ViperBite X2AbilityTemplate]
+LocFriendlyName="Vicious Bite"
+LocLongDescription="Bite any enemy within blue movement range. Deals moderate damage, applies poison and rupture the target. Costs a single action and doesn't end the turn. Cannot target robots and environmental objects."
+LocHelpText="Bite any enemy within blue movement range. Deals moderate damage, applies poison and rupture the target. Cannot target robots."
+LocFlyOverText="Vicious Bite"
+
+
+[M31_ENEMY_Lockjaw X2AbilityTemplate]
+LocFriendlyName="Lockjaw"
+LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
+LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
+LocFlyOverText="Lockjaw"
+
+[M31_ENEMY_Lockjaw_Attack X2AbilityTemplate]
+LocFriendlyName="Lockjaw"
+LocFlyOverText="Lockjaw"
+
+
+[M31_ENEMY_AngryBite X2AbilityTemplate]
+LocFriendlyName="Angry Bite"
+LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Cannot target robots."
+LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn."
+LocFlyOverText="Angry Bite"
+
+[M31_ENEMY_AngryBite_Attack X2AbilityTemplate]
+LocFriendlyName="Angry Bite"
+LocFlyOverText="Angry Bite"
+
+
+[M31_ENEMY_PoisonSpit X2AbilityTemplate]
+LocFriendlyName="Poison Spit"
+LocLongDescription="Spit deadly toxin that poisons all targets within the area and leaving a cloud of poison."
+LocHelpText="Spit deadly toxin that poisons all targets within the area and leaving a cloud of poison."
+LocFlyOverText="Poison Spit"
+
+
+[M31_ENEMY_PoisonSpitWithDamage X2AbilityTemplate]
+LocFriendlyName="Enhanced Poison Spit"
+LocLongDescription="Spit deadly toxin that deals poison damage, poisons all targets within the area and leaves a cloud of poison."
+LocHelpText="Spit deadly toxin that deals poison damage, poisons all targets within the area and leaves a cloud of poison."
+LocFlyOverText="Poison Spit"
+
+
+[M31_PA_Coil_Hunker X2AbilityTemplate]
+LocFriendlyName="Defensive Coil"
+LocLongDescription="If the unit did not attack this turn, it coils down, increasing its defense and dodge even against flanking attacks."
+LocHelpText="If the unit did not attack this turn, it coils down, increasing its defense and dodge even against flanking attacks."
+LocFlyOverText="Defensive Coil"
+
+
+[M31_ENEMY_AdvancedCoilHunker X2AbilityTemplate]
+LocFriendlyName="Advanced Defensive Coil"
+LocLongDescription="The unit coils down at the end of each turn, increasing its defense and dodge even against flanking attacks."
+LocHelpText="The unit coils down at the end of each turn, increasing its defense and dodge even against flanking attacks."
+LocFlyOverText="Defensive Coil"

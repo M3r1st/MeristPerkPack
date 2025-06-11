@@ -62,6 +62,9 @@ function int GetAttackingDamageModifier(
     if (AllowedAbilities.Length > 0 && AllowedAbilities.Find(AbilityState.GetMyTemplateName()) == INDEX_NONE)
         return 0;
 
+    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+        return 0;
+
     if (CurrentDamage > 0)
     {
         Bonus = DamageBonus;

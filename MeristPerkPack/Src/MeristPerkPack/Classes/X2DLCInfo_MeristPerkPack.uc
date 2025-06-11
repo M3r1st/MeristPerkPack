@@ -20,6 +20,10 @@ var config(GameData_SoldierSkills) array<name> ImprovedSuppression_AllowedAbilit
 var config(GameData_SoldierSkills) array<name> RapidDumping_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> ShadowstepAid_AllowedAbilities;
 var config(GameData_SoldierSkills) array<name> ShadowstepAid_AllowedMultiTargetAbilities;
+var config(GameData_SoldierSkills) array<name> TargetingAid_AllowedAbilities;
+var config(GameData_SoldierSkills) array<name> TargetingAid_AllowedMultiTargetAbilities;
+var config(GameData_SoldierSkills) array<name> AdvancedAidProtocol_AllowedAbilities;
+var config(GameData_SoldierSkills) array<name> AdvancedAidProtocol_AllowedMultiTargetAbilities;
 var config(GameData_SoldierSkills) bool bUpdateTemplarShield;
 var config(TooManyTooltips) bool bEnableTooManyTooltips;
 var config(TooManyTooltips) array<name> TooManyTooltips_AbilitiesToPatch;
@@ -90,6 +94,26 @@ static event OnPostTemplatesCreated()
     foreach default.ShadowstepAid_AllowedMultiTargetAbilities(AbilityName)
     {
         AddShadowstepAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
+    }
+
+    foreach default.TargetingAid_AllowedAbilities(AbilityName)
+    {
+        AddTargetingAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), false);
+    }
+
+    foreach default.TargetingAid_AllowedMultiTargetAbilities(AbilityName)
+    {
+        AddTargetingAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
+    }
+
+    foreach default.AdvancedAidProtocol_AllowedAbilities(AbilityName)
+    {
+        AddAdvancedAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), false);
+    }
+
+    foreach default.AdvancedAidProtocol_AllowedMultiTargetAbilities(AbilityName)
+    {
+        AddAdvancedAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
     }
 
     if (default.bUpdateTemplarShield)
@@ -329,6 +353,60 @@ static function AddShadowstepAidToAbility(X2AbilityTemplate Template, bool bAddT
         {
             Template.AddTargetEffect(ShadowstepEffect);
             Template.AddTargetEffect(ActionPointEffect);
+        }
+    }
+}
+
+static function AddTargetingAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
+{
+    local X2Effect_TargetingAid         Effect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+
+    if (Template != none)
+    {
+        AbilityCondition = new class'X2Condition_AbilityProperty';
+        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_TargetingAid');
+
+        Effect = new class'X2Effect_TargetingAid';
+        Effect.EffectName = 'M31_TargetingAid';
+        Effect.DuplicateResponse = eDupe_Refresh;
+        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_TargetingAid_FriendlyName"), `GetLocalizedString("M31_TargetingAid_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_CombatProtocol", true,, Template.AbilitySourceName);
+        Effect.TargetConditions.AddItem(AbilityCondition);
+        if (bAddToMultiTarget)
+        {
+            Template.AddMultiTargetEffect(Effect);
+        }
+        else
+        {
+            Template.AddTargetEffect(Effect);
+        }
+    }
+}
+
+static function AddAdvancedAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
+{
+    local X2Effect_AdvancedAidProtocol  Effect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+
+    if (Template != none)
+    {
+        AbilityCondition = new class'X2Condition_AbilityProperty';
+        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_AdvancedAidProtocol');
+
+        Effect = new class'X2Effect_AdvancedAidProtocol';
+        Effect.EffectName = 'M31_AdvancedAid';
+        Effect.DuplicateResponse = eDupe_Refresh;
+        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_AdvancedAidProtocol_FriendlyName"), `GetLocalizedString("M31_AdvancedAidProtocol_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_ArmorSystem", true,, Template.AbilitySourceName);
+        Effect.TargetConditions.AddItem(AbilityCondition);
+        if (bAddToMultiTarget)
+        {
+            Template.AddMultiTargetEffect(Effect);
+        }
+        else
+        {
+            Template.AddTargetEffect(Effect);
         }
     }
 }
@@ -575,6 +653,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             
         case "M31_SharpshooterAim_AimBonus":
         case "M31_SharpshooterAim_CritBonus":
+        case "M31_AdvancedAidProtocol_CritResistance":
+        case "M31_AdvancedAidProtocol_DodgeBonus":
         case "M31_AlphaStrike_Radius":
         case "M31_AlphaStrike_Charges":
         case "M31_Assassin_ActivationsPerTurn":
@@ -622,6 +702,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Sparkfire_AmmoCost":
         case "M31_SuperheavyOrdnance_ChargeBonus":
         case "M31_SuperheavyOrdnance_RangeBonus":
+        case "M31_TargetingAid_AimBonus":
+        case "M31_TargetingAid_CritBonus":
         case "M31_TrackingFire_CooldownReduction":
         case "M31_Warbringer_ChargeBonus":
         case "M31_Warbringer_RadiusBonus":
@@ -688,6 +770,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_EnhancedPoison_MobilityPenalty":
         case "M31_PA_EnhancedPoison_AimPenalty":
         case "M31_PA_EnhancedPoison_Duration":
+
+        case "M31_ENEMY_Lockjaw_Cooldown":
+        case "M31_ENEMY_Sidewinder_Cooldown":
             OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
             return true;
 
@@ -704,16 +789,19 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_Coil_NoCoverModifier":
         case "M31_PA_Coil_LowCoverModifier":
         case "M31_PA_Coil_HighCoverModifier":
+        OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)),, UnitState);
+            return true;
+
         case "M31_PA_PoisonSpit_Radius":
         case "M31_PA_FrostSpit_Radius":
         case "M31_PA_FrostBreath_Radius":
-            OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)),, UnitState);
+            OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)) $ "m",, UnitState);
             return true;
 
         case "M31_BloodThirst_bRefreshDuration":
         case "M31_BloodThirst_bApplyToAnyMelee":
         case "M31_BloodThirst_bIncreaseOnlyOnHit":
-        case "M31_Frostbane_bCheckSourceWeapon":
+        case "M31_Frostbane_bMatchSourceWeapon":
         case "M31_TrackingFire_bIsReactionFire":
         case "M31_TrackingFire_bAllowResetFromBladestorm":
         case "M31_ImprovedSuppression_bApplyToRobotic":
@@ -746,6 +834,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 
         case "M31_BloodThirst_BuffText":
             OutString = GetBloodThirstOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+        case "M31_PA_WS_Thrill_BuffText":
+            OutString = GetThrillOutString(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_CA_BlindSpot_CritBonus":
@@ -865,6 +956,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_WS_AlloyedCores_Range":
         case "M31_PA_WS_AlloyedCores_CritBonus":
         case "M31_PA_WS_AlloyedCores_PierceBonus":
+        case "M31_PA_WS_ChillingMist_Duration":
         case "M31_PA_WS_Entwine_DodgeBonus":
         case "M31_PA_WS_Entwine_BindDamageBonus":
         case "M31_PA_WS_Fracture_AimBonus":
@@ -894,6 +986,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_WS_RagingSerpent_CritBonus":
         case "M31_PA_WS_ReinforcedScales_CritResistance":
         case "M31_PA_WS_ReinforcedScales_DamageReduction":
+        case "M31_PA_WS_StupidSexySnake_Radius":
         case "M31_PA_WS_StupidSexySnake_AimBonus":
         case "M31_PA_WS_StupidSexySnake_CritBonus":
         case "M31_PA_WS_StupidSexySnake_DodgeBonus":
@@ -940,6 +1033,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_WS_Bolt_Rad_Charges":
             OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
             return true;
+
+        case "M31_PA_WS_Vigilance_SightRangeBonus_Tiles":
+            OutString = ColorText_Auto(int(`GetConfigInt("M31_PA_WS_Vigilance_SightRangeBonus") / 1.5 + 0.1),, UnitState);
 
         case "M31_PA_WS_Bolt_Maelstrom_AimBonus":
         case "M31_PA_WS_Bolt_Maelstrom_CritBonus":
@@ -1001,10 +1097,15 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_WS_NorthernWinds_bAllowWhileBurning":
         case "M31_PA_WS_NorthernWinds_bRequireVisibility":
         case "M31_PA_WS_Bolt_Stun_bCanStunLargeUnits":
+        case "M31_PA_WS_RebelYell_bAppliesToPanicked":
         case "M31_PA_WS_RebelYell_bClearsPanic":
+        case "M31_PA_WS_RebelYell_bAppliesToMindControlled":
         case "M31_PA_WS_RebelYell_bClearsMindControl":
+        case "M31_PA_WS_RebelYell_bAppliesToStunned":
+        case "M31_PA_WS_RebelYell_bClearsStun":
         case "M31_PA_WS_RagingSerpent_bAllowWhileDisoriented":
         case "M31_PA_WS_RagingSerpent_bAllowWhileBurning":
+        case "M31_PA_WS_ThrillOfTheHunt_bExcludeRobotic":
             OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
             return true;
             
@@ -1556,9 +1657,9 @@ static private function string GetBloodThirstOutString(Object ParseObj, Object S
     local XCGS_Effect_BloodThirst           BloodThirstEffectState;
     local X2Effect_BloodThirst              BloodThirstEffect;
     local string OutString;
+    local string NewString;
     local int Index;
     local int iCount;
-    local bool bFirst;
 
     EffectState = XComGameState_Effect(ParseObj);
     if (EffectState != none)
@@ -1570,32 +1671,61 @@ static private function string GetBloodThirstOutString(Object ParseObj, Object S
             if (iCount == 0)
                 return `GetLocalizedString("M31_BloodThirst_BuffText_NoStacks");
             else
-                OutString = `GetLocalizedString("M31_BloodThirst_BuffText_Stacks") $ " " $ iCount $ " " $ `GetLocalizedString("M31_BloodThirst_BuffText_Stacks2") $ "<br><br>";
+            {
+                NewString = `GetLocalizedString("M31_BloodThirst_BuffText_Stacks");
+                NewString = Repl(NewString, "[X]", iCount) $ "<br><br>";
+                OutString = NewString;
+            }
 
             BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
 
-            bFirst = true;
             for (Index = 0; Index < BloodThirstEffect.iMaxStacks; Index++)
             {
                 if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
-                {
-                    if (bFirst)
-                        bFirst = false;
-                    else
-                        OutString $= "<br>";
-                        
-                    OutString $= BloodThirstEffectState.arrStacksRemaining[Index] $ " ";
-                    
+                {                 
                     if (Index == 0)
-                        OutString $= `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
+                    {
+                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
+                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]) $ "<br>";
+                        OutString $= NewString;
+                    }
                     else
-                        OutString $= `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp") $ " " $ Index + 1 $ " " $ `GetLocalizedString("M31_Turns") $ ".";
+                    {
+                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp");
+                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]);
+                        NewString = Repl(NewString, "[y]", Index + 1) $ "<br>";
+                        OutString $= NewString;
+                    }
                 }
             }
             return OutString;
         }
     }
     return "?";
+}
+
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function string GetThrillOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Unit UnitState;
+    local int iCount;
+    local string NewString;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+
+    iCount = class'X2Effect_WS_Thrill'.static.GetCurrentStackCount(UnitState);
+
+    NewString = `GetLocalizedString(`GetLocalizedString("M31_PA_WS_Thrill_Stacks"));
+
+    NewString = Repl(NewString, "[X]", iCount * `GetConfigInt("M31_PA_WS_ThrillOfTheHunt_AimPerStack"));
+    NewString = Repl(NewString, "[Y]", iCount * `GetConfigInt("M31_PA_WS_ThrillOfTheHunt_CritPerStack"));
+    NewString = Repl(NewString, "[Z]", iCount);
+
+    return NewString;
 }
 
 // Purpose: helper function for AbilityTagExpandHandler_CH().
@@ -1668,7 +1798,7 @@ static private function string GetOutStringWithRank(int BaseValue, float PerRank
     OutString $= ColorText_Auto(BaseValue $ strExtra,, SourceUnit);
     
     if (bStrategy && PerRankValue != 0 && iRank < iMaxRank)
-        OutString $= ColorText_Grey(" ( " $ BaseValue $ " + " $  TruncateFloat(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+        OutString $= ColorText_Grey(" (" $ BaseValue $ " + " $  TruncateFloat(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
     
     return OutString;
 }
@@ -1794,7 +1924,7 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
                 if (bStrategy && DamageEffectHPRank.fBaseDmgPerRank > 0 && iRank < iMaxRank)
                 {
                     if (iDamageLowBase < iDamageHighBase)
-                        OutString $= ColorText_Grey(" (" $ iDamageLowBase $ "-" $ iDamageHighBase
+                        OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase
                             $ " + " $  TruncateFloat(DamageEffectHPRank.fBaseDmgPerRank)
                             $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                     else
@@ -1820,8 +1950,8 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
         else
         {
             DamageEffectHPRank.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
-            iDamageLow = Min(iDamageLow, DamageEffectHPRank.iMinDamage);
-            iDamageHigh = Min(iDamageHigh, DamageEffectHPRank.iMinDamage);
+            iDamageLow = Max(iDamageLow, DamageEffectHPRank.iMinDamage);
+            iDamageHigh = Max(iDamageHigh, DamageEffectHPRank.iMinDamage);
             
             if (iDamageLow < iDamageHigh)
                 OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
@@ -1855,8 +1985,8 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
         else
         {
             DamageEffectHP.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
-            iDamageLow = Min(iDamageLow, DamageEffectHPRank.iMinDamage);
-            iDamageHigh = Min(iDamageHigh, DamageEffectHPRank.iMinDamage);
+            iDamageLow = Max(iDamageLow, DamageEffectHPRank.iMinDamage);
+            iDamageHigh = Max(iDamageHigh, DamageEffectHPRank.iMinDamage);
             if (iDamageLow < iDamageHigh)
                 OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
             else
@@ -1878,7 +2008,7 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
             if (bStrategy && DamageEffectRank.fDamagePerRank != 0 && iRank < iMaxRank)
             {
                 if (iDamageLowBase < iDamageHighBase)
-                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ "-" $ iDamageHighBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
+                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
                         $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                 else
                     OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)

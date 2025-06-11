@@ -2,25 +2,25 @@
 LocFriendlyName="Sentinel's Hide"
 LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
 LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
-LocPromotionPopupText="<Bullet> "
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><Bullet> Wound reduction does not work if the <Ability:ClassName> entered a bleeding out state during the mission.<br><br><font color='#909497'>\"Alright, we'll call it a draw.\"</font>"
 
 [M31_PA_WS_Entwine X2AbilityTemplate]
 LocFriendlyName="Entwine"
-LocLongDescription="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <M31_PA_WS_Entwine_BindDamageBonus>. "
-LocHelpText="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <M31_PA_WS_Entwine_BindDamageBonus>. "
-; LocPromotionPopupText=""
+LocLongDescription="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <Ability:M31_PA_WS_Entwine_BindDamageBonus>. "
+LocHelpText="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <Ability:M31_PA_WS_Entwine_BindDamageBonus>. "
+LocPromotionPopupText="<Bullet> Increases the damage of both the initial bind and the sustain action.<br><br><font color='#909497'>\"Nice spine you've got there.\""
 
 [M31_PA_WS_ReinforcedScales X2AbilityTemplate]
 LocFriendlyName="Reinforced Scales"
 LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_ReinforcedScales_DamageReduction> and the chance of being criticaly hit by <Ability:M31_PA_WS_ReinforcedScales_CritResistance>."
 LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_ReinforcedScales_DamageReduction> and the chance of being criticaly hit by <Ability:M31_PA_WS_ReinforcedScales_CritResistance>."
-; LocPromotionPopupText=""
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><br><font color='#909497'>\"How does this even work..?\"</font>"
 
 [M31_PA_WS_GlacialArmor X2AbilityTemplate]
 LocFriendlyName="Glacial Armor"
 LocLongDescription="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
 LocHelpText="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
-LocPromotionPopupText="<Bullet> Works while burning: <Ability:M31_PA_WS_GlacialArmor_bAllowWhileBurning>."
+LocPromotionPopupText="<Bullet> Works while burning: <Ability:M31_PA_WS_GlacialArmor_bAllowWhileBurning>.<br><br><font color='#909497'>\"Not as fragile as it looks.\"</font>"
 
 [M31_PA_WS_GlacialArmor_Update X2AbilityTemplate]
 LocFriendlyName="Glacial Armor"
@@ -30,7 +30,7 @@ LocFlyOverText="Glacial Armor"
 LocFriendlyName="Dominance"
 LocLongDescription="Once per turn, perform any single action when taking damage during the enemy turn."
 LocHelpText="Once per turn, perform any single action when taking damage during the enemy turn."
-LocPromotionPopupText="<Bullet> Can activate while disoriented: <Ability:M31_PA_WS_Dominance_bAllowWhileDisoriented>.<br><Bullet> Can activate while burning: <Ability:M31_PA_WS_Dominance_bAllowWhileBurning>.<br>"
+LocPromotionPopupText="<Bullet> Can activate while disoriented: <Ability:M31_PA_WS_Dominance_bAllowWhileDisoriented>.<br><Bullet> Can activate while burning: <Ability:M31_PA_WS_Dominance_bAllowWhileBurning>.<br><br><font color='#909497'>\"That's one angry snake.\"</font>"
 
 [M31_PA_WS_Dominance_Trigger X2AbilityTemplate]
 LocFriendlyName="Dominance"
@@ -40,34 +40,34 @@ LocFlyOverText="Dominance"
 LocFriendlyName="Raging Serpent"
 LocLongDescription="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
 LocHelpText="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions."
-LocPromotionPopupText="<Bullet> Has +<Ability:M31_PA_WS_RagingSerpent_AimBonus> aim and +<Ability:M31_PA_WS_RagingSerpent_CritBonus> crit.<br><Bullet> Deals <Ability:M31_PA_WS_RagingSerpent_Damage> points of damage.<br><Bullet> Can be used while disoriented: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileDisoriented><br><Bullet> Can be used while burning: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileBurning>."
+LocPromotionPopupText="<Bullet> Has +<Ability:M31_PA_WS_RagingSerpent_AimBonus> aim and +<Ability:M31_PA_WS_RagingSerpent_CritBonus> crit.<br><Bullet> Deals <Ability:M31_PA_WS_RagingSerpent_Damage> points of damage.<br><Bullet> Can be used while disoriented: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileDisoriented><br><Bullet> Can be used while burning: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileBurning>.<br><br><font color='#909497'>\"I can't seem to control all this rage that's inside me!\"</font>"
 LocFlyOverText="Raging Serpent"
 
 [M31_PA_WS_Indomitable X2AbilityTemplate]
 LocFriendlyName="Indomitable"
 LocLongDescription="Gain +<Ability:M31_PA_WS_Indomitable_HPBonus> HP, +<Ability:M31_PA_WS_Indomitable_DodgeBonus> dodge, and +<Ability:M31_PA_WS_Indomitable_ArmorBonus> armor. Additionally, reduces incoming damage by <Ability:M31_PA_WS_Indomitable_DamageReduction>."
 LocHelpText="Gain +<Ability:M31_PA_WS_Indomitable_HPBonus> HP, +<Ability:M31_PA_WS_Indomitable_DodgeBonus> dodge, and +<Ability:M31_PA_WS_Indomitable_ArmorBonus> armor. Additionally, reduces incoming damage by <Ability:M31_PA_WS_Indomitable_DamageReduction>."
-; LocPromotionPopupText=""
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><br><font color='#909497'>\"Yes, this is a hardship most dire...\"</font>"
 
 
 
 [M31_PA_WS_Vigilance X2AbilityTemplate]
 LocFriendlyName="Sentinel's Vigilance"
-LocLongDescription="Increases sight range by 6. Bolt attacks can be delayed until the enemy action."
-LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
-; LocPromotionPopupText=""
+LocLongDescription="Increases sight range by <Ability:M31_PA_WS_Vigilance_SightRangeBonus> meters (~<Ability:M31_PA_WS_Vigilance_SightRangeBonus_Tiles> tiles). Bolt attacks can be delayed until the enemy action."
+LocHelpText="Increases sight range by <Ability:M31_PA_WS_Vigilance_SightRangeBonus> meters (~<Ability:M31_PA_WS_Vigilance_SightRangeBonus_Tiles> tiles). Bolt attacks can be delayed until the enemy action."
+LocPromotionPopupText="<Bullet> The delayed attack is not considered reaction fire and therefore it can crit and is not affected by reaction fire penalties or perks related to reaction fire.<br><Bullet> The delayed attack activates when the enemy moves or takes a hostile action.<br><br><font color='#909497'>\"I can see you.\"</font>"
 
 [M31_PA_WS_Fracture X2AbilityTemplate]
 LocFriendlyName="Fracture"
 LocLongDescription="<Ability:M31_BoundWeaponName> attacks  gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
 LocHelpText="<Ability:M31_BoundWeaponName> attacks  gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
-LocPromotionPopupText="<Bullet> Applies against flanked enemies: <Ability:M31_PA_WS_Fracture_bAppliesAgainstFlanked>."
+LocPromotionPopupText="<Bullet> Applies against flanked enemies: <Ability:M31_PA_WS_Fracture_bAppliesAgainstFlanked>.<br<br><font color='#909497'>\"\"</font>"
 
 [M31_PA_WS_AlloyedCores X2AbilityTemplate]
 LocFriendlyName="Alloyed Cores"
-LocLongDescription="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
-LocHelpText="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
-LocPromotionPopupText="<Bullet> Note that attacks cannot shred pierced armor."
+LocLongDescription="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocHelpText="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocPromotionPopupText="<Bullet> Note that attacks cannot shred pierced armor.<br><br><font color='#909497'>\"Ouch.\"</font>"
 
 [M31_PA_WS_HeavyOrdnance X2AbilityTemplate]
 LocFriendlyName="Heavy Ordnance"
@@ -79,7 +79,7 @@ LocHelpText="All bolts gain an additional charge."
 LocFriendlyName="Dragon Slayer"
 LocLongDescription="Attacks deal +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable> damage against unflankable enemies, and additional +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Large> against large enemies."
 LocHelpText="Attacks deal +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable> damage against unflankable enemies, and additional +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Large> against large enemies."
-LocPromotionPopupText="<Bullet> Applies to all sources of damage."
+LocPromotionPopupText="<Bullet> Applies to all sources of damage.<br><br><font color='#909497'>\"Welcome to Anor Londo.\"</font>"
 LocFlyOverText="Dragon Slayer"
 
 
@@ -88,19 +88,19 @@ LocFlyOverText="Dragon Slayer"
 LocFriendlyName="Winter Warfare"
 LocLongDescription="Grants +<Ability:M31_PA_WS_WinterWarfare_ChargeBonus> charge per bitterfrost grenade item. Increases the radius of frost and bitterfrost grenades by <Ability:M31_PA_WS_WinterWarfare_RadiusBonus> tile. Throwing frost and bitterfrost grenades no longer ends the turn."
 LocHelpText="Grants +<Ability:M31_PA_WS_WinterWarfare_ChargeBonus> charge per bitterfrost grenade item. Increases the radius of frost and bitterfrost grenades by <Ability:M31_PA_WS_WinterWarfare_RadiusBonus> tile. Throwing frost and bitterfrost grenades no longer ends the turn."
-LocPromotionPopupText="<Bullet> Applies to all slots.<br><Bullet> Extra grenades provided by abilities do not get extra charges."
+LocPromotionPopupText="<Bullet> Applies to all slots.<br><Bullet> Extra grenades provided by abilities do not get extra charges.<br><br><font color='#909497'>\"Winter is coming.\"</font>"
 LocFlyOverText="Winter Warfare"
 
 [M31_PA_WS_WinterSoldier X2AbilityTemplate]
 LocFriendlyName="Winter Soldier"
 LocLongDescription="Grants a Grenade-only slot and a free frost bomb."
-LocPromotionPopupText="<br><br>\"Bucky..?\""
+LocPromotionPopupText="<br><br><font color='#909497'>\"Bucky..?\""
 
 [M31_PA_WS_ChillingMist X2AbilityTemplate]
 LocFriendlyName="Chilling Mist"
 LocLongDescription="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
 LocHelpText="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
-LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_PA_WS_ChillingMist_Duration> Turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks."
+LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_PA_WS_ChillingMist_Duration> Turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks.<br><br><font color='#909497'>\"It's rather chilly here, isn't it?\"</font>"
 
 [M31_PA_WS_ChillingMist_Attack X2AbilityTemplate]
 LocFriendlyName="Chilling Mist"
@@ -110,20 +110,24 @@ LocFlyOverText="Chilling Mist"
 LocFriendlyName="Enchanting Presence"
 LocLongDescription="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
 LocHelpText="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
-LocPromotionPopupText="<Bullet> The effect updates when the units finish their movement.<br><Bullet> The effect applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs."
+LocPromotionPopupText="<Bullet> The effect updates when the units finish their movement.<br><Bullet> The effect applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs.<br><br><font color='#909497'>\"You can admire from afar.\"</font>"
+
+[M31_PA_WS_StupidSexySnake_Update X2AbilityTemplate]
+LocFriendlyName="Enchanting Presence"
+LocFlyOverText="Enchanting Presence"
 
 [M31_PA_WS_RebelYell X2AbilityTemplate]
 LocFriendlyName="Rebel Yell"
-LocLongDescription="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_DodgeBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_DodgeBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> Turn(s). Costs a single action and doesn't end the turn. Has an <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_DodgeBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_DodgeBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> Turn(s). Costs a single action and doesn't end the turn."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_WS_RebelYell_Radius> tile radius.<br><Bullet> Alerts all enemies in the affected area.<br><Bullet> The bonus applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs.<Bullet> Applies to panicking allies and clears panic: <Ability:M31_PA_WS_RebelYell_bClearsPanic>.<br><Bullet> Clears mind control: <Ability:M31_PA_WS_RebelYell_bClearsMindControl>.<br><br>\"Fuses burn and wheels will turn,<br>The ones who lie will never learn...\""
+LocLongDescription="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> Turn(s). Costs a single action and doesn't end the turn. Has an <Ability:M31_SelfCooldown> Turn(s) cooldown."
+LocHelpText="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> Turn(s). Costs a single action and doesn't end the turn."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_WS_RebelYell_Radius> tile radius.<br><Bullet> Alerts all enemies in the affected area.<br><Bullet> The bonus applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs.<br><Bullet> Applies to panicking allies: <Ability:M31_PA_WS_RebelYell_bAppliesToPanicked>.<br><Bullet> Clears panic: <Ability:M31_PA_WS_RebelYell_bClearsPanic>.<br><Bullet> Applies to mind controlled allies: <Ability:M31_PA_WS_RebelYell_bAppliesToMindControlled>.<br><Bullet> Clears mind control: <Ability:M31_PA_WS_RebelYell_bClearsMindControl>.<br><Bullet> Applies to stunned allies: <Ability:M31_PA_WS_RebelYell_bAppliesToStunned>.<br><Bullet> Clears stun: <Ability:M31_PA_WS_RebelYell_bClearsStun>.<br><br><font color='#909497'>\"Fuses burn and wheels will turn, the ones who lie will never learn...\"</font>"
 LocFlyOverText="Rebel Yell"
 
 [M31_PA_WS_NorthernWinds X2AbilityTemplate]
 LocFriendlyName="Northern Winds"
 LocLongDescription="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> points of frost damage and a stack of bitterfrost."
 LocHelpText="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> points of frost damage frost damage and a stack of bitterfrost."
-LocPromotionPopupText="<Bullet> Deals frost damage and ignores armor.<br><Bullet> Requires line of sight: <Ability:M31_PA_WS_NorthernWinds_bRequireVisibility>.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> work while burning: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileBurning>.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> work while concealed: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileConcealed>.<br><Bullet> If <font color='#1abc9c'>Northern Winds</font> affect any enemy while <Ability:ClassName> is concealed, their concealment will be broken.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> activate before the start of the alien turn. If the <Ability:ClassName>'s concealment is broken by this ability, the enemies activated will get a full turn.<br><br>\"Reduces the electricity bill for AC usage on the Avenger.\""
+LocPromotionPopupText="<Bullet> Deals frost damage and ignores armor.<br><Bullet> Requires line of sight: <Ability:M31_PA_WS_NorthernWinds_bRequireVisibility>.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> work while burning: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileBurning>.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> work while concealed: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileConcealed>.<br><Bullet> If <font color='#1abc9c'>Northern Winds</font> affect any enemy while <Ability:ClassName> is concealed, their concealment will be broken.<br><Bullet> <font color='#1abc9c'>Northern Winds</font> activate before the start of the alien turn. If the <Ability:ClassName>'s concealment is broken by this ability, the enemies activated will get a full turn.<br><br><font color='#909497'>\"Reduces the electricity bill for the AC usage on the Avenger.\"</font>"
 
 [M31_PA_WS_NorthernWinds_Trigger X2AbilityTemplate]
 LocFriendlyName="Northern Winds"
@@ -133,29 +137,27 @@ LocFlyOverText="Northern Winds"
 LocFriendlyName="Metabolic Boost"
 LocLongDescription="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
 LocHelpText="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation."
-LocPromotionPopupText="<Bullet> <font color='#1abc9c'>Metabolic Boost</font> removes the same environmental effects a Medikit does.<br><Bullet> Dodge bonus applies even when the <Ability:ClassName> is out of cover."
+LocPromotionPopupText="<Bullet> <font color='#1abc9c'>Metabolic Boost</font> removes the same environmental effects a Medikit does.<br><Bullet> Dodge bonus applies even when the <Ability:ClassName> is out of cover.<br><br><font color='#909497'>\"This bad boy can fit so much pain in him.\"</font>"
 
 [M31_PA_WS_ThrillOfTheHunt X2AbilityTemplate]
 LocFriendlyName="Thrill of the Hunt"
 LocLongDescription="Start each turn with an additional movement-only action. Gain +<Ability:M31_PA_WS_ThrillOfTheHunt_AimPerStack> aim and +<Ability:M31_PA_WS_ThrillOfTheHunt_CritPerStack> crit until the end of the mission for every enemy that dies in your line of sight. Stacks up to <Ability:M31_PA_WS_ThrillOfTheHunt_MaxStacks> times."
 LocHelpText="Start each turn with an additional movement-only action. Gain +<Ability:M31_PA_WS_ThrillOfTheHunt_AimPerStack> aim and +<Ability:M31_PA_WS_ThrillOfTheHunt_CritPerStack> crit until the end of the mission for every enemy that dies in your line of sight. Stacks up to <Ability:M31_PA_WS_ThrillOfTheHunt_MaxStacks> times."
-LocPromotionPopupText="<Bullet> The <Ability:ClassName> has to be able to see the enemy when it dies to recieve the bonus.<br><Bullet> The <Ability:ClassName> will not recieve the bonus if they are not able to act. This includes panicking, bleeding out, being stunned, dazed, or dead.<br><br>\"Maybe it's the moonlight,<br>
-Mixed with carnal insight.\""
+LocPromotionPopupText="<Bullet> The <Ability:ClassName> has to be able to see the enemy when it dies to recieve the bonus.<br><Bullet> The <Ability:ClassName> will not recieve the bonus if they are not able to act. This includes panicking, bleeding out, being stunned, dazed, or dead.<br><br><font color='#909497'>\"There will be blood! Shed!\"</font>"
 
 
 
 [M31_PA_WS_Bolt_Maelstrom X2AbilityTemplate]
 LocFriendlyName="Bolt: Maelstrom"
-LocLongDescription="Special bolt attack that deals 20% of the target's max HP as bonus damage."
-LocHelpText="Special bolt attack that deals 20% of the target's max HP as bonus damage."
-LocPromotionPopupText="<Bullet> Special bolt attack that deals 20% of the target's max HP as bonus damage.<br><Bullet> Bonus is increased to 30% for Sentinel's Ballista.<br><Bullet> The bonus is reduced by 50% against Alien Rulers and the Chosen.<br><br>\"Especially effective against protoss' archons and ultralisks.\""
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText="<br><br><font color='#909497'>\"Sir, those are protoss archons. If they get too close, our men won't stand a chance!\"</font>"
 LocFlyOverText="Bolt: Maelstrom"
 
 [M31_PA_WS_Bolt_Maelstrom_LTT X2AbilityTemplate]
 LocFriendlyName="Bolt: Maelstrom"
-LocLongDescription="Special bolt attack that deals 20% of the target's max HP as bonus damage."
-LocHelpText="Special bolt attack that deals 20% of the target's max HP as bonus damage."
-LocPromotionPopupText="<Bullet> Special bolt attack that deals 20% of the target's max HP as bonus damage.<br><Bullet> The bonus is increased to 30% for Sentinel's Ballista.<br><Bullet> The bonus is reduced by 50% against Alien Rulers and the Chosen.<br><br>\"Especially effective against protoss' archons and ultralisks.\""
+LocLongDescription=""
+LocHelpText=""
 LocFlyOverText="Bolt: Maelstrom"
 
 [M31_PA_WS_Bolt_Maelstrom_LTT_Attack X2AbilityTemplate]

@@ -47,6 +47,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(PoisonSpit());
         Templates.AddItem(EnhancedPoison());
         Templates.AddItem(BlindingPoison());
+        Templates.AddItem(NeuroPoison());
     Templates.AddItem(FrostSpit());
     Templates.AddItem(FrostbiteSpit());
     Templates.AddItem(FrostBreath());
@@ -599,7 +600,6 @@ static function X2AbilityTemplate LockjawAttack()
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
     Template.bFrameEvenWhenUnitIsHidden = true;
-    Template.DefaultSourceItemSlot = eInvSlot_Unknown;
 
     return Template;
 }
@@ -803,34 +803,27 @@ static function X2AbilityTemplate SidewinderMove()
 static function EventListenerReturn AbilityTriggerEventListener_SidewinderMove(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XComGameState_Unit            SourceUnit;
-    local XComGameStateContext_Ability  AbilityContext;
     local XComGameState                 NewGameState;
     local XComGameState_Ability         AbilityState;
 
     AbilityState = XComGameState_Ability(CallbackData);
     SourceUnit = XComGameState_Unit(EventSource);
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 
-    if (AbilityContext != none)
+    `assert(SourceUnit != none);
+    if (!SourceUnit.IsAbleToAct(true))
+        return ELR_NoInterrupt;
+
+    if (`TACTICALRULES.GetUnitActionTeam() == SourceUnit.GetTeam())
+        return ELR_NoInterrupt;
+
+    if (AbilityState.CanActivateAbilityForObserverEvent(SourceUnit) == 'AA_Success')
     {
-        `assert(SourceUnit != none);
-        if (!SourceUnit.IsAbleToAct(true))
+        if (AbilityState.AbilityTriggerAgainstSingleTarget(SourceUnit.GetReference(), false))
         {
-            return ELR_NoInterrupt;
-        }
-
-        if (`TACTICALRULES.GetUnitActionTeam() == SourceUnit.GetTeam())
-            return ELR_NoInterrupt;
-
-        if (AbilityState.CanActivateAbilityForObserverEvent(SourceUnit) == 'AA_Success')
-        {
-            if (AbilityState.AbilityTriggerAgainstSingleTarget(SourceUnit.GetReference(), false))
-            {
-                SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SourceUnit.ObjectID));
-                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Viper Interrupt Initiative");
-                `TACTICALRULES.InterruptInitiativeTurn(NewGameState, SourceUnit.GetGroupMembership().GetReference());
-                `TACTICALRULES.SubmitGameState(NewGameState);
-            }
+            SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(SourceUnit.ObjectID));
+            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Viper Interrupt Initiative");
+            `TACTICALRULES.InterruptInitiativeTurn(NewGameState, SourceUnit.GetGroupMembership().GetReference());
+            `TACTICALRULES.SubmitGameState(NewGameState);
         }
     }
 
@@ -1201,7 +1194,6 @@ static function X2AbilityTemplate AngryBiteAttack()
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
     Template.bFrameEvenWhenUnitIsHidden = true;
-    Template.DefaultSourceItemSlot = eInvSlot_Unknown;
 
     return Template;
 }
@@ -1358,7 +1350,6 @@ static function X2AbilityTemplate PoisonSpit()
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
-    local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
     local X2Effect_ApplyDamageWithRank      DamageEffect;
 
@@ -1371,10 +1362,7 @@ static function X2AbilityTemplate PoisonSpit()
     UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
     Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
 
-    ActionPointCost = new class'X2AbilityCost_ActionPoints';
-    ActionPointCost.iNumPoints = 1;
-    ActionPointCost.bConsumeAllPoints = false;
-    Template.AbilityCosts.AddItem(ActionPointCost);
+    AddActionPointCost(Template, eCost_Single);
 
     Cooldown = new class'X2AbilityCooldown';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_PoisonSpit_Cooldown");
@@ -1411,7 +1399,7 @@ static function X2AbilityTemplate EnhancedPoison()
     Effect = new class'X2Effect_Persistent';
     Effect.EffectName = 'M31_PA_EnhancedPoison_Valid';
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -1422,13 +1410,22 @@ static function X2AbilityTemplate BlindingPoison()
     local X2AbilityTemplate     Template;
     local X2Effect_Persistent   Effect;
 
-    Template = Passive('M31_PA_BlindingPoison', "img:///UILibrary_PerkIcons.UIPerk_insanity", false, false);
+    Template = Passive('M31_PA_BlindingPoison', "UILibrary_XPACK_Common.PerkIcons.UIPerk_mountainmist", false, false);
     
     Effect = new class'X2Effect_Persistent';
     Effect.EffectName = 'M31_PA_BlindingPoison_Valid';
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate NeuroPoison()
+{
+    local X2AbilityTemplate     Template;
+
+    Template = Passive('M31_PA_NeuroPoison', "img:///UILibrary_PerkIcons.UIPerk_insanity", false, true);
 
     return Template;
 }
@@ -1437,7 +1434,6 @@ static function X2AbilityTemplate FrostSpit()
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
-    local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
     local X2Effect_ApplyDamageWithRank      DamageEffect;
 
@@ -1450,10 +1446,7 @@ static function X2AbilityTemplate FrostSpit()
     UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
     Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
 
-    ActionPointCost = new class'X2AbilityCost_ActionPoints';
-    ActionPointCost.iNumPoints = 1;
-    ActionPointCost.bConsumeAllPoints = false;
-    Template.AbilityCosts.AddItem(ActionPointCost);
+    AddActionPointCost(Template, eCost_Single);
 
     Cooldown = new class'X2AbilityCooldown';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_FrostSpit_Cooldown");
@@ -1492,7 +1485,6 @@ static function X2AbilityTemplate FrostBreath()
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
-    local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2AbilityCooldown                 Cooldown;
     local X2Effect_ApplyDamageWithRank      DamageEffect;
 
@@ -1507,10 +1499,7 @@ static function X2AbilityTemplate FrostBreath()
     UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
     Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
 
-    ActionPointCost = new class'X2AbilityCost_ActionPoints';
-    ActionPointCost.iNumPoints = 1;
-    ActionPointCost.bConsumeAllPoints = false;
-    Template.AbilityCosts.AddItem(ActionPointCost);
+    AddActionPointCost(Template, eCost_Single);
 
     Cooldown = new class'X2AbilityCooldown';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_FrostBreath_Cooldown");
@@ -1556,14 +1545,13 @@ static function X2AbilityTemplate CreateViperSpitAbility(
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     CylinderMultiTarget = new class'X2AbilityMultiTarget_Cylinder';
-    CylinderMultiTarget.bIgnoreBlockingCover = `GetConfigBool("M31_PA_Spit_bRequireVisibility");
     CylinderMultiTarget.bUseWeaponRadius = false;
     CylinderMultiTarget.fTargetRadius = 2.5;
     CylinderMultiTarget.fTargetHeight = `GetConfigFloat("M31_PA_ViperSpit_Height");
     CylinderMultiTarget.bUseOnlyGroundTiles = true;
     Template.AbilityMultiTargetStyle = CylinderMultiTarget;
 
-    Template.TargetingMethod = class'X2TargetingMethod_ViperSpit';
+    Template.TargetingMethod = class'X2TargetingMethod_Grenade';
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
 
