@@ -1,0 +1,94 @@
+[M31_PA_HarrierBullRush X2AbilityTemplate]
+LocFriendlyName="Bull Rush (Harrier)"
+LocLongDescription="Punch an enemy within movement range, stunning them for <Ability:M31_PA_HarrierBullRush_StunDuration> action(s). Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot be used against large units."
+LocHelpText="Punch an enemy within movement range, stunning them for <Ability:M31_PA_HarrierBullRush_StunDuration> action(s). Cannot be used against large units."
+; LocPromotionPopupText=""
+LocFlyOverText="Bull Rush"
+
+[M31_PA_HarrierPunch X2AbilityTemplate]
+LocFriendlyName="Unhinged Behavior"
+LocLongDescription="Punch an enemy within blue movement range. Costs a single action and doesn't end the turn. Has no cooldown. Cannot be used against inanimate objects."
+LocHelpText="Punch an enemy within blue movement range. Costs a single action and doesn't end the turn. Cannot be used against inanimate objects."
+LocPromotionPopupText="<br><font color='#909497'>You can ask me: \"Merist, why is this a thing? Why a unit with a grenade launcher as primary weapon would go and punch someone in the face?\" And the answer is quite simple- because it's funny.<br><br>In all seriousness, I think that having a bar fighter muton is quite fitting."
+LocFlyOverText="Unhinged Behavior"
+
+[M31_PA_HarrierEndOfGeneva X2AbilityTemplate]
+LocFriendlyName="End of Geneva"
+LocLongDescription="It's not a war crime if you win. Cooldown of all Harrier Launcher attacks is reduced and they no longer end the turn."
+LocHelpText="It's not a war crime if you win. Cooldown of all Harrier Launcher attacks is reduced and they no longer end the turn."
+LocPromotionPopupText="<Bullet> Cooldown reduction depends on the ability."
+LocFlyOverText="End of Geneva"
+
+[M31_PA_HarrierFineControl X2AbilityTemplate]
+LocFriendlyName="Fine Control"
+LocLongDescription="Harrier Launcher attacks no longer affect allies."
+LocHelpText="Harrier Launcher attacks no longer affect allies."
+LocPromotionPopupText="<Bullet> Note that terrain effects left by these abilities can still affect allies."
+
+[M31_PA_HarrierVileMix X2AbilityTemplate]
+LocFriendlyName="Vile Mix"
+LocLongDescription="Your damage-over-time effects deal <Ability:M31_PA_HarrierVileMix_DOTDamageBonus> additional damage. Your grenades and Harrier Launcher attacks apply a stackable debuff that increases the damage the enemies take from damage-over-time effects by <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> for <Ability:M31_PA_HarrierVileMix_Duration> turn(s)."
+LocHelpText="Your damage-over-time effects deal <Ability:M31_PA_HarrierVileMix_DOTDamageBonus> additional damage. Your grenades and Harrier Launcher attacks apply a stackable debuff that increases the damage the enemies take from damage-over-time effects by <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> for <Ability:M31_PA_HarrierVileMix_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> The debuff will increase the damage from damage-over-time effects from all sources."
+
+[M31_PA_HarrierBlasterMaster X2AbilityTemplate]
+LocFriendlyName="Blaster Master"
+LocLongDescription="Grenades no longer have a cooldown. Gain a free Muton Plasma Grenade."
+LocHelpText="Grenades no longer have a cooldown."
+LocPromotionPopupText="<Bullet> Muton Plasma Grenade has <font color='#ffd700'>3 - 8</font> damage, <font color='#ffd700'>2</font> shred, <font color='#ffd700'>4m</font> radius, and <font color='#ffd700'>10</font> environmental damage."
+
+[M31_PA_NoGraze X2AbilityTemplate]
+LocFriendlyName="Undodgeable"
+LocLongDescription="This weapon's attacks cannot graze."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks cannot graze."
+LocFlyOverText="Undodgeable"
+
+[M31_PA_HarrierGrenade X2AbilityTemplate]
+LocFriendlyName="Harrier Grenades"
+LocLongDescription="Fire airburst rounds that can miss, but ignore cover. Deals damage to all units in a radius around the target."
+LocHelpText="Fire airburst rounds that can miss, but ignore cover. Deals damage to all units in a radius around the target."
+LocPromotionPopupText="<Bullet> Harrier Grenades are guaranteed to hit all additional targets as long as they hit the primary target."
+LocFlyOverText="Harrier Grenades"
+
+[M31_PA_HarrierPoisonGrenade X2AbilityTemplate]
+LocFriendlyName="Harrier Plague Grenades"
+LocLongDescription="Special Harrier Grenades that poison the targets and leave a cloud of poison. Have <Ability:M31_PA_HarrierPoisonGrenade_BaseRadiusModifer> radius compared to the standard Harrier Grenades. Require <Ability:M31_PA_HarrierPoisonGrenade_AmmoCost> ammo. Have a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special Harrier Grenades that poison the targets and leave a cloud of poison. Require <Ability:M31_PA_HarrierPoisonGrenade_AmmoCost> ammo."
+LocPromotionPopupText="<Bullet> End of Geneva reduces the cooldown by <Ability:M31_PA_HarrierPoisonGrenade_CooldownReductionEOG> turn(s)."
+LocFlyOverText="Harrier Grenades"
+
+[M31_PA_HarrierFireGrenade X2AbilityTemplate]
+LocFriendlyName="Harrier Immolation Grenades"
+LocLongDescription="Special Harrier Grenades that set the targets on fire and ignite terrain. Have <Ability:M31_PA_HarrierFireGrenade_BaseRadiusModifer> radius compared to the standard Harrier Grenades. Require <Ability:M31_PA_HarrierFireGrenade_AmmoCost> ammo. Have a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special Harrier Grenades that set the targets on fire and ignite terrain. Require <Ability:M31_PA_HarrierFireGrenade_AmmoCost> ammo."
+LocPromotionPopupText="<Bullet> End of Geneva reduces the cooldown by <Ability:M31_PA_HarrierFireGrenade_CooldownReductionEOG> turn(s)."
+LocFlyOverText="Immolation Grenades"
+
+[M31_PA_HarrierRadGrenade X2AbilityTemplate]
+LocFriendlyName="Harrier Radiation Grenades"
+LocLongDescription="Special Harrier Grenades that irradiate the targets. Have <Ability:M31_PA_HarrierRadGrenade_BaseRadiusModifer> radius compared to the standard Harrier Grenades. Require <Ability:M31_PA_HarrierRadGrenade_AmmoCost> ammo. Have a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special Harrier Grenades that irradiate the targets. Require <Ability:M31_PA_HarrierRadGrenade_AmmoCost> ammo."
+LocPromotionPopupText="<Bullet> Radiation can apply a variety of severe debuffs that affect even the Chosen.<br><Bullet> End of Geneva reduces the cooldown by <Ability:M31_PA_HarrierRadGrenade_CooldownReductionEOG> turn(s)."
+LocFlyOverText="Radiation Grenades"
+
+[M31_PA_HarrierFuseGrenade X2AbilityTemplate]
+LocFriendlyName="Harrier Mayhem Grenades"
+LocLongDescription="Special Harrier Grenades that detonate explsovies carried by the targets. Have <Ability:M31_PA_HarrierFuseGrenade_BaseRadiusModifer> radius compared to the standard Harrier Grenades. Require <Ability:M31_PA_HarrierFuseGrenade_AmmoCost> ammo. Have a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special Harrier Grenades that detonate explsovies carried by the targets. Require <Ability:M31_PA_HarrierRadGrenade_AmmoCost> ammo."
+LocPromotionPopupText="<Bullet> End of Geneva reduces the cooldown by <Ability:M31_PA_HarrierFuseGrenade_CooldownReductionEOG> turn(s)."
+LocFlyOverText="Mayhem Grenades"
+
+[M31_PA_HarrierCyclic X2AbilityTemplate]
+LocFriendlyName="Cyclic Airburst"
+LocLongDescription="Fire three bursts of Harrier Grenades at a target in a single attack. Requires both actions and all shots have a -<Ability:M31_PA_HarrierCyclic_AimPenalty> aim penalty. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Fire three bursts of Harrier Grenades at a target in a single attack. Requires both actions and all shots have a -<Ability:M31_PA_HarrierCyclic_AimPenalty> aim penalty."
+LocPromotionPopupText="<Bullet> Requires <font color='#ffd700'>3</font> ammo.<br><Bullet> Harrier Grenades can miss, but ignore cover. Deal damage to all units in a radius around the target.<br><Bullet> Harrier Grenades are guaranteed to hit all additional targets as long as they hit the primary target."
+LocFlyOverText="Cyclic Airburst"
+
+[M31_PA_HarrierCyclic2 X2AbilityTemplate]
+LocFriendlyName="Cyclic Airburst"
+LocFlyOverText="Cyclic Airburst"
+
+[M31_PA_HarrierCyclic3 X2AbilityTemplate]
+LocFriendlyName="Cyclic Airburst"
+LocFlyOverText="Cyclic Airburst"

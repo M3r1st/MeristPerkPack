@@ -67,7 +67,7 @@ static function X2Effect_PersistentStatChange CreateRoboticDisorientedStatusEffe
 
     UnitPropCondition = new class'X2Condition_UnitProperty';
     UnitPropCondition.ExcludeFriendlyToSource = bExcludeFriendlyToSource;
-    UnitPropCondition.ExcludeRobotic = true;
+    UnitPropCondition.ExcludeOrganic = true;
     PersistentStatChangeEffect.TargetConditions.AddItem(UnitPropCondition);
 
     return PersistentStatChangeEffect;
@@ -352,13 +352,32 @@ static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int
     return PersistentEffect;
 }
 
-static function AddAdjacencyCondition(out X2AbilityTemplate Template)
+static function X2Effect_Immobilize CreateMaimedStatusEffect(optional int NumTurns = 1, optional name AbilitySourceName = 'eAbilitySource_Standard')
+{
+    local X2Effect_Immobilize ImmobilizeEffect;
+
+    ImmobilizeEffect = new class'X2Effect_Immobilize';
+    ImmobilizeEffect.EffectName = 'Maim_Immobilize';
+    ImmobilizeEffect.DuplicateResponse = eDupe_Refresh;
+    ImmobilizeEffect.BuildPersistentEffect(NumTurns, false, false, , eGameRule_PlayerTurnEnd);
+    ImmobilizeEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Maimed_FriendlyName"), `GetLocalizedString("M31_Maimed_DebuffText"),
+            "img:///UILibrary_XPerkIconPack.UIPerk_move_blossom", true, , AbilitySourceName);
+    ImmobilizeEffect.AddPersistentStatChange(eStat_Mobility, 0.0f, MODOP_PostMultiplication);
+    ImmobilizeEffect.VisualizationFn = class'XMBAbility'.static.EffectFlyOver_Visualization;
+
+    return ImmobilizeEffect;
+}
+
+// Default = 144
+static function AddAdjacencyCondition(out X2AbilityTemplate Template, optional int Range = 180)
 {
     local X2Condition_UnitProperty                  AdjacencyCondition;
 
     AdjacencyCondition = new class'X2Condition_UnitProperty';
+    AdjacencyCondition.ExcludeDead = false;
+    AdjacencyCondition.ExcludeFriendlyToSource = false;
     AdjacencyCondition.RequireWithinRange = true;
-    AdjacencyCondition.WithinRange = 144;
+    AdjacencyCondition.WithinRange = Range;
     Template.AbilityTargetConditions.AddItem(AdjacencyCondition);
 }
 
@@ -405,9 +424,9 @@ static final function int GetActionPoints(const XComGameState_Unit Unit, array<n
 }
 
 static function array<X2Effect> CreateRadiationEffects(
-    optional int RadiationRadBurnApplyChance = 33, optional int RadiationRadBurnDamage = 3, optional int RadiationRadBurnDamageSpread = 2,
-    optional int RadiationBoilingBloodApplyChance = 25, optional int RadiationBoilingBloodDamage = 4, optional int RadiationBoilingBloodDamageSpread = 2,
-    optional int RadiationIrradiateApplyChance = 75, optional int RadiationPanicApplyChance = 10)
+    optional int RadiationRadBurnApplyChance = 50, optional int RadiationRadBurnDamage = 3, optional int RadiationRadBurnDamageSpread = 2,
+    optional int RadiationBoilingBloodApplyChance = 33, optional int RadiationBoilingBloodDamage = 4, optional int RadiationBoilingBloodDamageSpread = 2,
+    optional int RadiationIrradiateApplyChance = 100, optional int RadiationPanicApplyChance = 10)
 {
     local array<X2Effect> Effects;
     // 33, 3, 2
@@ -485,6 +504,30 @@ static function AddRadiationToMultiTarget(out X2AbilityTemplate Template,
         Template.AddMultiTargetEffect(Effect);
 }
 
+static function AddConditionalAbilityEffect(out X2AbilityTemplate Template, array<name> WeaponCats, array<name> AbilitiesToAdd, EInventorySlot Slot = eInvSlot_Unknown)
+{
+    local X2Condition_WOTC_APA_Class_ValidWeaponCategory    Condition;
+    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget      Effect;
+
+    Condition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
+    Condition.AllowedWeaponCategories = WeaponCats;
+    if (Slot != eInvSlot_Unknown)
+    {
+        Condition.bCheckSpecificSlot = true;
+        Condition.SpecificSlot = Slot;
+    }
+
+    Effect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
+    Effect.AddAbilities = AbilitiesToAdd;
+    if (Slot != eInvSlot_Unknown)
+    {
+        Effect.ApplyToWeaponSlot = Slot;
+    }
+    Effect.TargetConditions.AddItem(Condition);
+    
+    Template.AddTargetEffect(Effect);
+}
+
 static function EventListenerReturn KillMailListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XComGameState_Unit                SourceUnit;
@@ -504,6 +547,34 @@ static function EventListenerReturn KillMailListener_Self(Object EventData, Obje
     }
 
     return ELR_NoInterrupt;
+}
+
+static function AddSuppressedCondition(out X2AbilityTemplate Template)
+{
+    local X2Condition_UnitEffects SuppressedCondition;
+
+    SuppressedCondition = new class'X2Condition_UnitEffects';
+    SuppressedCondition.AddExcludeEffect(class'X2Effect_Suppression'.default.EffectName, 'AA_UnitIsSuppressed');
+    // SuppressedCondition.AddExcludeEffect(class'X2Effect_AreaSuppression'.default.EffectName, 'AA_UnitIsSuppressed');
+    SuppressedCondition.AddExcludeEffect('AreaSuppression', 'AA_UnitIsSuppressed'); // Not building against LWOTC
+    Template.AbilityShooterConditions.AddItem(SuppressedCondition);
+}
+
+
+static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName)
+{
+    local X2Effect_Persistent BladestormTargetEffect;
+    local X2Condition_UnitEffectsWithAbilitySource BladestormTargetCondition;
+
+    BladestormTargetEffect = new class'X2Effect_Persistent';
+    BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
+    BladestormTargetEffect.EffectName = MarkName;
+    BladestormTargetEffect.bApplyOnMiss = true;
+    Template.AddTargetEffect(BladestormTargetEffect);
+    
+    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    BladestormTargetCondition.AddExcludeEffect(MarkName, 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
 }
 
 // Helpers_LW.uc
@@ -619,4 +690,61 @@ final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2
             break;
         }
     }
+}
+
+static function EventListenerReturn AbilityTriggerEventListener_Multitasking(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Ability         AbilityState;
+
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+    AbilityState = XComGameState_Ability(CallbackData);
+
+    if (AbilityContext.InputContext.PrimaryTarget.ObjectID != AbilityContext.InputContext.SourceObject.ObjectID)
+        return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
+
+    return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn AbilityTriggerEventListener_ChasingAttack(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Ability         AbilityState;
+    local XComGameState_Ability         CallbackAbilityState;
+    local XComGameState_Unit            SourceUnit;
+    local XComGameState_Unit            Attacker;
+    local XComGameState_Unit            TargetUnit;
+    local X2AbilityTemplate             AbilityTemplate;
+    local bool bDealsDamage;
+    
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
+    {
+        AbilityState = XComGameState_Ability(EventData);
+        CallbackAbilityState = XComGameState_Ability(CallbackData);
+        Attacker = XComGameState_Unit(EventSource);
+        SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(CallbackAbilityState.OwnerStateObject.ObjectID));
+        TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+        if (AbilityState != none && CallbackAbilityState != none && Attacker != none && SourceUnit != none && TargetUnit != none)
+        {
+            if (AbilityState.IsAbilityInputTriggered())
+            {
+                if (SourceUnit.IsEnemyUnit(TargetUnit) && SourceUnit.IsFriendlyUnit(Attacker) && SourceUnit.ObjectID != Attacker.ObjectID)
+                {
+                    AbilityTemplate = AbilityState.GetMyTemplate();
+                    bDealsDamage = AbilityTemplate.TargetEffectsDealDamage(AbilityState.GetSourceWeapon(), AbilityState);
+                    if (AbilityTemplate.Hostility == eHostility_Offensive && bDealsDamage)
+                    {
+                        if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit, SourceUnit) == 'AA_Success')
+                            CallbackAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
+                    }
+
+                }
+            }
+
+        }
+    }
+
+    return ELR_NoInterrupt;
 }

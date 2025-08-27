@@ -1,5 +1,5 @@
 // This is an Unreal Script
-class X2StatusEffects_Radiation extends X2StatusEffects config(AssaultTrooper);
+class X2StatusEffects_Radiation extends X2StatusEffects config(Radiation);
 
 
 ////////////////////////////////////

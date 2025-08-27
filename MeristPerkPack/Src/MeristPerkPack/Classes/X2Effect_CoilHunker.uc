@@ -5,12 +5,18 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
     local GameRulesCache_VisibilityInfo VisInfo;
     local ShotModifierInfo ShotInfo;
     local float fModifier;
+    local X2AbilityToHitCalc_StandardAim StandardAim;
+    local bool bAbilityIgnoresCover;
 
     if (Target != none)
     {
         if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo))
         {
-            if (!Attacker.CanFlank() || !Target.CanTakeCover() || VisInfo.TargetCover == CT_None || AbilityState.IsMeleeAbility())
+            StandardAim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
+            if (StandardAim != none && (StandardAim.bMeleeAttack || StandardAim.bIgnoreCoverBonus))
+                bAbilityIgnoresCover = true;
+
+            if (!Attacker.CanFlank() || !Target.CanTakeCover() || VisInfo.TargetCover == CT_None || bAbilityIgnoresCover)
                 fModifier = `GetConfigFloat("M31_PA_Coil_NoCoverModifier");
             else if (VisInfo.TargetCover == CT_Midlevel && !Target.bTreatLowCoverasHigh)
                 fModifier = `GetConfigFloat("M31_PA_Coil_LowCoverModifier");

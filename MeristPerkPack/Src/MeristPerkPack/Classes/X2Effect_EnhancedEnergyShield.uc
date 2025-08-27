@@ -45,5 +45,6 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 defaultproperties
 {
+    EffectName = M31_EnergyShield
     EnergyShield_ShieldRemovedEventName = M31_EnergyShield_ShieldRemoved
 }

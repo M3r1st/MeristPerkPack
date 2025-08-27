@@ -3,6 +3,11 @@ class X2Effect_MeleeDamageResistance extends X2Effect_Persistent;
 var bool bApplyToStandardMelee;
 var bool bApplyToMovingMelee;
 
+var bool bAllowImpaired;
+var bool bAllowPanicked;
+var bool bAllowBurning;
+var bool bAllowFrozen;
+
 var float PercentDR;
 var int FlatDR;
 
@@ -58,6 +63,12 @@ private function bool ValidateAttack(
     if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return false;
 
+    if (!bAllowImpaired && TargetUnit.IsImpaired()
+        || !bAllowPanicked && TargetUnit.IsPanicked()
+        || !bAllowBurning && TargetUnit.IsBurning()
+        || !bAllowFrozen && TargetUnit.AffectedByEffectNames.Find('Frozen') != INDEX_NONE)
+        return false;
+
     if (WhitelistedAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
         return true;
 
@@ -67,7 +78,7 @@ private function bool ValidateAttack(
     bIsMelee = AbilityState.IsMeleeAbility() || WeaponDamageEffect.DamageTypes.Find('Melee') != INDEX_NONE;
 
     bIsMovingMelee = bIsMelee && (AbilityState.GetMyTemplate().AbilityTargetStyle != none
-        && !AbilityState.GetMyTemplate().AbilityTargetStyle.isA('X2AbilityTarget_MovingMelee'));
+        && AbilityState.GetMyTemplate().AbilityTargetStyle.IsA('X2AbilityTarget_MovingMelee'));
 
     if (bIsMovingMelee)
         return bApplyToMovingMelee;
@@ -82,6 +93,11 @@ defaultproperties
 {
     bApplyToStandardMelee = true
     bApplyToMovingMelee = true
+
+    bAllowImpaired = true
+    bAllowPanicked = true
+    bAllowBurning = true
+    bAllowFrozen = true
 
     WhitelistedAbilities[0] = PartingSilk
     WhitelistedAbilities[1] = AssassinSlash_LW

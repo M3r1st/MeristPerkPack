@@ -1,6 +1,7 @@
 class X2Effect_Sidewinder extends X2Effect_Persistent;
 
 var bool bDisableForFriendlyFire;
+var EAbilityHitResult SidewinderNewHitResult;
 
 function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit TargetUnit, XComGameState_Ability AbilityState, bool bIsPrimaryTarget, const EAbilityHitResult CurrentResult, out EAbilityHitResult NewHitResult)
 {
@@ -33,7 +34,7 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
                 !TargetUnit.IsUnitAffectedByEffectName(class'X2AbilitySet_PlayableAliens'.default.SidewinderCooldownEffectName))
             {
                 `LOG("Sidewinder activated. Current turn: " $ `TACTICALRULES.GetUnitActionTeam(), true, 'Merist_X2Effect_Sidewinder');
-                NewHitResult = eHit_Miss;
+                NewHitResult = SidewinderNewHitResult;
                 `XEVENTMGR.TriggerEvent(class'X2AbilitySet_PlayableAliens'.default.SidewinderEventName, TargetUnit, TargetUnit);
                 return true;
             }
@@ -47,4 +48,5 @@ DefaultProperties
 {
     EffectName = "M31_Sidewinder"
     DuplicateResponse = eDupe_Ignore
+    SidewinderNewHitResult = eHit_LightningReflexes
 }

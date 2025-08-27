@@ -11,7 +11,7 @@ function float GetPostDefaultDefendingDamageModifier_CH(
     XComGameState NewGameState)
 {
     if (Target.IsUnitAffectedByEffectName('M31_PA_PersonalShield'))
-        return -CurrentDamage * `GetConfigInt("M31_PA_Aegis_DamageReduction") / 100;
+        return -1 * FFloor(CurrentDamage * `GetConfigInt("M31_PA_Aegis_DamageReduction") / 100);
 
     return 0;
 }

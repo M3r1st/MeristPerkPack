@@ -4,20 +4,20 @@ class X2Effect_MeristTemplarShieldAnimations extends X2Effect_AdditionalAnimSets
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-	local X2EventManager EventMgr;
-	local XComGameState_Unit UnitState;
-	local Object EffectObj;
+    local X2EventManager EventMgr;
+    local XComGameState_Unit UnitState;
+    local Object EffectObj;
 
-	EventMgr = `XEVENTMGR;
+    EventMgr = `XEVENTMGR;
 
-	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-	EffectObj = EffectGameState;
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+    EffectObj = EffectGameState;
 
-	EventMgr.RegisterForEvent(EffectObj, class'X2Effect_MeristTemplarShield'.default.TemplarShield_ShieldRemovedEventName, EffectGameState.OnShieldsExpended, ELD_OnStateSubmitted, , UnitState);
+    EventMgr.RegisterForEvent(EffectObj, class'X2Effect_MeristTemplarShield'.default.TemplarShield_ShieldRemovedEventName, EffectGameState.OnShieldsExpended, ELD_OnStateSubmitted, , UnitState);
 }
 
 defaultproperties
 {
-	EffectName = "IRI_X2Effect_TemplarShieldAnimations"
-	DuplicateResponse = eDupe_Ignore
+    EffectName = "IRI_X2Effect_TemplarShieldAnimations"
+    DuplicateResponse = eDupe_Ignore
 }

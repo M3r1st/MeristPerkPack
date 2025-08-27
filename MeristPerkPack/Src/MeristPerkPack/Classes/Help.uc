@@ -32,7 +32,7 @@ FRand()
 // Returns a random `int` value from [0; x] range.
 int(x * FRand())
 
-// Returns a random `flaot` value from [0; 1) range
+// Returns a random `float` value from [0; 1) range
 `SYNC_FRAND()
 `SYNC_FRAND_STATIC()
 

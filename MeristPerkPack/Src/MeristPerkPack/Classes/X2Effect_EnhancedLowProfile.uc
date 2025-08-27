@@ -22,9 +22,8 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     if (UnitState != none)
     {
-        UnitState = XComGameState_Unit(NewGameState.CreateStateObject(UnitState.Class, UnitState.ObjectID));
+        UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(UnitState.Class, UnitState.ObjectID));
         UnitState.bTreatLowCoverAsHigh = false;
-        NewGameState.AddStateObject(UnitState);
     }
 }
 
@@ -32,12 +31,18 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 {
     local GameRulesCache_VisibilityInfo VisInfo;
     local ShotModifierInfo ShotInfo;
+    local X2AbilityToHitCalc_StandardAim StandardAim;
+    local bool bAbilityIgnoresCover;
 
     if (Target != none)
     {
         if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo))
         {
-            if (Target.CanTakeCover() && Target.bTreatLowCoverasHigh && VisInfo.TargetCover == CT_Midlevel && !AbilityState.IsMeleeAbility())
+            StandardAim = X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc);
+            if (StandardAim != none && (StandardAim.bMeleeAttack || StandardAim.bIgnoreCoverBonus))
+                bAbilityIgnoresCover = true;
+
+            if (Target.CanTakeCover() && Target.bTreatLowCoverasHigh && VisInfo.TargetCover == CT_Midlevel && !bAbilityIgnoresCover)
             {
                 ShotInfo.ModType = eHit_Success;
                 ShotInfo.Reason = FriendlyName;

@@ -18,7 +18,7 @@ final function int GetFinalOverflow(X2AbilityTemplate Template, XComGameState_Ab
 
     if (class'X2DLCInfo_MeristPerkPack'.default.bLWOTC)
     {
-        Template.AbilityToHitCalc.OverrideFinalHitChanceFns.InsertItem(0, OverrideHitChanceHack);
+        Template.AbilityToHitCalc.OverrideFinalHitChanceFns.InsertItem(1, OverrideHitChanceHack);
         Template.AbilityToHitCalc.GetShotBreakdown(AbilityState, AvTarget, Breakdown);
         Template.AbilityToHitCalc.OverrideFinalHitChanceFns.RemoveItem(OverrideHitChanceHack);
 
@@ -32,31 +32,10 @@ final function int GetFinalOverflow(X2AbilityTemplate Template, XComGameState_Ab
 
 private function bool OverrideHitChanceHack(X2AbilityToHitCalc AbilityToHitCalc, out ShotBreakdown ShotBreakdown)
 {
-    local X2AbilityToHitCalc_StandardAim    StandardAim;
-    local ShotModifierInfo                  ModInfo;
-    local int AimOverflow;
-    local int CritOverflow;
-
-    StandardAim = X2AbilityToHitCalc_StandardAim(AbilityToHitCalc);
-
-    if (StandardAim == none)
+    if (X2AbilityToHitCalc_StandardAim(AbilityToHitCalc) == none)
         return false;
 
-    AimOverflow = ShotBreakdown.ResultTable[eHit_Success] - 100;
-
-    if (AimOverflow <= 0)
-        return false;
-
-    ModInfo.ModType = eHit_Crit;
-    ModInfo.Value   = AimOverflow;
-    ModInfo.Reason  = `GetLocalizedString("M31_PA_WS_Bolt_Maelstrom_FriendlyName");
-    Shotbreakdown.Modifiers.AddItem(ModInfo);
-
-    ShotBreakdown.ResultTable[eHit_Crit] += AimOverflow;
-
-    CritOverflow = ShotBreakdown.ResultTable[eHit_Crit] - 100;
-
-    FinalOverflow = Max(CritOverflow, 0);
+    FinalOverflow = Max(ShotBreakdown.ResultTable[eHit_Crit] - 100, 0);
 
     return false;
 }
@@ -66,7 +45,6 @@ static final function bool OverrideHitChance(X2AbilityToHitCalc AbilityToHitCalc
     local X2AbilityToHitCalc_StandardAim    StandardAim;
     local ShotModifierInfo                  ModInfo;
     local int AimOverflow;
-    local int CritOverflow;
 
     StandardAim = X2AbilityToHitCalc_StandardAim(AbilityToHitCalc);
 
@@ -75,20 +53,15 @@ static final function bool OverrideHitChance(X2AbilityToHitCalc AbilityToHitCalc
 
     AimOverflow = ShotBreakdown.ResultTable[eHit_Success] - 100;
 
-    if (AimOverflow <= 0)
-        return false;
+    if (AimOverflow > 0)
+    {
+        ModInfo.ModType = eHit_Crit;
+        ModInfo.Value   = AimOverflow;
+        ModInfo.Reason  = `GetLocalizedString("M31_PA_WS_Bolt_Maelstrom_FriendlyName");
+        ShotBreakdown.Modifiers.AddItem(ModInfo);
 
-    ModInfo.ModType = eHit_Crit;
-    ModInfo.Value   = AimOverflow;
-    ModInfo.Reason  = `GetLocalizedString("M31_PA_WS_Bolt_Maelstrom_FriendlyName");
-    Shotbreakdown.Modifiers.AddItem(ModInfo);
-
-    ShotBreakdown.ResultTable[eHit_Crit] += AimOverflow;
-
-    CritOverflow = ShotBreakdown.ResultTable[eHit_Crit] - 100;
-
-    if (CritOverflow <= 0)
-        return false;
+        ShotBreakdown.ResultTable[eHit_Crit] += AimOverflow;
+    }
 
     return false;
 }

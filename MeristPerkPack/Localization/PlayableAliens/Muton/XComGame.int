@@ -1,0 +1,90 @@
+[M31_PA_PersonalShield X2AbilityTemplate]
+LocFriendlyName="Personal Shield"
+LocLongDescription="Activate to gain <Ability:M31_PA_PersonalShield_ShieldAmount> points of ablative HP for <Ability:M31_PA_PersonalShield_Duration> turn(s). Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Gain bonus ablative HP for <Ability:M31_PA_PersonalShield_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_PA_PersonalShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
+LocFlyOverText="Personal Shield"
+
+[M31_PA_Aegis X2AbilityTemplate]
+LocFriendlyName="Aegis"
+LocLongDescription="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
+LocHelpText="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
+; LocPromotionPopupText=""
+LocFlyOverText="Aegis"
+
+[M31_PA_HardenedShield X2AbilityTemplate]
+LocFriendlyName="Hardened Shield"
+LocLongDescription="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
+LocHelpText="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
+; LocPromotionPopupText=""
+LocFlyOverText="Hardened Shield"
+
+[M31_PA_Bayonet X2AbilityTemplate]
+LocFriendlyName="Bayonet"
+LocLongDescription="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
+LocHelpText="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
+; LocPromotionPopupText=""
+LocFlyOverText="Bayonet"
+
+[M31_PA_BayonetCharge X2AbilityTemplate]
+LocFriendlyName="Bayonet Charge"
+LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
+LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
+LocPromotionPopupText="<Bullet> You can activate this ability by placing the movement cursor over an enemy.<br><Bullet> The <Ability:ClassName> can perform a \"Dash\" move, using both actions to move, and still activate an attack against an adjacent enemy."
+LocFlyOverText="Bayonet Charge"
+
+[M31_PA_Counterattack X2AbilityTemplate]
+LocFriendlyName="Counterattack"
+LocLongDescription="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
+LocHelpText="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
+LocPromotionPopupText="<Bullet> Counterattack does not activate on your own turn.<br><Bullet> Gain +<Ability:M31_PA_Counterattack_Dodge> dodge against melee attacks. The bonus is reduced by <Ability:M31_PA_Counterattack_Dodge_ReductionPerHit> each time the <Ability:ClassName> counterattacks. The bonus resets at the start of each turn."
+LocFlyOverText="Counterattack"
+
+[M31_PA_Counterattack_Attack X2AbilityTemplate]
+LocFriendlyName="Counterattack"
+
+[M31_PA_CripplingBlow X2AbilityTemplate]
+LocFriendlyName="Crippling Blow"
+LocLongDescription="Strike an adjacent target with your <Ability:M31_BoundWeaponName>, permanently lowering its aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Melee attack that permanently lowers target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
+LocPromotionPopupText="<Bullet> Multiple applications of the debuff will not stack."
+LocFlyOverText="Crippling Blow"
+
+[M31_PA_Bladestorm X2AbilityTemplate]
+LocFriendlyName="Centurion"
+LocLongDescription="Gain <font color='#0bff9b'>Bladestorm</font>. Additionaly, standard bayonet attack no longer ends the turn."
+LocHelpText="Standard bayonet attack no longer ends the turn."
+LocPromotionPopupText="<Bullet> Does not apply to Bayonet Charge."
+LocFlyOverText="Centurion"
+
+[M31_PA_Barbarian X2AbilityTemplate]
+LocFriendlyName="Barbarian"
+LocLongDescription="Gain +<Ability:M31_PA_Barbarian_AimBonus> aim for melee attacks, and additional +<Ability:M31_PA_Barbarian_CritBonus> critical chance a rifle is equipped as the primary weapon."
+LocHelpText="Gain +<Ability:M31_PA_Barbarian_AimBonus> aim for melee attacks, and additional +<Ability:M31_PA_Barbarian_CritBonus> critical chance a rifle is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> Applies to all melee attacks."
+
+[M31_PA_ExcessiveForce X2AbilityTemplate]
+LocFriendlyName="Excessive Force"
+LocLongDescription="Gain <font color='#0bff9b'>Marauder</font> when a rifle is equipped as the primary weapon, or <font color='#0bff9b'>Traverse Fire</font> when a cannon is equipped as the primary weapon."
+LocHelpText="Gain <font color='#0bff9b'>Marauder</font> when a rifle is equipped as the primary weapon, or <font color='#0bff9b'>Traverse Fire</font> when a cannon is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Marauder</font> makes standard shots non-turn-ending, allowing for shooting then moving or shooting twice on a turn.<br><Bullet> <font color='#0bff9b'>Traverse Fire</font> grants a non-movement action after taking a standard shot with as the first action."
+
+[M31_PA_ChargeIn X2AbilityTemplate]
+LocFriendlyName="Charge In"
+LocLongDescription="Gain <font color='#0bff9b'>Run and Gun</font>. Additionally, gain <font color='#0bff9b'>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
+LocHelpText="Gain <font color='#0bff9b'>Run and Gun</font>. Additionally, gain <font color='#0bff9b'>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> When activated, <font color='#0bff9b'>Run and Gun</font> grants an additional non-movement action.<br><Bullet> <font color='#0bff9b'>Extra Conditioning</font> reduces the cooldown of <font color='#0bff9b'>Run and Gun</font>."
+
+[M31_PA_Shieldbreaker X2AbilityTemplate]
+LocFriendlyName="Parry This"
+LocLongDescription="The soldier's melee attacks can no longer graze, be reflected, deflected, parried, or counterattacked."
+LocHelpText="The soldier's melee attacks can no longer graze, be reflected, deflected, parried, or counterattacked."
+LocPromotionPopupText="<Bullet> Melee attacks can still miss."
+LocFlyOverText="Parry This"
+
+[M31_PA_MutonBullRush X2AbilityTemplate]
+LocFriendlyName="Bull Rush (Muton)"
+LocLongDescription="Punch an enemy within movement range, dealing a small amount of damage and stunning them for <Ability:M31_PA_MutonBullRush_StunDuration> action(s). Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot be used against large units."
+LocHelpText="Punch an enemy within movement range, dealing a small amount of damage and stunning them for <Ability:M31_PA_MutonBullRush_StunDuration> action(s). Cannot be used against large units."
+; LocPromotionPopupText=""
+LocFlyOverText="Bull Rush"

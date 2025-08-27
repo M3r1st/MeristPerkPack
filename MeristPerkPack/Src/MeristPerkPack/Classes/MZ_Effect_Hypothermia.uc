@@ -4,7 +4,13 @@ var privatewrite name HyptothermiaEffectAddedEventName;
 var config bool Hypothermia_Ignores_Shield, Hypothermia_Ignores_Armour;
 var config int Damage, TierDamage, Spread;
 
-var localized string HypothermiaEffectName, HypothermiaEffectDesc;
+var localized string HypothermiaEffectName;
+var localized string HypothermiaEffectDesc;
+var localized string HypothermiaTitle;
+
+var localized string HypothermiaEffectAcquiredString;
+var localized string HypothermiaEffectTickedString;
+var localized string HypothermiaEffectLostString;
 
 static function MZ_Effect_Hypothermia CreateHypothermiaEffect(int Turns) //, int DamagePerTick, int DamageSpreadPerTick)
 {
@@ -15,6 +21,11 @@ static function MZ_Effect_Hypothermia CreateHypothermiaEffect(int Turns) //, int
     BurningEffect.BuildPersistentEffect(Turns,, false,,eGameRule_PlayerTurnBegin);
     BurningEffect.SetDisplayInfo(ePerkBuff_Penalty, default.HypothermiaEffectName, default.HypothermiaEffectDesc, "img:///UILibrary_DLC2Images.UIPerk_freezingbreath");
     BurningEffect.SetBurnDamage();
+
+    BurningEffect.VisualizationFn = HypothermiaVisualization;
+    BurningEffect.EffectTickedVisualizationFn = HypothermiaVisualizationTicked;
+    BurningEffect.EffectRemovedVisualizationFn = HypothermiaVisualizationRemoved;
+
     BurningEffect.bRemoveWhenTargetDies = true;
     BurningEffect.DamageTypes.AddItem('Frost');
     BurningEffect.DuplicateResponse = eDupe_Refresh;
@@ -47,11 +58,73 @@ simulated function SetBurnDamage()
     ApplyOnTick.AddItem(BurnDamage);
 }
 
-DefaultProperties
+static function HypothermiaVisualization(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
 {
-    DuplicateResponse=eDupe_Refresh
-    bCanTickEveryAction=true
-    EffectName="MZHypothermia"
+    if (EffectApplyResult !=  'AA_Success')
+        return;
+    if (!ActionMetadata.StateObject_NewState.IsA('XComGameState_Unit'))
+        return;
 
-    HyptothermiaEffectAddedEventName="HypothermiaEffectAdded"
+    class'X2StatusEffects'.static.AddEffectSoundAndFlyOverToTrack(ActionMetadata, VisualizeGameState.GetContext(), default.HypothermiaEffectName, '', eColor_Bad, default.StatusIcon);
+    class'X2StatusEffects'.static.AddEffectMessageToTrack(
+        ActionMetadata,
+        default.HypothermiaEffectAcquiredString,
+        VisualizeGameState.GetContext(),
+        default.HypothermiaTitle,
+        default.StatusIcon,
+        eUIState_Bad);
+    class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
+}
+
+static function HypothermiaVisualizationTicked(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
+{
+    local XComGameState_Unit UnitState;
+
+    UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+
+    // dead units should not be reported
+    if (UnitState == none || UnitState.IsDead())
+    {
+        return;
+    }
+
+    class'X2StatusEffects'.static.AddEffectMessageToTrack(
+        ActionMetadata,
+        default.HypothermiaEffectTickedString,
+        VisualizeGameState.GetContext(),
+        default.HypothermiaTitle,
+        default.StatusIcon,
+        eUIState_Warning);
+    class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
+}
+
+static function HypothermiaVisualizationRemoved(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult)
+{
+    local XComGameState_Unit UnitState;
+
+    UnitState = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+
+    // dead units should not be reported
+    if (UnitState == none || UnitState.IsDead())
+    {
+        return;
+    }
+
+    class'X2StatusEffects'.static.AddEffectMessageToTrack(
+        ActionMetadata,
+        default.HypothermiaEffectLostString,
+        VisualizeGameState.GetContext(),
+        default.HypothermiaTitle,
+        default.StatusIcon,
+        eUIState_Good);
+    class'X2StatusEffects'.static.UpdateUnitFlag(ActionMetadata, VisualizeGameState.GetContext());
+}
+
+defaultproperties
+{
+    DuplicateResponse = eDupe_Refresh
+    bCanTickEveryAction = true
+    EffectName = MZHypothermia
+
+    HyptothermiaEffectAddedEventName = HypothermiaEffectAdded
 }

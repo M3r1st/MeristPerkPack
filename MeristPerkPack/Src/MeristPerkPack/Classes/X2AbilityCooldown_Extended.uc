@@ -19,6 +19,18 @@ function AddCooldownModifier(name RequiredAbility, int Modifier)
     CooldownModifiers.AddItem(CooldownModifier);
 }
 
+function AddAdditionalCooldownInfo(name AbilityName, optional int NumTurns, optional bool bUseAbilityCooldownNumTurns, optional name ApplyCooldownType = 'AdditionalCooldown_ApplyLarger')
+{
+    local AdditionalCooldownInfo CooldownInfo;
+
+    CooldownInfo.AbilityName = AbilityName;
+    CooldownInfo.NumTurns = NumTurns;
+    CooldownInfo.bUseAbilityCooldownNumTurns = bUseAbilityCooldownNumTurns;
+    CooldownInfo.ApplyCooldownType = ApplyCooldownType;
+
+    AditionalAbilityCooldowns.AddItem(CooldownInfo);
+}
+
 simulated function ApplyCooldown(XComGameState_Ability kAbility, XComGameState_BaseObject AffectState, XComGameState_Item AffectWeapon, XComGameState NewGameState)
 {
     local XComGameStateContext_Ability AbilityContext;
@@ -26,18 +38,17 @@ simulated function ApplyCooldown(XComGameState_Ability kAbility, XComGameState_B
     if (`CHEATMGR != none && `CHEATMGR.strAIForcedAbility ~= string(kAbility.GetMyTemplateName()))
         iNumTurns = 0;
 
-    if (bDoNotApplyOnHit)
+    AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
+
+    if (AbilityContext != none)
     {
-        AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
-        if(AbilityContext != none && AbilityContext.IsResultContextHit())
+        if (bDoNotApplyOnHit && AbilityContext.IsResultContextHit())
+            return;
+
+        if (bApplyOnlyOnHit && AbilityContext.IsResultContextMiss())
             return;
     }
-    if (bApplyOnlyOnHit)
-    {
-        AbilityContext = XComGameStateContext_Ability(NewGameState.GetContext());
-        if(AbilityContext != none && AbilityContext.IsResultContextMiss())
-            return;
-    }
+
     kAbility.iCooldown = GetNumTurns(kAbility, AffectState, AffectWeapon, NewGameState);
 
     ApplyAdditionalCooldown(kAbility, AffectState, AffectWeapon, NewGameState);
@@ -56,7 +67,7 @@ simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState
     {
         foreach CooldownModifiers(CooldownModifier)
         {
-            if (Unit.HasAbilityFromAnySource(CooldownModifier.RequiredAbility))
+            if (Unit.HasSoldierAbility(CooldownModifier.RequiredAbility, true))
             {
                 if (CooldownModifier.bRemoveCooldown)
                 {

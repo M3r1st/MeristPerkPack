@@ -10,7 +10,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     `LOG("Trying to change team for " $ TargetUnit.GetMyTemplateName(), true, 'Merist_X2Effect_Sidewinder_Move');
 
-    TargetUnit.SetUnitFloatValue('M31_PA_Sidewinder_Move_OriginalGroup', GroupState.ObjectID, eCleanup_BeginTactical);
+    TargetUnit.SetUnitFloatValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupState.ObjectID, eCleanup_BeginTactical);
 
     GroupState = XComGameState_AIGroup(NewGameState.CreateNewStateObject(class'XComGameState_AIGroup'));	
     GroupState.AddUnitToGroup(TargetUnit.ObjectID, NewGameState);
@@ -29,10 +29,10 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     `assert(GroupState.m_arrMembers.Length == 1 && GroupState.m_arrMembers[0].ObjectID == TargetUnit.ObjectID);
     NewGameState.RemoveStateObject(GroupState.ObjectID);
 
-    TargetUnit.GetUnitValue('M31_PA_Sidewinder_Move_OriginalGroup', GroupValue);
+    TargetUnit.GetUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupValue);
     GroupState = XComGameState_AIGroup(NewGameState.ModifyStateObject(class'XComGameState_AIGroup', GroupValue.fValue));
     GroupState.AddUnitToGroup(TargetUnit.ObjectID, NewGameState);
-    TargetUnit.ClearUnitValue('M31_PA_Sidewinder_Move_OriginalGroup');
+    TargetUnit.ClearUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState)
@@ -41,7 +41,7 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
     local XComGameState_AIGroup GroupState;
 
     GroupState = UnitState.GetGroupMembership();
-    UnitState.GetUnitValue('M31_PA_Sidewinder_Move_OriginalGroup', GroupValue);
+    UnitState.GetUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupValue);
 
     if (GroupState.ObjectID != GroupValue.fValue && UnitState.IsAbleToAct())
     {

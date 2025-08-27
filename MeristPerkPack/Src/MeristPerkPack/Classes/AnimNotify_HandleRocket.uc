@@ -18,8 +18,8 @@ event Notify(Actor Owner, AnimNodeSequence AnimSeqInstigator)
 	local UnitValue					UV;
 
 	Pawn = XComUnitPawn(Owner);
-    if (Pawn != none)
-    {	
+	if (Pawn != none)
+	{	
 		Rocket = XComWeapon(Pawn.Weapon);
 		OwnerUnit = Pawn.GetGameUnit();
 		UnitState = OwnerUnit.GetVisualizedGameState();
@@ -72,5 +72,5 @@ event Notify(Actor Owner, AnimNodeSequence AnimSeqInstigator)
 			}
 		}
 		else `redscreen("AnimNotify_HandleRocket -> could not retrieve Weapon State for cosmetic rocket on soldier " @ UnitState.GetFullName() @ " -Iridar");
-    }
+	}
 }

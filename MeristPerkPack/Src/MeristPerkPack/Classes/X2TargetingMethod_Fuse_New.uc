@@ -25,8 +25,8 @@ function Update(float DeltaTime)
             DrawAOETiles(EmptyTiles);
         }
         GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets);
-        CheckForFriendlyUnit(CurrentlyMarkedTargets);	
-        MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None );
+        CheckForFriendlyUnit(CurrentlyMarkedTargets);
+        MarkTargetedActors(CurrentlyMarkedTargets, (!AbilityIsOffensive) ? FiringUnit.GetTeam() : eTeam_None);
 
         Ability = ActualAbility;
 

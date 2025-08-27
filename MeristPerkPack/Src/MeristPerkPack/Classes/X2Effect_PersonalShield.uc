@@ -9,7 +9,7 @@ struct AdditionalShieldAmountInfo
 var int ShieldAmountBase;
 var array<int> ShieldAmount;
 var array<AdditionalShieldAmountInfo> AdditionalShieldAmount;
-var bool bGetShieldAmountFromGremlin;
+var bool bGetShieldAmountFromWeapon;
 var bool bGetShieldAmountFromArmor;
 
 function AddAdditionalShieldAmount(name RequiredAbility, int Modifier)
@@ -26,8 +26,8 @@ simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectPa
 
     Shield = ShieldAmountBase;
 
-    if (bGetShieldAmountFromGremlin)
-        Shield += GetShieldAmountFromGremlin(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+    if (bGetShieldAmountFromWeapon)
+        Shield += GetShieldAmountFromWeapon(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
     if (bGetShieldAmountFromArmor)
         Shield += GetShieldAmountFromArmor(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
@@ -62,11 +62,11 @@ simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAp
     return Shield;
 }
 
-simulated function int GetShieldAmountFromGremlin(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+simulated function int GetShieldAmountFromWeapon(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     local XComGameState_Item    SourceItem;
-    local X2GremlinTemplate     GremlinTemplate;
-    local int                   Shield;
+    local int Shield;
+    local int Tier;
 
     SourceItem = XComGameState_Item(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.ItemStateObjectRef.ObjectID));
     if (SourceItem == none)
@@ -74,16 +74,9 @@ simulated function int GetShieldAmountFromGremlin(const out EffectAppliedData Ap
 
     if (SourceItem != none)
     {
-        GremlinTemplate = X2GremlinTemplate(SourceItem.GetMyTemplate());
-        if (GremlinTemplate != none)
-        {
-            switch (GremlinTemplate.WeaponTech)
-            {
-                case 'beam':        Shield = ShieldAmount[2]; break;
-                case 'magnetic':    Shield = ShieldAmount[1]; break;
-                default:            Shield = ShieldAmount[0]; break;
-            }
-        }
+        Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceItem.GetMyTemplate());
+        Tier = Clamp(Tier, 0, ShieldAmount.Length);
+        Shield = ShieldAmount[Tier];
     }
 
     return Shield;
@@ -91,9 +84,9 @@ simulated function int GetShieldAmountFromGremlin(const out EffectAppliedData Ap
 
 simulated function int GetShieldAmountFromArmor(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit    SourceUnit;
-    local X2ArmorTemplate       ArmorTemplate;
+    local XComGameState_Unit SourceUnit;
     local int Shield;
+    local int Tier;
 
     SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     if (SourceUnit == none)
@@ -101,17 +94,9 @@ simulated function int GetShieldAmountFromArmor(const out EffectAppliedData Appl
 
     if (SourceUnit != none)
     {
-        ArmorTemplate = X2ArmorTemplate(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
-
-        if (ArmorTemplate != none)
-        {
-            switch (ArmorTemplate.ArmorTechCat)
-            {
-                case 'Powered':     Shield = ShieldAmount[2]; break;
-                case 'Plated':      Shield = ShieldAmount[1]; break;
-                default:            Shield = ShieldAmount[0]; break;
-            }
-        }
+        Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
+        Tier = Clamp(Tier, 0, ShieldAmount.Length);
+        Shield = ShieldAmount[Tier];
     }
 
     return Shield;

@@ -35,6 +35,11 @@ function GetToHitModifiers(
     }
 }
 
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
+{
+    return GetCurrentStackCount(TargetUnit) > 0;
+}
+
 static function int GetCurrentStackCount(XComGameState_Unit UnitState)
 {
     local UnitValue Counter;

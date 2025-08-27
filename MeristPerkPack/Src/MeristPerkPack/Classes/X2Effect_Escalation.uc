@@ -8,10 +8,10 @@ var private int ShotCounter;
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-    local XComGameStateHistory		History;
-    local XComGameState_Ability		SourceAbility;
-    local XComGameState_Item		SourceWeapon;
-    local ShotModifierInfo			ShotMod;
+    local XComGameStateHistory      History;
+    local XComGameState_Ability     SourceAbility;
+    local XComGameState_Item        SourceWeapon;
+    local ShotModifierInfo          ShotMod;
 
     if (Attacker == none)
         return;
@@ -27,7 +27,7 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
     ShotMod.Value = ShotCounter * CritBonus;
     ShotMod.Reason = FriendlyName;
 
-    ShotModifiers.AddItem(ShotMod);	
+    ShotModifiers.AddItem(ShotMod);
 }
 
 function int GetAttackingDamageModifier(XComGameState_Effect EffectState, XComGameState_Unit Attacker, Damageable TargetDamageable, XComGameState_Ability AbilityState, const out EffectAppliedData AppliedData, const int CurrentDamage, optional XComGameState NewGameState) 

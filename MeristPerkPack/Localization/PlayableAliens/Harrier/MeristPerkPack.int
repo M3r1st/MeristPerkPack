@@ -1,0 +1,4 @@
+[Help]
+
+M31_PA_HarrierVileMix_FriendlyName          = "Vile Mix"
+M31_PA_HarrierVileMix_DebuffText            = "This units takes <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> additional damage from damage-over-time effects."

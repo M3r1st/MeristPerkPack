@@ -1,0 +1,1 @@
+class X2AbilitySet_Templar extends X2Ability_Extended config(GameData_SoldierSkills);

@@ -5,7 +5,6 @@
 //           unlike Field Surgeon it can heal for more than 1 hp per effect apply,
 //           and fully stacks with itself.
 //--------------------------------------------------------------------------------------- 
-//---------------------------------------------------------------------------------------
 class X2Effect_GreaterPadding extends X2Effect_Persistent;
 
 var const name GreaterPaddingUnitWasBleedingOut;

@@ -21,7 +21,9 @@ function GetToHitModifiers(
         return;
 
     if (!Target.CanTakeCover()
-        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked") && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
+        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked")
+        && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo)
+        && (VisInfo.TargetCover == CT_None || Target.GetCurrentStat(eStat_AlertLevel) == 0 && Target.GetTeam() != eTeam_XCom))
     {
         AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;

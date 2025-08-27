@@ -57,7 +57,8 @@ function float GetPreDefaultAttackingDamageModifier_CH(
 {
     local X2AbilityTemplate             AbilityTemplate;
     local XCGS_Effect_WS_Maelstrom      MaelstromEffectState;
-    local int                           FinalOverflow;
+    local int FinalOverflow;
+    local int DamageBonus;
 
     if (SourceUnit == none)
         return 0;
@@ -78,7 +79,14 @@ function float GetPreDefaultAttackingDamageModifier_CH(
 
     FinalOverflow = MaelstromEffectState.GetFinalOverflow(AbilityTemplate, AbilityState, XComGameState_Unit(Target));
 
-    return CurrentDamage * (FinalOverflow / 100);
+    `LOG("FinalOverflow = " $ FinalOverflow);
+    `LOG("CurrentDamage = " $ CurrentDamage);
+
+    DamageBonus = CurrentDamage * (1.0f * FinalOverflow / 100);
+    
+    `LOG("DamageBonus = " $ DamageBonus);
+
+    return DamageBonus;
 }
 
 defaultproperties

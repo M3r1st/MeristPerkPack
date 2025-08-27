@@ -2,13 +2,20 @@ class X2Effect_Blademaster_LW extends X2Effect_Persistent;
 
 var bool bMatchSourceWeapon;
 
-function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
+function GetToHitModifiers(
+    XComGameState_Effect EffectState,
+    XComGameState_Unit Attacker,
+    XComGameState_Unit Target,
+    XComGameState_Ability AbilityState,
+    class<X2AbilityToHitCalc> ToHitType,
+    bool bMelee, bool bFlanking, bool bIndirectFire,
+    out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo AimInfo;
 
     if (bMelee && (!bMatchSourceWeapon || EffectState.ApplyEffectParameters.ItemStateObjectRef == AbilityState.SourceWeapon))
     {
-        AimInfo.ModType = eHit_Crit;
+        AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;
         AimInfo.Value = class'X2Ability_RangerAbilitySet'.default.BLADEMASTER_AIM;
         ShotModifiers.AddItem(AimInfo);

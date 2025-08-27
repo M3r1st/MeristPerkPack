@@ -7,22 +7,22 @@ LocFlyOverText="Blind Spot"
 
 [M31_CA_ChaosDriver X2AbilityTemplate]
 LocFriendlyName="Chaos Driver"
-LocLongDescription="Whenever you get a critical hit, gain one charge of Chaos Driver up to a maximum of <Ability:M31_CA_ChaosDriver_MaxCharges>. Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> Turn(s). You cannot gain charges while Chaos Driver is active."
-LocHelpText="Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> Turn(s). You cannot gain charges while Chaos Driver is active."
+LocLongDescription="Whenever you get a critical hit, gain one charge of Chaos Driver up to a maximum of <Ability:M31_CA_ChaosDriver_MaxCharges>. Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> turn(s). You cannot gain charges while Chaos Driver is active."
+LocHelpText="Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> turn(s). You cannot gain charges while Chaos Driver is active."
 LocPromotionPopupText="<Bullet> Starts with <Ability:M31_CA_ChaosDriver_InitialCharges> charges."
 LocFlyOverText="Chaos Driver"
 
 [M31_CA_ChaosDriver_Charges X2AbilityTemplate]
 LocFriendlyName="Chaos Driver"
-LocLongDescription="Whenever you get a critical hit, gain one charge of Chaos Driver up to a maximum of <Ability:M31_CA_ChaosDriver_MaxCharges>. Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> Turn(s). You cannot gain charges while Chaos Driver is active."
-LocHelpText="Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> Turn(s). You cannot gain charges while Chaos Driver is active."
+LocLongDescription="Whenever you get a critical hit, gain one charge of Chaos Driver up to a maximum of <Ability:M31_CA_ChaosDriver_MaxCharges>. Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> turn(s). You cannot gain charges while Chaos Driver is active."
+LocHelpText="Activate to consume all charges and increase damage dealt by <Ability:M31_CA_ChaosDriver_BonusPerCharge> and damage taken by <Ability:M31_CA_ChaosDriver_PenaltyPerCharge> per charge for <Ability:M31_CA_ChaosDriver_Duration> turn(s). You cannot gain charges while Chaos Driver is active."
 LocPromotionPopupText="<Bullet> Starts with <Ability:M31_CA_ChaosDriver_InitialCharges> charges."
 LocFlyOverText="Chaos Driver"
 
 [M31_CA_CollectBounty X2AbilityTemplate]
 LocFriendlyName="Collect Bounty"
-LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that deals +<Ability:M31_CA_CollectBounty_DamagePrc> damage on critical hits and shatters sustain effects. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that deals +<Ability:M31_CA_CollectBounty_DamagePrc> damage on critical hits and shatters sustain effects. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
+LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that deals +<Ability:M31_CA_CollectBounty_DamagePrc> damage on critical hits and shatters sustain effects. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special <Ability:M31_BoundWeaponName> shot that deals +<Ability:M31_CA_CollectBounty_DamagePrc> damage on critical hits and shatters sustain effects. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocPromotionPopupText=""
 LocFlyOverText="Collect Bounty"
 
@@ -32,15 +32,15 @@ LocFlyOverText="Collect Bounty"
 
 [M31_CA_KillingSpree X2AbilityTemplate]
 LocFriendlyName="Killing Spree"
-LocLongDescription="Gain +<Ability:M31_CA_KillingSpree_DamageBonus> damage and +<Ability:M31_CA_KillingSpree_CritBonus> critical chance for your <Ability:M31_BoundWeaponName> for <Ability:M31_CA_KillingSpree_Duration> Turn(s) after every kill."
-LocHelpText="Gain +<Ability:M31_CA_KillingSpree_DamageBonus> damage and +<Ability:M31_CA_KillingSpree_CritBonus> critical chance for your <Ability:M31_BoundWeaponName> for <Ability:M31_CA_KillingSpree_Duration> Turn(s) after every kill."
+LocLongDescription="Gain +<Ability:M31_CA_KillingSpree_DamageBonus> damage and +<Ability:M31_CA_KillingSpree_CritBonus> critical chance for your <Ability:M31_BoundWeaponName> for <Ability:M31_CA_KillingSpree_Duration> turn(s) after every kill."
+LocHelpText="Gain +<Ability:M31_CA_KillingSpree_DamageBonus> damage and +<Ability:M31_CA_KillingSpree_CritBonus> critical chance for your <Ability:M31_BoundWeaponName> for <Ability:M31_CA_KillingSpree_Duration> turn(s) after every kill."
 LocPromotionPopupText="<Bullet> Only kills by this soldier count towards Killing Spree."
 LocFlyOverText="Killing Spree"
 
 [M31_CA_MarkForDeath X2AbilityTemplate]
 LocFriendlyName="Mark for Death"
-LocLongDescription="As a free action, mark any enemy within your line of sight for <Ability:M31_CA_MarkForDeath_Duration> Turn(s). Your next <Ability:M31_BoundWeaponName> shot against that enemy will not cost an action. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Mark an enemy for <Ability:M31_CA_MarkForDeath_Duration> Turn(s). Your next <Ability:M31_BoundWeaponName> shot against that enemy will not cost an action."
+LocLongDescription="As a free action, mark any enemy within your line of sight for <Ability:M31_CA_MarkForDeath_Duration> turn(s). Your next <Ability:M31_BoundWeaponName> shot against that enemy will not cost an action. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Mark an enemy for <Ability:M31_CA_MarkForDeath_Duration> turn(s). Your next <Ability:M31_BoundWeaponName> shot against that enemy will not cost an action."
 LocFlyOverText="Mark for Death"
 
 [M31_CA_MarkForDeath_Refund X2AbilityTemplate]
@@ -49,14 +49,14 @@ LocFlyOverText="Mark for Death"
 
 [M31_CA_MistTrail X2AbilityTemplate]
 LocFriendlyName="Trail of Mist"
-LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> with +<Ability:M31_CA_MistTrail_AimBonus> bonus Aim that blinds the target for <Ability:M31_CA_MistTrail_Duration> Turn(s), but cannot crit. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot with +<Ability:M31_CA_MistTrail_AimBonus> Aim that blinds the target for <Ability:M31_CA_MistTrail_Duration> Turn(s), but cannot crit."
+LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> with +<Ability:M31_CA_MistTrail_AimBonus> bonus Aim that blinds the target for <Ability:M31_CA_MistTrail_Duration> turn(s), but cannot crit. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special <Ability:M31_BoundWeaponName> shot with +<Ability:M31_CA_MistTrail_AimBonus> Aim that blinds the target for <Ability:M31_CA_MistTrail_Duration> turn(s), but cannot crit."
 LocPromotionPopupText="<Bullet> Reduces the target's sight range to x<Ability:M31_CA_MistTrail_LOSModifier> of the original."
 LocFlyOverText="Trail of Mist"
 
 [M31_CA_PhantomStride X2AbilityTemplate]
 LocFriendlyName="Phantom Stride"
-LocLongDescription="As a free action, attack any enemy within blue movement range with your <Ability:M31_BoundWeaponName>. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown. Every time you attack with your melee weapon, reduce the cooldown by <Ability:M31_CA_PhantomStride_CooldownReduction>."
+LocLongDescription="As a free action, attack any enemy within blue movement range with your <Ability:M31_BoundWeaponName>. Has a <Ability:M31_SelfCooldown> turn cooldown. Every time you attack with your melee weapon, reduce the cooldown by <Ability:M31_CA_PhantomStride_CooldownReduction>."
 LocHelpText="Free <Ability:M31_BoundWeaponName> attack against any enemy within blue movement range."
 LocFlyOverText="Phantom Stride"
 

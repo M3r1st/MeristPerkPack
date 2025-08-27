@@ -13,12 +13,12 @@ var bool bAllowUpgrades;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local X2ItemTemplate ItemTemplate;
-    local X2ItemTemplateManager ItemTemplateMgr;
-    local XComGameState_Unit NewUnit;
-    local name TemplateName;
-    local UpgradeInfo Upgrade;
     local XComGameState_HeadquartersXCom XComHQ;
+    local X2ItemTemplateManager     ItemTemplateMgr;
+    local X2ItemTemplate            ItemTemplate;
+    local XComGameState_Unit        NewUnit;
+    local UpgradeInfo               Upgrade;
+    local name                      TemplateName;
 
     XComHQ = `XCOMHQ;
 

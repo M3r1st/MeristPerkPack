@@ -1,0 +1,4 @@
+[Help]
+
+M31_PA_VeryAngryBite_DebuffText             = "The unit is bleeding. It takes <Ability:M31_PA_VeryAngryBite_BleedDamage_Debuff> damage at the start of each turn."
+M31_PA_TaipanBite_DebuffText                = "The unit is bleeding. It takes <Ability:M31_PA_TaipanBite_BleedDamage_Debuff> damage at the start of each turn."

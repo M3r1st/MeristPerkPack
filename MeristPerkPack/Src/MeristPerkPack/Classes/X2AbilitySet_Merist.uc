@@ -1,42 +1,56 @@
-class X2AbilitySet_Merist extends X2Ability_Extended config(GameData_SoldierSkills);
+class X2AbilitySet_Merist extends X2Ability_Extended config(GameData_SoldierSkills) dependson(X2AbilityCooldown_Extended);
 
-var config bool bFrostbane_CheckSourceWeapon;
+var config array<name> BoltCasterTemplates;
+var config array<name> PistolCategories;
 
+var config array<name> AdvancedOptics_AllowedEffects;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
 var config array<name> FutureWarfare_AllowedAbilities;
-
+var config array<name> PriorityFocus_AllowedEffects;
 var config array<name> Relentless_AllowedAbilities;
+var config array<name> Reposition_AllowedAbilities;
+var config array<name> ShockGrenadier_AdditionalCharge_AllowedAbilities;
+var config array<name> ShotgunWedding_AllowedCategories;
+var config array<name> SniperElite_AllowedEffects;
 var config array<name> Suppression_Area_AllowedCategories;
 var config array<name> TrainedSniper_AllowedCategories;
 var config array<name> TraverseFire_AllowedAbilities;
+var config array<name> TraverseFirePlus_AllowedAbilities;
 
 var config array<CooldownModifierInfo> EnergyShield_CooldownModifiers;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
-    
-    // Templates.AddItem(Adrenaline());
-    //     Templates.AddItem(AdrenalineTrigger());
+
     Templates.AddItem(AdvancedAidProtocol());
+    Templates.AddItem(AdvancedOptics());
     Templates.AddItem(Aim());
     Templates.AddItem(AlphaStrike());
     Templates.AddItem(Assassin());
         Templates.AddItem(AssassinTrigger());
+    Templates.AddItem(AssaultShot());
     Templates.AddItem(Bandit());
     Templates.AddItem(BattalionCommander());
     Templates.AddItem(BloodThirst());
     Templates.AddItem(Botnet());
+    Templates.AddItem(BurstFire());
+    Templates.AddItem(CallForFire());
     Templates.AddItem(ColdBlooded());
+    Templates.AddItem(CombatAdvance());
     Templates.AddItem(ConcussiveGrenades());
     Templates.AddItem(CovertParkour());
     Templates.AddItem(DeathAdder());
         Templates.AddItem(DeathAdderBonus());
+    Templates.AddItem(DedicatedOverwatch());
     Templates.AddItem(Dervish());
         Templates.AddItem(DervishTrigger());
+    Templates.AddItem(DisarmingShot());
+        Templates.AddItem(DisarmingShotSnap());
     Templates.AddItem(Duskborn());
         Templates.AddItem(DuskbornTrigger());
+    Templates.AddItem(EMPBomber());
     Templates.AddItem(EnemyUnknown());
         Templates.AddItem(EnemyUnknownTrigger());
     Templates.AddItem(EnergyShield());
@@ -49,21 +63,53 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(FutureWarfare());
         Templates.AddItem(FutureWarfareTrigger());
     Templates.AddItem(ImprovedSuppression());
+    Templates.AddItem(LowProfileNest());
     Templates.AddItem(GenevaSuggestion());
+    Templates.AddItem(Maim());
+        Templates.AddItem(MaimSnap());
+    Templates.AddItem(Malevolence());
+        Templates.AddItem(MalevolenceAttack());
+    Templates.AddItem(MarauderElite());
     Templates.AddItem(Meld());
+    Templates.AddItem(Minelayer2());
     Templates.AddItem(NeurotoxicShot());
+    Templates.AddItem(OnTheMove());
+    Templates.AddItem(OverchargedBlast());
+    Templates.AddItem(Overpower());
     Templates.AddItem(Overseer());
     Templates.AddItem(PerfectHandling());
     Templates.AddItem(Pinpoint());
         Templates.AddItem(PinpointBonus());
     Templates.AddItem(PipeBombs());
+    Templates.AddItem(PistolDetonationShot());
+    Templates.AddItem(PistolDisarmingShot());
+    Templates.AddItem(PistolMaim());
+    Templates.AddItem(PriorityFocus());
     Templates.AddItem(RapidDumping());
+    Templates.AddItem(ReflexShot());
+        Templates.AddItem(ReflexShotAttack());
     Templates.AddItem(Relentless());
+    Templates.AddItem(RepositionPlus());
+    Templates.AddItem(SaltInTheWound());
+    Templates.AddItem(SawedOffRange());
+    Templates.AddItem(SawedOffReload());
+    Templates.AddItem(SawedOffSweeper());
     Templates.AddItem(ShadowstepAid());
+    Templates.AddItem(ShockGrenadier());
+    Templates.AddItem(ShotgunWedding());
+        Templates.AddItem(ShotgunWeddingAttack());
+    Templates.AddItem(Skykeeper());
+    Templates.AddItem(SleightOfHand());
+        Templates.AddItem(SleightOfHandTrigger());
+    Templates.AddItem(SmokeGrenadier());
+    Templates.AddItem(SniperElite());
     Templates.AddItem(SnipersOverwatch());
         Templates.AddItem(SnipersOverwatchShot());
+    Templates.AddItem(SoldierOfFortune());
     Templates.AddItem(SolidSnake());
     Templates.AddItem(Sparkfire());
+    Templates.AddItem(StaticGrenades());
+    Templates.AddItem(Stiletto());
     Templates.AddItem(SuperheavyOrdnance());
     Templates.AddItem(SupplyPack());
     Templates.AddItem(SuppressingFire());
@@ -77,7 +123,14 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(TrainedSniper_LongWatch());
     Templates.AddItem(TrainedSniper_RangeFinder());
     Templates.AddItem(TraverseFire());
+        Templates.AddItem(TraverseFirePlus());
+    Templates.AddItem(TroubleShooter());
+    Templates.AddItem(Undertaker());
+    Templates.AddItem(Unload('M31_Unload', true));
+        Templates.AddItem(Unload('M31_Unload_Chain'));
     Templates.AddItem(Warbringer());
+    Templates.AddItem(WatchfulEye());
+        Templates.AddItem(WatchfulEyeAttack());
 
     Templates.AddItem(AcidRoundsAttackPassive());
         Templates.AddItem(AcidRoundsAttack());
@@ -89,67 +142,41 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(ThermalShockAttack());
     Templates.AddItem(ToxicNightmare());
         Templates.AddItem(ToxicNightmareAttack());
+    Templates.AddItem(Shiver2());
+        Templates.AddItem(Shiver2Attack());
+    Templates.AddItem(HypothermiaRoundsPassive());
+        Templates.AddItem(HypothermiaRoundsAttack());
+
+    Templates.AddItem(Chimera());
 
     return Templates;
 }
 
-static function X2AbilityTemplate Adrenaline()
-{
-    local X2AbilityTemplate                     Template;
-
-    Template = Passive('M31_Adrenaline', "img:///UILibrary_XPerkIconPack.UIPerk_shield_plus", false, true);
-
-    Template.AdditionalAbilities.AddItem('M31_Adrenaline_Trigger');
-
-    return Template;
-}
-
-static function X2AbilityTemplate AdrenalineTrigger()
-{
-    local X2AbilityTemplate                     Template;
-    local X2AbilityTrigger_EventListener        Trigger;
-    local X2Effect_PersonalShield               Effect;
-    local X2Condition_UnitValue                 ValueCondition;
-    local X2Effect_IncrementUnitValue           UnitValueEffect;
-
-    Template = SelfTargetTrigger('M31_Adrenaline_Trigger', "img:///UILibrary_XPerkIconPack.UIPerk_shield_plus");
-    
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = 'KillMail';
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'M31_AbilityHelpers'.static.KillMailListener_Self;
-    Trigger.ListenerData.Priority = 41;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    Effect = new class'X2Effect_PersonalShield';
-    Effect.EffectName = 'M31_Adrenaline';
-    Effect.ShieldAmountBase = `GetConfigInt("M31_Adrenaline_ShieldAmount");
-    Effect.DuplicateResponse = eDupe_Allow;
-    Effect.BuildPersistentEffect(1, true, true);
-    Template.AddTargetEffect(Effect);
-    
-    ValueCondition = new class'X2Condition_UnitValue';
-    ValueCondition.AddCheckValue('M31_Adrenaline', `GetConfigInt("M31_Adrenaline_ActivationsPerMission"), eCheck_LessThan);
-    Template.AbilityTargetConditions.AddItem(ValueCondition);
-
-    UnitValueEffect = new class'X2Effect_IncrementUnitValue';
-    UnitValueEffect.UnitName = 'M31_Adrenaline';
-    UnitValueEffect.NewValueToSet = 1;
-    UnitValueEffect.CleanupType = eCleanup_BeginTactical;
-    Template.AddTargetEffect(UnitValueEffect);
-
-    Template.bShowActivation = true;
-
-    return Template;
-}
-
 static function X2AbilityTemplate AdvancedAidProtocol()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
 
     Template = Passive('M31_AdvancedAidProtocol', "img:///UILibrary_MZChimeraIcons.Ability_ArmorSystem", false, true);
     
+    return Template;
+}
+
+static function X2AbilityTemplate AdvancedOptics()
+{
+    local X2AbilityTemplate             Template;
+    local X2Effect_AdvancedOptics       Effect;
+
+    Template = Passive('M31_AdvancedOptics', "img:///UILibrary_MZChimeraIcons.WeaponMod_ScopeSuperior", false, true);
+
+    Effect = new class'X2Effect_AdvancedOptics';
+    Effect.bMatchSourceWeapon = false;
+    Effect.bLongRange = true;
+    Effect.RangeOffsetPrc = `GetConfigInt("M31_AdvancedOptics_PenaltyModifier");
+    Effect.DefenseIgnorePrc = `GetConfigInt("M31_AdvancedOptics_DefenseReduction");
+    Effect.AllowedEffects =  default.AdvancedOptics_AllowedEffects;
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
     return Template;
 }
 
@@ -171,10 +198,13 @@ static function X2AbilityTemplate AlphaStrike()
 
     Template = SelfTargetActivated('M31_AlphaStrike', "img:///UILibrary_MZChimeraIcons.Ability_Dash", false);
 
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
     AddCooldown(Template, `GetConfigInt("M31_AlphaStrike_Cooldown"));
     AddCharges(Template, `GetConfigInt("M31_AlphaStrike_Charges"));
     AddActionPointCost(Template, eCost_DoubleConsumeAll);
 
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
     Template.AddShooterEffectExclusions();
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -197,17 +227,73 @@ static function X2AbilityTemplate AlphaStrike()
     ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
     Template.AddMultiTargetEffect(ActionPointEffect);
     
-    Template.bShowActivation = true;
     Template.bSkipFireAction = false;
-    Template.bSkipExitCoverWhenFiring = true;
     
-    Template.CustomFireAnim = 'HL_SignalPositive';
+    Template.CustomFireAnim = 'HL_SignalEncourage';
     Template.CinescriptCameraType = "Skirmisher_CombatPresence";
-
     Template.AbilityConfirmSound = "Combat_Presence_Activate";
-    Template.ActivationSpeech = 'CombatPresence';
+
+    Template.BuildVisualizationFn = AlphaStrike_BuildVisualization;
 
     return Template;
+}
+
+simulated function AlphaStrike_BuildVisualization(XComGameState VisualizeGameState)
+{
+    local XComGameStateHistory          History;
+    local XComGameStateContext_Ability  Context;
+
+    local StateObjectReference          SourceUnitRef;
+    local StateObjectReference          TargetUnitRef;
+    local XComGameState_Effect          EffectState;
+    local X2AbilityTemplate             AbilityTemplate;
+
+    local VisualizationActionMetadata   EmptyTrack;
+    local VisualizationActionMetadata   SourceTrack;
+    local VisualizationActionMetadata   TargetTrack;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyOver;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyoverTarget;
+    local X2Action_PlayAnimation        PlayAnimationAction;
+
+    History = `XCOMHISTORY;
+    Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+    AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+    SourceUnitRef = Context.InputContext.SourceObject;
+
+    SourceTrack = EmptyTrack;
+    SourceTrack.StateObject_OldState = History.GetGameStateForObjectID(SourceUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+    SourceTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(SourceUnitRef.ObjectID);
+    SourceTrack.VisualizeActor = History.GetVisualizer(SourceUnitRef.ObjectID);
+
+    SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    SoundAndFlyOver.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'CombatPresence', eColor_Good, AbilityTemplate.IconImage);
+
+    class'X2Action_ExitCover'.static.AddToVisualizationTree(SourceTrack, context, false, SourceTrack.LastActionAdded);
+
+    PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    PlayAnimationAction.Params.AnimName = AbilityTemplate.CustomFireAnim;
+    PlayAnimationAction.bFinishAnimationWait = true;
+
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+    {
+        if (EffectState.ApplyEffectParameters.EffectRef.SourceTemplateName == AbilityTemplate.DataName)
+        {
+            TargetUnitRef = EffectState.ApplyEffectParameters.TargetStateObjectRef;
+            
+            if (TargetUnitRef.ObjectID != 0 && TargetUnitRef.ObjectID != SourceUnitRef.ObjectID)
+            {
+                TargetTrack = EmptyTrack;
+                TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+                TargetTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
+                TargetTrack.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
+
+                SoundAndFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, context, false, TargetTrack.LastActionAdded));
+                SoundAndFlyoverTarget.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', eColor_Good, AbilityTemplate.IconImage);
+            }
+        }
+    }
 }
 
 static function X2AbilityTemplate Assassin()
@@ -225,7 +311,7 @@ static function X2AbilityTemplate AssassinTrigger()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
-    local X2Condition_Stealth               StealthCondition;
+    local X2Condition_StealthCustom         StealthCondition;
     local X2Effect_RangerStealth            StealthEffect;
     local X2Effect_Spotted                  UnspottedEffect;
     local X2Condition_UnitValue             ValueCondition;
@@ -242,13 +328,9 @@ static function X2AbilityTemplate AssassinTrigger()
     Trigger.ListenerData.Priority = 20;
     Template.AbilityTriggers.AddItem(Trigger);
 
-    Template.bShowActivation = true;
-
-    ValueCondition = new class'X2Condition_UnitValue';
-    ValueCondition.AddCheckValue('M31_Assassin_Counter', `GetConfigInt("M31_Assassin_ActivationsPerTurn"), eCheck_LessThan);
-    Template.AbilityShooterConditions.AddItem(ValueCondition);
-
-    StealthCondition = new class'X2Condition_Stealth';
+    StealthCondition = new class'X2Condition_StealthCustom';
+    StealthCondition.bCheckConcealed = true;
+    StealthCondition.bCheckFlanking = false;
 
     StealthEffect = new class'X2Effect_RangerStealth';
     StealthEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnEnd);
@@ -261,6 +343,10 @@ static function X2AbilityTemplate AssassinTrigger()
     UnspottedEffect.TargetConditions.AddItem(StealthCondition);
     Template.AddShooterEffect(UnspottedEffect);
 
+    ValueCondition = new class'X2Condition_UnitValue';
+    ValueCondition.AddCheckValue('M31_Assassin_Counter', `GetConfigInt("M31_Assassin_ActivationsPerTurn"), eCheck_LessThan);
+    Template.AbilityShooterConditions.AddItem(ValueCondition);
+
     IncrementValueEffect = new class'X2Effect_IncrementUnitValue';
     IncrementValueEffect.UnitName = 'M31_Assassin_Counter';
     IncrementValueEffect.NewValueToSet = 1;
@@ -271,11 +357,13 @@ static function X2AbilityTemplate AssassinTrigger()
     SetValueEffect = new class'X2Effect_SetUnitValue';
     SetValueEffect.UnitName = 'M31_Assassin_Activated';
     SetValueEffect.NewValueToSet = 1;
-    SetValueEffect.CleanupType = eCleanup_BeginTactical;
+    SetValueEffect.CleanupType = eCleanup_BeginTurn;
     SetValueEffect.TargetConditions.AddItem(StealthCondition);
     Template.AddShooterEffect(SetValueEffect);
 
     AddCooldown(Template, `GetConfigInt("M31_Assassin_Cooldown"));
+
+    Template.bShowActivation = true;
 
     return Template;
 }
@@ -287,7 +375,6 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
     local XComGameStateContext_Ability      AbilityContext;
     local XComGameState_Unit                TargetUnit;
     local GameRulesCache_VisibilityInfo     VisInfo;
-    local XComGameState                     NewGameState; 
 
     SourceUnit = XComGameState_Unit(EventSource);
     AbilityState = XComGameState_Ability(CallbackData);
@@ -298,32 +385,58 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
     {
         if (AbilityState.GetSourceWeapon().ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
         {
-            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex - 1))
+            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex))
             {
-                if ((!TargetUnit.CanTakeCover() || VisInfo.TargetCover == CT_None))
+                if (!TargetUnit.CanTakeCover() || VisInfo.TargetCover == CT_None || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0 && TargetUnit.GetTeam() != eTeam_XCom)
                 {
                     if (AbilityState.CanActivateAbility(SourceUnit) == 'AA_Success')
                     {
-                        SourceUnit.BreakConcealment();
+                        if (SourceUnit.IsConcealed())
+                        {
+                            SourceUnit.BreakConcealment();
+                        }
                         return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
                     }
                 }
             }
         }
-
-        NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-        SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', SourceUnit.GetReference().ObjectID));
-        SourceUnit.SetUnitFloatValue('M31_Assassin_Activated', 0.0, eCleanup_BeginTactical);
-        `TACTICALRULES.SubmitGameState(NewGameState);
     }
 
     return ELR_NoInterrupt;
 }
 
-static function X2AbilityTemplate Bandit()
+static function X2AbilityTemplate AssaultShot()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_Bandit                   Effect;
+    local X2AbilityToHitCalc_StandardAim    StandardAim;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+
+    Template = Attack('M31_AssaultShot', "img:///UILibrary_LW_PerkPack.LW_AbilitySnapShot", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
+    
+    AddActionPointCost(Template, eCost_Free);
+    AddAmmoCost(Template, 1);
+    AddCooldown(Template, `GetConfigInt("M31_AssaultShot_Cooldown"));
+
+    StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+    StandardAim.bAllowCrit = false;
+    Template.AbilityToHitCalc = StandardAim;
+    Template.AbilityToHitOwnerOnMissCalc = StandardAim;
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = `GetConfigFloat("M31_AssaultShot_Range") * class'XComWorldData'.const.WORLD_StepSize;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    return Template;
+}
+
+static function X2AbilityTemplate Bandit()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_Bandit       Effect;
     
     Template = Passive('M31_Bandit', "img:///UILibrary_MZChimeraIcons.WeaponMod_ExtendedSuperior", false, true);
 
@@ -341,6 +454,8 @@ static function X2AbilityTemplate BattalionCommander()
     local X2AbilityTemplate Template;
 
     Template = Passive('M31_BattalionCommander', "img:///UILibrary_MZChimeraIcons.Ability_Resilience", false, true);
+
+    Template.PrerequisiteAbilities.AddItem('CombatPresence');
     
     return Template;
 }
@@ -350,16 +465,18 @@ static function X2AbilityTemplate BloodThirst()
     local X2AbilityTemplate                 Template;
     local X2Effect_BloodThirst              Effect;
     
-    Template = Passive('M31_BloodThirst', "img:///UILibrary_FavidsPerkPack.Perk_Ph_ColdBlooded", false, true);
+    Template = Passive('M31_BloodThirst', "img:///UILibrary_PerkIcons.UIPerk_beserker_rage", false, true);
 
     Effect = new class'X2Effect_BloodThirst';
+    Effect.iDefaultDamagePerStack = `GetConfigInt("M31_BloodThirst_DamagePerStack");
     Effect.iMaxStacks = `GetConfigInt("M31_BloodThirst_MaxStacks");
     Effect.iMaxStacksPerTurn = `GetConfigInt("M31_BloodThirst_MaxStacksPerTurn");
     Effect.iStackDuration = `GetConfigInt("M31_BloodThirst_StackDuration");
     Effect.bRefreshDuration = `GetConfigBool("M31_BloodThirst_bRefreshDuration");
     Effect.bApplyToAnyMelee = `GetConfigBool("M31_BloodThirst_bApplyToAnyMelee");
+    Effect.bActivateFromAnyMelee = `GetConfigBool("M31_BloodThirst_bActivateFromAnyMelee");
     Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_BloodThirst_bIncreaseOnlyOnHit");
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_BloodThirst_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
@@ -393,7 +510,7 @@ static function X2AbilityTemplate Botnet()
     Effect.EffectName = 'M31_Botnet_Valid';
     Effect.BuildPersistentEffect(`GetConfigInt("M31_Botnet_Duration"), false, true, false, eGameRule_PlayerTurnEnd);
     Effect.DuplicateResponse = eDupe_Refresh;
-    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true,, Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Botnet_BonusText"), Template.IconImage, true,, Template.AbilitySourceName);
 
     Template.AddTargetEffect(Effect);
     Template.AddMultiTargetEffect(Effect);
@@ -403,6 +520,146 @@ static function X2AbilityTemplate Botnet()
     Template.AbilityConfirmSound = "Unreal2DSounds_TargetLock";
 
     return Template;
+}
+
+static function X2AbilityTemplate BurstFire()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityMultiTarget_BurstFire    BurstFireMultiTarget;
+    local int NumExtraShots;
+
+    Template = Attack('M31_BurstFire', "img:///UILibrary_LW_PerkPack.LW_AbilityLightEmUp", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    AddActionPointCost(Template, eCost_WeaponConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt('M31_BurstFire_NumShots'));
+    AddCooldown(Template, `GetConfigInt("M31_BurstFire_Cooldown"));
+
+    NumExtraShots = `GetConfigInt('M31_BurstFire_NumShots') - 1;
+    if (NumExtraShots > 0)
+    {
+        BurstFireMultiTarget = new class'X2AbilityMultiTarget_BurstFire';
+        BurstFireMultiTarget.NumExtraShots = NumExtraShots;
+        Template.AbilityMultiTargetStyle = BurstFireMultiTarget;
+        Template.AddMultiTargetEffect(new class'X2Effect_Shredder');
+    }
+
+    SetFireAnim(Template, 'FF_IRI_BH_BurstFire');
+
+    Template.ActivationSpeech = 'BulletShred';
+
+    Template.AdditionalAbilities.AddItem('IRI_BH_BurstFire_Anim_Passive');
+
+    return Template;
+}
+
+static function X2AbilityTemplate CallForFire()
+{
+    local X2AbilityTemplate                         Template;
+    local X2AbilityMultiTarget_Radius               RadiusMultiTarget;
+    local X2Condition_UnitProperty                  UnitPropertyCondition;
+    local X2Effect_ThreatAssessment                 CoveringFireEffect;
+
+    Template = SelfTargetActivated('M31_CallForFire', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_circle", false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    AddCooldown(Template, `GetConfigInt("M31_CallForFire_Cooldown"));
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    Template.AddShooterEffectExclusions();
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeHostileToSource = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = false;
+    UnitPropertyCondition.RequireSquadmates = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.ExcludeUnableToAct = true;
+    UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = false;
+    Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+
+    RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+    RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_CallForFire_Radius"));
+    RadiusMultiTarget.bIgnoreBlockingCover = true;
+    Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+    
+    CoveringFireEffect = new class'X2Effect_ThreatAssessment';
+    CoveringFireEffect.EffectName = 'M31_CallForFire_ThreatAssessment';
+    CoveringFireEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
+    CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
+    CoveringFireEffect.ImmediateActionPoint = class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint;
+    Template.AddTargetEffect(CoveringFireEffect);
+    Template.AddMultiTargetEffect(CoveringFireEffect);
+    
+    Template.bSkipFireAction = false;
+    
+    Template.CustomFireAnim = 'HL_SignalHalt';
+    Template.CinescriptCameraType = "Overwatch";
+    Template.AbilityConfirmSound = "Unreal2DSounds_OverWatch";
+
+    Template.PostActivationEvents.AddItem('OverwatchUsed');
+
+    Template.BuildVisualizationFn = CallForFire_BuildVisualization;
+
+    return Template;
+}
+
+simulated function CallForFire_BuildVisualization(XComGameState VisualizeGameState)
+{
+    local XComGameStateHistory          History;
+    local XComGameStateContext_Ability  Context;
+
+    local StateObjectReference          SourceUnitRef;
+    local StateObjectReference          TargetUnitRef;
+    local XComGameState_Effect          EffectState;
+    local X2AbilityTemplate             AbilityTemplate;
+
+    local VisualizationActionMetadata   EmptyTrack;
+    local VisualizationActionMetadata   SourceTrack;
+    local VisualizationActionMetadata   TargetTrack;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyOver;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyoverTarget;
+    local X2Action_PlayAnimation        PlayAnimationAction;
+
+    History = `XCOMHISTORY;
+    Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+    AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+    SourceUnitRef = Context.InputContext.SourceObject;
+
+    SourceTrack = EmptyTrack;
+    SourceTrack.StateObject_OldState = History.GetGameStateForObjectID(SourceUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+    SourceTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(SourceUnitRef.ObjectID);
+    SourceTrack.VisualizeActor = History.GetVisualizer(SourceUnitRef.ObjectID);
+
+    SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    SoundAndFlyOver.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'Overwatch', eColor_Good, AbilityTemplate.IconImage);
+
+    PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    PlayAnimationAction.Params.AnimName = AbilityTemplate.CustomFireAnim;
+    PlayAnimationAction.bFinishAnimationWait = true;
+
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+    {
+        if (EffectState.ApplyEffectParameters.EffectRef.SourceTemplateName == AbilityTemplate.DataName)
+        {
+            TargetUnitRef = EffectState.ApplyEffectParameters.TargetStateObjectRef;
+            
+            if (TargetUnitRef.ObjectID != 0 && TargetUnitRef.ObjectID != SourceUnitRef.ObjectID)
+            {
+                TargetTrack = EmptyTrack;
+                TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+                TargetTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
+                TargetTrack.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
+
+                SoundAndFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, context, false, TargetTrack.LastActionAdded));
+                SoundAndFlyoverTarget.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', eColor_Good, AbilityTemplate.IconImage);
+            }
+        }
+    }
 }
 
 static function X2AbilityTemplate ColdBlooded()
@@ -416,8 +673,33 @@ static function X2AbilityTemplate ColdBlooded()
     Effect.ActivationsPerTurn = `GetConfigInt("M31_ColdBlooded_ActivationsPerTurn");
     Effect.AllowedAbilities = default.ColdBlooded_AllowedAbilities;
     Effect.AllowedEffects = default.ColdBlooded_AllowedEffects;
+    Effect.bMatchSourceWeapon = false;
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate CombatAdvance()
+{
+    local X2AbilityTemplate             Template;
+    local X2Effect_GrantActionPoints    ActionPointEffect;
+    local array<name>                   SkipExclusions;
+    
+    Template = MovingMelee('M31_CombatAdvance', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_Reckoning", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
+
+    SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+
+    AddActionPointCost(Template, eCost_Single);
+    AddCooldown(Template, `GetConfigInt("M31_CombatAdvance_Cooldown"));
+
+    ActionPointEffect = new class'X2Effect_GrantActionPoints';
+    ActionPointEffect.NumActionPoints = 1;
+    ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.MoveActionPoint;
+    Template.AddShooterEffect(ActionPointEffect);
 
     return Template;
 }
@@ -443,13 +725,22 @@ static function X2AbilityTemplate CovertParkour()
     return Template;
 }
 
-
-
 static function X2AbilityTemplate DeathAdder()
 {
-    local X2AbilityTemplate                         Template;
+    local X2AbilityTemplate Template;
+    local X2Effect_Shredder DamageEffect;
 
-    Template = Attack('M31_DeathAdder', "img:///UILibrary_PerkIcons.UIPerk_ruptured", false, true);
+    Template = Attack('M31_DeathAdder', "img:///UILibrary_PerkIcons.UIPerk_ruptured", false, false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+
+    DamageEffect = new class'X2Effect_Shredder';
+    DamageEffect.bBypassSustainEffects = true;
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+    Template.AddTargetEffect(DamageEffect);
+
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
     AddActionPointCost(Template, eCost_WeaponConsumeAll);
     AddAmmoCost(Template, 1);
@@ -469,7 +760,17 @@ static function X2AbilityTemplate DeathAdderBonus()
 
     Effect = new class'X2Effect_DeathAdderBonus';
     Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate DedicatedOverwatch()
+{
+    local X2AbilityTemplate Template;
+
+    Template = Passive('M31_DedicatedOverwatch', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_defense", false, true);
 
     return Template;
 }
@@ -523,41 +824,91 @@ static function X2AbilityTemplate DervishTrigger()
     return Template;
 }
 
+static function X2AbilityTemplate DisarmingShot()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityCooldown_Extended    Cooldown;
+
+    Template = Attack('M31_DisarmingShot', "img:///UILibrary_MeristPerkIcons.UIPerk_DisarmingShot", false, true);
+    
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
+    Template.HideIfAvailable.AddItem('M31_DisarmingShot_SnapShot');
+
+    AddActionPointCost(Template, eCost_WeaponConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt("M31_DisarmingShot_AmmoCost"));
+
+    Cooldown = new class'X2AbilityCooldown_Extended';
+    Cooldown.iNumTurns = `GetConfigInt("M31_DisarmingShot_Cooldown");
+    Cooldown.AddAdditionalCooldownInfo('M31_DisarmingShot_SnapShot',, true);
+    Template.AbilityCooldown = Cooldown;
+
+    // Template.AbilityTargetConditions.AddItem(new class'X2Condition_DisarmWeapon');
+    Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
+    Template.AddTargetEffect(CreateDisarmingShotEffect(Template));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    Template.AdditionalAbilities.AddItem('M31_DisarmingShot_SnapShot');
+
+    return Template;
+}
+
+static function X2AbilityTemplate DisarmingShotSnap()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityCooldown_Extended    Cooldown;
+    local X2Condition_AbilityProperty   AbilityCondition;
+    local X2Condition_SnapShotAction    SnapShotActionCondition;
+
+    Template = Attack('M31_DisarmingShot_SnapShot', "img:///UILibrary_MeristPerkIcons.UIPerk_DisarmingShot", false, true);
+    
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+    // Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt("M31_DisarmingShot_AmmoCost"));
+
+    Cooldown = new class'X2AbilityCooldown_Extended';
+    Cooldown.iNumTurns = `GetConfigInt("M31_DisarmingShot_Cooldown");
+    Cooldown.AddAdditionalCooldownInfo('M31_DisarmingShot',, true);
+    Template.AbilityCooldown = Cooldown;
+
+    // Template.AbilityTargetConditions.AddItem(new class'X2Condition_DisarmWeapon');
+    Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
+    Template.AddTargetEffect(CreateDisarmingShotEffect(Template));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    
+    AbilityCondition = new class'X2Condition_AbilityProperty';
+    AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
+    Template.AbilityShooterConditions.Additem(AbilityCondition);
+
+    SnapShotActionCondition = new class'X2Condition_SnapShotAction';
+    SnapShotActionCondition.StandardAbilityName = 'M31_DisarmingShot';
+    Template.AbilityShooterConditions.Additem(SnapShotActionCondition);
+    
+    return Template;
+}
+
 static function X2AbilityTemplate Duskborn()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_ToHitModifier            Effect;
-    local X2Condition_UnitProperty          StealthCondition;
-    local X2Condition_UnitProperty          NoStealthCondition;
-    local X2Condition_UnitEffectsOnSource   EffectCondition;
+    local X2Effect_Duskborn                  Effect;
 
     Template = Passive('M31_Duskborn', "img:///UILibrary_XPerkIconPack.UIPerk_stealth_shot2", false, true);
 
-    Effect = new class'X2Effect_ToHitModifier';
-    Effect.EffectName = 'M31_Duskborn';
-    Effect.DuplicateResponse = eDupe_Ignore;
+    Effect = new class'X2Effect_Duskborn';
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.AddEffectHitModifier(eHit_Success, `GetConfigInt("M31_Duskborn_AimBonus"), Template.LocFriendlyName);
-    Effect.AddEffectHitModifier(eHit_Crit, `GetConfigInt("M31_Duskborn_CritBonus"), Template.LocFriendlyName);
-
-    StealthCondition = new class 'X2Condition_UnitProperty';
-    StealthCondition.IsConcealed = true;
-    Effect.ToHitConditions.AddItem(StealthCondition);
-
-    Effect = new class'X2Effect_ToHitModifier';
-    Effect.EffectName = 'M31_Duskborn_Lasting';
-    Effect.DuplicateResponse = eDupe_Ignore;
-    Effect.BuildPersistentEffect(1, true, false);
-    Effect.AddEffectHitModifier(eHit_Success, `GetConfigInt("M31_Duskborn_AimBonus"), Template.LocFriendlyName);
-    Effect.AddEffectHitModifier(eHit_Crit, `GetConfigInt("M31_Duskborn_CritBonus"), Template.LocFriendlyName);
-
-    NoStealthCondition = new class 'X2Condition_UnitProperty';
-    NoStealthCondition.ExcludeConcealed = true;
-    Effect.ToHitConditions.AddItem(NoStealthCondition);
-
-    EffectCondition = new class'X2Condition_UnitEffectsOnSource';
-    EffectCondition.AddRequireEffect('M31_Duskborn_Valid', 'AA_MissingRequiredEffect');
-    Effect.ToHitConditions.AddItem(EffectCondition);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
 
     Template.AdditionalAbilities.AddItem('M31_Duskborn_Trigger');
 
@@ -577,15 +928,44 @@ static function X2AbilityTemplate DuskbornTrigger()
     Trigger.ListenerData.EventID = 'UnitConcealmentBroken';
     Trigger.ListenerData.Filter = eFilter_Unit;
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-    Trigger.ListenerData.Priority = 56;
+    Trigger.ListenerData.Priority = 60;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Effect = new class'X2Effect_Persistent';
-    Effect.EffectName = 'M31_Duskborn_Valid';
+    Effect.EffectName = class'X2Effect_Duskborn'.default.RequiredEffect;
     Effect.DuplicateResponse = eDupe_Refresh;
     Effect.BuildPersistentEffect(`GetConfigInt("M31_Duskborn_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Duskborn_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate EMPBomber()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_AddGrenade   Effect;
+    // local X2Condition_SourceHasOneOfTheAbilities Condition;
+
+    Template = Passive('M31_EMPBomber', "img:///UILibrary_MeristPerkIcons.UIPerk_EMPPlus", false, true);
+    
+    Effect = new class'X2Effect_AddGrenade';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'EMPGrenade';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    // Condition = new class'X2Condition_SourceHasOneOfTheAbilities';
+    // Condition.AbilityNames = default.ShockGrenadier_AdditionalCharge_AllowedAbilities;
+
+    // Effect = new class'X2Effect_AddGrenade';
+    // Effect.bAllowUpgrades = true;
+    // Effect.DataName = 'EMPGrenade';
+    // Effect.SkipAbilities.AddItem('SmallItemWeight');
+    // Effect.BuildPersistentEffect(1, true, false);
+    // Effect.TargetConditions.AddItem(Condition);
+    // Template.AddTargetEffect(Effect);
 
     return Template;
 }
@@ -609,7 +989,7 @@ static function X2AbilityTemplate EnemyUnknownTrigger()
 
     Template = SelfTargetTrigger('M31_EnemyUnknown_Trigger', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_shadow");
 
-    Trigger = new class'X2AbilityTrigger_EventListener';	
+    Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.EventID = 'PlayerTurnBegun';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.Filter = eFilter_Player;
@@ -686,7 +1066,7 @@ static function X2AbilityTemplate EnergyShield()
     ShieldEffect.bGetShieldAmountFromArmor = true;
     ShieldEffect.BuildPersistentEffect(`GetConfigInt("M31_EnergyShield_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
     ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Shield_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
-    ShieldEffect.EffectRemovedVisualizationFn = class'X2AbilitySet_PlayableAliens'.static.OnShieldRemoved_BuildVisualization;
+    ShieldEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.static.OnShieldRemoved_BuildVisualization;
     Template.AddTargetEffect(ShieldEffect);
     Template.AddMultiTargetEffect(ShieldEffect);
     
@@ -733,7 +1113,7 @@ static function X2AbilityTemplate EnhancedLowProfile()
     local X2AbilityTemplate                 Template;
     local X2Effect_EnhancedLowProfile       Effect;
     
-    Template = Passive('M31_LowProfile', "img:///UILibrary_LW_PerkPack.LW_AbilityLowProfile", false, true);
+    Template = Passive('M31_LowProfile', "img:///UILibrary_MeristPerkIcons.UIPerk_LowProfile", false, true);
 
     Effect = new class'X2Effect_EnhancedLowProfile';
     Effect.BuildPersistentEffect(1, true, false);
@@ -848,6 +1228,8 @@ static function X2AbilityTemplate EntrenchTrigger()
     UnitValueEffect.CleanupType = eCleanup_BeginTurn;
     Template.AddTargetEffect(UnitValueEffect);
 
+    Template.bShowActivation = true;
+
     return Template;
 }
 
@@ -912,7 +1294,7 @@ static function X2AbilityTemplate FutureWarfare()
 {
     local X2AbilityTemplate                 Template;
 
-    Template = Passive('M31_FutureWarfare', "img:///UILibrary_MeristPerkIcons.UIPerk_FutureWarfare", false, true);
+    Template = Passive('M31_FutureWarfare', "img:///UILibrary_MZChimeraIcons.Ability_Recharge", false, true);
     
     Template.AdditionalAbilities.AddItem('M31_FutureWarfare_Trigger');
 
@@ -981,28 +1363,30 @@ static function EventListenerReturn AbilityTriggerEventListener_FutureWarfare(Ob
 
 static function X2AbilityTemplate GenevaSuggestion()
 {
-    local X2AbilityTemplate                                 Template;
-    local X2Effect_AddGrenade                               Effect;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory    GrenadeLauncherCondition;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory    RocketLauncherCondition;
+    local X2AbilityTemplate     Template;
+    local X2Effect_AddGrenade   Effect;
+    // local X2Condition_ValidWeapon   GrenadeLauncherCondition;
+    // local X2Condition_ValidWeapon   RocketLauncherCondition;
 
     Template = Passive('M31_GenevaSuggestion', "img:///KetarosPkg_Abilities.UIPerk_bomb", false, false);
 
-    GrenadeLauncherCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    GrenadeLauncherCondition.AllowedWeaponCategories.AddItem('grenade_launcher');
-    GrenadeLauncherCondition.bCheckSpecificSlot = true;
-    GrenadeLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
+    // GrenadeLauncherCondition = new class'X2Condition_ValidWeapon';
+    // GrenadeLauncherCondition.AllowedWeaponCategories.AddItem('grenade_launcher');
+    // GrenadeLauncherCondition.bCheckSpecificSlot = true;
+    // GrenadeLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
 
-    RocketLauncherCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    RocketLauncherCondition.AllowedWeaponCategories.AddItem('iri_rocket_launcher');
-    RocketLauncherCondition.bCheckSpecificSlot = true;
-    RocketLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
+    // RocketLauncherCondition = new class'X2Condition_ValidWeapon';
+    // RocketLauncherCondition.AllowedWeaponCategories.AddItem('iri_rocket_launcher');
+    // RocketLauncherCondition.bCheckSpecificSlot = true;
+    // RocketLauncherCondition.bValidateTier = true;
+    // RocketLauncherCondition.ExcludedWeaponTiers.AddItem('conventional');
+    // RocketLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
 
     Effect = new class'X2Effect_AddGrenade';
     Effect.bAllowUpgrades = true;
     Effect.DataName = 'AcidGrenade';
     Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
+    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
@@ -1010,7 +1394,7 @@ static function X2AbilityTemplate GenevaSuggestion()
     Effect.bAllowUpgrades = true;
     Effect.DataName = 'GasGrenade';
     Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
+    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
@@ -1018,25 +1402,95 @@ static function X2AbilityTemplate GenevaSuggestion()
     Effect.bAllowUpgrades = true;
     Effect.DataName = 'Firebomb';
     Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
+    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
-    Effect= new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = false;
-    Effect.DataName = 'IRI_X2Rocket_Napalm';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.TargetConditions.AddItem(RocketLauncherCondition);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+    // Effect= new class'X2Effect_AddGrenade';
+    // Effect.bAllowUpgrades = false;
+    // Effect.DataName = 'IRI_X2Rocket_Napalm';
+    // Effect.SkipAbilities.AddItem('SmallItemWeight');
+    // Effect.TargetConditions.AddItem(RocketLauncherCondition);
+    // Effect.BuildPersistentEffect(1, true, false);
+    // Template.AddTargetEffect(Effect);
 
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = false;
-    Effect.DataName = 'IRI_X2Rocket_WhitePh';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.TargetConditions.AddItem(RocketLauncherCondition);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+    // Effect = new class'X2Effect_AddGrenade';
+    // Effect.bAllowUpgrades = false;
+    // Effect.DataName = 'IRI_X2Rocket_WhitePh';
+    // Effect.SkipAbilities.AddItem('SmallItemWeight');
+    // Effect.TargetConditions.AddItem(RocketLauncherCondition);
+    // Effect.BuildPersistentEffect(1, true, false);
+    // Template.AddTargetEffect(Effect);
+    
+    return Template;
+}
+
+static function X2AbilityTemplate Maim()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityCooldown_Extended    Cooldown;
+
+    Template = Attack('M31_Maim', "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom", false, true);
+    
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_HideIfOtherAvailable;
+    Template.HideIfAvailable.AddItem('M31_Maim_SnapShot');
+
+    AddActionPointCost(Template, eCost_WeaponConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt("M31_Maim_AmmoCost"));
+
+    Cooldown = new class'X2AbilityCooldown_Extended';
+    Cooldown.iNumTurns = `GetConfigInt("M31_Maim_Cooldown");
+    Cooldown.AddAdditionalCooldownInfo('M31_Maim_SnapShot',, true);
+    Template.AbilityCooldown = Cooldown;
+
+    Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateMaimedStatusEffect(, Template.AbilitySourceName));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    Template.AdditionalAbilities.AddItem('M31_Maim_SnapShot');
+
+    return Template;
+}
+
+static function X2AbilityTemplate MaimSnap()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityCooldown_Extended    Cooldown;
+    local X2Condition_AbilityProperty   AbilityCondition;
+    local X2Condition_SnapShotAction    SnapShotActionCondition;
+
+    Template = Attack('M31_Maim_SnapShot', "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom", false, true);
+    
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_ShowIfAvailable;
+    // Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt("M31_Maim_AmmoCost"));
+
+    Cooldown = new class'X2AbilityCooldown_Extended';
+    Cooldown.iNumTurns = `GetConfigInt("M31_Maim_Cooldown");
+    Cooldown.AddAdditionalCooldownInfo('M31_Maim',, true);
+    Template.AbilityCooldown = Cooldown;
+
+    Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateMaimedStatusEffect(, Template.AbilitySourceName));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    
+    AbilityCondition = new class'X2Condition_AbilityProperty';
+    AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
+    Template.AbilityShooterConditions.Additem(AbilityCondition);
+
+    SnapShotActionCondition = new class'X2Condition_SnapShotAction';
+    SnapShotActionCondition.StandardAbilityName = 'M31_Maim';
+    Template.AbilityShooterConditions.Additem(SnapShotActionCondition);
     
     return Template;
 }
@@ -1046,6 +1500,177 @@ static function X2AbilityTemplate ImprovedSuppression()
     local X2AbilityTemplate                 Template;
     
     Template = Passive('M31_ImprovedSuppression', "img:///UILibrary_SOInfantry.UIPerk_improvedsuppression", false, true);
+
+    return Template;
+}
+
+static function X2AbilityTemplate LowProfileNest()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_LowProfileNest           Effect;
+    
+    Template = Passive('M31_LowProfileNest', "img:///UILibrary_PerkIcons.UIPerk_eaglesnest", false, true);
+
+    Effect = new class'X2Effect_LowProfileNest';
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate Malevolence()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_MarkedBonus              Effect;
+    local X2Effect_Malevolence_RuptureBonus RuptureEffect;
+    local X2Effect_PassiveWeaponEffect      PassiveWeaponEffect;
+    
+    Template = Passive('M31_Malevolence', "img:///UILibrary_MeristPerkIcons.UIPerk_Malevolence", false, true);
+
+    Effect = new class'X2Effect_MarkedBonus';
+    Effect.AllowedEffects.AddItem(class'X2StatusEffects'.default.AcidBurningName);
+    Effect.ShredBonus = `GetConfigInt("M31_Malevolence_AcidBurning_ShredBonus");
+    Effect.bMatchSourceWeapon = false;
+    Effect.bApplyToRanged = true;
+    Effect.bApplyToMelee = true;
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    Effect = new class'X2Effect_MarkedBonus';
+    Effect.AllowedEffects.AddItem(class'X2StatusEffects'.default.BleedingName);
+    Effect.AllowedEffects.AddItem('StackBleed');
+    Effect.CritBonus = `GetConfigInt("M31_Malevolence_Bleeding_CritBonus");
+    Effect.CritDamageBonus = `GetConfigInt("M31_Malevolence_Bleeding_CritDamageBonus");
+    Effect.bMatchSourceWeapon = false;
+    Effect.bApplyToRanged = true;
+    Effect.bApplyToMelee = true;
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    RuptureEffect = new class'X2Effect_Malevolence_RuptureBonus';
+    RuptureEffect.AllowedEffects.AddItem('MinorRequiemCorrosion');
+    RuptureEffect.AllowedEffects.AddItem('RequiemCorrosion');
+    RuptureEffect.AllowedEffects.AddItem('HeavyRequiemCorrosion');
+    RuptureEffect.AllowedEffects.AddItem('SevereRequiemCorrosion');
+    RuptureEffect.AllowedEffects.AddItem('PsiRipple');
+    RuptureEffect.bMatchSourceWeapon = false;
+    RuptureEffect.bApplyToRanged = true;
+    RuptureEffect.bApplyToMelee = true;
+    RuptureEffect.BuildPersistentEffect(1, true, false);
+    RuptureEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(RuptureEffect);
+
+    PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
+    PassiveWeaponEffect.EffectName = 'M31_Malevolence_Passive';
+    PassiveWeaponEffect.AttackName = 'M31_Malevolence_Trigger';
+    PassiveWeaponEffect.EventPriority = 45;
+    PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(PassiveWeaponEffect);
+
+    Template.AdditionalAbilities.AddItem('M31_Malevolence_Trigger');
+
+    return Template;
+}
+
+static function X2AbilityTemplate MalevolenceAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_TargetHasOneOfTheEffects  EffectCondition;
+    local X2Effect_DamagePenalty            RadiationEffect;
+    local X2Effect_VileMix                  BurningEffect;
+    local X2Effect_ToHitModifier            PoisonedEffect;
+    local X2Effect_PersistentStatChange     FrostEffect;
+
+    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
+        'M31_Malevolence_Trigger',
+        "img:///UILibrary_MeristPerkIcons.UIPerk_Malevolence"
+    );
+
+    // RADIATION
+
+    EffectCondition = new class'X2Condition_TargetHasOneOfTheEffects';
+    EffectCondition.EffectNames.AddItem(class'X2StatusEffects_Radiation'.default.RadDisorientedName);
+    EffectCondition.EffectNames.AddItem(class'X2StatusEffects_Radiation'.default.RadBurningName);
+    EffectCondition.EffectNames.AddItem(class'X2StatusEffects_Radiation'.default.RadBleedingName);
+    EffectCondition.EffectNames.AddItem('EleriumPoisoning');
+
+    RadiationEffect = new class'X2Effect_DamagePenalty';
+    RadiationEffect.DamagePenaltyPrc = `GetConfigInt("M31_Malevolence_Radiation_DamageReductionPrc");
+    RadiationEffect.bCeiling = true;
+
+    RadiationEffect.EffectName = 'M31_Malevolence_RadiationEffect';
+    RadiationEffect.DuplicateResponse = eDupe_Refresh;
+    RadiationEffect.BuildPersistentEffect(`GetConfigInt("M31_Malevolence_Radiation_DebuffDuration"), false, false, false, eGameRule_PlayerTurnEnd);
+    RadiationEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Malevolence_Radiation_FriendlyName"), `GetLocalizedString("M31_Malevolence_Radiation_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_andromedon_acidblob", true,, Template.AbilitySourceName);
+    RadiationEffect.TargetConditions.AddItem(EffectCondition);
+    Template.AddTargetEffect(RadiationEffect);
+    
+    // BURNING
+
+    EffectCondition = new class'X2Condition_TargetHasOneOfTheEffects';
+    EffectCondition.EffectNames.AddItem(class'X2StatusEffects'.default.BurningName);
+
+    BurningEffect = new class'X2Effect_VileMix';
+    BurningEffect.DOTDamageBonus = `GetConfigInt("M31_Malevolence_Burning_DOTDamageBonus");
+
+    BurningEffect.EffectName = 'M31_Malevolence_BurningEffect';
+    BurningEffect.DuplicateResponse = eDupe_Refresh;
+    BurningEffect.BuildPersistentEffect(`GetConfigInt("M31_Malevolence_Burning_DebuffDuration"), false, false, false, eGameRule_PlayerTurnEnd);
+    BurningEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Malevolence_Burning_FriendlyName"), `GetLocalizedString("M31_Malevolence_Burning_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_andromedon_acidblob", true,, Template.AbilitySourceName);
+    BurningEffect.TargetConditions.AddItem(EffectCondition);
+    Template.AddTargetEffect(BurningEffect);
+
+    // POISONED
+
+    EffectCondition = new class'X2Condition_TargetHasOneOfTheEffects';
+    EffectCondition.EffectNames.AddItem(class'X2StatusEffects'.default.PoisonedName);
+    EffectCondition.EffectNames.AddItem(class'X2Effect_ParthenogenicPoison'.default.EffectName);
+    EffectCondition.EffectNames.AddItem('EleriumPoisoning');
+
+    PoisonedEffect = new class'X2Effect_ToHitModifier';
+    PoisonedEffect.AddEffectHitModifier(eHit_Crit, -1 * `GetConfigInt("M31_Malevolence_Poisoned_CritPenalty"), Template.LocFriendlyName);
+    PoisonedEffect.AddEffectHitModifier(eHit_Graze, `GetConfigInt("M31_Malevolence_Poisoned_GrazePenalty"), Template.LocFriendlyName);
+
+    PoisonedEffect.EffectName = 'M31_Malevolence_PoisonedEffect';
+    PoisonedEffect.DuplicateResponse = eDupe_Allow;
+    PoisonedEffect.BuildPersistentEffect(`GetConfigInt("M31_Malevolence_Poisoned_DebuffDuration"), false, false, false, eGameRule_PlayerTurnEnd);
+    PoisonedEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Malevolence_Poisoned_FriendlyName"), `GetLocalizedString("M31_Malevolence_Poisoned_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_andromedon_acidblob", true,, Template.AbilitySourceName);
+    PoisonedEffect.TargetConditions.AddItem(EffectCondition);
+    Template.AddTargetEffect(PoisonedEffect);
+
+    // FROST
+
+    EffectCondition = new class'X2Condition_TargetHasOneOfTheEffects';
+    EffectCondition.EffectNames.AddItem(class'MZ_Effect_Hypothermia'.default.EffectName);
+    // EffectCondition.EffectNames.AddItem('Chilled');
+    // EffectCondition.EffectNames.AddItem('MZChill');
+    // EffectCondition.EffectNames.AddItem('MZBitterChill');
+    // EffectCondition.EffectNames.AddItem('Freeze');
+
+    FrostEffect = new class'X2Effect_PersistentStatChange';
+    FrostEffect.EffectName = 'M31_Malevolence_FrostEffect';
+    FrostEffect.DuplicateResponse = eDupe_Allow;
+
+    FrostEffect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_Malevolence_Frost_AimPenalty"));
+    FrostEffect.AddPersistentStatChange(eStat_Defense, -1 * `GetConfigInt("M31_Malevolence_Frost_DefensePenalty"));
+
+    FrostEffect.BuildPersistentEffect(`GetConfigInt("M31_Malevolence_Frost_DebuffDuration"), false, false, false, eGameRule_PlayerTurnEnd);
+    FrostEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Malevolence_Frost_FriendlyName"), `GetLocalizedString("M31_Malevolence_Frost_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_andromedon_acidblob", true,, Template.AbilitySourceName);
+    FrostEffect.TargetConditions.AddItem(EffectCondition);
+    Template.AddTargetEffect(FrostEffect);
+    
+    return Template;
+}
+
+
+static function X2AbilityTemplate MarauderElite()
+{
+    local X2AbilityTemplate                 Template;
+    
+    Template = Passive('M31_MarauderElite', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_strike", false, true);
 
     return Template;
 }
@@ -1087,6 +1712,24 @@ static function Meld_EffectRemoved(X2Effect_Persistent PersistentEffect, const o
         `XEVENTMGR.TriggerEvent('EffectBreakUnitConcealment', UnitState, UnitState, NewGameState);
 }
 
+static function X2AbilityTemplate Minelayer2()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_AddGrenade               Effect;
+
+    Template = Passive('M31_Minelayer2', "img:///UILibrary_MZChimeraIcons.Item_TeleportDisc", false, true);
+        
+    Effect = new class'X2Effect_AddGrenade';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'ProximityMine';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate NeurotoxicShot()
 {
     local X2AbilityTemplate                 Template;
@@ -1095,6 +1738,8 @@ static function X2AbilityTemplate NeurotoxicShot()
     local X2Effect_Persistent               DisorientedEffect;
 
     Template = Attack('M31_NeurotoxicShot', "img:///UILibrary_MZChimeraIcons.Ability_ToxicGreeting", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
 
     AddActionPointCost(Template, eCost_WeaponConsumeAll);
     AddAmmoCost(Template, 1);
@@ -1118,25 +1763,102 @@ static function X2AbilityTemplate NeurotoxicShot()
     return Template;
 }
 
+static function X2AbilityTemplate OnTheMove()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_OnTheMove                Effect;
+    
+    Template = Passive('M31_OnTheMove', "img:///UILibrary_MZChimeraIcons.Ability_Dash", false, true);
+
+    Effect = new class'X2Effect_OnTheMove';
+    Effect.AddPersistentStatChange(eStat_Mobility, 1.0 - `GetConfigInt("M31_OnTheMove_MobilityPenaltyPrc") / 100.0, MODOP_PostMultiplication);
+    Effect.BuildPersistentEffect(1, true);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate OverchargedBlast()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StandardAim    StandardAim;
+    local X2Effect_Shredder                 DamageEffect;
+
+    Template = Attack('M31_OverchargedBlast', "img:///UILibrary_MeristPerkIcons.UIPerk_Blast", false, false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+
+    AddActionPointCost(Template, eCost_WeaponConsumeAll);
+    AddAmmoCost(Template, `GetConfigInt("M31_OverchargedBlast_AmmoCost"));
+    AddCooldown(Template, `GetConfigInt("M31_OverchargedBlast_Cooldown"));
+    AddCharges(Template, `GetConfigInt("M31_OverchargedBlast_Charges"));
+
+    StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+    StandardAim.bHitsAreCrits = `GetConfigBool("M31_OverchargedBlast_bGuaranteedCrit");
+    Template.AbilityToHitCalc = StandardAim;
+    Template.AbilityToHitOwnerOnMissCalc = StandardAim;
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+
+    DamageEffect = new class'X2Effect_Shredder';
+    DamageEffect.EffectDamageValue.Shred = `GetConfigInt("M31_OverchargedBlast_Shred");
+    DamageEffect.EffectDamageValue.Rupture = `GetConfigInt("M31_OverchargedBlast_Rupture");
+    Template.AddTargetEffect(DamageEffect);
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+    return Template;
+}
+
+static function X2AbilityTemplate Overpower()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Effect_ApplyWeaponDamage        ShredEffect;
+    local array<name>                       SkipExclusions;
+    
+    Template = MovingMelee('M31_Overpower', "img:///UILibrary_SOCombatEngineer.UIPerk_fracture", false, false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+    AddCooldown(Template, `GetConfigInt("M31_Overpower_Cooldown"));
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.ExcludeLargeUnits = true;
+
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(`GetConfigInt("M31_Overpower_StunDuration"), 100, false));
+    Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+
+    ShredEffect = new class'X2Effect_ApplyWeaponDamage';
+    ShredEffect.bBypassShields = true;
+    ShredEffect.bIgnoreBaseDamage = true;
+    ShredEffect.bAllowFreeKill = false;
+    ShredEffect.bAllowWeaponUpgrade = false;
+    ShredEffect.bAppliesDamage = false;
+    ShredEffect.EffectDamageValue.Shred = `GetConfigInt("M31_Overpower_Shred");
+    ShredEffect.EffectDamageValue.DamageType = 'Melee';
+    Template.AddTargetEffect(ShredEffect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate Overseer()
 {
-    local X2AbilityTemplate                                     Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        SniperRifleCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          SniperRifleAbilityEffect;
+    local X2AbilityTemplate Template;
+    local array<name> AbilitiesToAdd;
 
     Template = Passive('M31_Overseer', "img:///KetarosPkg_Abilities.UIPerk_SniperRifle05", false, false);
     
-    SniperRifleCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    SniperRifleCondition.AllowedWeaponCategories = default.TrainedSniper_AllowedCategories;
-    SniperRifleCondition.bCheckSpecificSlot = true;
-    SniperRifleCondition.SpecificSlot = eInvSlot_PrimaryWeapon;
+    AbilitiesToAdd.AddItem('Squadsight');
+    AbilitiesToAdd.AddItem('M31_SnipersOverwatch');
 
-    SniperRifleAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
-    SniperRifleAbilityEffect.AddAbilities.AddItem('Squadsight');
-    SniperRifleAbilityEffect.AddAbilities.AddItem('M31_SnipersOverwatch');
-    SniperRifleAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
-    SniperRifleAbilityEffect.TargetConditions.AddItem(SniperRifleCondition);
-    Template.AddTargetEffect(SniperRifleAbilityEffect);
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.TrainedSniper_AllowedCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
@@ -1149,7 +1871,7 @@ static function X2AbilityTemplate PerfectHandling()
     Template = Passive('M31_PerfectHandling', "img:///UILibrary_SOHunter.UIPerk_point_blank", false, true);
 
     Effect = new class'X2Effect_ModifyRangePenalties';
-    Effect.RangePenaltyMultiplier = `GetConfigFloat("M31_PerfectHandling_PenaltyModifier");
+    Effect.RangeOffsetPrc = `GetConfigInt("M31_PerfectHandling_PenaltyModifier");
     Effect.BaseRange = `GetConfigInt("M31_PerfectHandling_BaseRange");
     Effect.bLongRange = true;
     Effect.BuildPersistentEffect(1, true, false);
@@ -1163,6 +1885,8 @@ static function X2AbilityTemplate Pinpoint()
     local X2AbilityTemplate             Template;
 
     Template = Attack('M31_Pinpoint', "img:///UILibrary_MZChimeraIcons.WeaponMod_LaserSight_Sup", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 
     AddActionPointCost(Template, eCost_WeaponConsumeAll);
     AddAmmoCost(Template, 1);
@@ -1182,6 +1906,7 @@ static function X2AbilityTemplate PinpointBonus()
 
     Effect = new class'X2Effect_PinpointBonus';
     Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -1196,6 +1921,24 @@ static function X2AbilityTemplate PipeBombs()
     return Template;
 }
 
+static function X2AbilityTemplate PriorityFocus()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_MarkedBonus      Effect;
+
+    Template = Passive('M31_PriorityFocus', "img:///UILibrary_LWOTC.LW_AbilityVitalPointTargeting", false, true);
+    
+    Effect = new class'X2Effect_MarkedBonus';
+    Effect.AllowedEffects = default.PriorityFocus_AllowedEffects;
+    Effect.DamageBonus = `GetConfigInt("M31_PriorityFocus_DamageBonus");
+    Effect.bApplyToRanged = true;
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate RapidDumping()
 {
     local X2AbilityTemplate                 Template;
@@ -1205,15 +1948,274 @@ static function X2AbilityTemplate RapidDumping()
     return Template;
 }
 
-static function X2AbilityTemplate Relentless()
+static function X2AbilityTemplate PistolDetonationShot()
 {
     local X2AbilityTemplate                 Template;
-    local X2Effect_Relentless               Effect;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2Effect_TriggerEvent             InsanityEvent;
+
+    Template = Attack('M31_PistolDetonationShot', "img:///UILibrary_MZChimeraIcons.Ability_TargetGrenade", false, false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = true;
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('Quickdraw');
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('DP_BulletTime');
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_PistolDetonationShot_Cooldown"));
+    AddAmmoCost(Template, `GetConfigInt("M31_DetonationShot_AmmoCost"));
+
+    Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    Template.TargetingMethod = class'X2TargetingMethod_Fuse';
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_FuseTarget');
+
+    InsanityEvent = new class'X2Effect_TriggerEvent';
+    InsanityEvent.TriggerEventName = class'X2Ability_PsiOperativeAbilitySet'.default.FuseEventName;
+    InsanityEvent.ApplyChance = 100;
+    Template.AddTargetEffect(InsanityEvent);
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    Template.DamagePreviewFn = DetonationShotDamagePreview;
+
+    return Template;
+}
+
+function bool DetonationShotDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    local XComGameStateHistory History;
+    local XComGameState_Ability FuseTargetAbility;
+    local XComGameState_Unit TargetUnit;
+    local StateObjectReference EmptyRef, FuseRef;
+
+    AbilityState.NormalDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+
+    History = `XCOMHISTORY;
+    TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(TargetRef.ObjectID));
+    if (TargetUnit != none)
+    {
+        if (class'X2Condition_FuseTarget'.static.GetAvailableFuse(TargetUnit, FuseRef))
+        {
+            FuseTargetAbility = XComGameState_Ability(History.GetGameStateForObjectID(FuseRef.ObjectID));
+            if (FuseTargetAbility != None)
+            {
+                FuseTargetAbility.GetDamagePreview(EmptyRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static function X2AbilityTemplate PistolDisarmingShot()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityCost_ActionPoints    ActionPointCost;
+
+    Template = Attack('M31_PistolDisarmingShot', "img:///UILibrary_MeristPerkIcons.UIPerk_DisarmingShot", false, false);
+    
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = true;
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('Quickdraw');
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('DP_BulletTime');
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_PistolDisarmingShot_Cooldown"));
+    AddAmmoCost(Template, `GetConfigInt("M31_DisarmingShot_AmmoCost"));
+
+    Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+    // Template.AbilityTargetConditions.AddItem(new class'X2Condition_DisarmWeapon');
+    Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
+    Template.AddTargetEffect(CreateDisarmingShotEffect(Template));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    return Template;
+}
+
+static function X2Effect_ToHitModifier CreateDisarmingShotEffect(X2AbilityTemplate Template)
+{
+    local X2Effect_ToHitModifier Effect;
+
+    Effect = new class'X2Effect_ToHitModifier';
+    Effect.EffectName = 'M31_DisarmingShot_Penalty';
+    Effect.AddEffectHitModifier(eHit_Success, `GetConfigInt("M31_DisarmingShot_AimPenalty"), Template.LocFriendlyName);
+    Effect.AddEffectHitModifier(eHit_Crit, `GetConfigInt("M31_DisarmingShot_CritPenalty"), Template.LocFriendlyName);
+    Effect.BuildPersistentEffect(`GetConfigInt("M31_DisarmingShot_Duration"), false, false, true, eGameRule_PlayerTurnEnd);
+    Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_DisarmingShot_DebuffText"), Template.IconImage,,, Template.AbilitySourceName);
+    Effect.DuplicateResponse = eDupe_Refresh;
+
+    return Effect;
+}
+
+static function X2AbilityTemplate PistolMaim()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityCost_ActionPoints        ActionPointCost;
+
+    Template = Attack('M31_PistolMaim', "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom", false, false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = true;
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('Quickdraw');
+    ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('DP_BulletTime');
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_PistolMaim_Cooldown"));
+    AddAmmoCost(Template, `GetConfigInt("M31_Maim_AmmoCost"));
+
+    Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateMaimedStatusEffect(, Template.AbilitySourceName));
+
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    return Template;
+}
+
+static function X2AbilityTemplate ReflexShot()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_ReflexShot', "img:///UILibrary_MeristPerkIcons.UIPerk_ReflexShot", false, true);
+    
+    Template.AdditionalAbilities.AddItem('M31_ReflexShot_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate ReflexShotAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_Visibility            VisibilityCondition;
+    local X2Condition_UnitValue             ValueCondition;
+    local X2Effect_IncrementUnitValue       UnitValueEffect;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+    local X2AbilityTarget_Single            SingleTarget;
+
+    Template = Attack('M31_ReflexShot_Attack', "img:///UILibrary_MeristPerkIcons.UIPerk_ReflexShot", false, false);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.BuildInterruptGameStateFn = none;
+
+    Template.AbilityTriggers.Length = 0;
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'ObjectMoved';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'AbilityActivated';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AbilityShooterConditions.Length = 0;
+    Template.AbilityTargetConditions.Length = 0;
+
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    VisibilityCondition.bAllowSquadsight = false;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeSquadmates = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = `GetConfigFloat("M31_ReflexShot_Radius") * class'XComWorldData'.const.WORLD_StepSize;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+    Template.AddShooterEffectExclusions();
+
+    class'M31_AbilityHelpers'.static.AddBladestormMark(Template, 'M31_ReflexShot_MarkTarget');
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    ValueCondition = new class'X2Condition_UnitValue';
+    ValueCondition.AddCheckValue('M31_ReflexShot_Counter', `GetConfigInt("M31_ReflexShot_ActivationsPerTurn"), eCheck_LessThan);
+    Template.AbilityShooterConditions.AddItem(ValueCondition);
+
+    UnitValueEffect = new class'X2Effect_IncrementUnitValue';
+    UnitValueEffect.UnitName = 'M31_ReflexShot_Counter';
+    UnitValueEffect.NewValueToSet = 1;
+    UnitValueEffect.CleanupType = eCleanup_BeginTurn;
+    UnitValueEffect.bApplyOnMiss = true;
+    Template.AddShooterEffect(UnitValueEffect);
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = `GetConfigBool("M31_ReflexShot_bReactionFire");
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+    AddAmmoCost(Template, 1);
+
+    Template.bShowActivation = true;
+
+    return Template;
+}
+
+static function X2AbilityTemplate Relentless()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_Relentless   Effect;
     
     Template = Passive('M31_Relentless', "img:///UILibrary_SOCombatEngineer.UIPerk_skirmisher", false, true);
 
     Effect = new class'X2Effect_Relentless';
+    Effect.AllowedAbilities = default.Relentless_AllowedAbilities;
     Effect.ActivationsPerTurn = `GetConfigInt("M31_Relentless_ActivationsPerTurn");
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate RepositionPlus()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_HitAndRun    Effect;
+    
+    Template = Passive('M31_RepositionPlus', "img:///UILibrary_SOCombatEngineer.UIPerk_skirmisher", false, true);
+
+    Effect = new class'X2Effect_HitAndRun';
+    Effect.CounterName = 'RepositionUses';
+    Effect.AllowedAbilities = default.Reposition_AllowedAbilities;
+    Effect.bApplyToUnflankable = `GetConfigBool("M31_RepositionPlus_bApplyToUnflankable");
+    Effect.ActivationsPerTurn = `GetConfigInt("M31_RepositionPlus_ActivationsPerTurn");
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
@@ -1222,12 +2224,517 @@ static function X2AbilityTemplate Relentless()
     return Template;
 }
 
+static function X2AbilityTemplate SaltInTheWound()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_SaltInTheWound   Effect;
+    
+    Template = Passive('M31_SaltInTheWound', "img:///UILibrary_XPerkIconPack.UIPerk_poison_shot", false, true);
+
+    Effect = new class'X2Effect_SaltInTheWound';
+    Effect.DamageBonus = `GetConfigInt("M31_SaltInTheWound_DamageBonus");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SawedOffRange()
+{
+    local X2AbilityTemplate             Template;
+    local X2Effect_ModifyRangeTable     Effect;
+    
+    Template = Passive('M31_SawedOffRange', "img:///UILibrary_SOHunter.UIPerk_point_blank", false, true);
+
+    Effect = new class'X2Effect_ModifyRangeTable';
+    Effect.IndexLast = `GetConfigInt("M31_SawedOffRange_LastIndex");
+    Effect.NewIndexLast = `GetConfigInt("M31_SawedOffRange_NewLastIndex");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SawedOffReload()
+{
+    local X2AbilityTemplate             Template;
+    local array<name>                   SkipExclusions;
+    local X2Condition_SawedOffReload    SawedOffCondition;
+    local X2Effect_ReloadWeapon         ReloadEffect;
+    local X2AbilityCharges_Tech         Charges;
+    local X2AbilityCost_Charges         ChargeCost;
+    
+    Template = SelfTargetActivated('M31_SawedOffReload', "img:///BstarsPerkPack_Icons.UIPerk_ReloadSawedOff", false);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.RELOAD_PRIORITY + 1;
+
+    SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
+
+    AddActionPointCost(Template, eCost_Single);
+
+    SawedOffCondition = new class'X2Condition_SawedOffReload';
+    SawedOffCondition.AmmoLimitBase = `GetConfigInt("M31_SawedOffReload_BaseLimit") - `GetConfigInt("M31_SawedOffReload_AmmoPerUse") + 1;
+    SawedOffCondition.PumpActionBonus = `GetConfigInt("M31_SawedOffReload_PumpAction_BonusLimit");
+    Template.AbilityShooterConditions.AddItem(SawedOffCondition);
+
+    Charges = new class'X2AbilityCharges_Tech';
+    Charges.InitialChargesFromTech = `GetConfigArrayInt("M31_SawedOffReload_Charges");
+    Charges.AddBonusCharge('PumpAction', `GetConfigInt("M31_SawedOffReload_PumpAction_BonusCharges"));
+    Template.AbilityCharges = Charges;
+
+    ChargeCost = new class'X2AbilityCost_Charges';
+    ChargeCost.NumCharges = 1;
+    Template.AbilityCosts.AddItem(ChargeCost);
+
+    ReloadEffect = new class'X2Effect_ReloadWeapon';
+    ReloadEffect.AmmoToReload = `GetConfigInt("M31_SawedOffReload_AmmoPerUse");
+    ReloadEffect.bSkipClipSizeCheck = true;
+    Template.AddTargetEffect(ReloadEffect);
+
+    Template.ActivationSpeech = 'Reloading';
+    Template.CinescriptCameraType = "GenericAccentCam";
+    
+    return Template;
+}
+
+static function X2AbilityTemplate SawedOffSweeper()
+{
+    local X2AbilityTemplate                             Template;
+    local X2AbilityMultiTarget_Cone_SawedOffSweeper     ConeMultiTarget;
+    local X2AbilityTarget_Cursor                        CursorTarget;
+    local X2AbilityCost_ActionPoints                    ActionPointCost;
+    local X2AbilityCost_Ammo_Extended                   AmmoCost;
+    local X2Effect_Knockback                            KnockbackEffect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_SawedOffSweeper');
+
+    Template.IconImage = "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Offensive;
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
+
+    Template.AbilityToHitCalc = default.DeadEye;
+
+    Template.AbilityToHitCalc = default.SimpleStandardAim;
+    Template.AbilityToHitOwnerOnMissCalc = default.SimpleStandardAim;
+        
+    CursorTarget = new class'X2AbilityTarget_Cursor';
+    CursorTarget.bRestrictToWeaponRange = true;
+    Template.AbilityTargetStyle = CursorTarget;
+
+    ConeMultiTarget = new class'X2AbilityMultiTarget_Cone_SawedOffSweeper';
+    
+    ConeMultiTarget.BaseConeEndDiameter = `METERSTOUNITS(`GetConfigFloat("M31_SawedOffSweeper_Width"));
+    ConeMultiTarget.BaseConeLength = `METERSTOUNITS(`GetConfigFloat("M31_SawedOffSweeper_Length"));
+    ConeMultiTarget.ConeEndDiameterPerAmmo = `METERSTOUNITS(`GetConfigFloat("M31_SawedOffSweeper_WidthPerAmmo"));
+    ConeMultiTarget.ConeLengthPerAmmo = `METERSTOUNITS(`GetConfigFloat("M31_SawedOffSweeper_LengthPerAmmo"));
+
+    // ConeMultiTarget.BaseConeEndDiameter = `GetConfigInt("M31_SawedOffSweeper_Width") * class'XComWorldData'.const.WORLD_StepSize;
+    // ConeMultiTarget.BaseConeLength = `GetConfigInt("M31_SawedOffSweeper_Length") * class'XComWorldData'.const.WORLD_StepSize;
+    // ConeMultiTarget.ConeEndDiameterPerAmmo = `GetConfigInt("M31_SawedOffSweeper_WidthPerAmmo") * class'XComWorldData'.const.WORLD_StepSize;
+    // ConeMultiTarget.ConeLengthPerAmmo = `GetConfigInt("M31_SawedOffSweeper_LengthPerAmmo") * class'XComWorldData'.const.WORLD_StepSize;
+
+    ConeMultiTarget.MinAmmo = `GetConfigInt("M31_SawedOffSweeper_MinAmmo");
+    ConeMultiTarget.MaxAmmo = `GetConfigInt("M31_SawedOffSweeper_MaxAmmo");
+
+    ConeMultiTarget.fTargetRadius = 99;
+    ConeMultiTarget.bIgnoreBlockingCover = false;
+    ConeMultiTarget.bUseWeaponRangeForLength = false;
+    ConeMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+    Template.AbilityMultiTargetStyle = ConeMultiTarget;
+
+    Template.TargetingMethod = class'X2TargetingMethod_Cone';
+    Template.bCheckCollision = true;
+    // Template.bAffectNeighboringTiles = true;
+    Template.bFragileDamageOnly = false;
+
+    ActionPointCost = new class'X2AbilityCost_ActionPoints';
+    ActionPointCost.iNumPoints = 1;
+    ActionPointCost.bConsumeAllPoints = true;
+    if (`GetConfigBool("M31_SawedOffSweeper_bHipfire"))
+    {
+        ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('Hipfire_LW');
+    }
+    Template.AbilityCosts.AddItem(ActionPointCost);
+
+    AmmoCost = new class'X2AbilityCost_Ammo_Extended';
+    AmmoCost.iAmmo = `GetConfigInt("M31_SawedOffSweeper_MinAmmo");
+    AmmoCost.iAmmoMax = `GetConfigInt("M31_SawedOffSweeper_MaxAmmo");
+    AmmoCost.bConsumeAllAmmo = true;
+    Template.AbilityCosts.AddItem(AmmoCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_SawedOffSweeper_Cooldown"));
+
+    Template.bAllowAmmoEffects = true;
+    Template.bAllowBonusWeaponEffects = true;
+
+    KnockbackEffect = new class'X2Effect_Knockback';
+    KnockbackEffect.KnockbackDistance = 2;
+    Template.AddMultiTargetEffect(KnockbackEffect);
+
+    Template.AddMultiTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+    Template.ActivationSpeech = 'SaturationFire';
+    Template.CinescriptCameraType = "Grenadier_SaturationFire";
+
+    Template.bShowActivation = true;
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = false;
+
+    return Template;
+}
+
 static function X2AbilityTemplate ShadowstepAid()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
 
     Template = Passive('M31_ShadowstepAid', "img:///UILibrary_MeristPerkIcons.UIPerk_ShadowstepAid", false, true);
     
+    return Template;
+}
+
+static function X2AbilityTemplate ShockGrenadier()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_AddGrenade   Effect;
+    // local X2Condition_SourceHasOneOfTheAbilities Condition;
+
+    Template = Passive('M31_ShockGrenadier', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp", false, true);
+        
+    Effect = new class'X2Effect_AddGrenade';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'EMPGrenade';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    // Condition = new class'X2Condition_SourceHasOneOfTheAbilities';
+    // Condition.AbilityNames = default.ShockGrenadier_AdditionalCharge_AllowedAbilities;
+
+    // Effect = new class'X2Effect_AddGrenade';
+    // Effect.bAllowUpgrades = true;
+    // Effect.DataName = 'EMPGrenade';
+    // Effect.SkipAbilities.AddItem('SmallItemWeight');
+    // Effect.BuildPersistentEffect(1, true, false);
+    // Effect.TargetConditions.AddItem(Condition);
+    // Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate ShotgunWedding()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityMultiTarget_Cone     ConeMultiTarget;
+    local X2AbilityCost_Ammo            AmmoCost;
+    local X2Effect_TriggerEvent         InsanityEvent;
+    local X2Effect_SetUnitValue         UnitValueEffect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_ShotgunWedding');
+
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_saturationfire";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Offensive;
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    Template.AbilityMultiTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
+
+    Template.AbilityToHitCalc = default.DeadEye;
+        
+    Template.AbilityTargetStyle = new class'X2AbilityTarget_Cursor';
+
+    ConeMultiTarget = new class'X2AbilityMultiTarget_Cone';
+    ConeMultiTarget.ConeEndDiameter = `GetConfigInt("M31_ShotgunWedding_Width") * class'XComWorldData'.const.WORLD_StepSize;
+    ConeMultiTarget.ConeLength = `GetConfigInt("M31_ShotgunWedding_Length") * class'XComWorldData'.const.WORLD_StepSize;
+    ConeMultiTarget.fTargetRadius = 99;
+    ConeMultiTarget.bIgnoreBlockingCover = true;
+    ConeMultiTarget.bUseWeaponRangeForLength = false;
+    ConeMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+    Template.AbilityMultiTargetStyle = ConeMultiTarget;
+
+    Template.TargetingMethod = class'X2TargetingMethod_Cone';
+
+    AmmoCost = new class'X2AbilityCost_Ammo';
+    AmmoCost.iAmmo = `GetConfigInt("M31_ShotgunWedding_AmmoCost") + `GetConfigInt("M31_ShotgunWedding_AmmoCostPerShot");
+    AmmoCost.bFreeCost = true;
+    Template.AbilityCosts.AddItem(AmmoCost);
+
+    AmmoCost = new class'X2AbilityCost_Ammo';
+    AmmoCost.iAmmo = `GetConfigInt("M31_ShotgunWedding_AmmoCost");
+    Template.AbilityCosts.AddItem(AmmoCost);
+
+    AddCooldown(Template, `GetConfigInt("M31_ShotgunWedding_Cooldown"));
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+
+    InsanityEvent = new class'X2Effect_TriggerEvent';
+    InsanityEvent.TriggerEventName = 'M31_ShotgunWedding_Event';
+    InsanityEvent.ApplyChance = 100;
+    Template.AddMultiTargetEffect(InsanityEvent);
+
+    UnitValueEffect = new class'X2Effect_SetUnitValue';
+    UnitValueEffect.UnitName = 'M31_ShotgunWedding_Counter';
+    UnitValueEffect.NewValueToSet = 0;
+    UnitValueEffect.CleanupType = eCleanup_BeginTactical;
+    Template.AddShooterEffect(UnitValueEffect);
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+    Template.ActivationSpeech = 'SaturationFire';
+    Template.CinescriptCameraType = "Grenadier_SaturationFire";
+
+    Template.bSkipFireAction = true;
+    Template.bShowActivation = true;
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = false;
+
+    Template.AdditionalAbilities.AddItem('M31_ShotgunWedding_Attack');
+
+    Template.DamagePreviewFn = ShotgunWeddingDamagePreview;
+
+    return Template;
+}
+
+function bool ShotgunWeddingDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    local XComGameState_Unit        SourceUnit;
+    local StateObjectReference      AttackAbilityRef;
+    local XComGameState_Ability     AttackAbility;
+    local XComGameStateHistory      History;
+
+    History = `XCOMHISTORY;
+    SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+    AttackAbilityRef = SourceUnit.FindAbility('M31_ShotgunWedding_Attack');
+    AttackAbility = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+    if (AttackAbility != none)
+    {
+         AttackAbility.GetDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+    }
+
+    return true;
+}
+
+static function X2AbilityTemplate ShotgunWeddingAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2Condition_UnitValue             ValueCondition;
+    local X2Effect_IncrementUnitValue       UnitValueEffect;
+    local X2AbilityMultiTarget_Cone         ConeMultiTarget;
+    local X2Effect_Knockback                KnockbackEffect;
+    local X2Condition_ValidWeapon           ShotgunCondition;
+    
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_ShotgunWedding_Attack');
+
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_saturationfire";
+    Template.AbilitySourceName = 'eAbilitySource_Perk'; 
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Offensive;
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'M31_ShotgunWedding_Event';
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Trigger.ListenerData.Priority = 55;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.VoidRiftInsanityListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AbilityTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+
+    Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetOnlyProperty);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    ShotgunCondition = new class'X2Condition_ValidWeapon';
+    ShotgunCondition.AllowedWeaponCategories = default.ShotgunWedding_AllowedCategories;
+    Template.AbilityShooterConditions.AddItem(ShotgunCondition);
+
+    Template.AddShooterEffectExclusions();
+
+    ValueCondition = new class'X2Condition_UnitValue';
+    ValueCondition.AddCheckValue('M31_ShotgunWedding_Counter', `GetConfigInt("M31_ShotgunWedding_MaxNumShots"), eCheck_LessThan);
+    Template.AbilityShooterConditions.AddItem(ValueCondition);
+
+    UnitValueEffect = new class'X2Effect_IncrementUnitValue';
+    UnitValueEffect.UnitName = 'M31_ShotgunWedding_Counter';
+    UnitValueEffect.NewValueToSet = 1;
+    UnitValueEffect.CleanupType = eCleanup_BeginTactical;
+    UnitValueEffect.bApplyOnMiss = true;
+    Template.AddShooterEffect(UnitValueEffect);
+
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+
+    ConeMultiTarget = new class'X2AbilityMultiTarget_Cone';
+    ConeMultiTarget.ConeEndDiameter = `GetConfigInt("M31_ShotgunWedding_Width") * class'XComWorldData'.const.WORLD_StepSize;
+    ConeMultiTarget.ConeLength = `GetConfigInt("M31_ShotgunWedding_Length") * class'XComWorldData'.const.WORLD_StepSize;
+    ConeMultiTarget.fTargetRadius = 99;
+    ConeMultiTarget.bIgnoreBlockingCover = true;
+    ConeMultiTarget.bUseWeaponRangeForLength = false;
+    ConeMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+    Template.AbilityMultiTargetStyle = ConeMultiTarget;
+
+    Template.bAllowAmmoEffects = true;
+    Template.bAllowBonusWeaponEffects = true;
+
+    AddAmmoCost(Template, `GetConfigInt("M31_ShotgunWedding_AmmoCostPerShot"));
+
+    KnockbackEffect = new class'X2Effect_Knockback';
+    KnockbackEffect.KnockbackDistance = 2;
+    Template.AddMultiTargetEffect(KnockbackEffect);
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+    Template.AddMultiTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+
+    Template.AbilityToHitCalc = default.SimpleStandardAim;
+    Template.AbilityToHitOwnerOnMissCalc = default.SimpleStandardAim;
+        
+    Template.TargetingMethod = class'X2TargetingMethod_TopDown';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+    Template.CinescriptCameraType = "Grenadier_SaturationFire";
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = false;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+    Template.bFragileDamageOnly = true;
+
+    return Template;
+}
+
+static function X2AbilityTemplate Skykeeper()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_Skykeeper        Effect;
+    
+    Template = Passive('M31_Skykeeper', "img:///UILibrary_MeristPerkIcons.UIPerk_Skykeeper", false, true);
+
+    Effect = new class'X2Effect_Skykeeper';
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SleightOfHand()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_SleightOfHand    Effect;
+    
+    Template = Passive('M31_SleightOfHand', "img:///UILibrary_MeristPerkIcons.UIPerk_Gunslinger", false, true);
+
+    Effect = new class'X2Effect_SleightOfHand';
+    Effect.bMatchSourceWeapon = `GetConfigBool("M31_SleightOfHand_bMatchSourceWeapon");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_SleightOfHand_BuffText"), Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
+    Template.AdditionalAbilities.AddItem('M31_SleightOfHand_Trigger');
+
+    return Template;
+}
+
+static function X2AbilityTemplate SleightOfHandTrigger()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2Effect_ChangeUnitValue          UnitValueEffect;
+    
+    Template = SelfTargetTrigger('M31_SleightOfHand_Trigger', "img:///UILibrary_MeristPerkIcons.UIPerk_Gunslinger");
+
+    Trigger = new class'X2AbilityTrigger_EventListener';	
+    Trigger.ListenerData.EventID = 'PlayerTurnBegun';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_Player;
+    Trigger.ListenerData.Priority = 50;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    UnitValueEffect = new class'X2Effect_ChangeUnitValue';
+    UnitValueEffect.UnitName = class'X2Effect_SleightOfHand'.default.UnitValueName;
+    UnitValueEffect.NewValueToSet = -1 * `GetConfigInt("M31_SleightOfHand_StackDecay");
+    UnitValueEffect.iMaxValue = `GetConfigInt("M31_SleightOfHand_MaxStacks");
+    UnitValueEffect.CleanupType = eCleanup_BeginTactical;
+    Template.AddTargetEffect(UnitValueEffect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SmokeGrenadier()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_AddGrenade   Effect;
+
+    Template = Passive('M31_SmokeGrenadier', "img:///UILibrary_XPerkIconPack.UIPerk_smoke_box", false, true);
+    
+    Effect = new class'X2Effect_AddGrenade';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'SmokeGrenade';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate SniperElite()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_SniperElite      Effect;
+    
+    Template = Passive('M31_SniperElite', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_farsight", false, true);
+
+    Effect = new class'X2Effect_SniperElite';
+    Effect.AllowedEffects = default.SniperElite_AllowedEffects;
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
     return Template;
 }
 
@@ -1418,6 +2925,15 @@ static function X2AbilityTemplate SnipersOverwatchShot()
     return Template;
 }
 
+static function X2AbilityTemplate SoldierOfFortune()
+{
+    local X2AbilityTemplate Template;
+
+    Template = Passive('M31_SoldierOfFortune', "img:///UILibrary_MZChimeraIcons.Ability_TaskForce", false, false);
+    
+    return Template;
+}
+
 static function X2AbilityTemplate SolidSnake()
 {
     local X2AbilityTemplate                 Template;
@@ -1427,7 +2943,7 @@ static function X2AbilityTemplate SolidSnake()
     Template = Passive('M31_SolidSnake', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_BloodTrail", false, true);
 
     RangeEffect = new class'X2Effect_ModifyRangePenalties';
-    RangeEffect.RangePenaltyMultiplier = `GetConfigFloat("M31_SolidSnake_PenaltyModifier");
+    RangeEffect.RangeOffsetPrc = `GetConfigInt("M31_SolidSnake_PenaltyModifier");
     RangeEffect.BaseRange = `GetConfigInt("M31_SolidSnake_BaseRange");
     RangeEffect.bLongRange = true;
     RangeEffect.BuildPersistentEffect(1, true, false);
@@ -1448,6 +2964,8 @@ static function X2AbilityTemplate Sparkfire()
     local X2Effect_TriggerEvent             InsanityEvent;
 
     Template = Attack('M31_Sparkfire', "img:///UILibrary_MZChimeraIcons.Ability_TargetGrenade", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;
@@ -1522,6 +3040,31 @@ function bool SparkfireDamagePreview(XComGameState_Ability AbilityState, StateOb
     return false;
 }
 
+static function X2AbilityTemplate StaticGrenades()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_StaticGrenades', "img:///UILibrary_MeristPerkIcons.UIPerk_Static", false, true);
+    
+    return Template;
+}
+
+static function X2AbilityTemplate Stiletto()
+{
+    local X2AbilityTemplate             Template;
+    local X2Effect_BonusFromWeaponTier  Effect;
+
+    Template = Passive('M31_Stiletto', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_Needle", false, true);
+
+    Effect = new class'X2Effect_BonusFromWeaponTier';
+    Effect.PierceBonus = `GetConfigArrayInt("M31_Stiletto_PierceBonus");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate SuperheavyOrdnance()
 {
     local X2AbilityTemplate                     Template;
@@ -1557,10 +3100,12 @@ static function X2AbilityTemplate SupplyPack()
 
 static function X2AbilityTemplate SuppressingFire()
 {
-    local X2AbilityTemplate                 Template;
-    local X2AbilityCost_Ammo                AmmoCost;
+    local X2AbilityTemplate     Template;
+    local X2AbilityCost_Ammo    AmmoCost;
 
     Template = Attack('M31_SuppressingFire', "img:///UILibrary_XPerkIconPack.UIPerk_suppression_shot_2", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY - 1;
 
     AddActionPointCost(Template, eCost_WeaponConsumeAll);
 
@@ -1600,7 +3145,7 @@ static function X2AbilityTemplate SuppressingFireAddActions()
     Trigger.ListenerData.EventID = 'M31_SuppressingFire_Suppress';
     Trigger.ListenerData.Filter = eFilter_Unit;
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-    Trigger.ListenerData.Priority = 75;
+    Trigger.ListenerData.Priority = 85;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Effect = new class'X2Effect_GrantActionPoints';
@@ -1640,24 +3185,15 @@ static function X2AbilityTemplate SuppressingFireRemoveActions()
 
 static function X2AbilityTemplate Suppression()
 {
-    local X2AbilityTemplate                                     Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        CannonCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          CannonAbilityEffect;
+    local X2AbilityTemplate Template;
+    local array<name> AbilitiesToAdd;
 
     Template = Passive('M31_Suppression', "img:///UILibrary_LW_PerkPack.LW_AreaSuppression", false, false);
     
     Template.AdditionalAbilities.AddItem('Suppression_LW');
-
-    CannonCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    CannonCondition.AllowedWeaponCategories = default.Suppression_Area_AllowedCategories;
-    CannonCondition.bCheckSpecificSlot = true;
-    CannonCondition.SpecificSlot = eInvSlot_PrimaryWeapon;
-
-    CannonAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
-    CannonAbilityEffect.AddAbilities.AddItem('AreaSuppression');
-    CannonAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
-    CannonAbilityEffect.TargetConditions.AddItem(CannonCondition);
-    Template.AddTargetEffect(CannonAbilityEffect);
+    
+    AbilitiesToAdd.AddItem('AreaSuppression');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.Suppression_Area_AllowedCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
@@ -1679,7 +3215,7 @@ static function X2AbilityTemplate TrackingFire()
 
     Template = Attack('M31_TrackingFire', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_recoil", false, true);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY;
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
 
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.iNumPoints = 1;
@@ -1688,6 +3224,7 @@ static function X2AbilityTemplate TrackingFire()
     Template.AbilityCosts.AddItem(ActionPointCost);
 
     AddCooldown(Template, `GetConfigInt("M31_TrackingFire_Cooldown"));
+    AddAmmoCost(Template, 1);
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
     ToHitCalc.bReactionFire = `GetConfigBool("M31_TrackingFire_bIsReactionFire");
@@ -1735,67 +3272,40 @@ static function X2AbilityTemplate TrackingFireResetCooldown()
 
 static function X2AbilityTemplate TrainedSniper_Squadsight()
 {
-    local X2AbilityTemplate                                     Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        SniperRifleCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          SniperRifleAbilityEffect;
+    local X2AbilityTemplate Template;
+    local array<name> AbilitiesToAdd;
 
     Template = Passive('M31_TrainedSniper_Squadsight', "img:///KetarosPkg_Abilities.UIPerk_SniperRifle01", false, false);
     
-    SniperRifleCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    SniperRifleCondition.AllowedWeaponCategories = default.TrainedSniper_AllowedCategories;
-    SniperRifleCondition.bCheckSpecificSlot = true;
-    SniperRifleCondition.SpecificSlot = eInvSlot_PrimaryWeapon;
-
-    SniperRifleAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
-    SniperRifleAbilityEffect.AddAbilities.AddItem('Squadsight');
-    SniperRifleAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
-    SniperRifleAbilityEffect.TargetConditions.AddItem(SniperRifleCondition);
-    Template.AddTargetEffect(SniperRifleAbilityEffect);
+    AbilitiesToAdd.AddItem('Squadsight');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.TrainedSniper_AllowedCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
 
 static function X2AbilityTemplate TrainedSniper_LongWatch()
 {
-    local X2AbilityTemplate                                     Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        SniperRifleCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          SniperRifleAbilityEffect;
+    local X2AbilityTemplate Template;
+    local array<name> AbilitiesToAdd;
 
     Template = Passive('M31_TrainedSniper_LongWatch', "img:///KetarosPkg_Abilities.UIPerk_SniperRifle04", false, false);
-    
-    SniperRifleCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    SniperRifleCondition.AllowedWeaponCategories = default.TrainedSniper_AllowedCategories;
-    SniperRifleCondition.bCheckSpecificSlot = true;
-    SniperRifleCondition.SpecificSlot = eInvSlot_PrimaryWeapon;
-
-    SniperRifleAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
-    SniperRifleAbilityEffect.AddAbilities.AddItem('LongWatch');
-    SniperRifleAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
-    SniperRifleAbilityEffect.TargetConditions.AddItem(SniperRifleCondition);
-    Template.AddTargetEffect(SniperRifleAbilityEffect);
+        
+    AbilitiesToAdd.AddItem('LongWatch');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.TrainedSniper_AllowedCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
 
 static function X2AbilityTemplate TrainedSniper_RangeFinder()
 {
-    local X2AbilityTemplate                                     Template;
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory        SniperRifleCondition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget          SniperRifleAbilityEffect;
+    local X2AbilityTemplate Template;
+    local array<name> AbilitiesToAdd;
 
     Template = Passive('M31_RangeFinder', "img:///UILibrary_MZChimeraIcons.WeaponMod_ScopeSuperior", false, false);
     
-    SniperRifleCondition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
-    SniperRifleCondition.AllowedWeaponCategories = default.TrainedSniper_AllowedCategories;
-    SniperRifleCondition.bCheckSpecificSlot = true;
-    SniperRifleCondition.SpecificSlot = eInvSlot_PrimaryWeapon;
-
-    SniperRifleAbilityEffect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
-    SniperRifleAbilityEffect.AddAbilities.AddItem('Squadsight');
-    SniperRifleAbilityEffect.AddAbilities.AddItem('LongWatch');
-    SniperRifleAbilityEffect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
-    SniperRifleAbilityEffect.TargetConditions.AddItem(SniperRifleCondition);
-    Template.AddTargetEffect(SniperRifleAbilityEffect);
+    AbilitiesToAdd.AddItem('Squadsight');
+    AbilitiesToAdd.AddItem('LongWatch');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.TrainedSniper_AllowedCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
@@ -1816,11 +3326,143 @@ static function X2AbilityTemplate TraverseFire()
     return Template;
 }
 
-static function X2AbilityTemplate Warbringer()
+static function X2AbilityTemplate TraverseFirePlus()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_TraverseFire     Effect;
+    
+    Template = Passive('M31_TraverseFirePlus', "img:///UILibrary_LW_PerkPack.LW_AbilityTraverseFire", false, true);
+
+    Effect = new class 'X2Effect_TraverseFire';
+    Effect.ActivationsPerTurn = `GetConfigInt("M31_TraverseFire_ActivationsPerTurn");
+    Effect.AllowedAbilities = default.TraverseFirePlus_AllowedAbilities;
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate TroubleShooter()
 {
     local X2AbilityTemplate                 Template;
-    local XMBEffect_BonusRadius             RadiusEffect;
-    local X2Effect_AddGrenadeCharges        ChargesEffect;
+
+    Template = Passive('M31_TroubleShooter', "img:///UILibrary_MZChimeraIcons.Ability_Crowdsource", false, true);
+    
+    return Template;
+}
+
+static function X2AbilityTemplate Undertaker()
+{
+    local X2AbilityTemplate Template;
+
+    Template = Attack('M31_Undertaker', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_betweentheeyes", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
+    
+    AddActionPointCost(Template, eCost_Free);
+    AddAmmoCost(Template, 1);
+    AddCooldown(Template, `GetConfigInt("M31_Undertaker_Cooldown"));
+
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_Undead');
+
+    return Template;
+}
+
+static function X2AbilityTemplate Unload(name DataName, optional bool bFirst)
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityCost_Ammo                AmmoCost;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2Effect_SetUnitValue             SetValueEffect;
+    local X2Condition_UnitValue             ValueCondition;
+    local X2Effect_IncrementUnitValue       IncrementValueEffect;
+
+    Template = Attack(DataName, "img:///UILibrary_XPerkIconPack.UIPerk_rifle_bullet_x3", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.BuiltInHitMod = -1 * `GetConfigInt("M31_Unload_AimPenalty");
+    ToHitCalc.bAllowCrit = `GetConfigBool("M31_Unload_bAllowCrit");
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+    if (bFirst)
+    {
+        AmmoCost = new class'X2AbilityCost_Ammo';
+        AmmoCost.iAmmo = 2;
+        AmmoCost.bFreeCost = true;
+        Template.AbilityCosts.AddItem(AmmoCost);
+
+        AmmoCost = new class'X2AbilityCost_Ammo';
+        AmmoCost.iAmmo = 1;
+        Template.AbilityCosts.AddItem(AmmoCost);
+
+        AddActionPointCost(Template, eCost_WeaponConsumeAll);
+        AddCooldown(Template, `GetConfigInt("M31_Unload_Cooldown"));
+
+        SetValueEffect = new class'X2Effect_SetUnitValue';
+        SetValueEffect.UnitName = 'M31_Unload_Counter';
+        SetValueEffect.NewValueToSet = 0;
+        SetValueEffect.CleanupType = eCleanup_BeginTurn;
+        SetValueEffect.bApplyOnMiss = true;
+        Template.AddShooterEffect(SetValueEffect);
+
+        IncrementValueEffect = new class'X2Effect_IncrementUnitValue';
+        IncrementValueEffect.UnitName = 'M31_Unload_Counter';
+        IncrementValueEffect.NewValueToSet = 1;
+        IncrementValueEffect.CleanupType = eCleanup_BeginTurn;
+        IncrementValueEffect.bApplyOnMiss = !`GetConfigBool("M31_Unload_bOnlyOnHit");
+        Template.AddShooterEffect(IncrementValueEffect);
+
+        Template.AdditionalAbilities.AddItem('M31_Unload_Chain');
+        
+        Template.bShowActivation = true;
+    }
+    else
+    {
+        Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+
+        Template.AbilityTriggers.Length = 0;
+
+        Trigger = new class'X2AbilityTrigger_EventListener';
+        Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+        Trigger.ListenerData.EventID = DataName;
+        Trigger.ListenerData.Filter = eFilter_Unit;
+        Trigger.ListenerData.Priority = 80;
+        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_OriginalTarget;
+        Template.AbilityTriggers.AddItem(Trigger);
+
+        AmmoCost = new class'X2AbilityCost_Ammo';
+        AmmoCost.iAmmo = 1;
+        Template.AbilityCosts.AddItem(AmmoCost);
+
+        ValueCondition = new class'X2Condition_UnitValue';
+        ValueCondition.AddCheckValue('M31_Unload_Counter', `GetConfigInt("M31_Unload_MaxShots"), eCheck_LessThan);
+        Template.AbilityShooterConditions.AddItem(ValueCondition);
+
+        IncrementValueEffect = new class'X2Effect_IncrementUnitValue';
+        IncrementValueEffect.UnitName = 'M31_Unload_Counter';
+        IncrementValueEffect.NewValueToSet = 1;
+        IncrementValueEffect.CleanupType = eCleanup_BeginTurn;
+        IncrementValueEffect.bApplyOnMiss = !`GetConfigBool("M31_Unload_bOnlyOnHit");
+        Template.AddShooterEffect(IncrementValueEffect);
+
+        Template.MergeVisualizationFn = SequentialShot_MergeVisualization;
+        Template.BuildInterruptGameStateFn = none;
+    }
+
+    Template.PostActivationEvents.AddItem('M31_Unload_Chain');
+
+    return Template;
+}
+
+static function X2AbilityTemplate Warbringer()
+{
+    local X2AbilityTemplate             Template;
+    local XMBEffect_BonusRadius         RadiusEffect;
+    local X2Effect_AddGrenadeCharges    ChargesEffect;
 
     Template = Passive('M31_Warbringer', "img:///UILibrary_MZChimeraIcons.Ability_HeavyOrdinance", false, false);
 
@@ -1839,25 +3481,186 @@ static function X2AbilityTemplate Warbringer()
     return Template;
 }
 
+static function X2AbilityTemplate WatchfulEye()
+{
+    local X2AbilityTemplate                 Template;
+
+    Template = Passive('M31_WatchfulEye', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, true);
+
+    Template.AdditionalAbilities.AddItem('M31_WatchfulEye_Attack');
+
+    return Template;
+}
+
+static function AddWatchfulEyeEffect(out X2AbilityTemplate Template)
+{
+    local X2Effect_Persistent           Effect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+    local X2Condition_NoAbilities       NoAbilityCondition;
+
+    NoAbilityCondition = new class'X2Condition_NoAbilities';
+    NoAbilityCondition.ExcludedAbilities.AddItem('IndependentTracking');
+
+    AbilityCondition = new class'X2Condition_AbilityProperty';
+    AbilityCondition.OwnerHasSoldierAbilities.AddItem('IndependentTracking');
+
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+    Effect.bRemoveWhenTargetDies = true;
+    Effect.bUseSourcePlayerState = true;
+    Effect.EffectName = 'M31_WatchfulEye_Mark';
+    Effect.TargetConditions.AddItem(NoAbilityCondition);
+    Template.AddTargetEffect(Effect);
+
+    Effect = new class'X2Effect_Persistent';
+    Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin);
+    Effect.bRemoveWhenTargetDies = true;
+    Effect.bUseSourcePlayerState = true;
+    Effect.EffectName = 'M31_WatchfulEye_Mark';
+    Effect.TargetConditions.AddItem(AbilityCondition);
+    Template.AddTargetEffect(Effect);
+}
+
+static function X2AbilityTemplate WatchfulEyeAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+    local X2AbilityTarget_Single            SingleTarget;
+    local X2Condition_Visibility            VisibilityCondition;
+    local X2Condition_UnitValue             ValueCondition;
+    local X2Effect_IncrementUnitValue       UnitValueEffect;
+    local X2Effect_Persistent               BladestormTargetEffect;
+    local X2Condition_UnitEffectsWithAbilitySource  BladestormTargetCondition;
+    local X2Condition_UnitEffectsWithAbilitySource  TargetEffectCondition;
+    local X2Condition_UnitProperty          ShooterCondition;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_WatchfulEye_Attack');
+
+    Template.IconImage = "img:///UILibrary_SOHunter.UIPerk_watchfuleye";
+    Template.AbilitySourceName = 'eAbilitySource_Perk'; 
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Offensive;
+    Template.DisplayTargetHitChance = false;
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'ObjectMoved';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'AbilityActivated';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    VisibilityCondition.bAllowSquadsight = true;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+
+    TargetEffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    TargetEffectCondition.AddRequireEffect('M31_WatchfulEye_Mark', 'AA_MissingRequiredEffect');
+    Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
+
+    BladestormTargetEffect = new class'X2Effect_Persistent';
+    BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
+    BladestormTargetEffect.EffectName = 'M31_WatchfulEye_MarkTarget';
+    BladestormTargetEffect.bApplyOnMiss = true;
+    Template.AddTargetEffect(BladestormTargetEffect);
+
+    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    BladestormTargetCondition.AddExcludeEffect('M31_WatchfulEye_MarkTarget', 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
+
+    if (`GetConfigInt("M31_WatchfulEye_ActivationsPerTurn") > 0)
+    {
+        ValueCondition = new class'X2Condition_UnitValue';
+        ValueCondition.AddCheckValue('M31_WatchfulEye_Counter', `GetConfigInt("M31_WatchfulEye_ActivationsPerTurn"), eCheck_LessThan);
+        Template.AbilityShooterConditions.AddItem(ValueCondition);
+
+        UnitValueEffect = new class'X2Effect_IncrementUnitValue';
+        UnitValueEffect.UnitName = 'M31_WatchfulEye_Counter';
+        UnitValueEffect.NewValueToSet = 1;
+        UnitValueEffect.CleanupType = eCleanup_BeginTurn;
+        UnitValueEffect.bApplyOnMiss = true;
+        Template.AddShooterEffect(UnitValueEffect);
+    }
+
+    AddAmmoCost(Template, 1);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    ShooterCondition = new class'X2Condition_UnitProperty';
+    ShooterCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(ShooterCondition);
+    Template.AddShooterEffectExclusions();
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    Template.bAllowAmmoEffects = true;
+    Template.bAllowBonusWeaponEffects = true;
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = true;
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+        
+    Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
+    Template.bUsesFiringCamera = true;
+    Template.CinescriptCameraType = "StandardGunFiring";
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = false;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+    Template.bShowActivation = true;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
+    return Template;
+}
+
 static function X2AbilityTemplate AcidRoundsAttackPassive()
 {
     local X2AbilityTemplate                 Template;
     local X2Effect_PassiveWeaponEffect      PassiveWeaponEffect;
-    local X2Effect_PersistentAttackModifier ShredEffect;
+    local X2Effect_AcidRoundsShred          ShredEffect;
 
     Template = Passive('M31_AcidRoundsPassive', "img:///UILibrary_MZChimeraIcons.Grenade_Acid", false, true);
 
     PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
     PassiveWeaponEffect.EffectName = 'M31_AcidRounds_Passive';
     PassiveWeaponEffect.AttackName = 'M31_AcidRounds_Attack';
+    PassiveWeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
     PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(PassiveWeaponEffect);
 
-    ShredEffect = new class'X2Effect_PersistentAttackModifier';
-    ShredEffect.EffectName = 'M31_AcidRounds_ShredBonus';
+    ShredEffect = new class'X2Effect_AcidRoundsShred';
     ShredEffect.ShredBonus = `GetConfigInt("M31_AcidRounds_ShredBonus");
-    ShredEffect.bCheckSourceWeapon = true;
+    ShredEffect.AdditionalWeaponCategories = default.PistolCategories;
     ShredEffect.BuildPersistentEffect(1, true, false);
+    ShredEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(ShredEffect);
 
     Template.AdditionalAbilities.AddItem('M31_AcidRounds_Attack');
@@ -1867,7 +3670,7 @@ static function X2AbilityTemplate AcidRoundsAttackPassive()
 
 static function X2AbilityTemplate AcidRoundsAttack()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_AcidRounds_Attack',
@@ -1880,8 +3683,12 @@ static function X2AbilityTemplate AcidRoundsAttack()
 
 static function X2Effect_Burning CreateAcidRoundsBurningEffect()
 {
-    return class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(
-        `GetConfigInt("M31_AcidRounds_BurnDamage"), `GetConfigInt("M31_AcidRounds_BurnDamage_Spread"));
+    local X2Effect_Burning Effect;
+
+    Effect = class'X2StatusEffects'.static.CreateAcidBurningStatusEffect(`GetConfigInt("M31_AcidRounds_BurnDamage"), `GetConfigInt("M31_AcidRounds_BurnDamage_Spread"));
+    Effect.iNumTurns = `GetConfigInt("M31_AcidRounds_BurnDuration");
+
+    return Effect;
 }
 
 static function X2AbilityTemplate BleedingRoundsAttackPassive()
@@ -1894,6 +3701,7 @@ static function X2AbilityTemplate BleedingRoundsAttackPassive()
     PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
     PassiveWeaponEffect.EffectName = 'M31_BleedingRounds_Passive';
     PassiveWeaponEffect.AttackName = 'M31_BleedingRounds_Attack';
+    PassiveWeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
     PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(PassiveWeaponEffect);
 
@@ -1904,7 +3712,7 @@ static function X2AbilityTemplate BleedingRoundsAttackPassive()
 
 static function X2AbilityTemplate BleedingRoundsAttack()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_BleedingRounds_Attack',
@@ -1940,6 +3748,7 @@ static function X2AbilityTemplate Bloodlet()
     PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
     PassiveWeaponEffect.EffectName = 'M31_Bloodlet';
     PassiveWeaponEffect.AttackName = 'M31_Bloodlet_Attack';
+    PassiveWeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
     PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(PassiveWeaponEffect);
 
@@ -1950,7 +3759,20 @@ static function X2AbilityTemplate Bloodlet()
 
 static function X2AbilityTemplate BloodletAttack()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
+
+    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
+        'M31_Bloodlet_Attack',
+        "img:///UILibrary_FavidsPerkPack.Perk_Ph_Bloodlet",
+        CreateBloodletBleedingEffect()
+    );
+
+    return Template;
+}
+
+static function X2AbilityTemplate BloodletAttackPistol()
+{
+    local X2AbilityTemplate Template;
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_Bloodlet_Attack',
@@ -1977,19 +3799,16 @@ static function X2Effect_Persistent CreateBloodletBleedingEffect()
 
 static function X2Effect_Persistent CreatePipeBombsBleedingEffect()
 {
-    local X2Effect_Persistent BleedingEffect;
-    
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
-        `GetConfigInt("M31_Bloodlet_BleedDuration"),
-        `GetConfigInt("M31_Bloodlet_BleedDamage"),
-        `GetConfigInt("M31_Bloodlet_BleedDamage_Spread"),
-        `GetConfigFloat("M31_Bloodlet_BleedDamage_Prc"));
-    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_PipeBombsBleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+    local X2Effect_Persistent           BleedingEffect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+
+    BleedingEffect = class'X2StatusEffects'.static.CreateBleedingStatusEffect(
+        `GetConfigInt("M31_PipeBombs_BleedDuration"), `GetConfigInt("M31_PipeBombs_BleedDamage"));
+    AbilityCondition = new class'X2Condition_AbilityProperty';
+    AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_PipeBombs');
+    BleedingEffect.TargetConditions.AddItem(AbilityCondition);
 
     return BleedingEffect;
-
-    return class'X2StatusEffects'.static.CreateBleedingStatusEffect(  
-        `GetConfigInt("M31_PipeBombs_BleedDuration"), `GetConfigInt("M31_PipeBombs_BleedDamage"));
 }
 
 static function X2AbilityTemplate ThermalShock()
@@ -2012,36 +3831,23 @@ static function X2AbilityTemplate ThermalShock()
 
 static function X2AbilityTemplate ThermalShockAttack()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_PersistentStatChange     Effect;
-    local X2Condition_UnitImmunities        UnitImmunityCondition;
-
+    local X2AbilityTemplate         Template;
+    local X2Effect_ThermalShock     Effect;
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_ThermalShock_Attack',
         "img:///KetarosPkg_Abilities.UIPerk_surprise"
     );
 
-    Effect = new class'X2Effect_PersistentStatChange';
+    Effect = new class'X2Effect_ThermalShock';
     Effect.EffectName = 'M31_ThermalShock_Debuff';
-    Effect.BuildPersistentEffect(`GetConfigInt("M31_ThermalShock_Duration"), false, false, true, eGameRule_PlayerTurnBegin);
+
+    Effect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_ThermalShock_AimPenalty_Immune"), true);
+    Effect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_ThermalShock_DefensePenalty_Immune"), true);
     Effect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_ThermalShock_AimPenalty"));
-    Effect.AddPersistentStatChange(eStat_Defense, -1 * `GetConfigInt("M31_ThermalShock_DefensePenalty"));
-    Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_ThermalShock_DebuffText"), Template.IconImage,,, Template.AbilitySourceName);
-    Effect.DuplicateResponse = eDupe_Refresh;
+    Effect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_ThermalShock_DefensePenalty"));
 
-    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
-    UnitImmunityCondition.AddExcludeDamageType('Frost');
-    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
-    Effect.TargetConditions.AddItem(UnitImmunityCondition);
-
-    Template.AddTargetEffect(Effect);
-
-    Effect = new class'X2Effect_PersistentStatChange';
-    Effect.EffectName = 'M31_ThermalShock_Debuff';
     Effect.BuildPersistentEffect(`GetConfigInt("M31_ThermalShock_Duration"), false, false, true, eGameRule_PlayerTurnBegin);
-    Effect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_ThermalShock_AimPenalty_Immune"));
-    Effect.AddPersistentStatChange(eStat_Defense, -1 * `GetConfigInt("M31_ThermalShock_DefensePenalty_Immune"));
     Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_ThermalShock_DebuffText"), Template.IconImage,,, Template.AbilitySourceName);
     Effect.DuplicateResponse = eDupe_Refresh;
 
@@ -2055,11 +3861,12 @@ static function X2AbilityTemplate ToxicNightmare()
     local X2AbilityTemplate                 Template;
     local X2Effect_PassiveWeaponEffect      PassiveWeaponEffect;
 
-    Template = Passive('M31_ToxicNightmare', "img:///UILibrary_MeristPerkIcons.UIPerk_venomrounds", false, true);
+    Template = Passive('M31_ToxicNightmare', "img:///UILibrary_MeristPerkIcons.UIPerk_ToxicNightmare", false, true);
 
     PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
     PassiveWeaponEffect.EffectName = 'M31_ToxicNightmare';
     PassiveWeaponEffect.AttackName = 'M31_ToxicNightmare_Attack';
+    PassiveWeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
     PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(PassiveWeaponEffect);
 
@@ -2074,11 +3881,224 @@ static function X2AbilityTemplate ToxicNightmareAttack()
 
     Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_ToxicNightmare_Attack',
-        "img:///UILibrary_MeristPerkIcons.UIPerk_venomrounds",
+        "img:///UILibrary_MeristPerkIcons.UIPerk_ToxicNightmare",
         class'X2StatusEffects'.static.CreatePoisonedStatusEffect()
     );
 
     return Template;
 }
 
-// Texture2D'UILibrary_PerkIcons.UIPerk_hithurts'
+static function X2AbilityTemplate Shiver2()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_PassiveWeaponEffect      PassiveWeaponEffect;
+
+    Template = Passive('M31_Shiver2', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath", false, true);
+
+    PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
+    PassiveWeaponEffect.EffectName = 'M31_Shiver2';
+    PassiveWeaponEffect.AttackName = 'M31_Shiver2_Attack';
+    PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(PassiveWeaponEffect);
+
+    Template.AdditionalAbilities.AddItem('M31_Shiver2_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate Shiver2Attack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_PercentChanceWithRank ToHitCalc;
+
+    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
+        'M31_Shiver2_Attack',
+        "img:///UILibrary_DLC2Images.UIPerk_freezingbreath"
+    );
+
+    class'BitterfrostHelper'.static.AddBitterfrostToTarget(Template);
+
+    ToHitCalc = new class'X2AbilityToHitCalc_PercentChanceWithRank';
+    ToHitCalc.PercentToHit = `GetConfigInt("M31_Shiver2_PrcChance");
+    ToHitCalc.PercentToHitPerRank = `GetConfigFloat("M31_Shiver2_PrcChancePerRank");
+    Template.AbilityToHitCalc = ToHitCalc;
+
+    return Template;
+}
+
+static function X2AbilityTemplate HypothermiaRoundsPassive()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_PassiveWeaponEffect      PassiveWeaponEffect;
+
+    Template = Passive('M31_HypothermiaRounds', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath", false, true);
+
+    PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
+    PassiveWeaponEffect.EffectName = 'M31_HypothermiaRounds';
+    PassiveWeaponEffect.AttackName = 'M31_HypothermiaRounds_Attack';
+    PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(PassiveWeaponEffect);
+
+    Template.AdditionalAbilities.AddItem('M31_HypothermiaRounds_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate HypothermiaRoundsAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_PercentChanceWithRank ToHitCalc;
+
+    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
+        'M31_HypothermiaRounds_Attack',
+        "img:///UILibrary_DLC2Images.UIPerk_freezingbreath",
+        class'MZ_Effect_Hypothermia'.static.CreateHypothermiaEffect(`GetConfigInt("M31_HypothermiaRounds_Duration"))
+    );
+
+    ToHitCalc = new class'X2AbilityToHitCalc_PercentChanceWithRank';
+    ToHitCalc.PercentToHit = `GetConfigInt("M31_HypothermiaRounds_PrcChance");
+    ToHitCalc.PercentToHitPerRank = `GetConfigFloat("M31_HypothermiaRounds_PrcChancePerRank");
+    Template.AbilityToHitCalc = ToHitCalc;
+
+    return Template;
+}
+
+static function X2AbilityTemplate Chimera()
+{
+    local X2AbilityTemplate         Template;
+    local X2Condition_ValidWeapon   Condition;
+    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget Effect;
+    local array<name>               WeaponCats;
+    local array<name>               AbilitiesToAdd;
+
+    Template = Passive('M31_Chimera', "img:///UILibrary_MeristPerkIcons.UIPerk_Chimera", false, false);
+
+    // SMG
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('smg');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('ShadowOps_Airstrike');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Rifle (excluding Bolt Caster)
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('rifle');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('CyclicFire');
+
+    Condition = new class'X2Condition_ValidWeapon';
+    Condition.AllowedWeaponCategories = WeaponCats;
+    Condition.ExcludedWeaponTemplates = default.BoltCasterTemplates;
+    Condition.bCheckSpecificSlot = true;
+    Condition.SpecificSlot = eInvSlot_PrimaryWeapon;
+
+    Effect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
+    Effect.AddAbilities = AbilitiesToAdd;
+    Effect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
+    Effect.TargetConditions.AddItem(Condition);
+
+    Template.AddTargetEffect(Effect);
+
+    // Bolt Caster
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('M31_Pinpoint');
+
+    Condition = new class'X2Condition_ValidWeapon';
+    Condition.AllowedWeaponTemplates = default.BoltCasterTemplates;
+    Condition.bCheckSpecificSlot = true;
+    Condition.SpecificSlot = eInvSlot_PrimaryWeapon;
+
+    Effect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
+    Effect.AddAbilities = AbilitiesToAdd;
+    Effect.ApplyToWeaponSlot = eInvSlot_PrimaryWeapon;
+    Effect.TargetConditions.AddItem(Condition);
+
+    Template.AddTargetEffect(Effect);
+
+    // Shotgun
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('shotgun');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('M31_AssaultShot');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Cannon
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('cannon');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('SaturationFire');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Sniper Rifle
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('sniper_rifle');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('Squadsight');
+    AbilitiesToAdd.AddItem('DoubleTap2');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Vektor Rifle
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('vektor_rifle');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('Squadsight');
+    AbilitiesToAdd.AddItem('M31_BurstFire');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Bullpup
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('bullpup');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('Battlelord');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+
+    // Sword
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('sword');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('M31_Overpower');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_SecondaryWeapon);
+
+    // Combat Knife
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('combatknife');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('M31_PA_CripplingBlow');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_SecondaryWeapon);
+
+    // Ripjack
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('wristblade');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('M31_CombatAdvance');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_SecondaryWeapon);
+
+    // Pistol
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('pistol');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('MZFranticFire');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_Pistol);
+
+    // Autopistol
+    WeaponCats.Length = 0;
+    WeaponCats.AddItem('sidearm');
+
+    AbilitiesToAdd.Length = 0;
+    AbilitiesToAdd.AddItem('MZPistolRave');
+    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_Pistol);
+
+    return Template;
+}

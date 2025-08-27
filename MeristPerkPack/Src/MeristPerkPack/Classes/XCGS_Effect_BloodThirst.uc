@@ -1,17 +1,31 @@
+//---------------------------------------------------------------------------------------
+//  FILE:    XCGS_Effect_BloodThirst.uc
+//  AUTHOR:  Merist
+//  PURPOSE: Tracks the amount of stacks for X2Effect_BloodThirst.
+//---------------------------------------------------------------------------------------
 class XCGS_Effect_BloodThirst extends XComGameState_Effect;
 
 var array<int> arrStacksRemaining;
+var int iStacksThisTurn;
 
 final function int GetTotalStacksRemaining()
 {
-    local X2Effect_BloodThirst BloodThirstEffect;
+    local X2Effect_BloodThirst  BloodThirstEffect;
+    local XComGameState_Unit    EffectSourceUnit;
     local int Index;
     local int Count;
 
     BloodThirstEffect = X2Effect_BloodThirst(GetX2Effect());
-    for (Index = 0; Index < BloodThirstEffect.iMaxStacks; Index++)
+    EffectSourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    
+    if (BloodThirstEffect != none)
     {
-        Count += arrStacksRemaining[Index];
+        for (Index = 0; Index < BloodThirstEffect.GetStackDuration(EffectSourceUnit); Index++)
+        {
+            `LOG(Index $ ": " $ arrStacksRemaining[Index], class'X2Effect_BloodThirst'.default.bLog, GetFuncName());
+            Count += arrStacksRemaining[Index];
+        }
+        return Count;
     }
-    return Count;
+    return -1;
 }

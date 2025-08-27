@@ -1,4 +1,4 @@
-class X2Ability_Extended extends X2Ability dependson(X2AbilityCooldown_Extended);
+class X2Ability_Extended extends X2Ability;
 
 // Used by ActionPointCost and related functions
 enum EActionPointCost
@@ -16,7 +16,7 @@ enum EActionPointCost
                                 // the enemy turn. You should use eCost_Free for activated abilities.
 };
 
-static function X2AbilityTemplate Passive( name TemplateName, string IconImage,
+static function X2AbilityTemplate Passive(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false, optional bool bDisplayInUI = false)
 {
     local X2AbilityTemplate             Template;
@@ -40,7 +40,7 @@ static function X2AbilityTemplate Passive( name TemplateName, string IconImage,
         PersistentEffect = new class'X2Effect_Persistent';
         PersistentEffect.EffectName = name(TemplateName $ "_Passive");
         PersistentEffect.BuildPersistentEffect(1, true, false);
-        PersistentEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
+        PersistentEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
         Template.AddTargetEffect(PersistentEffect);
     }
 
@@ -101,7 +101,6 @@ static function X2AbilityTemplate SelfTargetTrigger(name TemplateName, string Ic
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    // Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
     Template.bSkipFireAction = true;
 
@@ -113,7 +112,7 @@ static function X2AbilityTemplate SelfTargetTrigger(name TemplateName, string Ic
 static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
 {
-    local X2AbilityTemplate                 Template;	
+    local X2AbilityTemplate                 Template;
     local X2Condition_Visibility            VisibilityCondition;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
@@ -125,8 +124,6 @@ static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
     Template.DisplayTargetHitChance = true;
 
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-    Template.AddShooterEffectExclusions();
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;
@@ -159,18 +156,133 @@ static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
         
     Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
     Template.bUsesFiringCamera = true;
-    Template.CinescriptCameraType = "StandardGunFiring";	
+    Template.CinescriptCameraType = "StandardGunFiring";
 
     Template.AssociatedPassives.AddItem('HoloTargeting');
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;	
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
     Template.bDisplayInUITooltip = false;
     Template.bDisplayInUITacticalText = false;
 
     Template.bCrossClassEligible = bCrossClassEligible;
+
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+    return Template;
+}
+
+// Requires:
+// * Exclusions
+static function X2AbilityTemplate StandardMelee(name TemplateName, string IconImage,
+    optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+
+    Template.IconImage = IconImage;
+    Template.AbilitySourceName = 'eAbilitySource_Perk'; 
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Offensive;
+    Template.DisplayTargetHitChance = true;
+
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
+
+    Template.bAllowBonusWeaponEffects = true;
+
+    if (bAddDefaultEffects)
+    {
+        Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    }
+    
+    StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+    Template.AbilityToHitCalc = StandardMelee;
+        
+    Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
+    Template.SourceMissSpeech = 'SwordMiss';
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = bCrossClassEligible;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
+
+    return Template;
+}
+
+// Requires:
+// * Exclusions
+static function X2AbilityTemplate MovingMelee(name TemplateName, string IconImage,
+    optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StandardMelee  StandardMelee;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+
+    Template.IconImage = IconImage;
+    Template.AbilitySourceName = 'eAbilitySource_Perk'; 
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Offensive;
+    Template.DisplayTargetHitChance = true;
+
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
+    Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
+
+    Template.bAllowBonusWeaponEffects = true;
+
+    if (bAddDefaultEffects)
+    {
+        Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
+    }
+    
+    StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
+    Template.AbilityToHitCalc = StandardMelee;
+        
+    Template.AbilityConfirmSound = "TacticalUI_SwordConfirm";
+    Template.SourceMissSpeech = 'SwordMiss';
+
+    Template.BuildNewGameStateFn = TypicalMoveEndAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalMoveEndAbility_BuildInterruptGameState;
+
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+
+    Template.bCrossClassEligible = bCrossClassEligible;
+
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
     return Template;
 }
@@ -189,10 +301,10 @@ static function AddCooldown(X2AbilityTemplate Template, int iNumTurns)
 
 static function AddAmmoCost(X2AbilityTemplate Template, int iAmmo)
 {
-	local X2AbilityCost_Ammo AmmoCost;
+    local X2AbilityCost_Ammo AmmoCost;
     if (iAmmo > 0)
     {
-        AmmoCost = new class'X2AbilityCost_Ammo';	
+        AmmoCost = new class'X2AbilityCost_Ammo';
         AmmoCost.iAmmo = iAmmo;
         Template.AbilityCosts.AddItem(AmmoCost);
     }
@@ -205,7 +317,7 @@ static function AddCharges(X2AbilityTemplate Template, int InitialCharges)
 
     if (InitialCharges > 0)
     {
-        Charges = new class 'X2AbilityCharges';
+        Charges = new class'X2AbilityCharges';
         Charges.InitialCharges = InitialCharges;
         Template.AbilityCharges = Charges;
 
@@ -243,4 +355,16 @@ static function X2AbilityCost_ActionPoints ActionPointCost(EActionPointCost Cost
     }
 
     return AbilityCost;
+}
+
+static function SetFireAnim(out X2AbilityTemplate Template, name Anim)
+{
+    Template.CustomFireAnim = Anim;
+    Template.CustomFireKillAnim = Anim;
+    Template.CustomMovingFireAnim = Anim;
+    Template.CustomMovingFireKillAnim = Anim;
+    Template.CustomMovingTurnLeftFireAnim = Anim;
+    Template.CustomMovingTurnLeftFireKillAnim = Anim;
+    Template.CustomMovingTurnRightFireAnim = Anim;
+    Template.CustomMovingTurnRightFireKillAnim = Anim;
 }

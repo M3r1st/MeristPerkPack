@@ -13,6 +13,9 @@ function float GetPostDefaultAttackingDamageModifier_CH(
     local XComGameState_Unit TargetUnit;
     local float fModifier;
 
+    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+        return 0;
+
     TargetUnit = XComGameState_Unit(Target);
 
     if (TargetUnit == none)

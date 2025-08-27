@@ -2,9 +2,15 @@ class X2Effect_TraverseFire extends X2Effect_Persistent;
 
 var int ActivationsPerTurn;
 var array<name> AllowedAbilities;
-var bool bCheckSourceWeapon;
+var bool bMatchSourceWeapon;
 var name CounterName;
 var name EventName;
+
+struct AdditionalValuesInfo
+{
+    var name ValueName;
+    var int MaxValue;
+};
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -18,9 +24,9 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
 {
-    local XComGameState_Ability                 AbilityState;
-    local int                                   iCounter;
-    local UnitValue                             UnitValue;
+    local XComGameState_Ability AbilityState;
+    local UnitValue UnitValue;
+    local int iCounter;
 
     if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
         return false;
@@ -38,8 +44,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
     if (AbilityState != none)
     {
-        if (!(bCheckSourceWeapon && kAbility.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef) &&
-            AllowedAbilities.Find(kAbility.GetMyTemplateName()) != -1)
+        if ((!bMatchSourceWeapon || kAbility.SourceWeapon.ObjectID == EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID)
+            && AllowedAbilities.Find(kAbility.GetMyTemplateName()) != INDEX_NONE)
         {
             SourceUnit.SetUnitFloatValue(CounterName, iCounter + 1.0, eCleanup_BeginTurn);
             SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.RunAndGunActionPoint);
@@ -47,8 +53,10 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
         }
         else
         {
-            if (kAbility.IsAbilityInputTriggered()) {
-                if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || PreCostActionPoints.Length - SourceUnit.ActionPoints.Length > 0) {
+            if (kAbility.IsAbilityInputTriggered())
+            {
+                if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || !ValidateAbilityCost(kAbility, SourceUnit))
+                {
                     SourceUnit.SetUnitFloatValue(CounterName, ActivationsPerTurn, eCleanup_BeginTurn);
                 }
             }
@@ -57,11 +65,28 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     return false;
 }
 
+static function bool ValidateAbilityCost(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner)
+{
+    local X2AbilityTemplate Template;
+    local X2AbilityCost Cost;
+    local X2AbilityCost_ActionPoints ActionPointCost;
+
+    Template = AbilityState.GetMyTemplate();
+
+    foreach Template.AbilityCosts(Cost)
+    {
+        ActionPointCost = X2AbilityCost_ActionPoints(Cost);
+        if (ActionPointCost != none && !ActionPointCost.bFreeCost && ActionPointCost.GetPointCost(AbilityState, AbilityOwner) > 0)
+            return false;
+    }
+    return true;
+}
+
 defaultproperties
 {
     DuplicateResponse = eDupe_Ignore
     EffectName = M31_TraverseFire
     CounterName = M31_TraverseFire
     EventName = M31_TraverseFire
-    bCheckSourceWeapon = true
+    bMatchSourceWeapon = true
 }

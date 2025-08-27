@@ -2,7 +2,7 @@ class X2Effect_Entwine extends X2Effect_Persistent;
 
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo  ModInfo;
 
     if (Target.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName))
     {
@@ -15,7 +15,7 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo  ModInfo;
 
     if (class'X2AbilitySet_PlayableAliens'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {

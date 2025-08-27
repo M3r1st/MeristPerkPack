@@ -1,0 +1,345 @@
+[M31_PA_WS_Hide X2AbilityTemplate]
+LocFriendlyName="Sentinel's Hide"
+LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
+LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><Bullet> Wound reduction does not work if the <Ability:ClassName> entered a bleeding out state during the mission.<br><br><font color='#909497'>\"Alright, we'll call it a draw.\"</font>"
+
+[M31_PA_WS_Entwine X2AbilityTemplate]
+LocFriendlyName="Entwine"
+LocLongDescription="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <Ability:M31_PA_WS_Entwine_BindDamageBonus>. "
+LocHelpText="Gain +<Ability:M31_PA_WS_Entwine_DodgeBonus> dodge while binding an enemy. Additionaly, increases bind damage by <Ability:M31_PA_WS_Entwine_BindDamageBonus>. "
+LocPromotionPopupText="<Bullet> Increases the damage of both the initial bind and the sustain action.<br><br><font color='#909497'>\"Nice spine you've got there.\""
+
+[M31_PA_WS_ReinforcedScales X2AbilityTemplate]
+LocFriendlyName="Reinforced Scales"
+LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_ReinforcedScales_DamageReduction> and the chance of being criticaly hit by <Ability:M31_PA_WS_ReinforcedScales_CritResistance>."
+LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_ReinforcedScales_DamageReduction> and the chance of being criticaly hit by <Ability:M31_PA_WS_ReinforcedScales_CritResistance>."
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated."
+
+[M31_PA_WS_GlacialArmor X2AbilityTemplate]
+LocFriendlyName="Glacial Armor"
+LocLongDescription="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
+LocHelpText="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
+LocPromotionPopupText="<Bullet> Works while burning: <Ability:M31_PA_WS_GlacialArmor_bAllowWhileBurning>.<br><br><font color='#909497'>\"Not as fragile as it looks.\"</font>"
+
+[M31_PA_WS_GlacialArmor_Update X2AbilityTemplate]
+LocFriendlyName="Glacial Armor"
+LocFlyOverText="Glacial Armor"
+
+[M31_PA_WS_Dominance X2AbilityTemplate]
+LocFriendlyName="Dominance"
+LocLongDescription="Once per turn, perform any single action after taking damage during the enemy turn."
+LocHelpText="Once per turn, perform any single action after taking damage during the enemy turn."
+LocPromotionPopupText="<Bullet> Can activate while disoriented: <Ability:M31_PA_WS_Dominance_bAllowWhileDisoriented>.<br><Bullet> Can activate while burning: <Ability:M31_PA_WS_Dominance_bAllowWhileBurning>."
+
+[M31_PA_WS_Dominance_Trigger X2AbilityTemplate]
+LocFriendlyName="Dominance"
+LocFlyOverText="Dominance"
+
+[M31_PA_WS_RagingSerpent X2AbilityTemplate]
+LocFriendlyName="Raging Serpent"
+LocLongDescription="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions."
+LocPromotionPopupText="<Bullet> Has +<Ability:M31_PA_WS_RagingSerpent_AimBonus> aim and +<Ability:M31_PA_WS_RagingSerpent_CritBonus> crit.<br><Bullet> Deals <Ability:M31_PA_WS_RagingSerpent_Damage> points of damage.<br><Bullet> Can be used while disoriented: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileDisoriented><br><Bullet> Can be used while burning: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileBurning>."
+LocFlyOverText="Raging Serpent"
+
+[M31_PA_WS_Indomitable X2AbilityTemplate]
+LocFriendlyName="Indomitable"
+LocLongDescription="Gain +<Ability:M31_PA_WS_Indomitable_HPBonus> HP, +<Ability:M31_PA_WS_Indomitable_DodgeBonus> dodge, and +<Ability:M31_PA_WS_Indomitable_ArmorBonus> armor. Additionally, reduces incoming damage by <Ability:M31_PA_WS_Indomitable_DamageReduction>."
+LocHelpText="Gain +<Ability:M31_PA_WS_Indomitable_HPBonus> HP, +<Ability:M31_PA_WS_Indomitable_DodgeBonus> dodge, and +<Ability:M31_PA_WS_Indomitable_ArmorBonus> armor. Additionally, reduces incoming damage by <Ability:M31_PA_WS_Indomitable_DamageReduction>."
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><br><font color='#909497'>\"Yes, this is a hardship most dire...\"</font>"
+
+
+
+[M31_PA_WS_Vigilance X2AbilityTemplate]
+LocFriendlyName="Sentinel's Vigilance"
+LocLongDescription="Increases sight range by <Ability:M31_PA_WS_Vigilance_SightRangeBonus> meters (~<Ability:M31_PA_WS_Vigilance_SightRangeBonus_Tiles> tiles). Bolt attacks can be delayed until the start of the enemy turn."
+LocHelpText="Increases sight range by <Ability:M31_PA_WS_Vigilance_SightRangeBonus> meters (~<Ability:M31_PA_WS_Vigilance_SightRangeBonus_Tiles> tiles). Bolt attacks can be delayed until the start of the enemy turn."
+LocPromotionPopupText="<Bullet> Base vision range of most units is 27 meters (~18 tiles).<br><Bullet> The delayed attacks are not considered reaction fire and therefore can crit and are not affected by reaction fire penalties or perks related to reaction fire.<br><Bullet> The delayed attacks activate before the marked enemy can act."
+
+[M31_PA_WS_Vigilance_LTT X2AbilityTemplate]
+LocFriendlyName="Delayed Fire"
+LocLongDescription="Delay the shot until the start of the enemy action."
+LocHelpText="Delay the shot until the start of the enemy action."
+LocFlyOverText="Delayed Fire"
+
+[M31_PA_WS_Vigilance_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Delayed Fire"
+LocFlyOverText="Delayed Fire"
+
+
+
+[M31_PA_WS_Fracture X2AbilityTemplate]
+LocFriendlyName="Fracture"
+LocLongDescription="<Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
+LocHelpText="<Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
+LocPromotionPopupText="<Bullet> Applies against flanked enemies: <Ability:M31_PA_WS_Fracture_bAppliesAgainstFlanked>."
+
+[M31_PA_WS_AlloyedCores X2AbilityTemplate]
+LocFriendlyName="Alloyed Cores"
+LocLongDescription="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocHelpText="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocPromotionPopupText="<Bullet> Unlike Close and Personal, the bonus does not decline with distance from the target."
+
+[M31_PA_WS_HeavyOrdnance X2AbilityTemplate]
+LocFriendlyName="Heavy Ordnance"
+LocLongDescription="All special bolt attacks gain an additional charge."
+LocHelpText="All special bolt attacks gain an additional charge."
+; LocPromotionPopupText=""
+
+[M31_PA_WS_DragonSlayer X2AbilityTemplate]
+LocFriendlyName="Dragon Slayer"
+LocLongDescription="Attacks deal +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable> damage against unflankable enemies, and additional +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Large> against large enemies."
+LocHelpText="Attacks deal +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable> damage against unflankable enemies, and additional +<Ability:M31_PA_WS_DragonSlayer_DamageBonusPrc_Large> against large enemies."
+LocPromotionPopupText="<Bullet> Applies to all sources of damage.<br><br><font color='#909497'>\"Welcome to Anor Londo.\"</font>"
+LocFlyOverText="Dragon Slayer"
+
+
+
+[M31_PA_WS_WinterWarfare X2AbilityTemplate]
+LocFriendlyName="Winter Warfare"
+LocLongDescription="Grants +<Ability:M31_PA_WS_WinterWarfare_ChargeBonus> charge per bitterfrost grenade item. Increases the radius of frost and bitterfrost grenades by <Ability:M31_PA_WS_WinterWarfare_RadiusBonus> tile. Throwing frost and bitterfrost grenades no longer ends the turn."
+LocHelpText="Grants +<Ability:M31_PA_WS_WinterWarfare_ChargeBonus> charge per bitterfrost grenade item. Increases the radius of frost and bitterfrost grenades by <Ability:M31_PA_WS_WinterWarfare_RadiusBonus> tile. Throwing frost and bitterfrost grenades no longer ends the turn."
+LocPromotionPopupText="<Bullet> Applies to all slots.<br><Bullet> Extra grenades provided by abilities do not get extra charges.<br><br><font color='#909497'>\"Winter is coming.\"</font>"
+LocFlyOverText="Winter Warfare"
+
+[M31_PA_WS_WinterSoldier X2AbilityTemplate]
+LocFriendlyName="Winter Soldier"
+LocLongDescription="Grants a Grenade-only slot and a free frost bomb."
+; LocPromotionPopupText=""
+
+[M31_PA_WS_ChillingMist X2AbilityTemplate]
+LocFriendlyName="Chilling Mist"
+LocLongDescription="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
+LocHelpText="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
+LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_PA_WS_ChillingMist_Duration> turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks.<br><br><font color='#909497'>\"It's rather chilly here, isn't it?\"</font>"
+
+[M31_PA_WS_ChillingMist_Attack X2AbilityTemplate]
+LocFriendlyName="Chilling Mist"
+LocFlyOverText="Chilling Mist"
+
+[M31_PA_WS_StupidSexySnake X2AbilityTemplate]
+LocFriendlyName="Enchanting Presence"
+LocLongDescription="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
+LocHelpText="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
+LocPromotionPopupText="<Bullet> The effect updates when the units finish their movement.<br><Bullet> The effect applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs."
+
+[M31_PA_WS_StupidSexySnake_Update X2AbilityTemplate]
+LocFriendlyName="Enchanting Presence"
+LocFlyOverText="Enchanting Presence"
+
+[M31_PA_WS_RebelYell X2AbilityTemplate]
+LocFriendlyName="Rebel Yell"
+LocLongDescription="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> turn(s). Costs a single action and doesn't end the turn. Has an <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> turn(s). Costs a single action and doesn't end the turn."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_WS_RebelYell_Radius> tile radius.<br><Bullet> The bonus applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs.<br><Bullet> Applies to panicking allies: <Ability:M31_PA_WS_RebelYell_bAppliesToPanicked>. Clears panic: <Ability:M31_PA_WS_RebelYell_bClearsPanic>.<br><Bullet> Applies to mind controlled allies: <Ability:M31_PA_WS_RebelYell_bAppliesToMindControlled>. Clears mind control: <Ability:M31_PA_WS_RebelYell_bClearsMindControl>.<br><Bullet> Applies to stunned allies: <Ability:M31_PA_WS_RebelYell_bAppliesToStunned>. Clears stun: <Ability:M31_PA_WS_RebelYell_bClearsStun>.<br><br><font color='#909497'>\"Fuses burn and wheels will turn, the ones who lie will never learn...\"</font>"
+LocFlyOverText="Rebel Yell"
+
+[M31_PA_WS_NorthernWinds X2AbilityTemplate]
+LocFriendlyName="Northern Winds"
+LocLongDescription="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> points of frost damage and a stack of bitterfrost."
+LocHelpText="At the end of each turn, all enemies in a <Ability:M31_PA_WS_NorthernWinds_Radius> tile radius receive <Ability:M31_PA_WS_NorthernWinds_Damage> points of frost damage frost damage and a stack of bitterfrost."
+LocPromotionPopupText="<Bullet> Deals frost damage and ignores armor.<br><Bullet> Requires line of sight: <Ability:M31_PA_WS_NorthernWinds_bRequireVisibility>.<br><Bullet> <font color='#0bff9b'>Northern Winds</font> work while burning: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileBurning>.<br><Bullet> <font color='#0bff9b'>Northern Winds</font> work while concealed: <Ability:M31_PA_WS_NorthernWinds_bAllowWhileConcealed>.<br><Bullet> If <font color='#0bff9b'>Northern Winds</font> affect any enemy while <Ability:ClassName> is concealed, their concealment will be broken.<br><Bullet> <font color='#0bff9b'>Northern Winds</font> activate before the start of the alien turn. If the <Ability:ClassName>'s concealment is broken by this ability, the enemies activated will get a full turn.<br><br><font color='#909497'>\"Reduces the electricity bill for the AC usage on the Avenger.\"</font>"
+
+[M31_PA_WS_NorthernWinds_Trigger X2AbilityTemplate]
+LocFriendlyName="Northern Winds"
+LocFlyOverText="Northern Winds"
+
+[M31_PA_WS_MetabolicBoost X2AbilityTemplate]
+LocFriendlyName="Metabolic Boost"
+LocLongDescription="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Metabolic Boost</font> removes the same environmental effects a Medikit does.<br><Bullet> Dodge bonus applies even when the <Ability:ClassName> is out of cover."
+
+[M31_PA_WS_ThrillOfTheHunt X2AbilityTemplate]
+LocFriendlyName="Thrill of the Hunt"
+LocLongDescription="Start each turn with an additional movement-only action. Gain +<Ability:M31_PA_WS_ThrillOfTheHunt_AimPerStack> aim and +<Ability:M31_PA_WS_ThrillOfTheHunt_CritPerStack> crit until the end of the mission for every enemy that dies in your line of sight. Stacks up to <Ability:M31_PA_WS_ThrillOfTheHunt_MaxStacks> times."
+LocHelpText="Start each turn with an additional movement-only action. Gain +<Ability:M31_PA_WS_ThrillOfTheHunt_AimPerStack> aim and +<Ability:M31_PA_WS_ThrillOfTheHunt_CritPerStack> crit until the end of the mission for every enemy that dies in your line of sight. Stacks up to <Ability:M31_PA_WS_ThrillOfTheHunt_MaxStacks> times."
+LocPromotionPopupText="<Bullet> The <Ability:ClassName> has to be able to see the enemy when it dies to recieve the bonus.<br><Bullet> The <Ability:ClassName> will not recieve the bonus if they are not able to act. This includes panicking, bleeding out, being stunned, dazed, or dead.<br><Bullet> Doesn't apply when robotic enemies die: <Ability:M31_PA_WS_ThrillOfTheHunt_bExcludeRobotic>.<br><br><font color='#909497'>\"There will be blood! Shed!\"</font>"
+
+
+[M31_PA_WS_Bolt_Maelstrom X2AbilityTemplate]
+LocFriendlyName="Maelstrom Bolt"
+LocLongDescription="Special bolt. Has +<Ability:M31_PA_WS_Bolt_Maelstrom_CritBonus> critical chance against unflankable targets and +<Ability:M31_PA_WS_Bolt_Maelstrom_AimBonus> aim against large units. Aim and critical chance can <font color='#0bff9b'>overflow</font>. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt with bonus critical chance against unflankable targets and bonus aim against large units."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Overflow</font>: all aim above <font color='#ffd700'>100</font> contributes to critical chance, and all critical chance above <font color='#ffd700'>100</font> contributes to base weapon damage (<font color='#ffd700'>25</font> critical chance = <font color='#ffd700'>25%</font> base weapon damage).<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, critical chance bonus is increased to +<Ability:M31_PA_WS_Bolt_Maelstrom_CritBonus_Ballista>, and aim bonus is increased to +<Ability:M31_PA_WS_Bolt_Maelstrom_AimBonus_Ballista>.<br><br><font color='#909497'>\"Sir, those are protoss archons. If they get too close, our men won't stand a chance!\"</font>"
+LocFlyOverText="Maelstrom Bolt"
+
+[M31_PA_WS_Bolt_Maelstrom_LTT X2AbilityTemplate]
+LocFriendlyName="Maelstrom Bolt (Delayed)"
+LocLongDescription="Delay Maelstrom Bolt attack until the start of the enemy action."
+LocHelpText="Delay Maelstrom Bolt attack until the start of the enemy action."
+LocFlyOverText="Maelstrom Bolt"
+
+[M31_PA_WS_Bolt_Maelstrom_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Maelstrom Bolt"
+LocFlyOverText="Maelstrom Bolt"
+
+[M31_PA_WS_Bolt_Maelstrom_Passive X2AbilityTemplate]
+LocFriendlyName="Maelstrom"
+LocFlyOverText="Maelstrom"
+
+
+[M31_PA_WS_Bolt_Frost X2AbilityTemplate]
+LocFriendlyName="Arctic Bolt"
+LocLongDescription="Special bolt. Freezes the target and all units in a <Ability:M31_PA_WS_Bolt_Frost_Radius> radius around it. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt that freezes the target and all units around it."
+LocPromotionPopupText="<Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Frost_Radius_Ballista>.<br><br><font color='#909497'>\"I see a cold wind blowing through...\"</font>"
+LocFlyOverText="Arctic Bolt"
+
+[M31_PA_WS_Bolt_Frost_LTT X2AbilityTemplate]
+LocFriendlyName="Arctic Bolt (Delayed)"
+LocLongDescription="Delay Arctic Bolt attack until the start of the enemy action."
+LocHelpText="Delay Arctic Bolt attack until the start of the enemy action."
+LocFlyOverText="Arctic Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Frost_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Arctic Bolt"
+LocFlyOverText="Arctic Bolt"
+
+
+[M31_PA_WS_Bolt_Shred X2AbilityTemplate]
+LocFriendlyName="Crushing Bolt"
+LocLongDescription="Special bolt. Has +<Ability:M31_PA_WS_Bolt_Shred_ShredBonus> shred and destroys the target's cover. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt that has bonus shred and destroys the target's cover."
+LocPromotionPopupText="<Bullet> The cover will be destroyed even if the attack misses.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, shred bonus is increased to <Ability:M31_PA_WS_Bolt_Shred_ShredBonus_Ballista>."
+LocFlyOverText="Crushing Bolt"
+
+[M31_PA_WS_Bolt_Shred_LTT X2AbilityTemplate]
+LocFriendlyName="Crushing Bolt (Delayed)"
+LocLongDescription="Delay Crushing Bolt until the start of the enemy action."
+LocHelpText="Delay Crushing Bolt until the start of the enemy action."
+LocFlyOverText="Crushing Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Shred_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Crushing Bolt"
+LocFlyOverText="Crushing Bolt"
+
+
+[M31_PA_WS_Bolt_Rupture X2AbilityTemplate]
+LocFriendlyName="Rupturing Bolt"
+LocLongDescription="Special bolt. Has +<Ability:M31_PA_WS_Bolt_Rupture_RuptureBonus> rupture and +<Ability:M31_PA_WS_Bolt_Rupture_CritBonus> critical chance. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bonus with bonus rupture and critical chance."
+LocPromotionPopupText="<Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, rupture bonus is increased to +<Ability:M31_PA_WS_Bolt_Rupture_RuptureBonus_Ballista>, and critical chance bonus is increased to +<Ability:M31_PA_WS_Bolt_Rupture_CritBonus_Ballista>."
+LocFlyOverText="Rupturing Bolt"
+
+[M31_PA_WS_Bolt_Rupture_LTT X2AbilityTemplate]
+LocFriendlyName="Rupturing Bolt (Delayed)"
+LocLongDescription="Delay Rupturing Bolt until the start of the enemy action."
+LocHelpText="Delay Rupturing Bolt until the start of the enemy action."
+LocFlyOverText="Rupturing Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Rupture_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Rupturing Bolt"
+LocFlyOverText="Rupturing Bolt"
+
+
+[M31_PA_WS_Bolt_Stun X2AbilityTemplate]
+LocFriendlyName="Impaling Bolt"
+LocLongDescription="Special bolt. Stuns non-large units for <Ability:M31_PA_WS_Bolt_Stun_StunDuration> actions, reduces their mobility by <Ability:M31_PA_WS_Bolt_Stun_MobilityPenalty> and applies bleeding to organic units (<Ability:M31_PA_WS_Bolt_Stun_BleedDamage> damage per turn) for <Ability:M31_PA_WS_Bolt_Stun_DebuffDuration> turn(s). Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt that stuns the target, reduces its mobility and applies bleeding to organic units."
+LocPromotionPopupText="<Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, stun duration is increased to <Ability:M31_PA_WS_Bolt_Stun_StunDuration_Ballista> actions, mobility penalty to <Ability:M31_PA_WS_Bolt_Stun_MobilityPenalty_Ballista> and bleeding damage to <Ability:M31_PA_WS_Bolt_Stun_BleedDamage_Ballista>. Additionally allows Impaling Bolt to stun large units for <Ability:M31_PA_WS_Bolt_Stun_StunDurationLarge_Ballista> action(s)."
+LocFlyOverText="Impaling Bolt"
+
+[M31_PA_WS_Bolt_Stun_LTT X2AbilityTemplate]
+LocFriendlyName="Impaling Bolt (Delayed)"
+LocLongDescription="Delay Impaling Bolt until the start of the enemy action."
+LocHelpText="Delay Impaling Bolt until the start of the enemy action."
+LocFlyOverText="Impaling Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Stun_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Impaling Bolt"
+LocFlyOverText="Impaling Bolt"
+
+
+[M31_PA_WS_Bolt_Crit X2AbilityTemplate]
+LocFriendlyName="Precision Bolt"
+LocLongDescription="Special bolt. Has +<Ability:M31_PA_WS_Bolt_Crit_CritBonus> critical chance and +<Ability:M31_PA_WS_Bolt_Crit_BasePrcCritDamageBonus> base critical damage. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt with bonus critical chance and base critical damage."
+LocPromotionPopupText="<Bullet> Base critical damage bonus takes into account only the critical damage bonus of the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, critical chance bonus is increased to +<Ability:M31_PA_WS_Bolt_Crit_CritBonus_Ballista>, and base critical damage bonus is increased to +<Ability:M31_PA_WS_Bolt_Crit_BasePrcCritDamageBonus_Ballista>."
+LocFlyOverText="Precision Bolt"
+
+[M31_PA_WS_Bolt_Crit_LTT X2AbilityTemplate]
+LocFriendlyName="Precision Bolt (Delayed)"
+LocLongDescription="Delay Precision Bolt until the start of the enemy action."
+LocHelpText="Delay Precision Bolt until the start of the enemy action."
+LocFlyOverText="Precision Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Crit_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Precision Bolt"
+LocFlyOverText="Precision Bolt"
+
+
+[M31_PA_WS_Bolt_Fire X2AbilityTemplate]
+LocFriendlyName="Fusion Bolt"
+LocLongDescription="Special bolt. Explodes, dealing damage to the target and all units in a <Ability:M31_PA_WS_Bolt_Fire_Radius> radius around it, and setting them on fire. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt that explodes, damaging and setting the target and nearby units on fire."
+LocPromotionPopupText="<Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Fire_Radius_Ballista>."
+LocFlyOverText="Fusion Bolt"
+
+[M31_PA_WS_Bolt_Fire_LTT X2AbilityTemplate]
+LocFriendlyName="Fusion Bolt (Delayed)"
+LocLongDescription="Delay Fusion Bolt until the start of the enemy action."
+LocHelpText="Delay Fusion Bolt until the start of the enemy action."
+LocFlyOverText="Fusion Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Fire_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Fusion Bolt"
+LocFlyOverText="Fusion Bolt"
+
+
+[M31_PA_WS_Bolt_Psi X2AbilityTemplate]
+LocFriendlyName="Reaver Bolt"
+LocLongDescription="Special bolt. Causes a psionic explosion that deals psionic damage to the target and all units in a <Ability:M31_PA_WS_Bolt_Psi_Radius> radius around it and destroys buildings and other objects in the environment. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Special bolt that deals psionic damage to the target and nearby units and destroying environmental objects."
+LocPromotionPopupText="<Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Psi_Radius_Ballista>."
+LocFlyOverText="Reaver Bolt"
+
+[M31_PA_WS_Bolt_Psi_LTT X2AbilityTemplate]
+LocFriendlyName="Reaver Bolt (Delayed)"
+LocLongDescription="Delay Reaver Bolt until the start of the enemy action."
+LocHelpText="Delay Reaver Bolt until the start of the enemy action."
+LocFlyOverText="Reaver Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Psi_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Reaver Bolt"
+LocFlyOverText="Reaver Bolt"
+
+
+[M31_PA_WS_Bolt_Poison X2AbilityTemplate]
+LocFriendlyName="Aeonian Bolt"
+LocLongDescription="Special bolt. Explodes, poisoning and disorienting the target and all units in a <Ability:M31_PA_WS_Bolt_Poison_Radius> radius around it. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Disorientation will not apply against enemies immune to poison.<br><Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Poison_Radius_Ballista>."
+LocFlyOverText="Aeonian Bolt"
+
+[M31_PA_WS_Bolt_Poison_LTT X2AbilityTemplate]
+LocFriendlyName="Aeonian Bolt (Delayed)"
+LocLongDescription="Delay Aeonian Bolt until the start of the enemy action."
+LocHelpText="Delay Aeonian Bolt until the start of the enemy action."
+LocFlyOverText="Aeonian Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Poison_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Aeonian Bolt"
+LocFlyOverText="Aeonian Bolt"
+
+
+[M31_PA_WS_Bolt_Rad X2AbilityTemplate]
+LocFriendlyName="Wasteland Bolt"
+LocLongDescription="Special bolt. Explodes, irradiating the target and all units in a <Ability:M31_PA_WS_Bolt_Rad_Radius> radius around it. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Radiation can apply a variety of severe debuffs that affect even the Chosen<br><Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Rad_Radius_Ballista>."
+LocFlyOverText="Wasteland Bolt"
+
+[M31_PA_WS_Bolt_Rad_LTT X2AbilityTemplate]
+LocFriendlyName="Wasteland Bolt (Delayed)"
+LocLongDescription="Delay Wasteland Bolt until the start of the enemy action."
+LocHelpText="Delay Wasteland Bolt until the start of the enemy action."
+LocFlyOverText="Wasteland Bolt (Delayed)"
+
+[M31_PA_WS_Bolt_Rad_LTT_Attack X2AbilityTemplate]
+LocFriendlyName="Wasteland Bolt"
+LocFlyOverText="Wasteland Bolt"
+
+
+

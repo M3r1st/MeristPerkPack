@@ -1,7 +1,7 @@
 [M31_ENEMY_Sidewinder X2AbilityTemplate]
 LocFriendlyName="Sidewinder"
-LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> Turn(s). Will not activate if the unit is disoriented or burning."
-LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> Turn(s). Will not activate if the unit is disoriented or burning."
+LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> turn(s). Will not activate if the unit is disoriented or burning."
+LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can only trigger once every <Ability:M31_ENEMY_Sidewinder_Cooldown> turn(s). Will not activate if the unit is disoriented or burning."
 LocFlyOverText="Sidewinder"
 
 [M31_ENEMY_Sidewinder_Move X2AbilityTemplate]
@@ -11,8 +11,8 @@ LocFlyOverText="Sidewinder"
 
 [M31_ENEMY_MuchSidewinder X2AbilityTemplate]
 LocFriendlyName="Sidewinder Elite"
-LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can activate once per turn. Will not activate if the unit is disoriented, burning, or otherwise impaired."
-LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action.  Can activate once per turn. Will not activate if the unit is disoriented, burning, or otherwise impaired."
+LocLongDescription="Allows the unit to evade a damaging attack, and instantly gain a movement action. Can activate once per turn. Will not activate during the unit's own turn or if the unit is disoriented, burning, or otherwise impaired."
+LocHelpText="Allows the unit to evade a damaging attack, and instantly gain a movement action.  Can activate once per turn. Will not activate during the unit's own or if the unit is disoriented, burning, or otherwise impaired."
 LocFlyOverText="Sidewinder Elite"
 
 [M31_ENEMY_MuchSidewinder_Move X2AbilityTemplate]
@@ -22,15 +22,21 @@ LocFlyOverText="Sidewinder"
 
 [M31_ENEMY_ViperBite X2AbilityTemplate]
 LocFriendlyName="Vicious Bite"
-LocLongDescription="Bite any enemy within blue movement range. Deals moderate damage, applies poison and rupture the target. Costs a single action and doesn't end the turn. Cannot target robots and environmental objects."
-LocHelpText="Bite any enemy within blue movement range. Deals moderate damage, applies poison and rupture the target. Cannot target robots."
+LocLongDescription="Bite any enemy within blue movement range. Deals moderate damage and poisons and ruptures the target. Cannot target robots."
+LocHelpText="Bite any enemy within blue movement range. Deals moderate damage and poisons and ruptures the target. Cannot target robots."
 LocFlyOverText="Vicious Bite"
+
+[M31_ENEMY_ViperBiteWithCrit X2AbilityTemplate]
+LocFriendlyName="Very Vicious Bite"
+LocLongDescription="Very angrily bite an enemy within blue movement range. Deals moderate damage and poisons and severely ruptures the target. Has very high critical chance. Requires two actions. Cannot target robots."
+LocHelpText="Very angrily bite an enemy within blue movement range. Deals moderate damage and poisons and severely ruptures the target. Has very high critical chance. Requires two actions. Cannot target robots."
+LocFlyOverText="Very Vicious Bite"
 
 
 [M31_ENEMY_Lockjaw X2AbilityTemplate]
 LocFriendlyName="Lockjaw"
-LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
-LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
+LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> turn cooldown, but only when the attack successfuly hits. Cannot target robots."
+LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> turn cooldown, but only when the attack successfuly hits. Cannot target robots."
 LocFlyOverText="Lockjaw"
 
 [M31_ENEMY_Lockjaw_Attack X2AbilityTemplate]
@@ -41,7 +47,7 @@ LocFlyOverText="Lockjaw"
 [M31_ENEMY_AngryBite X2AbilityTemplate]
 LocFriendlyName="Angry Bite"
 LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Cannot target robots."
-LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn."
+LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Cannot target robots."
 LocFlyOverText="Angry Bite"
 
 [M31_ENEMY_AngryBite_Attack X2AbilityTemplate]
@@ -65,13 +71,38 @@ LocFlyOverText="Poison Spit"
 
 [M31_PA_Coil_Hunker X2AbilityTemplate]
 LocFriendlyName="Defensive Coil"
-LocLongDescription="If the unit did not attack this turn, it coils down, increasing its defense and dodge even against flanking attacks."
-LocHelpText="If the unit did not attack this turn, it coils down, increasing its defense and dodge even against flanking attacks."
-LocFlyOverText="Defensive Coil"
+LocLongDescription="If this reptile did not attack this turn, it coils down, gaining additional defense and dodge even against flanking attacks."
+LocHelpText="If this reptile did not attack this turn, it coils down, gaining additional defense and dodge even against flanking attacks."
+LocFlyOverText="Coil"
+
+[M31_PA_Coil_Hunker_Trigger X2AbilityTemplate]
+LocFriendlyName="Defensive Coil"
+LocLongDescription="If this reptile did not attack this turn, it coils down, gaining additional defense and dodge even against flanking attacks."
+LocHelpText="If this reptile did not attack this turn, it coils down, gaining additional defense and dodge even against flanking attacks."
+LocFlyOverText="Coil"
 
 
 [M31_ENEMY_AdvancedCoilHunker X2AbilityTemplate]
 LocFriendlyName="Advanced Defensive Coil"
-LocLongDescription="The unit coils down at the end of each turn, increasing its defense and dodge even against flanking attacks."
-LocHelpText="The unit coils down at the end of each turn, increasing its defense and dodge even against flanking attacks."
-LocFlyOverText="Defensive Coil"
+LocLongDescription="This reptile coils down at the end of each turn, gaining additional defense and dodge even against flanking attacks."
+LocHelpText="This reptile coils down at the end of each turn, gaining additional defense and dodge even against flanking attacks."
+LocFlyOverText="Coil"
+
+[M31_ENEMY_AdvancedCoilHunker_Trigger X2AbilityTemplate]
+LocFriendlyName="Advanced Defensive Coil"
+LocLongDescription="This reptile coils down at the end of each turn, gaining additional defense and dodge even against flanking attacks."
+LocHelpText="This reptile coils down at the end of each turn, gaining additional defense and dodge even against flanking attacks."
+LocFlyOverText="Coil"
+
+
+[M31_ENEMY_CoilHunkerDamaged X2AbilityTemplate]
+LocFriendlyName="Reactive Coil"
+LocLongDescription="Whenever this reptile takes damage, it coils down, gaining additional defense and dodge even against flanking attacks. Will not activate during its own turn."
+LocHelpText="Whenever this reptile takes damage, it coils down, gaining additional defense and dodge even against flanking attacks. Will not activate during its own turn."
+LocFlyOverText="Coil"
+
+[M31_ENEMY_CoilHunkerDamaged_Trigger X2AbilityTemplate]
+LocFriendlyName="Reactive Coil"
+LocLongDescription="Whenever this reptile takes damage, it coils down, gaining additional defense and dodge even against flanking attacks. Will not activate during its own turn."
+LocHelpText="Whenever this reptile takes damage, it coils down, gaining additional defense and dodge even against flanking attacks. Will not activate during its own turn."
+LocFlyOverText="Coil"

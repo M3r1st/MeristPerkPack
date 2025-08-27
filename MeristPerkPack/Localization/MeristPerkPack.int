@@ -1,13 +1,15 @@
 [Help]
 
 M31_DefaultWeapon                           = "weapon"
-
 M31_PerRank                                 = "per rank"
 M31_Turns                                   = "Turn(s)"
-
 M31_FreeAction                              = "Free action"
+M31_CoveringFire_FlyoverText                = ": Covering Fire"
 
 M31_Shield_BonusText                        = "Shield remaining: <Ability:M31_ShieldRemaining>.<br>Shield priority: <Ability:M31_ShieldPriority>."
+
+M31_SharpshooterAim_FriendlyName            = "Hunker Down: Aim"
+M31_SharpshooterAim_BuffText                = "This unit receives +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance on its next shot."
 
 M31_ShadowstepAid_FriendlyName              = "Shadowstep Aid"
 M31_ShadowstepAid_BuffText                  = "This unit is given temporary Shadowstep and does not trigger overwatch or reaction fire."
@@ -16,52 +18,65 @@ M31_TargetingAid_FriendlyName               = "Targeting Aid"
 M31_TargetingAid_BuffText                   = "This unit's aim is incrased by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
 
 M31_AdvancedAidProtocol_FriendlyName        = "Advanced Aid"
-M31_AdvancedAidProtocol_BuffText            = "This unit is protected. Their dodge is increased by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and the chance of being criticaly hit reduced by <Ability:M31_AdvancedAidProtocol_CritResistance>."
+M31_AdvancedAidProtocol_BuffText            = "This unit's dodge is increased by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and the chance of being criticaly hit reduced by <Ability:M31_AdvancedAidProtocol_CritResistance>."
 
-M31_CA_Escalation_BonusText                 = "While Escalation is active, gain +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
-
+M31_CA_Escalation_BonusText                 = "Gain +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
 M31_CA_KillingSpree_BonusText               = "+<Ability:M31_CA_KillingSpree_DamageBonus> damage, +<Ability:M31_CA_KillingSpree_CritBonus> critical chance."
-
 M31_CA_ChaosDriver_BonusText                = "This unit takes and deals increased damage."
-
 M31_CA_MarkedForDeath_FriendlyName          = "Marked for Death"
 M31_CA_MarkedForDeath_FriendlyDesc          = "The caster's next attack against this unit will not cost an action."
 
 M31_PA_Coil_FriendlyName                    = "Coiled"
 M31_PA_Coil_BonusText                       = "Your next action will not end the turn."
-
+M31_PA_RegenBite_BuffText                   = "This unit is regenerating."
+M31_PA_RegenBite_EnhBuffText                = "This unit is regenerating rapidly."
+M31_PA_RegenBite_ImmunityBuffText           = "This unit is immune to poison."
+M31_PA_MemeBite_BuffText                    = "You might require a doctor."
 M31_PA_HardenedShield_FriendlyName          = "Hardened Shield"
 
+M31_Malevolence_Radiation_FriendlyName      = "Malevolence: Radiation"
+M31_Malevolence_Burning_FriendlyName        = "Malevolence: Burning"
+M31_Malevolence_Poisoned_FriendlyName       = "Malevolence: Poison"
+M31_Malevolence_Frost_FriendlyName          = "Malevolence: Hypothermia"
+M31_Malevolence_Radiation_DebuffText        = "This unit's damage is reduced by <Ability:M31_Malevolence_Radiation_DamageReductionPrc>."
+M31_Malevolence_Burning_DebuffText          = "This unit takes <Ability:M31_Malevolence_Burning_DOTDamageBonus> additional damage from damage-over-time effects."
+M31_Malevolence_Poisoned_DebuffText         = "This unit's critical chance is reduced by <Ability:M31_Malevolence_Poisoned_CritPenalty> and graze chance increased by <Ability:M31_Malevolence_Poisoned_GrazePenalty>."
+M31_Malevolence_Frost_DebuffText            = "This unit's aim and defense are reduced."
+
 M31_BloodThirst_BuffText                    = "<Ability:M31_BloodThirst_BuffText>"
-M31_BloodThirst_BuffText_NoStacks           = "Thos unit doesn't have any stacks of Blood Thirst."
-M31_BloodThirst_BuffText_Stacks             = "This unit has [X] stack(s) of Blood Thirst."
-M31_BloodThirst_BuffText_StacksHelp         = "[X] stack(s) will be lost in [Y] Turn(s)."
+M31_BloodThirst_BuffText_NoStacks           = "This unit doesn't have any stacks."
+M31_BloodThirst_BuffText_Stacks             = "This unit has [X] stack(s)."
+M31_BloodThirst_BuffText_StacksHelp         = "[X] stack(s) will be lost in [Y] turns."
 M31_BloodThirst_BuffText_StacksHelpFirst    = "[X] stack(s) will be lost at the start of the next turn."
 
-M31_Duskborn_BonusText                      = "Duskborn is still active."
-; M31_Duskborn_BonusText                      = "Duckborn is still active. <Ability:ClassName> is still quacking."
+M31_SleightOfHand_BuffText                  = "<Ability:M31_SleightOfHand_BuffText>"
+M31_SleightOfHand_Stacks                    = "This unit gains +[X] aim and +[Y] critical chance from [Z] stack(s)."
 
-M31_ThermalShock_DebuffText                 = "Suffering from Thermal Shock. Aim and defense are reduced."
-
-M31_PA_CripplingBlow_DebuffText             = "The unit is crippled. Aim, mobility and dodge are reduced."
-
+M31_DisarmingShot_DebuffText                = "The unit is disarmed. Its aim and critical chance are reduced."
+M31_ThermalShock_DebuffText                 = "This unit is affected by Thermal Shock. Its aim and defense are reduced."
+M31_PA_CripplingBlow_DebuffText             = "The unit is crippled. Its aim, mobility and dodge are reduced."
 M31_PA_Sidewinder_CooldownText              = "Sidewinder is unavailable."
+
+M31_Botnet_BonusText                        = "This unit's standard shots reduce the targets' hack defense."
+M31_Duskborn_BonusText                      = "Duskborn is still active."
+
+M31_Maimed_FriendlyName                     = "Maimed"
+M31_Maimed_DebuffText                       = "The unit's mobility is reduced to zero and they cannot move. They can still shoot and perform other non-movement actions."
 
 M31_PA_ViperPoison_DebuffText               = "The unit is poisoned. Its aim and mobility are reduced, and it takes <Ability:M31_PA_Poison_DamagePerTurn_Debuff> damage at the start of each turn."
 M31_PA_ViperEnhancedPoison_DebuffText       = "The unit is poisoned. Its aim and mobility are reduced, and it takes <Ability:M31_PA_EnhancedPoison_DamagePerTurn_Debuff> damage at the start of each turn."
 M31_BloodletBleeding_DebuffText             = "The unit is bleeding. It takes <Ability:M31_Bloodlet_BleedDamage_Debuff> damage at the start of each turn."
 M31_BleedingRoundsBleeding_DebuffText       = "The unit is bleeding. It takes <Ability:M31_BleedingRounds_BleedDamage_Debuff> damage at the start of each turn."
 M31_PipeBombsBleeding_DebuffText            = "The unit is bleeding. It takes <Ability:M31_PipeBombs_BleedDamage> damage at the start of each turn."
-M31_PA_VeryAngryBite_DebuffText             = "The unit is bleeding. It takes <Ability:M31_PA_VeryAngryBite_BleedDamage_Debuff> damage at the start of each turn."
 
-M31_ENEMY_ViperPoison_DebuffText            = ""
-M31_ENEMY_ViperEnhPoison_DebuffText         = ""
+M31_ENEMY_ViperPoison_DebuffText            = "The unit is poisoned. Its aim and mobility are reduced, and it takes a small amount of damage at the start of each turn."
+M31_ENEMY_ViperEnhPoison_DebuffText         = "The unit is poisoned. Its aim and mobility are drastically reduced, and it takes damage at the start of each turn."
 
-M31_PA_WS_Bolt_Maelstrom_FriendlyName       = "Maelstrom"
-M31_PA_WS_StupidSexySnake_BuffText          = "This unit is enchanted. Its aim, crit, and dodge are increased."
-M31_PA_WS_RebelYell_BuffText                = "This unit is inspired. It gains various stat bonuses."
-M31_PA_WS_Thrill_BuffText                   = "<Ability:M31_PA_WS_Thrill_BuffText>"
-M31_PA_WS_Thrill_Stacks                     = "This unit gains +[X] aim and +[Y] critical chance from [Z] stack(s) of Thrill."
+M31_LocalizedAbility_StandardShot           = "Standard Shot"
+M31_LocalizedAbility_SniperStandardFire     = "Standard Sniper Shot"
+M31_LocalizedAbility_PistolStandardShot     = "Pistol Shot"
+M31_LocalizedAbility_Maim_LW                = "Maim (LW)"
+
 
 [BitterfrostHelper]
 ChillEffectName="Chilled"
@@ -70,8 +85,12 @@ BitterChillEffectName="Bitter Chilled"
 BitterChillEffectDesc="Mobility reduced and unable to dodge. Vulnerable to freezing."
 
 [MZ_Effect_Hypothermia]
-HypothermiaEffectName = "Hypothermia"
-HypothermiaEffectDesc = "Cold damage at the begining of each turn depending on degree of chill."
+HypothermiaEffectName="Hypothermia"
+HypothermiaTitle="Hypothermia"
+HypothermiaEffectDesc="Taking 1 - 4 cold damage over time depending on the degree of chill."
+HypothermiaEffectAcquiredString="<XGParam:StrValue0/!UnitName/> is hypothermal."
+HypothermiaEffectTickedString="<XGParam:StrValue0/!UnitName/> is still hypothermal."
+HypothermiaEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer hypothermal."
 
 [X2StatusEffects_Radiation]
 RadBurningFriendlyName="Radiation Burn"

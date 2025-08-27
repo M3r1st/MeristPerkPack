@@ -1,0 +1,8 @@
+[Help]
+
+M31_PA_WS_Ballista                          = "Ballista"
+M31_PA_WS_Bolt_Maelstrom_FriendlyName       = "Maelstrom"
+M31_PA_WS_StupidSexySnake_BuffText          = "This unit is enchanted. Its aim, crit, and dodge are increased."
+M31_PA_WS_RebelYell_BuffText                = "This unit is inspired. It gains various stat bonuses."
+M31_PA_WS_Thrill_BuffText                   = "<Ability:M31_PA_WS_Thrill_BuffText>"
+M31_PA_WS_Thrill_Stacks                     = "This unit gains +[X] aim and +[Y] critical chance from [Z] stack(s)."

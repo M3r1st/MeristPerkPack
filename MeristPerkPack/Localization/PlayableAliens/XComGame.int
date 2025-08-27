@@ -12,8 +12,8 @@ LocPromotionPopupText="<Bullet> Stock Bash can be a good way to start the turn i
 
 [M31_PA_Ambush X2AbilityTemplate]
 LocFriendlyName="Ambush"
-LocLongDescription="When your concealment is broken, you will automatically enter overwatch."
-LocHelpText="When your concealment is broken, you will automatically enter overwatch."
+LocLongDescription="Whenever your concealment is broken, you will automatically enter overwatch."
+LocHelpText="Whenver your concealment is broken, you will automatically enter overwatch."
 ; LocPromotionPopupText=""
 LocFlyOverText="Ambush"
 
@@ -23,30 +23,30 @@ LocFlyOverText="Ambush"
 
 [M31_PA_Coil X2AbilityTemplate]
 LocFriendlyName="Coil"
-LocLongDescription="The <Ability:ClassName> coils its body tightly, increasing its defense by <Ability:M31_PA_Coil_DefenseBonus> and dodge by <Ability:M31_PA_Coil_DodgeBonus>, and gaining an extra action on the next turn. The first non-movement action you take on the next turn will not be turn-ending. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown. Allows the use of <font color='#1abc9c'>Defensive Coil</font>."
+LocLongDescription="The <Ability:ClassName> coils its body tightly, increasing its defense by <Ability:M31_PA_Coil_DefenseBonus> and dodge by <Ability:M31_PA_Coil_DodgeBonus>, and gaining an extra action on the next turn. The first non-movement action you take on the next turn will not be turn-ending. Allows the use of <font color='#0bff9b'>Defensive Coil</font>."
 LocHelpText="Increase defense by <Ability:M31_PA_Coil_DefenseBonus> and dodge by <Ability:M31_PA_Coil_DodgeBonus>, and gain an extra action on the next turn. The first non-movement action you take on the next turn will not be turn-ending."
-LocPromotionPopupText="<Bullet> Can be used without cover.<br><Bullet> Defensive bonuses are reduced to x<Ability:M31_PA_Coil_NoCoverModifier> against flanking and melee attacks or when the <Ability:ClassName> cannot be flanked.<br><Bullet> <font color='#1abc9c'>Defensive Coil</font> gives the same defensive bonuses, has no cooldown, and can be used while on fire or disoriented.<br><Bullet> <font color='#1abc9c'>Defensive Coil</font> can be activated by <font color='#1abc9c'>Deep Cover</font>: <Ability:M31_PA_Coil_Hunker_bAllowDeepCover>."
+LocPromotionPopupText="<Bullet> Can be used without cover.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Defensive bonuses are reduced to <Ability:M31_PA_Coil_NoCoverModifier> against flanking and melee attacks or when the <Ability:ClassName> cannot be flanked.<br><Bullet> Certain abilities, like <font color='#0bff9b'>Pinpoint</font> and <font color='#0bff9b'>Defensive Coil</font>, will still end the turn.<br><Bullet> <font color='#0bff9b'>Defensive Coil</font> gives the same defensive bonuses, has no cooldown, and can be used while on fire or disoriented.<br><Bullet> <font color='#0bff9b'>Defensive Coil</font> can be activated by <font color='#0bff9b'>Deep Cover</font>: <Ability:M31_PA_Coil_Hunker_bAllowDeepCover>."
 LocFlyOverText="Coil"
 
 [M31_PA_Coil_Hunker X2AbilityTemplate]
 LocFriendlyName="Defensive Coil"
 LocLongDescription="The <Ability:ClassName> coils its body tightly, increasing its defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>."
 LocHelpText="Increase defense by <Ability:M31_HunkerDown_DefenseBonus> and dodge by <Ability:M31_HunkerDown_DodgeBonus>."
-LocPromotionPopupText="<Bullet> Can be used without cover.<br><Bullet> Defensive bonuses are reduced to x<Ability:M31_PA_Coil_NoCoverModifier> against flanking and melee attacks or when the <Ability:ClassName> cannot be flanked."
+LocPromotionPopupText="<Bullet> Can be used without cover.<br><Bullet> Defensive bonuses are reduced to <Ability:M31_PA_Coil_NoCoverModifier> against flanking and melee attacks or when the <Ability:ClassName> cannot be flanked."
 LocFlyOverText="Defensive Coil"
 
 [M31_PA_Entwine X2AbilityTemplate]
 LocFriendlyName="Entwine"
 LocLongDescription="Increases Tongue Grab's aim by <Ability:M31_PA_Entwine_AimBonus> and bind damage by <Ability:M31_PA_Entwine_BindDamageBonus>. Additionaly, gain +<Ability:M31_PA_Entwine_DefenseBonus> defense while binding an enemy."
 LocHelpText="Increases Tongue Grab's aim by <Ability:M31_PA_Entwine_AimBonus> and bind damage by <Ability:M31_PA_Entwine_BindDamageBonus>. Additionaly, gain +<Ability:M31_PA_Entwine_DefenseBonus> defense while binding an enemy."
-; LocPromotionPopupText=""
+LocPromotionPopupText="<Bullet> Defense and damage bonuses apply to all types of Bind."
 LocFlyOverText="Entwine"
 
 [M31_PA_Lockjaw X2AbilityTemplate]
 LocFriendlyName="Lockjaw"
-LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
-LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and stuns the target for one action. Has a <Ability:M31_PA_Lockjaw_Cooldown> Turn(s) cooldown, but only when the attack successfuly hits. Cannot target robots."
-LocPromotionPopupText="<Bullet> If an enemy begins their turn in an adjacent tile, Lockjaw will activate if that enemy tries to attack.<br><Bullet> If an enemy does not begin their turn in an adjacent tile, Lockjaw will activate when that enemy moves into melee range.<br><Bullet> Deals <Ability:M31_PA_Lockjaw_Damage> damage, poisons the target, and <font color='#ffd700'>stuns the target for one action, interrupting their turn</font>.<br><Bullet> Counts as reaction fire and cannot crit.<br><Bullet> Only a successful (graze or hit) Lockjaw attack will put the ability on cooldown.<br><Bullet> Only one attempt can made against each target per turn.<br><Bullet> Lockjaw does not activate during the soldier's own turn.<br><Bullet> The poison is the same as Poison Spit's and is affected by <font color='#1abc9c'>Enhanced Poison</font>.<br><Bullet> Cannot target robots."
+LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and <font color='#ffd700'>stuns the target for one action</font>. Cannot target robots."
+LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Poisons and <font color='#ffd700'>stuns the target for one action</font>. Has a <Ability:M31_PA_Lockjaw_Cooldown> turn cooldown, but only when the attack successfuly hits. Cannot target robots."
+LocPromotionPopupText="<Bullet> If an enemy begins their turn in an adjacent tile, Lockjaw will activate if that enemy tries to attack.<br><Bullet> If an enemy does not begin their turn in an adjacent tile, Lockjaw will activate when that enemy moves into melee range.<br><Bullet> Deals <Ability:M31_PA_Lockjaw_Damage> damage, poisons the target, and <font color='#ffd700'>stuns the target for one action, interrupting their turn</font>.<br><Bullet> Counts as reaction fire and cannot crit.<br><Bullet> Only a successful (graze or hit) Lockjaw attack will put the ability on cooldown.<br><Bullet> Only one attempt can made against each target per turn.<br><Bullet> Lockjaw does not activate during the soldier's own turn.<br><Bullet> The poison is the same as Poison Spit's and is affected by <font color='#0bff9b'>Enhanced Poison</font>.<br><Bullet> Cannot target robots."
 LocFlyOverText="Lockjaw"
 
 [M31_PA_Lockjaw_Attack X2AbilityTemplate]
@@ -57,39 +57,25 @@ LocFlyOverText="Lockjaw"
 LocFriendlyName="Angry Bite"
 LocLongDescription="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn. Cannot target robots."
 LocHelpText="Free bite attack against any enemies that enter, exit or attack from melee range during the enemy turn."
-LocPromotionPopupText="<Bullet> If an enemy begins their turn in an adjacent tile, Angry Bite will activate if that enemy tries to attack.<br><Bullet> If an enemy does not begin their turn in an adjacent tile, Angry Bite will activate when that enemy moves into melee range.<br><Bullet> Deals <Ability:M31_PA_AngryBite_Damage> damage.<br><Bullet> Has innate +<Ability:M31_PA_AngryBite_AimBonus> aim and +<Ability:M31_PA_AngryBite_CritBonus> critical chance.<br><Bullet> Counts as reaction fire.<br><Bullet> Can crit (if reaction fire is allowed to crit): <Ability:M31_PA_AngryBite_bAllowCrit>.<br><Bullet> Has a cooldown (<Ability:M31_PA_AngryBite_Cooldown> Turn(s)): <Ability:M31_PA_AngryBite_bHasCooldown>.<br><Bullet> Cooldown applies only on hit: <Ability:M31_PA_AngryBite_bCooldownOnlyOnHit>.<br><Bullet> Angry Bite does not activate during the soldier's own turn.<br><Bullet> Cannot target robots."
+LocPromotionPopupText="<Bullet> If an enemy begins their turn in an adjacent tile, Angry Bite will activate if that enemy tries to attack.<br><Bullet> If an enemy does not begin their turn in an adjacent tile, Angry Bite will activate when that enemy moves into melee range.<br><Bullet> Deals <Ability:M31_PA_AngryBite_Damage> damage.<br><Bullet> Has innate +<Ability:M31_PA_AngryBite_AimBonus> aim and +<Ability:M31_PA_AngryBite_CritBonus> critical chance.<br><Bullet> Counts as reaction fire.<br><Bullet> Can crit (if reaction fire is allowed to crit): <Ability:M31_PA_AngryBite_bAllowCrit>.<br><Bullet> Has a cooldown (<Ability:M31_PA_AngryBite_Cooldown> turn(s)): <Ability:M31_PA_AngryBite_bHasCooldown>.<br><Bullet> Cooldown applies only on hit: <Ability:M31_PA_AngryBite_bCooldownOnlyOnHit>.<br><Bullet> Angry Bite does not activate during the soldier's own turn.<br><Bullet> Cannot target robots."
 LocFlyOverText="Angry Bite"
 
 [M31_PA_AngryBite_Attack X2AbilityTemplate]
 LocFriendlyName="Angry Bite"
 LocFlyOverText="Angry Bite"
 
-[M31_PA_VeryAngryBite X2AbilityTemplate]
-LocFriendlyName="Very Angry Bite"
-LocLongDescription="Viciously bite any adjacent enemy, dealing <Ability:M31_PA_VeryAngryBite_Damage> points of damage and causing bleeding. Costs a single action and doesn't the end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Viciously bite any adjacent enemy, dealing <Ability:M31_PA_VeryAngryBite_Damage> points of damage and causing bleeding. Costs a single action and doesn't the end the turn."
-LocPromotionPopupText="<Bullet> Can be used with movement-only actions: <Ability:M31_PA_VeryAngryBite_bAllowMovementActionPoint>.<br><Bullet> Counts as reaction fire: <Ability:M31_PA_VeryAngryBite_bIsReactonFire>.<br><Bullet> Can crit (if not reaction fire or reaction fire is allowed to crit): <Ability:M31_PA_VeryAngryBite_bAllowCrit>.<br><Bullet> Has +<Ability:M31_PA_VeryAngryBite_CritBonus> critical chance.<br><Bullet> Bleeding deals <Ability:M31_PA_VeryAngryBite_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_PA_VeryAngryBite_BleedDuration> Turn(s).<br>"
-LocFlyOverText="Very Angry Bite"
-; +<Ability:M31_PA_VeryAngryBite_AimBonus> aim
-
-[M31_PA_CrystallineCornea X2AbilityTemplate]
-LocFriendlyName="Crystalline Cornea"
-LocLongDescription="Gain +<Ability:M31_PA_CrystallineCornea_AimBonus> aim and additional +<Ability:M31_PA_CrystallineCornea_FlankAimBonus> aim for melee and flanking attacks."
-LocHelpText="Gain +<Ability:M31_PA_CrystallineCornea_AimBonus> aim and additional +<Ability:M31_PA_CrystallineCornea_FlankAimBonus> aim for melee and flanking attacks."
-; LocPromotionPopupText="<Bullet> "
-
-[M31_PA_MalevolentFocus X2AbilityTemplate]
-LocFriendlyName="Malevolent Focus"
-LocLongDescription="Allows reaction attacks to crit and increases the soldier's critical chance by <Ability:M31_PA_MalevolentFocus_CritBonus>."
-LocHelpText="Allows reaction attacks to crit and increases the soldier's critical chance by <Ability:M31_PA_MalevolentFocus_CritBonus>."
-LocPromotionPopupText="<Bullet> Allows all reaction attacks to crit.<br><Bullet> Critical chance bonus applies only to reaction attacks: <Ability:M31_PA_MalevolentFocus_bOnlyForReaction>."
-
+[M31_PA_Serpentine X2AbilityTemplate]
+LocFriendlyName="Serpentine"
+LocLongDescription="Once per turn, the actions spent on some of the <Ability:ClassName>'s abilities will be refunded."
+LocHelpText="Once per turn, the actions spent on some of the <Ability:ClassName>'s abilities will be refunded."
+LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Will not activate while Serial is active.<br><Bullet> Applies to <Ability:M31_PA_Serpentine_Abilities>."
+LocFlyOverText="Serpentine"
 
 [M31_PA_Rattle X2AbilityTemplate]
 LocFriendlyName="Rattle"
-LocLongDescription="When your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
-LocHelpText="When your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
-; LocPromotionPopupText=""
+LocLongDescription="Whenever your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
+LocHelpText="Whenever your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
+LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> <Ability:M31_FriendlyName> can affect up to <Ability:M31_PA_Rattle_MaxTargets> enemies in a single activation."
 LocFlyOverText="Rattle"
 
 [M31_PA_Rattle_Trigger X2AbilityTemplate]
@@ -105,8 +91,8 @@ LocFlyOverText="Salamander"
 
 [M31_PA_Sidewinder X2AbilityTemplate]
 LocFriendlyName="Sidewinder"
-LocLongDescription="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only activate once every <Ability:M31_PA_Sidewinder_Cooldown> Turn(s)."
-LocHelpText="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only activate once every <Ability:M31_PA_Sidewinder_Cooldown> Turn(s)."
+LocLongDescription="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only activate once every <Ability:M31_PA_Sidewinder_Cooldown> turn(s)."
+LocHelpText="Allows the <Ability:ClassName> to evade a damaging attack, and instantly gain a movement action. Can only activate once every <Ability:M31_PA_Sidewinder_Cooldown> turn(s)."
 LocPromotionPopupText="<Bullet> Sidewinder can activate while disoriented: <Ability:M31_PA_Sidewinder_bAllowWhileDisoriented>.<br><Bullet> Sidewinder can activate while burning: <Ability:M31_PA_Sidewinder_bAllowWhileBurning>.<br><Bullet> Sidewinder will not activate during <Ability:ClassName>'s own turn: <Ability:M31_PA_Sidewinder_bOnlyOnEnemyTurn>.<br><Bullet> Sidewinder will not activate if the <Ability:ClassName> is currently binding a target.<br><Bullet> Sidewinder will not activate against reaction fire."
 LocFlyOverText="Sidewinder"
 
@@ -120,137 +106,91 @@ LocFlyOverText="Sidewinder"
 
 [M31_PA_Slither X2AbilityTemplate]
 LocFriendlyName="Slither"
-LocLongDescription="Activate to gain +<Ability:M31_PA_Slither_MobilityBonus> mobility and +<Ability:M31_PA_Slither_DefenseBonus> defense for <Ability:M31_PA_Slither_Duration> Turn(s). <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Gain +<Ability:M31_PA_Slither_MobilityBonus> mobility and +<Ability:M31_PA_Slither_DefenseBonus> defense for <Ability:M31_PA_Slither_Duration> Turn(s). <Ability:M31_FreeAction>."
+LocLongDescription="Activate to gain +<Ability:M31_PA_Slither_MobilityBonus> mobility and +<Ability:M31_PA_Slither_DefenseBonus> defense for <Ability:M31_PA_Slither_Duration> turn(s). <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Gain +<Ability:M31_PA_Slither_MobilityBonus> mobility and +<Ability:M31_PA_Slither_DefenseBonus> defense for <Ability:M31_PA_Slither_Duration> turn(s). <Ability:M31_FreeAction>."
 ; LocPromotionPopupText=""
 LocFlyOverText="Slither"
 
 [M31_PA_ViperBite X2AbilityTemplate]
 LocFriendlyName="Vicious Bite"
-LocLongDescription="Bite any enemy within blue movement range. Deals <Ability:M31_PA_ViperBite_Damage> points of damage and applies poison and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown. Cannot target robots and environmental objects."
-LocHelpText="Bite any enemy within blue movement range. Applies poison and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Cannot target robots."
-LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_ViperBite_Damage> points of damage and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Can crit for +<Ability:M31_PA_ViperBite_CritDamage> damage.<br><Bullet> Vicious Bite has innate +<Ability:M31_PA_ViperBite_AimBonus> aim and +<Ability:M31_PA_ViperBite_CritBonus> critical chance.<br><Bullet> The poison is the same as Poison Spit's and is affected by <font color='#1abc9c'>Enhanced Poison</font>.<br><Bullet> Cannot target robots and environmental objects."
+LocLongDescription="Bite any enemy within blue movement range. Deals damage, inflicts poison, and ruptures the target. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot target robots and environmental objects."
+LocHelpText="Bite any enemy within blue movement range. Deals damage, inflicts poison, and ruptures the target. Cannot target robots."
+LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_ViperBite_Damage> points of damage and <Ability:M31_PA_ViperBite_Rupture> points of Rupture. Can crit for +<Ability:M31_PA_ViperBite_CritDamage> damage.<br><Bullet> Vicious Bite has innate +<Ability:M31_PA_ViperBite_AimBonus> aim and +<Ability:M31_PA_ViperBite_CritBonus> critical chance.<br><Bullet> The poison is the same as Poison Spit's and is affected by <font color='#0bff9b'>Enhanced Poison</font>.<br><Bullet> Cannot target robots and environmental objects."
 LocFlyOverText="Vicious Bite"
 
 [M31_PA_IronskinBite X2AbilityTemplate]
 LocFriendlyName="Ironskin Bite"
-LocLongDescription="Not-so-gently bite an adjacent friendly unit, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> Turn(s). Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown. Cannot target robots."
-LocHelpText="Bite an adjacent friendly unit, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> Turn(s)."
+LocLongDescription="Not-so-gently bite an adjacent ally, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> turn(s). Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot target robots."
+LocHelpText="Bite an adjacent ally, giving them <Ability:M31_PA_IronskinBite_ShieldAmount> points of ablative HP for <Ability:M31_PA_IronskinBite_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Shield priority: <Ability:M31_PA_IronskinBite_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
 LocFlyOverText="Ironskin Bite"
+
+[M31_PA_RegenBite X2AbilityTemplate]
+LocFriendlyName="Regenerating Bite"
+LocLongDescription="Not-so-gently bite an adjacent ally. Applies regeneration, healing <Ability:M31_PA_RegenBite_HealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_Duration> turn(s). Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Not-so-gently bite an adjacent ally. Applies regeneration, healing <Ability:M31_PA_RegenBite_HealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission.<br><Bullet> If <font color='#0bff9b'>Enhanced Poison</font> is learned, regeneration will heal <Ability:M31_PA_RegenBite_EnhHealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_EnhDuration> turn(s).<br><Bullet> Can be used to stabilize bleeding out soldiers: <Ability:M31_PA_RegenBite_bStabilize>.<br><Bullet> Cures poison: <Ability:M31_PA_RegenBite_bRemovePoison>. Provides poison immunity for the duration: <Ability:M31_PA_RegenBite_bProvidesPoisonImmunity>.<br><Bullet> Can target Vipers: <Ability:M31_PA_ViperBite_bCanTargetVipers>.<br><Bullet> Cannot target robots."
+LocFlyOverText="Regenerating Bite"
+
+[M31_PA_MemeBite X2AbilityTemplate]
+LocFriendlyName="\"Acid\" Bite"
+LocLongDescription="Viciously bite an adjacent unit, inflicting \"acid\". Can be used against allies and enemies alike. Has <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Not-so-gently bite and adjacent unit, inflicting \"acid\". Can be used against allies and enemies alike."
+LocPromotionPopupText="<Bullet> Allied units gain massive stat bonuses to aim, crit chance, dodge, mobility and will, as well as immunity to some mental status effects for <Ability:M31_PA_MemeBite_E> turn(s), but will take a small amount of damage whenever the effect ticks. Watch out for the side effects!<br><Bullet> Hostile units take damage and suffer a variety of extremely potent status effects.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission.<br><Bullet> Cannot target robots.<br><br><font color='#909497'>\"Are you sure this is the right acid?\"</font>"
+LocFlyOverText="\"Acid\" Bite"
+
+[M31_PA_MemeBite_Panic X2AbilityTemplate]
+LocFriendlyName="\"Acid\" Bite"
+LocFlyOverText="\"Acid\" Bite"
 
 
 [M31_PA_PoisonSpit X2AbilityTemplate]
 LocFriendlyName="Poison Spit"
-LocLongDescription="Spit deadly toxin that poisons all targets within the area. Does not leave a cloud. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
+LocLongDescription="Spit deadly toxin that poisons all targets within the area. Does not leave a cloud. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Spit deadly toxin that poisons any targets within the area. Does not leave a cloud."
-LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> The poison is affected by <font color='#1abc9c'>Enhanced Poison</font>.<br><Bullet> Has a <Ability:M31_PA_PoisonSpit_Radius>m radius."
+LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> turn(s).<br><Bullet> The poison is affected by <font color='#0bff9b'>Enhanced Poison</font>.<br><Bullet> Has a <Ability:M31_PA_PoisonSpit_Radius> radius."
 LocFlyOverText="Poison Spit"
 
 [M31_PA_EnhancedPoison X2AbilityTemplate]
 LocFriendlyName="Enhanced Poison"
 LocLongDescription="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
 LocHelpText="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
-LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
+LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_DamagePerTurn> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to a quarter against the Chosen and does not apply against the Alien Rulers.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> turn(s)."
 LocFlyOverText="Enhanced Poison"
 
 [M31_PA_BlindingPoison X2AbilityTemplate]
 LocFriendlyName="Blinding Poison"
 LocLongDescription="Improves the <Ability:ClassName>'s poison, causing it to blind the target for the same duration. Blinded untis have reduced sight range."
 LocHelpText="Improves the <Ability:ClassName>'s poison, causing it to blind the target for the same duration. Blinded untis have reduced sight range."
-LocPromotionPopupText="<Bullet> The poison blinds the targets for <Ability:M31_PA_Poison_Duration> Turn(s).<br><Bullet> Enhanced poison blinds the targets for <Ability:M31_PA_EnhancedPoison_Duration> Turn(s)."
+LocPromotionPopupText="<Bullet> The poison blinds the targets for <Ability:M31_PA_Poison_Duration> turn(s).<br><Bullet> Enhanced poison blinds the targets for <Ability:M31_PA_EnhancedPoison_Duration> turn(s)."
 LocFlyOverText="Blinding Poison"
 
 [M31_PA_NeuroPoison X2AbilityTemplate]
 LocFriendlyName="Neurotoxin"
-LocLongDescription="Improves the <Ability:ClassName>'s poison, causing it to disorient the target on initial application."
-LocHelpText="Improves the <Ability:ClassName>'s poison, causing it to disorient the target on initial application."
+LocLongDescription="Improves the <Ability:ClassName>'s poison, causing it to disorient the targets on initial application. Reduces the cooldown of <font color='#0bff9b'>Poison Spit</font> by <Ability:M31_PA_NeuroPoison_CooldownReduction> turn(s)."
+LocHelpText="Improves the <Ability:ClassName>'s poison, causing it to disorient the targets on initial application. Reduces the cooldown of <font color='#0bff9b'>Poison Spit</font> by <Ability:M31_PA_NeuroPoison_CooldownReduction> turn(s)."
 LocPromotionPopupText="<Bullet> Enhanced poison does not affect the duration of this effect.<br><Bullet> Does not disorient enemies immune to poison."
 LocFlyOverText="Neurotoxin"
 
 
 [M31_PA_FrostSpit X2AbilityTemplate]
 LocFriendlyName="Bitterfrost Spit"
-LocLongDescription="Project a blast of frost at long range that explodes into a chilling cloud. Deals <Ability:M31_PA_FrostSpit_Damage> points of frost damage and inflicts bitterfrost. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
+LocLongDescription="Project a blast of frost at long range that explodes into a chilling cloud. Deals <Ability:M31_PA_FrostSpit_Damage> points of frost damage and inflicts bitterfrost. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Project a blast of frost at long range that explodes into a chilling cloud. Deals frost damage and inflicts bitterfrost."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_FrostSpit_Radius>m radius."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_FrostSpit_Radius> radius."
 LocFlyOverText="Bitterfrost Spit"
 
 [M31_PA_FrostbiteSpit X2AbilityTemplate]
 LocFriendlyName="Frostbite Spit"
-LocLongDescription="Allows Bitterfrost Spit to inflict critical damage (<Ability:M31_PA_FrostbiteSpit_CritBonus> for +<Ability:M31_PA_FrostbiteSpit_CritDamageBonus> damage)."
-LocHelpText="Bitterfrost Spit has <Ability:M31_PA_FrostbiteSpit_CritBonus> chance to inflict +<Ability:M31_PA_FrostbiteSpit_CritDamageBonus> critical damage."
+LocLongDescription="Allows <font color='#0bff9b'>Bitterfrost Spit</font> to ignore armor and inflict critical damage (<Ability:M31_PA_FrostbiteSpit_CritBonus> for +<Ability:M31_PA_FrostbiteSpit_CritDamageBonus> damage)."
+LocHelpText="<font color='#0bff9b'>Bitterfrost Spit</font> ignores armor and has a <Ability:M31_PA_FrostbiteSpit_CritBonus> chance to inflict +<Ability:M31_PA_FrostbiteSpit_CritDamageBonus> critical damage."
 LocPromotionPopupText="<Bullet> Critical chance is not affected by normal critical chance modifiers."
 LocFlyOverText="Frostbite Spit"
+; <br><Bullet> Affected by <font color='#0bff9b'>Chilling Critical</font>.
 
 [M31_PA_FrostBreath X2AbilityTemplate]
 LocFriendlyName="Frost Breath"
-LocLongDescription="Project an icy blast at long range that freezes enemies in place. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown and <Ability:M31_SelfCharges> charges per mission."
-LocHelpText="Project an icy blast at long range that freezes enemies in place."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_FrostBreath_Radius> radius."
+LocLongDescription="Project an icy blast that instantly freezes enemies in place. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Project an icy blast that instantly freezes enemies in place."
+LocPromotionPopupText="<Bullet> Has the same range as other spit attacks (<Ability:M31_PA_ViperSpit_Range> tiles).<br><Bullet> Has a <Ability:M31_PA_FrostBreath_Radius> radius."
 LocFlyOverText="Frost Breath"
-
-[M31_PA_PersonalShield X2AbilityTemplate]
-LocFriendlyName="Personal Shield"
-LocLongDescription="Activate to gain <Ability:M31_PA_PersonalShield_ShieldAmount> points of ablative HP for <Ability:M31_PA_PersonalShield_Duration> Turn(s). Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Gain bonus ablative HP for <Ability:M31_PA_PersonalShield_Duration> Turn(s)."
-LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_PA_PersonalShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
-LocFlyOverText="Personal Shield"
-
-[M31_PA_Aegis X2AbilityTemplate]
-LocFriendlyName="Aegis"
-LocLongDescription="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
-LocHelpText="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
-; LocPromotionPopupText=""
-LocFlyOverText="Aegis"
-
-[M31_PA_HardenedShield X2AbilityTemplate]
-LocFriendlyName="Hardened Shield"
-LocLongDescription="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP, and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
-LocHelpText="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP, and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
-; LocPromotionPopupText=""
-LocFlyOverText="Hardened Shield"
-
-[M31_PA_Bayonet X2AbilityTemplate]
-LocFriendlyName="Bayonet"
-LocLongDescription="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
-LocHelpText="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
-; LocPromotionPopupText=""
-LocFlyOverText="Bayonet"
-
-[M31_PA_BayonetCharge X2AbilityTemplate]
-LocFriendlyName="Bayonet Charge"
-LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
-LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
-LocPromotionPopupText="<Bullet> You can activate this ability by placing the movement cursor over an enemy.<br><Bullet> The <Ability:ClassName> can perform a "Dash" move, using both actions to move, and still activate an attack against an adjacent enemy."
-LocFlyOverText="Bayonet Charge"
-
-[M31_PA_Counterattack X2AbilityTemplate]
-LocFriendlyName="Counterattack"
-LocLongDescription="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
-LocHelpText="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
-LocPromotionPopupText="<Bullet> Counterattack does not activate on your own turn.<br><Bullet> Gain +<Ability:M31_PA_Counterattack_Dodge> dodge against melee attacks. The bonus is reduced by <Ability:M31_PA_Counterattack_Dodge_ReductionPerHit> each time the <Ability:ClassName> counterattacks. The bonus resets at the end of each turn."
-LocFlyOverText="Counterattack"
-
-[M31_PA_Counterattack_Attack X2AbilityTemplate]
-LocFriendlyName="Counterattack"
-
-[M31_PA_Counterattack_Dodge X2AbilityTemplate]
-LocFriendlyName="Counterattack"
-
-[M31_PA_Counterattack_Trigger X2AbilityTemplate]
-LocFriendlyName="Counterattack"
-
-[M31_PA_CripplingBlow X2AbilityTemplate]
-LocFriendlyName="Crippling Blow"
-LocLongDescription="Strike an adjacent target with your <Ability:M31_BoundWeaponName>, permanently lowering its aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown> Turn(s) cooldown."
-LocHelpText="Melee attack that permanently lowers target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
-LocPromotionPopupText="<Bullet> Multiple applications of the debuff will not stack."
-LocFlyOverText="Crippling Blow"
-
-[M31_PA_Bladestorm X2AbilityTemplate]
-LocFriendlyName="Centurion"
-LocLongDescription="Gain Bladestorm. Additionaly, standard bayonet attack no longer ends the turn."
-LocHelpText="Standard bayonet attack no longer ends the turn."
-LocPromotionPopupText="<Bullet> Does not apply to Bayonet Charge."
-LocFlyOverText="Centurion"

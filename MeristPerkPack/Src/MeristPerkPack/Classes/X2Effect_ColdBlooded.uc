@@ -4,7 +4,7 @@ var int ActivationsPerTurn;
 var array<name> AllowedAbilities;
 var array<name> AllowedEffects;
 var bool bIncludeDefaultEffects;
-var bool bCheckSourceWeapon;
+var bool bMatchSourceWeapon;
 var name CounterName;
 var name EventName;
 
@@ -41,7 +41,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 
     if (AbilityState != none)
     {
-        if (bCheckSourceWeapon && kAbility.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
+        if (bMatchSourceWeapon && kAbility.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
             return false;
 
         if (AllowedAbilities.Find(kAbility.GetMyTemplateName()) != -1)
@@ -94,5 +94,5 @@ defaultproperties
     CounterName = M31_ColdBlooded
     EventName = M31_ColdBlooded
     bIncludeDefaultEffects = true
-    bCheckSourceWeapon = true
+    bMatchSourceWeapon = true
 }
