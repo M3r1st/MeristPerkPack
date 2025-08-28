@@ -2172,9 +2172,10 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
         return ColorText_Grey("?");
 
     if (SourceUnit != none)
+    {
         Index = SourceUnit.GetSoldierRank();
-    else
-        Index = -2;
+    }
+        
 
     if (!bStrategy)
     {

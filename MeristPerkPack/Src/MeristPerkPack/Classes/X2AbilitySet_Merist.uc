@@ -2,6 +2,7 @@ class X2AbilitySet_Merist extends X2Ability_Extended config(GameData_SoldierSkil
 
 var privatewrite name SniperOverwatchActionPoint;
 
+var config array<name> RocketLauncherTemplates;
 var config array<name> BoltCasterTemplates;
 var config array<name> PistolCategories;
 
@@ -3877,6 +3878,46 @@ static function X2AbilityTemplate Chimera()
     AbilitiesToAdd.Length = 0;
     AbilitiesToAdd.AddItem('MZPistolRave');
     class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, WeaponCats, AbilitiesToAdd, eInvSlot_Pistol);
+
+    return Template;
+}
+
+static function X2AbilityTemplate RocketTest()
+{
+    local X2AbilityTemplate         Template;
+    local X2Condition_ValidWeapon   Condition;
+    local X2Effect_AddRocket        Effect;
+
+    Template = Passive('M31_RocketTest', "", false, true);
+
+    Condition = new class'X2Condition_ValidWeapon';
+    Condition.AllowedWeaponTemplates = default.RocketLauncherTemplates;
+    Condition.bCheckSpecificSlot = true;
+    Condition.SpecificSlot = eInvSlot_SecondaryWeapon;
+
+    Effect = new class'X2Effect_AddRocket';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'IRI_X2Rocket_Standard';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.TargetConditions.AddItem(Condition);
+    Template.AddTargetEffect(Effect);
+
+    Condition = new class'X2Condition_ValidWeapon';
+    Condition.AllowedWeaponTemplates = default.RocketLauncherTemplates;
+    Condition.bCheckSpecificSlot = true;
+    Condition.SpecificSlot = eInvSlot_SecondaryWeapon;
+    Condition.bValidateTier = true;
+    Condition.AllowedWeaponTiers.AddItem('magnetic');
+    Condition.AllowedWeaponTiers.AddItem('beam');
+
+    Effect = new class'X2Effect_AddRocket';
+    Effect.bAllowUpgrades = true;
+    Effect.DataName = 'IRI_X2Rocket_Sabot';
+    Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.TargetConditions.AddItem(Condition);
+    Template.AddTargetEffect(Effect);
 
     return Template;
 }
