@@ -2078,9 +2078,10 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
         return ColorText_Grey("?");
 
     if (ItemTemplate != none)
+    {
         Index = GetItemTech(ItemTemplate);
-    else
-        Index = -2;
+        Index = Clamp(Index, 0, Array.Length);
+    }
 
     if (!bStrategy)
     {
@@ -2174,15 +2175,12 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
     if (SourceUnit != none)
     {
         Index = SourceUnit.GetSoldierRank();
+        Index = Clamp(Index, 0, Array.Length);
     }
-        
 
     if (!bStrategy)
     {
-        if (0 <= Index && Index < Array.Length)
-        {
-            OutString = ColorText_Auto(Array[Index],, SourceUnit);
-        }
+        OutString = ColorText_Auto(Array[Index],, SourceUnit);
     }
     else
     {
