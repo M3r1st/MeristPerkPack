@@ -2150,6 +2150,101 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     return ColorText_Grey("?");
 }
 
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function string GetTagValueFromRank(string Tag, Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional bool bSquash)
+{
+    local XComGameState_Unit    SourceUnit;
+    local bool          bStrategy;
+    local int           i, Index;
+    local array<int>    Array, NewArray;
+    local string        OutString;
+
+    bStrategy = StrategyParseObj != none;
+    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+
+    Array = `GetConfigArrayInt(Tag);
+
+    if (Array.Length == 0)
+        return ColorText_Grey("?");
+
+    if (SourceUnit != none)
+        Index = SourceUnit.GetSoldierRank();
+    else
+        Index = -2;
+
+    if (!bStrategy)
+    {
+        if (0 <= Index && Index < Array.Length)
+        {
+            OutString = ColorText_Auto(Array[Index],, SourceUnit);
+        }
+    }
+    else
+    {
+        if (bSquash)
+        {
+            for (i = 0; i < Array.Length; i++)
+            {
+                if (Index > i && Array[i] == Array[Index])
+                {
+                    Index = i;
+                }
+                if (NewArray.Length == 0 || NewArray[NewArray.Length - 1] != Array[i])
+                {
+                    NewArray.AddItem(Array[i]);
+                }
+            }
+            Array = NewArray;
+        }
+        if (Array.Length == 1)
+        {
+            if (Index == 0)
+                OutString = ColorText_Auto(Array[Index],, SourceUnit);
+            else
+                OutString = ColorText_Grey(Array[Index]);
+        }
+        else
+        {
+            for (i = 0; i < Array.Length; i++)
+            {
+                if (i == 0)
+                {
+                    if (i == Index)
+                        OutString = ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
+                    else
+                        OutString = ColorText_Grey(Array[i], true);
+                }
+                else if (i < Array.Length - 1)
+                {
+                    if (i == Index)
+                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
+                    else
+                        OutString = OutString $ string(Array[i]);
+                }
+                else
+                {
+                    if (i == Index)
+                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit);
+                    else
+                        OutString = OutString $ string(Array[i]) $ ColorText_Close();
+                }
+                if (i < Array.Length - 1)
+                    OutString = OutString $ " / ";
+            }
+        }
+    }
+    
+    if (OutString != "")
+        return OutString;
+    
+    return ColorText_Grey("?");
+}
+
+
 // Purpose: helper function for GetTagValueFromItemTech().
 // Use: get the template of the weapon to which the ability is bound.
 // Typical use case:
