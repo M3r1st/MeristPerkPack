@@ -368,20 +368,6 @@ static function X2Effect_Immobilize CreateMaimedStatusEffect(optional int NumTur
     return ImmobilizeEffect;
 }
 
-// Default = 144
-static function AddAdjacencyCondition(out X2AbilityTemplate Template, optional int Range = 180)
-{
-    local X2Condition_UnitProperty                  AdjacencyCondition;
-
-    AdjacencyCondition = new class'X2Condition_UnitProperty';
-    AdjacencyCondition.ExcludeDead = false;
-    AdjacencyCondition.ExcludeFriendlyToSource = false;
-    AdjacencyCondition.RequireWithinRange = true;
-    AdjacencyCondition.WithinRange = Range;
-    Template.AbilityTargetConditions.AddItem(AdjacencyCondition);
-}
-
-    
 static function X2AbilityTemplate CreateAnimSetPassive(name TemplateName, string AnimSetPath)
 {
     local X2AbilityTemplate                 Template;
@@ -416,7 +402,8 @@ static final function int GetActionPoints(const XComGameState_Unit Unit, array<n
 
     for (i = 0; i < Unit.ActionPoints.Length; i++)
     {
-        if (AllowedTypes.Find(Unit.ActionPoints[i]) != INDEX_NONE) {
+        if (AllowedTypes.Find(Unit.ActionPoints[i]) != INDEX_NONE)
+        {
             Count++;
         }
     }
@@ -506,10 +493,10 @@ static function AddRadiationToMultiTarget(out X2AbilityTemplate Template,
 
 static function AddConditionalAbilityEffect(out X2AbilityTemplate Template, array<name> WeaponCats, array<name> AbilitiesToAdd, EInventorySlot Slot = eInvSlot_Unknown)
 {
-    local X2Condition_WOTC_APA_Class_ValidWeaponCategory    Condition;
-    local X2Effect_WOTC_APA_Class_AddAbilitiesToTarget      Effect;
+    local X2Condition_ValidWeapon   Condition;
+    local X2Effect_AddAbilities     Effect;
 
-    Condition = new class'X2Condition_WOTC_APA_Class_ValidWeaponCategory';
+    Condition = new class'X2Condition_ValidWeapon';
     Condition.AllowedWeaponCategories = WeaponCats;
     if (Slot != eInvSlot_Unknown)
     {
@@ -517,7 +504,7 @@ static function AddConditionalAbilityEffect(out X2AbilityTemplate Template, arra
         Condition.SpecificSlot = Slot;
     }
 
-    Effect = new class'X2Effect_WOTC_APA_Class_AddAbilitiesToTarget';
+    Effect = new class'X2Effect_AddAbilities';
     Effect.AddAbilities = AbilitiesToAdd;
     if (Slot != eInvSlot_Unknown)
     {
@@ -547,34 +534,6 @@ static function EventListenerReturn KillMailListener_Self(Object EventData, Obje
     }
 
     return ELR_NoInterrupt;
-}
-
-static function AddSuppressedCondition(out X2AbilityTemplate Template)
-{
-    local X2Condition_UnitEffects SuppressedCondition;
-
-    SuppressedCondition = new class'X2Condition_UnitEffects';
-    SuppressedCondition.AddExcludeEffect(class'X2Effect_Suppression'.default.EffectName, 'AA_UnitIsSuppressed');
-    // SuppressedCondition.AddExcludeEffect(class'X2Effect_AreaSuppression'.default.EffectName, 'AA_UnitIsSuppressed');
-    SuppressedCondition.AddExcludeEffect('AreaSuppression', 'AA_UnitIsSuppressed'); // Not building against LWOTC
-    Template.AbilityShooterConditions.AddItem(SuppressedCondition);
-}
-
-
-static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName)
-{
-    local X2Effect_Persistent BladestormTargetEffect;
-    local X2Condition_UnitEffectsWithAbilitySource BladestormTargetCondition;
-
-    BladestormTargetEffect = new class'X2Effect_Persistent';
-    BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
-    BladestormTargetEffect.EffectName = MarkName;
-    BladestormTargetEffect.bApplyOnMiss = true;
-    Template.AddTargetEffect(BladestormTargetEffect);
-    
-    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
-    BladestormTargetCondition.AddExcludeEffect(MarkName, 'AA_DuplicateEffectIgnored');
-    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
 }
 
 // Helpers_LW.uc

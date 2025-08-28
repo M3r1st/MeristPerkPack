@@ -69,7 +69,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddSuppressedCondition(Template);
 
     // There must be a free tile around the source unit
     template.AbilityShooterConditions.AddItem(new class'X2Condition_UnblockedNeighborTile');
@@ -157,7 +157,7 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddSuppressedCondition(Template);
 
     // There must be a free tile around the source unit
     template.AbilityShooterConditions.AddItem(new class'X2Condition_UnblockedNeighborTile');
@@ -296,7 +296,7 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -577,7 +577,7 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -820,7 +820,7 @@ static function X2AbilityTemplate RushAndBindBindSentinel(name DataName, name Cr
 
     AddDefaultBindConditions(Template, true);
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 

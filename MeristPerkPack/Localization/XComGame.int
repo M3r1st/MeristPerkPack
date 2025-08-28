@@ -320,9 +320,9 @@ LocFlyOverText="Overpower"
 
 [M31_Overseer X2AbilityTemplate]
 LocFriendlyName="Overseer"
-LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper's Overwatch</font> when a sniper rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper's Overwatch</font> when a sniper rifle is equipped as the primary weapon."
-LocPromotionPopupText="<Bullet> Sniper's Overwatch is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br>    <Bullet> Sniper's Overwatch is affected by Sentinel and Rapid Reaction."
+LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
+LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br>    <Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
 
 [M31_PerfectHandling X2AbilityTemplate]
 LocFriendlyName="Perfect Handling"
@@ -476,12 +476,12 @@ LocLongDescription="The <Ability:ClassName>'s attacks ignore all dodge modifiers
 LocHelpText="The <Ability:ClassName>'s attacks ignore all dodge modifiers and have +<Ability:M31_SniperElite_AimBonus> aim and <Ability:M31_SniperElite_CritBonus> critical chance. Additionally, their reaction fire can crit."
 LocPromotionPopupText="<Bullet> The attacks will ignore all dodge modifiers, but not the graze band.<br><Bullet> Aim bonus is not affected by the reaction fire penalty."
 
-[M31_SnipersOverwatch X2AbilityTemplate]
-LocFriendlyName="Sniper's Overwatch"
+[M31_SniperOverwatch X2AbilityTemplate]
+LocFriendlyName="Sniper Overwatch"
 LocLongDescription="A specialized form of overwatch. Take a reaction shot against an enemy that moves or attacks within a cone of fire."
 LocHelpText="Take a reaction shot against an enemy that moves or attacks within a cone of fire."
-LocPromotionPopupText="<Bullet> Sniper's Overwatch utilizes Squadsight, even if the soldier does not have Long Watch.<br><Bullet> Sniper's Overwatch is affected by Sentinel and Rapid Reaction."
-LocFlyOverText="Sniper's Overwatch"
+LocPromotionPopupText="<Bullet> Sniper Overwatch utilizes Squadsight, even if the soldier does not have Long Watch.<br><Bullet> Affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
+LocFlyOverText="Sniper Overwatch"
 
 [M31_SolidSnake X2AbilityTemplate]
 LocFriendlyName="Hunter's Focus"

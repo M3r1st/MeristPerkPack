@@ -72,6 +72,7 @@ function name GetUnitToSpawnName(const out EffectAppliedData ApplyEffectParamete
     SourceWeapon = XComGameState_Item(History.GetGameStateForObjectID(ApplyEffectParameters.ItemStateObjectRef.ObjectID));
 
     Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceWeapon.GetMyTemplate());
+    Tier = Clamp(Tier, 0, 4);
     
     `assert(SourceUnit != none);
 

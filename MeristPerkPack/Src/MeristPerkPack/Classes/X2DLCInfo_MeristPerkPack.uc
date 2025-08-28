@@ -2774,7 +2774,7 @@ static final function bool IsModActive(const name ModName)
 
 defaultproperties
 {
-    SuppressingFireActionPoint = "M31_SuppressingFire"
+    SuppressingFireActionPoint = M31_SuppressingFire
     // DefaultSpecialColor = "#ffd700"
 }
 

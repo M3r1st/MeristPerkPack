@@ -47,7 +47,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     SourceUnit.GetUnitValue(CounterName, UnitValue);
     iUsesThisTurn = int(UnitValue.fValue);
 
-    if (iUsesThisTurn >= ActivationsPerTurn)
+    if (ActivationsPerTurn > 0 && iUsesThisTurn >= ActivationsPerTurn)
         return false;
 
     if (kAbility.IsMeleeAbility())

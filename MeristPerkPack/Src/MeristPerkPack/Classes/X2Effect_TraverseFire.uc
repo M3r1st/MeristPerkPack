@@ -37,7 +37,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     SourceUnit.GetUnitValue(CounterName, UnitValue);
     iCounter = int(UnitValue.fValue);
 
-    if (iCounter >= ActivationsPerTurn)
+    if (ActivationsPerTurn > 0 && iCounter >= ActivationsPerTurn)
         return false;
 
     AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));

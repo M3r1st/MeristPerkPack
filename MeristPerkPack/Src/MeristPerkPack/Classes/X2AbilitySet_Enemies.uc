@@ -298,19 +298,7 @@ static function X2AbilityTemplate LockjawAttack(name DataName)
 
     Template.AbilityTriggers.Length = 0;
 
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'ObjectMoved';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'AbilityActivated';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
-    Template.AbilityTriggers.AddItem(Trigger);
+    AddOverwatchTrigger(Template);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -335,7 +323,7 @@ static function X2AbilityTemplate LockjawAttack(name DataName)
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
@@ -348,8 +336,8 @@ static function X2AbilityTemplate LockjawAttack(name DataName)
     Cooldown.bApplyOnlyOnHit = true;
     Template.AbilityCooldown = Cooldown;
 
-    class'M31_AbilityHelpers'.static.AddBladestormMark(Template, 'M31_ENEMY_Lockjaw_MarkTarget');
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddBladestormMark(Template, 'M31_ENEMY_Lockjaw_MarkTarget');
+    AddSuppressedCondition(Template);
 
     AddEnhancedPoisonEffectToTarget(Template);
     AddBlindingPoisonEffectToTarget(Template);
@@ -410,19 +398,7 @@ static function X2AbilityTemplate AngryBiteAttack(name DataName)
 
     Template.AbilityTriggers.Length = 0;
 
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'ObjectMoved';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'AbilityActivated';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
-    Template.AbilityTriggers.AddItem(Trigger);
+    AddOverwatchTrigger(Template);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -447,7 +423,7 @@ static function X2AbilityTemplate AngryBiteAttack(name DataName)
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
@@ -455,8 +431,8 @@ static function X2AbilityTemplate AngryBiteAttack(name DataName)
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
 
-    class'M31_AbilityHelpers'.static.AddBladestormMark(Template, 'M31_ENEMY_AngryBite_MarkTarget');
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddBladestormMark(Template, 'M31_ENEMY_AngryBite_MarkTarget');
+    AddSuppressedCondition(Template);
 
     Template.AddTargetEffect(CreateAngryBiteDamageEffect());
 

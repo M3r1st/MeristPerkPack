@@ -256,6 +256,7 @@ static function X2AbilityTemplate HarrierPoisonGrenade()
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY + 2;
 
     AddAmmoCost(Template, `GetConfigInt('M31_PA_HarrierPoisonGrenade_AmmoCost'));
+    AddSuppressedCondition(Template);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_HarrierPoisonGrenade_Cooldown");
@@ -294,6 +295,7 @@ static function X2AbilityTemplate HarrierFireGrenade()
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY + 3;
 
     AddAmmoCost(Template, `GetConfigInt('M31_PA_HarrierFireGrenade_AmmoCost'));
+    AddSuppressedCondition(Template);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_HarrierFireGrenade_Cooldown");
@@ -332,6 +334,7 @@ static function X2AbilityTemplate HarrierRadGrenade()
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY + 4;
 
     AddAmmoCost(Template, `GetConfigInt('M31_PA_HarrierRadGrenade_AmmoCost'));
+    AddSuppressedCondition(Template);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_HarrierRadGrenade_Cooldown");
@@ -367,6 +370,7 @@ static function X2AbilityTemplate HarrierFuseGrenade()
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY + 5;
 
     AddAmmoCost(Template, `GetConfigInt('M31_PA_HarrierFuseGrenade_AmmoCost'));
+    AddSuppressedCondition(Template);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_HarrierFuseGrenade_Cooldown");

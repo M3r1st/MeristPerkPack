@@ -133,16 +133,18 @@ static function EventListenerReturn OnOverrideDamageRemovesReserveActionPoints(O
         {
             foreach UnitState.ReserveActionPoints(ActionPointName)
             {
-                if(ActionPointName == class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint
-                    || ActionPointName == class'X2CharacterTemplateManager'.default.PistolOverwatchReserveActionPoint)
+                if (ActionPointName == class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint
+                    || ActionPointName == class'X2CharacterTemplateManager'.default.PistolOverwatchReserveActionPoint
+                    || ActionPointName == class'X2AbilitySet_Merist'.default.SniperOverwatchActionPoint)
                 {
                     bIsOverwatch = true;
                     break;
                 }
             }
 
-            if (UnitState.HasSoldierAbility('M31_PA_TaipanVengeance', true)
-                || bIsOverwatch && UnitState.HasSoldierAbility('M31_DedicatedOverwatch', true))
+            if (bIsOverwatch
+                && (UnitState.HasSoldierAbility('M31_PA_TaipanVengeance', true)
+                || UnitState.HasSoldierAbility('M31_DedicatedOverwatch', true)))
             {
                 bDamageRemovesReserveActionPoints = false;
                 Tuple.Data[0].b = bDamageRemovesReserveActionPoints;

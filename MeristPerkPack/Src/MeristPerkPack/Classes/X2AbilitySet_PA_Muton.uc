@@ -53,7 +53,7 @@ static function X2AbilityTemplate MutonPunch()
 
     Template.bLimitTargetIcons = true;
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -275,7 +275,7 @@ static function X2AbilityTemplate CreateBayonetAbility(name TemplateName, bool b
 
     Template.bLimitTargetIcons = true;
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
@@ -476,7 +476,7 @@ static function X2AbilityTemplate CripplingBlow()
 
     Template.bLimitTargetIcons = true;
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
     Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);

@@ -12,6 +12,7 @@ enum EActionPointCost
     eCost_WeaponConsumeAll,     // Costs as much as a weapon shot, ends the turn.
     eCost_Overwatch,            // No action point cost, but displays as ending the turn. Used for 
                                 // abilities that have an X2Effect_ReserveActionPoints or similar.
+    eCost_OverwatchWeapon,
     eCost_None,                 // No action point cost. For abilities which may be triggered during
                                 // the enemy turn. You should use eCost_Free for activated abilities.
 };
@@ -19,8 +20,8 @@ enum EActionPointCost
 static function X2AbilityTemplate Passive(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false, optional bool bDisplayInUI = false)
 {
-    local X2AbilityTemplate             Template;
-    local X2Effect_Persistent           PersistentEffect;
+    local X2AbilityTemplate     Template;
+    local X2Effect_Persistent   PersistentEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 
@@ -54,7 +55,7 @@ static function X2AbilityTemplate Passive(name TemplateName, string IconImage,
 static function X2AbilityTemplate SelfTargetActivated(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false)
 {
-    local X2AbilityTemplate     Template;
+    local X2AbilityTemplate Template;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 
@@ -299,13 +300,14 @@ static function AddCooldown(X2AbilityTemplate Template, int iNumTurns)
     }
 }
 
-static function AddAmmoCost(X2AbilityTemplate Template, int iAmmo)
+static function AddAmmoCost(X2AbilityTemplate Template, int iAmmo, optional bool bFreeCost)
 {
     local X2AbilityCost_Ammo AmmoCost;
     if (iAmmo > 0)
     {
         AmmoCost = new class'X2AbilityCost_Ammo';
         AmmoCost.iAmmo = iAmmo;
+        AmmoCost.bFreeCost = bFreeCost;
         Template.AbilityCosts.AddItem(AmmoCost);
     }
 }
@@ -351,6 +353,7 @@ static function X2AbilityCost_ActionPoints ActionPointCost(EActionPointCost Cost
         case eCost_Weapon:              AbilityCost.iNumPoints = 0; AbilityCost.bAddWeaponTypicalCost = true; break;
         case eCost_WeaponConsumeAll:    AbilityCost.iNumPoints = 0; AbilityCost.bAddWeaponTypicalCost = true; AbilityCost.bConsumeAllPoints = true; break;
         case eCost_Overwatch:           AbilityCost.iNumPoints = 1; AbilityCost.bConsumeAllPoints = true; AbilityCost.bFreeCost = true; break;
+        case eCost_OverwatchWeapon:     AbilityCost.iNumPoints = 0; AbilityCost.bAddWeaponTypicalCost = true; AbilityCost.bConsumeAllPoints = true; AbilityCost.bFreeCost = true; break;
         case eCost_None:                AbilityCost.iNumPoints = 0; break;
     }
 
@@ -367,4 +370,89 @@ static function SetFireAnim(out X2AbilityTemplate Template, name Anim)
     Template.CustomMovingTurnLeftFireKillAnim = Anim;
     Template.CustomMovingTurnRightFireAnim = Anim;
     Template.CustomMovingTurnRightFireKillAnim = Anim;
+}
+
+static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName)
+{
+    local X2Effect_Persistent BladestormTargetEffect;
+    local X2Condition_UnitEffectsWithAbilitySource BladestormTargetCondition;
+
+    BladestormTargetEffect = new class'X2Effect_Persistent';
+    BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
+    BladestormTargetEffect.EffectName = MarkName;
+    BladestormTargetEffect.bApplyOnMiss = true;
+    Template.AddTargetEffect(BladestormTargetEffect);
+    
+    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    BladestormTargetCondition.AddExcludeEffect(MarkName, 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
+}
+
+static function AddSuppressedCondition(out X2AbilityTemplate Template)
+{
+    local X2Condition_UnitEffects SuppressedCondition;
+
+    SuppressedCondition = new class'X2Condition_UnitEffects';
+    SuppressedCondition.AddExcludeEffect(class'X2Effect_Suppression'.default.EffectName, 'AA_UnitIsSuppressed');
+    // SuppressedCondition.AddExcludeEffect(class'X2Effect_AreaSuppression'.default.EffectName, 'AA_UnitIsSuppressed');
+    SuppressedCondition.AddExcludeEffect('AreaSuppression', 'AA_UnitIsSuppressed'); // Not building against LWOTC
+    Template.AbilityShooterConditions.AddItem(SuppressedCondition);
+}
+
+// Default = 144
+static function AddAdjacencyCondition(out X2AbilityTemplate Template, optional int Range = 180)
+{
+    local X2Condition_UnitProperty                  AdjacencyCondition;
+
+    AdjacencyCondition = new class'X2Condition_UnitProperty';
+    AdjacencyCondition.ExcludeDead = false;
+    AdjacencyCondition.ExcludeFriendlyToSource = false;
+    AdjacencyCondition.RequireWithinRange = true;
+    AdjacencyCondition.WithinRange = Range;
+    Template.AbilityTargetConditions.AddItem(AdjacencyCondition);
+}
+
+static function AddUnitValueCondition(out X2AbilityTemplate Template, name ValueName, int MaxValue, optional EUnitValueCleanup CleanupType)
+{
+    local X2Condition_UnitValue             ValueCondition;
+    local X2Effect_IncrementUnitValue       UnitValueEffect;
+
+    if (MaxValue > 0)
+    {
+        ValueCondition = new class'X2Condition_UnitValue';
+        ValueCondition.AddCheckValue(ValueName, MaxValue, eCheck_LessThan);
+        Template.AbilityShooterConditions.AddItem(ValueCondition);
+
+        UnitValueEffect = new class'X2Effect_IncrementUnitValue';
+        UnitValueEffect.UnitName = ValueName;
+        UnitValueEffect.NewValueToSet = 1;
+        UnitValueEffect.CleanupType = CleanupType;
+        UnitValueEffect.bApplyOnMiss = true;
+        Template.AddShooterEffect(UnitValueEffect);
+    }
+}
+
+static function AddOverwatchTrigger(out X2AbilityTemplate Template, optional bool bMovement = true, optional bool bAttack = true)
+{
+    local X2AbilityTrigger_EventListener Trigger;
+
+    if (bMovement)
+    {
+        Trigger = new class'X2AbilityTrigger_EventListener';
+        Trigger.ListenerData.EventID = 'ObjectMoved';
+        Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+        Trigger.ListenerData.Filter = eFilter_None;
+        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
+        Template.AbilityTriggers.AddItem(Trigger);
+    }
+
+    if (bAttack)
+    {
+        Trigger = new class'X2AbilityTrigger_EventListener';
+        Trigger.ListenerData.EventID = 'AbilityActivated';
+        Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+        Trigger.ListenerData.Filter = eFilter_None;
+        Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
+        Template.AbilityTriggers.AddItem(Trigger);
+    }
 }

@@ -96,7 +96,7 @@ static function X2AbilityTemplate ViperBash()
 
     Template.bLimitTargetIcons = true;
 
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     Template.AbilityTargetConditions.AddItem(new class'X2Condition_BerserkerDevastatingPunch');
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
@@ -159,7 +159,7 @@ static function X2AbilityTemplate AmbushTrigger()
     Trigger.ListenerData.Priority = 60;
     Template.AbilityTriggers.AddItem(Trigger);
 
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddSuppressedCondition(Template);
     Template.AddShooterEffectExclusions();
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
@@ -472,19 +472,7 @@ static function X2AbilityTemplate LockjawAttack()
 
     Template.AbilityTriggers.Length = 0;
 
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'ObjectMoved';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'AbilityActivated';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
-    Template.AbilityTriggers.AddItem(Trigger);
+    AddOverwatchTrigger(Template);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -509,7 +497,7 @@ static function X2AbilityTemplate LockjawAttack()
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
@@ -522,8 +510,8 @@ static function X2AbilityTemplate LockjawAttack()
     Cooldown.bApplyOnlyOnHit = true;
     Template.AbilityCooldown = Cooldown;
 
-    class'M31_AbilityHelpers'.static.AddBladestormMark(Template, 'M31_PA_Lockjaw_MarkTarget');
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddBladestormMark(Template, 'M31_PA_Lockjaw_MarkTarget');
+    AddSuppressedCondition(Template);
 
     class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToTarget(Template);
     class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToTarget(Template);
@@ -594,8 +582,6 @@ static function X2AbilityTemplate RattleTrigger()
     local X2Condition_TargetCanSeeSource    VisibilityCondition;
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2Effect_Panicked                 PanickedEffect;
-    local X2Condition_UnitValue             ValueCondition;
-    local X2Effect_IncrementUnitValue       IncrementValueEffect;
 
     Template = SelfTargetTrigger('M31_PA_Rattle_Trigger', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_harborwave");
 
@@ -639,17 +625,9 @@ static function X2AbilityTemplate RattleTrigger()
     PanickedEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
     Template.AddMultiTargetEffect(PanickedEffect);
 
-    ValueCondition = new class'X2Condition_UnitValue';
-    ValueCondition.AddCheckValue('M31_PA_Rattle_Counter', `GetConfigInt("M31_PA_Rattle_ActivationsPerTurn"), eCheck_LessThan);
-    Template.AbilityShooterConditions.AddItem(ValueCondition);
+    AddUnitValueCondition(Template, 'M31_PA_Rattle_Counter', `GetConfigInt("M31_PA_Rattle_ActivationsPerTurn"));
 
-    IncrementValueEffect = new class'X2Effect_IncrementUnitValue';
-    IncrementValueEffect.UnitName = 'M31_PA_Rattle_Counter';
-    IncrementValueEffect.NewValueToSet = 1;
-    IncrementValueEffect.CleanupType = eCleanup_BeginTurn;
-    Template.AddShooterEffect(IncrementValueEffect);
-
-    // Template.bShowActivation = true;
+    Template.bShowActivation = true;
 
     Template.ModifyNewContextFn = Rattle_ModifyActivatedAbilityContext;
 
@@ -1413,19 +1391,7 @@ static function X2AbilityTemplate AngryBiteAttack()
 
     Template.AbilityTriggers.Length = 0;
 
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'ObjectMoved';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalOverwatchListener;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.EventID = 'AbilityActivated';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.TypicalAttackListener;
-    Template.AbilityTriggers.AddItem(Trigger);
+    AddOverwatchTrigger(Template);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -1450,7 +1416,7 @@ static function X2AbilityTemplate AngryBiteAttack()
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    class'M31_AbilityHelpers'.static.AddAdjacencyCondition(Template);
+    AddAdjacencyCondition(Template);
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
@@ -1466,8 +1432,8 @@ static function X2AbilityTemplate AngryBiteAttack()
         Template.AbilityCooldown = Cooldown;
     }
 
-    class'M31_AbilityHelpers'.static.AddBladestormMark(Template, 'M31_PA_AngryBite_MarkTarget');
-    class'M31_AbilityHelpers'.static.AddSuppressedCondition(Template);
+    AddBladestormMark(Template, 'M31_PA_AngryBite_MarkTarget');
+    AddSuppressedCondition(Template);
 
     Template.AddTargetEffect(CreateAngryBiteDamageEffect());
 
