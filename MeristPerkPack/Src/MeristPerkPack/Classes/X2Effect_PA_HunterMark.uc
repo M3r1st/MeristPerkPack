@@ -96,6 +96,6 @@ defaultproperties
 {
     bUniqueTarget = true
     bRemoveWhenTargetDies = true
-    DuplicateResponse = eDupe_Refresh
+    bUseSourcePlayerState = true
     EffectName = M31_PA_HunterMark
 }

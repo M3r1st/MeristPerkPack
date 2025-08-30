@@ -3323,7 +3323,7 @@ static function X2AbilityTemplate Warbringer()
 
 static function X2AbilityTemplate WatchfulEye()
 {
-    local X2AbilityTemplate                 Template;
+    local X2AbilityTemplate Template;
 
     Template = Passive('M31_WatchfulEye', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, true);
 
@@ -3368,6 +3368,7 @@ static function X2AbilityTemplate WatchfulEyeAttack()
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2AbilityToHitCalc_StandardAim    ToHitCalc;
     local X2AbilityTarget_Single            SingleTarget;
+    local X2Condition_UnitEffectsWithAbilitySource  TargetEffectCondition;
 
     Template = Attack('M31_WatchfulEye_Attack', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, false);
     
@@ -3394,6 +3395,10 @@ static function X2AbilityTemplate WatchfulEyeAttack()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
+
+    TargetEffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    TargetEffectCondition.AddRequireEffect('M31_WatchfulEye_Mark', 'AA_MissingRequiredEffect');
+    Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
 
     AddBladestormMark(Template, 'M31_WatchfulEye_MarkTarget');
     AddSuppressedCondition(Template);

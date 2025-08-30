@@ -24,7 +24,12 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(ChargeIn());
     Templates.AddItem(Shieldbreaker());
     Templates.AddItem(MutonBullRush());
-    Templates.AddItem(MutonHunterMark());
+    Templates.AddItem(HunterMark());
+    Templates.AddItem(HunterWatchfulEye());
+        Templates.AddItem(HunterWatchfulEyeAttack());
+    Templates.AddItem(HunterDedication());
+    Templates.AddItem(StayFrosty());
+        Templates.AddItem(StayFrostyAttack());
 
     Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_MutonPunch_Anims', "M31_PA_Mutons.Anims.AS_MutonPunch"));
 
@@ -649,8 +654,7 @@ static function X2AbilityTemplate MutonBullRush()
     return Template;
 }
 
-// UIPerk_watchfuleye
-static function X2AbilityTemplate MutonHunterMark()
+static function X2AbilityTemplate HunterMark()
 {
     local X2AbilityTemplate         Template;
     local X2Effect_PA_HunterMark    Effect;
@@ -669,7 +673,15 @@ static function X2AbilityTemplate MutonHunterMark()
     AddCooldown(Template, `GetConfigInt("M31_PA_HunterMark_Cooldown"));
 
     Effect = new class'X2Effect_PA_HunterMark';
-    Effect.BuildPersistentEffect(1, true, true);
+    Effect.DefenseBonus = `GetConfigInt("M31_PA_HunterMark_DefenseBonus");
+    Effect.DefenseBonusPerTurn = `GetConfigInt("M31_PA_HunterMark_DefenseBonusPerTurn");
+    Effect.DodgeBonus = `GetConfigInt("M31_PA_HunterMark_DodgeBonus");
+    Effect.DodgeBonusPerTurn = `GetConfigInt("M31_PA_HunterMark_DodgeBonusPerTurn");
+    Effect.AimBonus = `GetConfigInt("M31_PA_HunterMark_AimBonus");
+    Effect.AimBonusPerTurn = `GetConfigInt("M31_PA_HunterMark_AimBonusPerTurn");
+    Effect.CritBonus = `GetConfigInt("M31_PA_HunterMark_CritBonus");
+    Effect.CritBonusPerTurn = `GetConfigInt("M31_PA_HunterMark_CritBonusPerTurn");
+    Effect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_PA_HunterMark_DebuffText"), Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
@@ -684,7 +696,82 @@ static function X2AbilityTemplate MutonHunterMark()
     return Template;
 }
 
-static function X2AbilityTemplate MutonDedication()
+static function X2AbilityTemplate HunterWatchfulEye()
+{
+    local X2AbilityTemplate Template;
+
+    Template = Passive('M31_PA_HunterWatchfulEye', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, true);
+
+    Template.AdditionalAbilities.AddItem('M31_PA_HunterWatchfulEye_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate HunterWatchfulEyeAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_Visibility            VisibilityCondition;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+    local X2AbilityTarget_Single            SingleTarget;
+    local X2Condition_UnitEffectsWithAbilitySource  TargetEffectCondition;
+
+    Template = Attack('M31_PA_HunterWatchfulEye_Attack', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, false);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.BuildInterruptGameStateFn = none;
+
+    Template.AbilityTriggers.Length = 0;
+
+    AddOverwatchTrigger(Template);
+
+    Template.AbilityShooterConditions.Length = 0;
+    Template.AbilityTargetConditions.Length = 0;
+
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    VisibilityCondition.bAllowSquadsight = true;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+    Template.AddShooterEffectExclusions();
+
+    TargetEffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    TargetEffectCondition.AddRequireEffect(class'X2Effect_PA_HunterMark'.default.EffectName, 'AA_MissingRequiredEffect');
+    Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
+
+    AddBladestormMark(Template, 'M31_PA_HunterWatchfulEye_MarkTarget');
+    AddSuppressedCondition(Template);
+    AddUnitValueCondition(Template, 'M31_PA_HunterWatchfulEye_Counter', `GetConfigInt("M31_PA_HunterWatchfulEye_ActivationsPerTurn"));
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = true;
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+    AddAmmoCost(Template, 1);
+
+    Template.bShowActivation = true;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
+    return Template;
+}
+
+static function X2AbilityTemplate HunterDedication()
 {
     local X2AbilityTemplate                 Template;
     local X2Effect_PA_HunterDedication      Effect;
@@ -697,11 +784,92 @@ static function X2AbilityTemplate MutonDedication()
     AddCooldown(Template, `GetConfigInt("M31_PA_HunterDedication_Cooldown"));
 
     Effect = new class'X2Effect_PA_HunterDedication';
+    Effect.DefenseBonus = `GetConfigInt("M31_PA_HunterDedication_DefenseBonus");
+    Effect.DodgeBonus = `GetConfigInt("M31_PA_HunterDedication_DodgeBonus");
+    Effect.bExcludeFlanking = `GetConfigBool("M31_PA_HunterDedication_bExcludeFlanking");
+    Effect.bExcludeMelee = `GetConfigBool("M31_PA_HunterDedication_bExcludeMelee");
+    Effect.AddPersistentStatChange(eStat_Mobility, `GetConfigInt("M31_PA_HunterDedication_MobilityBonus"));
     Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_HunterDedication_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_PA_HunterDedication_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     Template.bShowActivation = true;
     
+    return Template;
+}
+
+static function X2AbilityTemplate StayFrosty()
+{
+    local X2AbilityTemplate Template;
+
+    Template = Passive('M31_PA_StayFrosty', "img:///KetarosPkg_Abilities.UIPerk_shootingtarget", false, true);
+    
+    Template.AdditionalAbilities.AddItem('M31_PA_StayFrosty_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate StayFrostyAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_Visibility            VisibilityCondition;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+    local X2AbilityTarget_Single            SingleTarget;
+
+    Template = Attack('M31_PA_StayFrosty_Attack', "img:///KetarosPkg_Abilities.UIPerk_shootingtarget", false, false);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.BuildInterruptGameStateFn = none;
+
+    Template.AbilityTriggers.Length = 0;
+
+    AddOverwatchTrigger(Template);
+
+    Template.AbilityShooterConditions.Length = 0;
+    Template.AbilityTargetConditions.Length = 0;
+
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    VisibilityCondition.bAllowSquadsight = false;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeSquadmates = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = `GetConfigFloat("M31_PA_StayFrosty_Radius") * class'XComWorldData'.const.WORLD_StepSize;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+    Template.AddShooterEffectExclusions();
+
+    AddBladestormMark(Template, 'M31_PA_StayFrosty_MarkTarget');
+    AddSuppressedCondition(Template);
+    AddUnitValueCondition(Template, 'M31_PA_StayFrosty_Counter', `GetConfigInt("M31_PA_StayFrosty_ActivationsPerTurn"));
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+    Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+    Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+    
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = `GetConfigBool("M31_PA_StayFrosty_bReactionFire");
+    Template.AbilityToHitCalc = ToHitCalc;
+    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+
+    AddAmmoCost(Template, 1);
+
+    Template.bShowActivation = true;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
     return Template;
 }

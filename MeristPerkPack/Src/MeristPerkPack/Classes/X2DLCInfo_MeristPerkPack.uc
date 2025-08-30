@@ -863,14 +863,18 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = ColorText_Green(`GetLocalizedString(InString));
             return true;
 
+        case "M31_EffectTurnsTicked":
+            OutString = string(GetEffectTurnsTicked(ParseObj, StrategyParseOb, GameState));
+            return true;
+
         case "M31_ShieldRemaining":
             GetShieldEffectValues(ParseObj, StrategyParseOb, GameState, ShieldRemaining, ShieldPriority);
-            OutString = ColorText_Auto(ShieldRemaining,, UnitState);
+            OutString = string(ShieldRemaining);
             return true;
 
         case "M31_ShieldPriority":
             GetShieldEffectValues(ParseObj, StrategyParseOb, GameState, ShieldRemaining, ShieldPriority);
-            OutString = ColorText_Auto(ShieldPriority,, UnitState);
+            OutString = string(ShieldPriority);
             return true;
             
         case "M31_SharpshooterAim_AimBonus":
@@ -1054,6 +1058,23 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_MutonBullRush_AimBonus":
         case "M31_PA_MutonBullRush_CritBonus":
         case "M31_PA_MutonBullRush_StunDuration":
+        case "M31_PA_StayFrosty_Radius":
+        case "M31_PA_StayFrosty_ActivationsPerTurn":
+
+        case "M31_PA_HunterMark_DefenseBonus":
+        case "M31_PA_HunterMark_DefenseBonusPerTurn":
+        case "M31_PA_HunterMark_DodgeBonus":
+        case "M31_PA_HunterMark_DodgeBonusPerTurn":
+        case "M31_PA_HunterMark_AimBonus":
+        case "M31_PA_HunterMark_AimBonusPerTurn":
+        case "M31_PA_HunterMark_CritBonus":
+        case "M31_PA_HunterMark_CritBonusPerTurn":
+        case "M31_PA_HunterWatchfulEye_ActivationsPerTurn":
+        case "M31_PA_HunterDedication_DefenseBonus":
+        case "M31_PA_HunterDedication_DodgeBonus":
+        case "M31_PA_HunterDedication_MobilityBonus":
+        case "M31_PA_HunterDedication_Duration":
+
         case "M31_PA_HarrierBullRush_AimBonus":
         case "M31_PA_HarrierBullRush_CritBonus":
         case "M31_PA_HarrierBullRush_StunDuration":
@@ -1071,6 +1092,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_HarrierFuseGrenade_AmmoCost":
         case "M31_PA_HarrierFuseGrenade_CooldownReductionEOG":
         case "M31_PA_HarrierCyclic_AimPenalty":
+
         case "M31_PA_Poison_MobilityPenalty":
         case "M31_PA_Poison_AimPenalty":
         case "M31_PA_Poison_Duration":
@@ -1183,6 +1205,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_Counterattack_bOnlyOnEnemyTurn":
         case "M31_PA_CripplingBlow_bInfiniteDuration":
         case "M31_PA_CripplingBlow_bAllowStack":
+        case "M31_PA_StayFrosty_bReactionFire":
+        case "M31_PA_HunterDedication_bExcludeFlanking":
+        case "M31_PA_HunterDedication_bExcludeMelee":
         case "M31_PA_Sidewinder_bOnlyOnEnemyTurn":
         case "M31_PA_Sidewinder_bAllowWhileDisoriented":
         case "M31_PA_Sidewinder_bAllowWhileBurning":
@@ -2502,6 +2527,23 @@ static private function GetShieldEffectValues(Object ParseObj, Object StrategyPa
             ShieldPriority = ShieldEffectState.ShieldPriority;
         }
     }
+}
+
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function int GetEffectTurnsTicked(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Effect EffectState;
+
+    EffectState = XComGameState_Effect(ParseObj);
+    if (EffectState != none)
+    {
+        return EffectState.FullTurnsTicked;
+    }
+    return -1;
 }
 
 

@@ -69,6 +69,9 @@ M31_BloodletBleeding_DebuffText             = "The unit is bleeding. It takes <A
 M31_BleedingRoundsBleeding_DebuffText       = "The unit is bleeding. It takes <Ability:M31_BleedingRounds_BleedDamage_Debuff> damage at the start of each turn."
 M31_PipeBombsBleeding_DebuffText            = "The unit is bleeding. It takes <Ability:M31_PipeBombs_BleedDamage> damage at the start of each turn."
 
+M31_PA_HunterMark_DebuffText                = "Turns passed: <Ability:M31_EffectTurnsTicked>."
+M31_PA_HunterDedication_BuffText            = "This unit does not trigger overwatch or reaction fire and its defense and mobility are increased."
+
 M31_ENEMY_ViperPoison_DebuffText            = "The unit is poisoned. Its aim and mobility are reduced, and it takes a small amount of damage at the start of each turn."
 M31_ENEMY_ViperEnhPoison_DebuffText         = "The unit is poisoned. Its aim and mobility are drastically reduced, and it takes damage at the start of each turn."
 

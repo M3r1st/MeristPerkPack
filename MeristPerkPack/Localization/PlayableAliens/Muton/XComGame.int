@@ -88,3 +88,38 @@ LocLongDescription="Punch an enemy within movement range, dealing a small amount
 LocHelpText="Punch an enemy within movement range, dealing a small amount of damage and stunning them for <Ability:M31_PA_MutonBullRush_StunDuration> action(s). Cannot be used against large units."
 ; LocPromotionPopupText=""
 LocFlyOverText="Bull Rush"
+
+
+[M31_PA_HunterMark X2AbilityTemplate]
+LocFriendlyName="Personal Enemy"
+LocLongDescription="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonus> aim and +<Ability:M31_PA_HunterMark_CritBonus> critical chance against it. The bonus increases at the start of each turn. <Ability:M31_FreeAction>."
+LocHelpText="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it. The bonus increases at the start of each turn."
+LocPromotionPopupText="<Bullet> While the target it marked, gain additional +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it at the start of each turn.<br><Bullet> The effect lasts indefinitely, but only a single enemy can be marked at a time.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
+LocFlyOverText="Personal Enemy"
+
+[M31_PA_HunterWatchfulEye X2AbilityTemplate]
+LocFriendlyName="Very Watchful Eye"
+LocLongDescription="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocHelpText="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocPromotionPopupText="<Bullet> Activates <Ability:M31_PA_HunterWatchfulEye_ActivationsPerTurn> time(s) per turn.<br><Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> The attack activates whenever the enemy moves or attacks."
+
+[M31_PA_HunterWatchfulEye_Attack X2AbilityTemplate]
+LocFriendlyName="Very Watchful Eye"
+LocFlyOverText="Very Watchful Eye"
+
+[M31_PA_HunterDedication X2AbilityTemplate]
+LocFriendlyName="Hunter's Dedication"
+LocLongDescription="Activate to gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for the rest of the turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for the rest of the turn."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
+LocFlyOverText="Hunter's Dedication"
+
+[M31_PA_StayFrosty X2AbilityTemplate]
+LocFriendlyName="Stay Frosty"
+LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Has reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
+
+[M31_PA_StayFrosty_Attack X2AbilityTemplate]
+LocFriendlyName="Stay Frosty"
+LocFlyOverText="Stay Frosty"
