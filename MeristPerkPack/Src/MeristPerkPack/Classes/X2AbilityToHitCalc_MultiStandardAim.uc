@@ -5,12 +5,16 @@ var bool bMultiHitsAreCrits;
 var bool bMultiGuaranteedHit;
 var bool bMultiIgnoreCoverBonus;
 var float MultiFinalMultiplier;
+var int MultiBuiltInHitMod;
+var int MultiBuiltInCritMod; 
 
 var protected bool bCacheAllowCrit;
 var protected bool bCacheHitsAreCrits;
 var protected bool bCacheGuaranteedHit;
 var protected bool bCacheIgnoreCoverBonus;
 var protected float CacheFinalMultiplier;
+var protected int CacheMultiBuiltInHitMod;
+var protected int CacheMultiBuiltInCritMod;
 
 function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarget, out AbilityResultContext ResultContext)
 {
@@ -35,12 +39,16 @@ function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarg
     bCacheGuaranteedHit = bGuaranteedHit;
     bCacheIgnoreCoverBonus = bIgnoreCoverBonus;
     CacheFinalMultiplier = FinalMultiplier;
+    CacheMultiBuiltInHitMod = BuiltInHitMod;
+    CacheMultiBuiltInCritMod = BuiltInCritMod;
 
     bAllowCrit = bMultiAllowCrit;
     bHitsAreCrits = bMultiHitsAreCrits;
     bGuaranteedHit = bMultiGuaranteedHit;
     bIgnoreCoverBonus = bMultiIgnoreCoverBonus;
     FinalMultiplier = MultiFinalMultiplier;
+    BuiltInHitMod = MultiBuiltInHitMod;
+    BuiltInCritMod = MultiBuiltInCritMod;
 
     for (MultiIndex = 0; MultiIndex < kTarget.AdditionalTargets.Length; ++MultiIndex)
     {
@@ -65,4 +73,6 @@ function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarg
     bGuaranteedHit = bCacheGuaranteedHit;
     bIgnoreCoverBonus = bCacheIgnoreCoverBonus;
     FinalMultiplier = CacheFinalMultiplier;
+    BuiltInHitMod = CacheMultiBuiltInHitMod;
+    BuiltInCritMod = CacheMultiBuiltInCritMod;
 }
