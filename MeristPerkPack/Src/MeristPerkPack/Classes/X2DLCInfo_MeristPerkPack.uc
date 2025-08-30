@@ -2080,7 +2080,8 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     if (ItemTemplate != none)
     {
         Index = GetItemTech(ItemTemplate);
-        Index = Clamp(Index, 0, Array.Length);
+        if (Index != -1)
+            Index = Clamp(Index, 0, Array.Length);
     }
 
     if (!bStrategy)

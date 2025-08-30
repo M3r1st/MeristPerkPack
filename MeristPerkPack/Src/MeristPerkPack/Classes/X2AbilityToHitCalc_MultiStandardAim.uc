@@ -6,11 +6,11 @@ var bool bMultiGuaranteedHit;
 var bool bMultiIgnoreCoverBonus;
 var float MultiFinalMultiplier;
 
-var privatewrite bool bCacheAllowCrit;
-var privatewrite bool bCacheHitsAreCrits;
-var privatewrite bool bCacheGuaranteedHit;
-var privatewrite bool bCacheIgnoreCoverBonus;
-var privatewrite float CacheFinalMultiplier;
+var protected bool bCacheAllowCrit;
+var protected bool bCacheHitsAreCrits;
+var protected bool bCacheGuaranteedHit;
+var protected bool bCacheIgnoreCoverBonus;
+var protected float CacheFinalMultiplier;
 
 function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarget, out AbilityResultContext ResultContext)
 {
