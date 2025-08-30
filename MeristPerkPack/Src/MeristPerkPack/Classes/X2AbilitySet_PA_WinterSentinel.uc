@@ -792,6 +792,22 @@ static function X2AbilityTemplate StupidSexySnakeCleanse()
     Trigger.ListenerData.Priority = 50; // Priorities!
     Template.AbilityTriggers.AddItem(Trigger);
 
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'MindControlled';
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_AuraUpdate;
+    Trigger.ListenerData.Priority = 50; // Priorities!
+    Template.AbilityTriggers.AddItem(Trigger);
+    
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'M31_PA_WS_StupidSexySnake_Update';
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_AuraUpdate;
+    Trigger.ListenerData.Priority = 50; // Priorities!
+    Template.AbilityTriggers.AddItem(Trigger);
+
     // We don't want to cleanse the effect of it would be reapplied after that
     //   because there can be additional effects tied to the main one whenever it is removed
     //   i.e. the target takes damage
@@ -852,12 +868,29 @@ static function X2AbilityTemplate StupidSexySnakeUpdate()
     Trigger.ListenerData.Priority = 49; // Priorities!
     Template.AbilityTriggers.AddItem(Trigger);
 
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'MindControlled';
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_AuraUpdate;
+    Trigger.ListenerData.Priority = 49; // Priorities!
+    Template.AbilityTriggers.AddItem(Trigger);
+    
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.EventID = 'M31_PA_WS_StupidSexySnake_Update';
+    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_AuraUpdate;
+    Trigger.ListenerData.Priority = 49; // Priorities!
+    Template.AbilityTriggers.AddItem(Trigger);
+
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.FailOnNonUnits = true;    // IMPORTANT! Range condition cannot be applied to objects
     UnitPropertyCondition.ExcludeInStasis = false;  // IMPORTANT! If the unit is in stasis, we want to make sure they are affected by the aura
     // Normal conditions for the ability:
     UnitPropertyCondition.ExcludeFriendlyToSource = false;
     UnitPropertyCondition.ExcludeHostileToSource = true;
+    UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = true;
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.RequireSquadmates = true;
     UnitPropertyCondition.RequireWithinRange = true;
@@ -867,6 +900,7 @@ static function X2AbilityTemplate StupidSexySnakeUpdate()
     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
 
     Effect = new class'X2Effect_WS_StupidSexySnake';
+    Effect.EffectRemovedFn = AuraEffect_EffectRemoved;
     Effect.DuplicateResponse = eDupe_Refresh; // Relevant if the effect doesn't have infinite duration
     Effect.BuildPersistentEffect(1, true, true); // Infinite duration, remove when the SOURCE dies
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_PA_WS_StupidSexySnake_BuffText"), Template.IconImage,,, Template.AbilitySourceName);
@@ -875,6 +909,22 @@ static function X2AbilityTemplate StupidSexySnakeUpdate()
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
 
     return Template;
+}
+
+// If the effect is removed due to the source's death, trigger an event that would
+// cause other sources of the effect to try and reapply it
+static function AuraEffect_EffectRemoved(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed)
+{
+    local XComGameState_Unit SourceUnit;
+    local XComGameState_Unit TargetUnit;
+
+    SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+    if (SourceUnit != none && TargetUnit != none && SourceUnit.IsDead())
+    {
+        `XEVENTMGR.TriggerEvent('M31_PA_WS_StupidSexySnake_Update', TargetUnit, TargetUnit, NewGameState);
+    }
 }
 
 static function EventListenerReturn AbilityTriggerEventListener_AuraUpdate(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
