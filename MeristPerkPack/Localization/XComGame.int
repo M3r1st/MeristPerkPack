@@ -383,7 +383,7 @@ LocFlyOverText="Rapid Dumping"
 LocFriendlyName="Reflex Shot"
 LocLongDescription="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius> tile radius."
 LocHelpText="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius> tile radius."
-LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Has reaction fire penalties: <Ability:M31_ReflexShot_bReactionFire>."
+LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_ReflexShot_bReactionFire>."
 
 [M31_ReflexShot_Attack X2AbilityTemplate]
 LocFriendlyName="Reflex Shot"

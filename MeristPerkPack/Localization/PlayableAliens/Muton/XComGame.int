@@ -109,8 +109,8 @@ LocFlyOverText="Very Watchful Eye"
 
 [M31_PA_HunterDedication X2AbilityTemplate]
 LocFriendlyName="Hunter's Dedication"
-LocLongDescription="Activate to gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for the rest of the turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for the rest of the turn."
+LocLongDescription="Activate to gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for <Ability:M31_PA_HunterDedication_Duration> turn(s). <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for <Ability:M31_PA_HunterDedication_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
 LocFlyOverText="Hunter's Dedication"
 
@@ -118,7 +118,7 @@ LocFlyOverText="Hunter's Dedication"
 LocFriendlyName="Stay Frosty"
 LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
 LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
-LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Has reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
+LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
 
 [M31_PA_StayFrosty_Attack X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"

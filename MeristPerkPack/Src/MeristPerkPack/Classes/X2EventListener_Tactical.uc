@@ -45,17 +45,18 @@ static function EventListenerReturn OnRetainConcealmentOnActivation(Object Event
         if (AbilityContext != none)
         {
             UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
-            UnitState.GetUnitValue('M31_Assassin_Activated', UnitValue);
-
-            if (int(UnitValue.fValue) == 1)
+            if (UnitState != none)
             {
-                bRetainConcealmentOnActivation = true;
-                Tuple.Data[0].b = bRetainConcealmentOnActivation;
+                if (UnitState.GetUnitValue('M31_Assassin_Activated', UnitValue) && int(UnitValue.fValue) == 1)
+                {
+                    bRetainConcealmentOnActivation = true;
+                    Tuple.Data[0].b = bRetainConcealmentOnActivation;
 
-                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-                UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.GetReference().ObjectID));
-                UnitState.ClearUnitValue('M31_Assassin_Activated');
-                `TACTICALRULES.SubmitGameState(NewGameState);
+                    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+                    UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.GetReference().ObjectID));
+                    UnitState.ClearUnitValue('M31_Assassin_Activated');
+                    `TACTICALRULES.SubmitGameState(NewGameState);
+                }
             }
         }
     }
@@ -149,8 +150,6 @@ static function EventListenerReturn OnOverrideDamageRemovesReserveActionPoints(O
                 bDamageRemovesReserveActionPoints = false;
                 Tuple.Data[0].b = bDamageRemovesReserveActionPoints;
             }
-
-            
         }
     }
 
