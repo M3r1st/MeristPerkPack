@@ -41,10 +41,10 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
     local OverwatchAbilityInfo          AbilityInfo;
     local array<OverwatchAbilityInfo>   AbilitiesToActivateSorted;
     local name                          AbilityName;
-    local bool                          bCanUseAbility;
-    local X2AbilityCost                 Cost;
 
-    local XComGameState                 NewGameState;    
+    local XComGameState                 NewGameState;
+
+    History = `XCOMHISTORY;
 
     CoveringFireEffectState = XComGameState_Effect(CallbackData);
 
@@ -61,7 +61,7 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
             EventAbilityTemplate = EventAbilityState.GetMyTemplate();
             if (EventAbilityState.GetMyTemplate().Hostility != eHostility_Offensive
                 || !(CoveringFireEffect.bAnyHostileAction
-                || EventAbilityTemplate.TargetEffectsDealDamage(AbilityState.GetSourceWeapon(), AbilityState) && !EventAbilityTemplate.bIsASuppressionEffect))
+                || EventAbilityTemplate.TargetEffectsDealDamage(EventAbilityState.GetSourceWeapon(), EventAbilityState) && !EventAbilityTemplate.bIsASuppressionEffect))
                 return ELR_NoInterrupt;
 
             if (CoveringFireEffect.bOnlyDuringEnemyTurn && `TACTICALRULES.GetUnitActionTeam() == CoveringUnit.GetTeam())
@@ -99,6 +99,7 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
                         if (AbilityContext.InputContext.MultiTargets[Index].ObjectID == CoveringUnit.ObjectID)
                         {
                             bIsDirectAttack = true;
+                            break;
                         }
                     }
                 }
@@ -143,28 +144,23 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
                     AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
                     if (AbilityState != none)
                     {
-                        if (CoveringFireEffect.bSelfTargeting && AbilityState.CanActivateAbilityForObserverEvent(CoveringUnit) == 'AA_Success')
+                        if (CoveringFireEffect.bSelfTargeting)
                         {
-                            `TACTICALRULES.SubmitGameState(NewGameState);
-                            AbilityState.AbilityTriggerAgainstSingleTarget(CoveringUnit.GetReference(), CoveringFireEffect.bUseMultiTargets);
-                            return ELR_NoInterrupt;
+                            if (AbilityState.CanActivateAbilityForObserverEvent(CoveringUnit) == 'AA_Success')
+                            {
+                                `TACTICALRULES.SubmitGameState(NewGameState);
+                                AbilityState.AbilityTriggerAgainstSingleTarget(CoveringUnit.GetReference(), CoveringFireEffect.bUseMultiTargets);
+                                return ELR_NoInterrupt;
+                            }
                         }
-                        else if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit) == 'AA_Success')
+                        else
                         {
-                            `TACTICALRULES.SubmitGameState(NewGameState);
-                            if (CoveringFireEffect.bUseMultiTargets)
+                            if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit) == 'AA_Success')
                             {
-                                AbilityState.AbilityTriggerAgainstSingleTarget(CoveringUnit.GetReference(), true);
+                                `TACTICALRULES.SubmitGameState(NewGameState);
+                                AbilityState.AbilityTriggerAgainstSingleTarget(AttackingUnit.GetReference(), CoveringFireEffect.bUseMultiTargets);
+                                return ELR_NoInterrupt;
                             }
-                            else
-                            {
-                                AbilityContext = class'XComGameStateContext_Ability'.static.BuildContextFromAbility(AbilityState, AttackingUnit.ObjectID);
-                                if (AbilityContext.Validate())
-                                {
-                                    `TACTICALRULES.SubmitGameStateContext(AbilityContext);
-                                }
-                            }
-                            return ELR_NoInterrupt;
                         }
                     }
                 }
@@ -174,6 +170,23 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
     }
 
     return ELR_NoInterrupt;
+}
+
+static function X2Effect_MeristCoveringFire CreateCoveringFireEffect(optional bool bMatchWeapon)
+{
+    local X2Effect_MeristCoveringFire   CoveringFireEffect;
+    local X2Condition_AbilityProperty   CoveringFireCondition;
+
+    CoveringFireCondition = new class'X2Condition_AbilityProperty';
+    CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
+
+    CoveringFireEffect = new class'X2Effect_MeristCoveringFire';
+    CoveringFireEffect.AbilitiesToActivate = class'X2Effect_MeristReserveOverwatchPoints'.default.OverwatchAbilities;
+    CoveringFireEffect.bMatchSourceWeapon = bMatchWeapon;
+    CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+    CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
+
+    return CoveringFireEffect;
 }
 
 defaultproperties

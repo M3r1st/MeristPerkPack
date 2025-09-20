@@ -48,8 +48,6 @@ static function X2AbilityTemplate ReadyForAnythingTrigger()
     local X2AbilityTrigger_EventListener        Trigger;
     local X2Condition_UnitEffects               SuppressedCondition;
     local X2Effect_MeristReserveOverwatchPoints ReserveEffect;
-    local X2Effect_MeristCoveringFire           CoveringFireEffect;
-    local X2Condition_AbilityProperty           CoveringFireCondition;
     local X2Condition_UnitValue                 ValueCondition;
     local X2Effect_IncrementUnitValue           UnitValueEffect;
 
@@ -85,14 +83,7 @@ static function X2AbilityTemplate ReadyForAnythingTrigger()
     ReserveEffect.bMatchSourceWeapon = class'X2Effect_ReadyForAnything'.default.bMatchSourceWeapon;
     Template.AddTargetEffect(ReserveEffect);
     
-    CoveringFireEffect = new class'X2Effect_MeristCoveringFire';
-    CoveringFireEffect.AbilitiesToActivate = class'X2Effect_MeristReserveOverwatchPoints'.default.OverwatchAbilities;
-    CoveringFireEffect.bMatchSourceWeapon = class'X2Effect_ReadyForAnything'.default.bMatchSourceWeapon;
-    CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-    CoveringFireCondition = new class'X2Condition_AbilityProperty';
-    CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
-    CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
-    Template.AddTargetEffect(CoveringFireEffect);
+    Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect(class'X2Effect_ReadyForAnything'.default.bMatchSourceWeapon));
 
     if (class'X2Effect_ReadyForAnything'.default.RFA_ACTIVATIONS_PER_TURN > 0)
     {

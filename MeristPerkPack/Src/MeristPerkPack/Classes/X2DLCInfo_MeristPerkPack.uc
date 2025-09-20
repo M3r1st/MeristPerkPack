@@ -1858,7 +1858,7 @@ static private function string GetFriendlyName(Object ParseObj, Object StrategyP
     local XComGameState_Effect  EffectState;
     local XComGameState_Ability AbilityState;
     local string                OutString;
-    local int                   Index;
+    // local int                   Index;
 
     AbilityTemplate = X2AbilityTemplate(ParseObj);
 
