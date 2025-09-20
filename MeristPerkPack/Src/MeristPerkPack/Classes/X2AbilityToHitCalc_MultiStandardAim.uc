@@ -34,31 +34,34 @@ function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarg
         ResultContext.CalculatedHitChance = CalculatedHitChance;
     }
 
-    bCacheAllowCrit = bAllowCrit;
-    bCacheHitsAreCrits = bHitsAreCrits;
-    bCacheGuaranteedHit = bGuaranteedHit;
-    bCacheIgnoreCoverBonus = bIgnoreCoverBonus;
-    CacheFinalMultiplier = FinalMultiplier;
-    CacheMultiBuiltInHitMod = BuiltInHitMod;
-    CacheMultiBuiltInCritMod = BuiltInCritMod;
-
-    bAllowCrit = bMultiAllowCrit;
-    bHitsAreCrits = bMultiHitsAreCrits;
-    bGuaranteedHit = bMultiGuaranteedHit;
-    bIgnoreCoverBonus = bMultiIgnoreCoverBonus;
-    FinalMultiplier = MultiFinalMultiplier;
-    BuiltInHitMod = MultiBuiltInHitMod;
-    BuiltInCritMod = MultiBuiltInCritMod;
-
-    for (MultiIndex = 0; MultiIndex < kTarget.AdditionalTargets.Length; ++MultiIndex)
+    if (bOnlyMultiHitWithSuccess && class'XComGameStateContext_Ability'.static.IsHitResultMiss(HitResult))
     {
-        if (bOnlyMultiHitWithSuccess && class'XComGameStateContext_Ability'.static.IsHitResultMiss(HitResult))
+        for (MultiIndex = 0; MultiIndex < kTarget.AdditionalTargets.Length; ++MultiIndex)
         {
             ResultContext.MultiTargetHitResults.AddItem(eHit_Miss);
             ResultContext.MultiTargetArmorMitigation.AddItem(ArmorMitigated);
             ResultContext.MultiTargetStatContestResult.AddItem(0);
         }
-        else
+    }
+    else
+    {
+        bCacheAllowCrit = bAllowCrit;
+        bCacheHitsAreCrits = bHitsAreCrits;
+        bCacheGuaranteedHit = bGuaranteedHit;
+        bCacheIgnoreCoverBonus = bIgnoreCoverBonus;
+        CacheFinalMultiplier = FinalMultiplier;
+        CacheMultiBuiltInHitMod = BuiltInHitMod;
+        CacheMultiBuiltInCritMod = BuiltInCritMod;
+
+        bAllowCrit = bMultiAllowCrit;
+        bHitsAreCrits = bMultiHitsAreCrits;
+        bGuaranteedHit = bMultiGuaranteedHit;
+        bIgnoreCoverBonus = bMultiIgnoreCoverBonus;
+        FinalMultiplier = MultiFinalMultiplier;
+        BuiltInHitMod = MultiBuiltInHitMod;
+        BuiltInCritMod = MultiBuiltInCritMod;
+
+        for (MultiIndex = 0; MultiIndex < kTarget.AdditionalTargets.Length; ++MultiIndex)
         {
             kTarget.PrimaryTarget = kTarget.AdditionalTargets[MultiIndex];
             InternalRollForAbilityHit(kAbility, kTarget, false, ResultContext, HitResult, ArmorMitigated, CalculatedHitChance);
@@ -66,13 +69,13 @@ function RollForAbilityHit(XComGameState_Ability kAbility, AvailableTarget kTarg
             ResultContext.MultiTargetArmorMitigation.AddItem(ArmorMitigated);
             ResultContext.MultiTargetStatContestResult.AddItem(0);
         }
+        
+        bAllowCrit = bCacheAllowCrit;
+        bHitsAreCrits = bCacheHitsAreCrits;
+        bGuaranteedHit = bCacheGuaranteedHit;
+        bIgnoreCoverBonus = bCacheIgnoreCoverBonus;
+        FinalMultiplier = CacheFinalMultiplier;
+        BuiltInHitMod = CacheMultiBuiltInHitMod;
+        BuiltInCritMod = CacheMultiBuiltInCritMod;
     }
-    
-    bAllowCrit = bCacheAllowCrit;
-    bHitsAreCrits = bCacheHitsAreCrits;
-    bGuaranteedHit = bCacheGuaranteedHit;
-    bIgnoreCoverBonus = bCacheIgnoreCoverBonus;
-    FinalMultiplier = CacheFinalMultiplier;
-    BuiltInHitMod = CacheMultiBuiltInHitMod;
-    BuiltInCritMod = CacheMultiBuiltInCritMod;
 }

@@ -87,8 +87,8 @@ LocFlyOverText="Cold Blooded"
 
 [M31_CombatAdvance X2AbilityTemplate]
 LocFriendlyName="Combat Advance"
-LocLongDescription="Attack any enemy within movement range with your <Abiltiy:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Attack any enemy within movement range with your <Abiltiy:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use."
+LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use."
 ; LocPromotionPopupText=""
 LocFlyOverText="Combat Advance"
 
@@ -103,7 +103,7 @@ LocFlyOverText="Concussive Grenades"
 LocFriendlyName="Infiltrator"
 LocLongDescription="Gain <font color='#0bff9b'>Covert</font> and <font color='#0bff9b'>Parkour</font>, gaining reduced detection radius and the ability to climb walls."
 LocHelpText="Gain <font color='#0bff9b'>Covert</font> and <font color='#0bff9b'>Parkour</font>, gaining reduced detection radius and the ability to climb walls."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Covert</font> reduces the <Ability:ClassName>'s detection redius by <font color='#ffd700'><Ability:COVERT_DETECTION_RANGE_REDUCTION/>%</font>.<br><Bullet> <font color='#0bff9b'>Parkour</font> allows the <Ability:ClassName> to climb walls."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Covert</font> reduces the <Ability:ClassName>'s detection radius by <font color='#ffd700'><Ability:COVERT_DETECTION_RANGE_REDUCTION/>%</font>.<br><Bullet> <font color='#0bff9b'>Parkour</font> allows the <Ability:ClassName> to climb walls."
 
 [M31_DeathAdder X2AbilityTemplate]
 LocFriendlyName="Death Adder"
@@ -322,7 +322,7 @@ LocFlyOverText="Overpower"
 LocFriendlyName="Overseer"
 LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
 LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br>    <Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
+LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br><Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
 
 [M31_PerfectHandling X2AbilityTemplate]
 LocFriendlyName="Perfect Handling"
@@ -575,14 +575,14 @@ LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff
 LocFriendlyName="Traverse Fire"
 LocLongDescription="After taking a standard shot with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
 LocHelpText="After taking a standard shot with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
-LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up and Pistol Shot.<br><Bullet> Free non-offensive actions can be used without invalidating Stationary Fire."
+LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up and Pistol Shot.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>."
 LocFlyOverText="Traverse Fire"
 
 [M31_TraverseFirePlus X2AbilityTemplate]
 LocFriendlyName="Advanced Traverse Fire"
 LocLongDescription="After taking a standard shot or one of the special shots with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
 LocHelpText="After taking a standard shot or one of the special shots with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
-LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Free non-offensive actions can be used without invalidating Stationary Fire.<br><Bullet> Applies to <Ability:M31_TraverseFirePlus_Abilities>."
+LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>.<br><Bullet> Applies to <Ability:M31_TraverseFirePlus_Abilities>."
 LocFlyOverText="Advanced Traverse Fire"
 
 [M31_TroubleShooter X2AbilityTemplate]
@@ -680,14 +680,15 @@ LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> at
 [M31_Shiver2_Attack X2AbilityTemplate]
 LocFriendlyName="Greater Shiver"
 
-[M31_HypothermiaRounds X2AbilityTemplate]
-LocFriendlyName="Withering Frost"
-LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks have a <Ability:M31_HypothermiaRounds_PrcChance> chance to inflict hypothermia."
-LocHelpText="Your <Ability:M31_BoundWeaponName> attacks have a <Ability:M31_HypothermiaRounds_PrcChance> chance to inflict hypothermia."
-LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_HypothermiaRounds_Duration> turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks."
+[M31_ReadyForAnything X2AbilityTemplate]
+LocFriendlyName="Ready for Anything"
+LocHelpText="Once per turn, enter overwatch after taking a standard shot with your <Ability:BOUND_WEAPON_NAME>."
+LocLongDescription="Enter overwatch after firing a turn-ending standard shot with your <Ability:BOUND_WEAPON_NAME>."
+LocPromotionPopupText="<Bullet> Standard shot abilities also include Standard Sniper Shot and Pistol Shot."
 
-[M31_HypothermiaRounds_Attack X2AbilityTemplate]
-LocFriendlyName="Withering Frost"
+[M31_ReadyForAnythingTrigger X2AbilityTemplate]
+LocFriendlyName="Ready for Anything"
+LocFlyOverText="Ready for Anything"
 
 
 
@@ -697,6 +698,15 @@ LocLongDescription="The <Ability:ClassName> can now equip <font color='#ffd700'>
 LocHelpText="The <Ability:ClassName> can now equip <font color='#ffd700'>cannons</font>, <font color='#ffd700'>sniper rifles</font>, <font color='#ffd700'>vektor rifles</font>, <font color='#ffd700'>bullpups</font>, and <font color='#ffd700'>ripjacks</font>, and gains additional abilities depending on the weapons equipped."
 LocPromotionPopupText="<Bullet> <font color='#ffd700'>SMG</font>: <font color='#0bff9b'>Airstrike</font> - Once per mission, call in an airstrike that does damage in a large area.<br><Bullet> <font color='#ffd700'>Rifle</font>: <font color='#0bff9b'>Cyclic Fire</font> - Fire three shots at a target in a single attack.<br><Bullet> <font color='#ffd700'>Boltcaster</font>: <font color='#0bff9b'>Pinpoint</font> - Special shot that has bonus aim, critical chance and critical damage for each action consumed.<br><Bullet> <font color='#ffd700'>Shotgun</font>: <font color='#0bff9b'>Assault Shot</font> - Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. Free action, but can't crit. Has a <Ability:M31_AssaultShot_Cooldown> turn cooldown.<br><Bullet> <font color='#ffd700'>Cannon</font>: <font color='#0bff9b'>Saturation Fire</font> - Fire a cone shaped barrage of bullets at every enemy in an area. Deals high damage to cover.<br><Bullet> <font color='#ffd700'>Sniper Rifle</font>: <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Double Tap</font> - Fire a standard shot and gain a second action restricted to an additional shot or overwatching.<br><Bullet> <font color='#ffd700'>Vektor Rifle</font>: <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Burst Fire</font> - Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst. Has a <Ability:M31_BurstFire_Cooldown> turn cooldown.<br><Bullet> <font color='#ffd700'>Bullpup</font>: <font color='#0bff9b'>Battlelord</font> - Activate to take an action after each enemy in line of sight takes a turn.<br><br><Bullet> <font color='#ffd700'>Sword</font>: <font color='#0bff9b'>Overpower</font> - Dashing melee attack. Stuns the target and shreds all of its armor. Non-large units only.<br><Bullet> <font color='#ffd700'>Combat Knife</font>: <font color='#0bff9b'>Crippling Blow</font> - Crippling slash against an adjecent enemy. Inflicts a permanent non-stacking debuff that severely reduces the target's mobility, aim and dodge.<br><Bullet> <font color='#ffd700'>Ripjack</font>: <font color='#0bff9b'>Combat Advance</font> - Dashing melee attack. Costs a single action, doesn't end the turn, and grants a movement-only action. Has a <Ability:M31_CombatAdvance_Cooldown> turn cooldown.<br><br><Bullet> <font color='#ffd700'>Pistol</font>: <font color='#0bff9b'>Frantic Fire</font> - As a free action, fire the pistol at 2 random enemies.<br><Bullet> <font color='#ffd700'>Sidearm</font>: <font color='#0bff9b'>Sidearm Rave</font> - Fire the pistol three times at the same target. Woefully inaccurate."
 
+[M31_HypothermiaRounds X2AbilityTemplate]
+LocFriendlyName="Withering Frost"
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks have a <Ability:M31_HypothermiaRounds_PrcChance> chance to inflict hypothermia."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks have a <Ability:M31_HypothermiaRounds_PrcChance> chance to inflict hypothermia."
+LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_HypothermiaRounds_Duration> turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks."
+
+[M31_HypothermiaRounds_Attack X2AbilityTemplate]
+LocFriendlyName="Withering Frost"
+M31_ReadyForAnythingTrigger
 
 
 [M31_SpectralZombie_M1 X2CharacterTemplate]

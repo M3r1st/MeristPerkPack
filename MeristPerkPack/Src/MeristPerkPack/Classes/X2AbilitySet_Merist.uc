@@ -495,7 +495,6 @@ static function X2AbilityTemplate Botnet()
     UnitPropertyCondition.ExcludeFriendlyToSource = false;
     UnitPropertyCondition.RequireSquadmates = true;
     UnitPropertyCondition.ExcludeCivilian = true;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
     Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
     Effect = new class'X2Effect_Persistent';
@@ -927,7 +926,6 @@ static function X2AbilityTemplate EMPBomber()
 {
     local X2AbilityTemplate     Template;
     local X2Effect_AddGrenade   Effect;
-    // local X2Condition_SourceHasOneOfTheAbilities Condition;
 
     Template = Passive('M31_EMPBomber', "img:///UILibrary_MeristPerkIcons.UIPerk_EMPPlus", false, true);
     
@@ -937,17 +935,6 @@ static function X2AbilityTemplate EMPBomber()
     Effect.SkipAbilities.AddItem('SmallItemWeight');
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
-
-    // Condition = new class'X2Condition_SourceHasOneOfTheAbilities';
-    // Condition.AbilityNames = default.ShockGrenadier_AdditionalCharge_AllowedAbilities;
-
-    // Effect = new class'X2Effect_AddGrenade';
-    // Effect.bAllowUpgrades = true;
-    // Effect.DataName = 'EMPGrenade';
-    // Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.BuildPersistentEffect(1, true, false);
-    // Effect.TargetConditions.AddItem(Condition);
-    // Template.AddTargetEffect(Effect);
 
     return Template;
 }
@@ -2023,8 +2010,8 @@ static function X2Effect_ToHitModifier CreateDisarmingShotEffect(X2AbilityTempla
 
     Effect = new class'X2Effect_ToHitModifier';
     Effect.EffectName = 'M31_DisarmingShot_Penalty';
-    Effect.AddEffectHitModifier(eHit_Success, `GetConfigInt("M31_DisarmingShot_AimPenalty"), Template.LocFriendlyName);
-    Effect.AddEffectHitModifier(eHit_Crit, `GetConfigInt("M31_DisarmingShot_CritPenalty"), Template.LocFriendlyName);
+    Effect.AddEffectHitModifier(eHit_Success, -1 * `GetConfigInt("M31_DisarmingShot_AimPenalty"), Template.LocFriendlyName);
+    Effect.AddEffectHitModifier(eHit_Crit, -1 * `GetConfigInt("M31_DisarmingShot_CritPenalty"), Template.LocFriendlyName);
     Effect.BuildPersistentEffect(`GetConfigInt("M31_DisarmingShot_Duration"), false, false, true, eGameRule_PlayerTurnEnd);
     Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, `GetLocalizedString("M31_DisarmingShot_DebuffText"), Template.IconImage,,, Template.AbilitySourceName);
     Effect.DuplicateResponse = eDupe_Refresh;
@@ -2367,9 +2354,8 @@ static function X2AbilityTemplate ShockGrenadier()
 {
     local X2AbilityTemplate     Template;
     local X2Effect_AddGrenade   Effect;
-    // local X2Condition_SourceHasOneOfTheAbilities Condition;
 
-    Template = Passive('M31_ShockGrenadier', "img:///UILibrary_PerkIcons.UIPerk_grenade_emp", false, true);
+    Template = Passive('M31_ShockGrenadier', "img:///UILibrary_MeristPerkIcons.UIPerk_ShockBox", false, true);
         
     Effect = new class'X2Effect_AddGrenade';
     Effect.bAllowUpgrades = true;
@@ -2377,17 +2363,6 @@ static function X2AbilityTemplate ShockGrenadier()
     Effect.SkipAbilities.AddItem('SmallItemWeight');
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
-
-    // Condition = new class'X2Condition_SourceHasOneOfTheAbilities';
-    // Condition.AbilityNames = default.ShockGrenadier_AdditionalCharge_AllowedAbilities;
-
-    // Effect = new class'X2Effect_AddGrenade';
-    // Effect.bAllowUpgrades = true;
-    // Effect.DataName = 'EMPGrenade';
-    // Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.BuildPersistentEffect(1, true, false);
-    // Effect.TargetConditions.AddItem(Condition);
-    // Template.AddTargetEffect(Effect);
 
     return Template;
 }
@@ -2692,7 +2667,7 @@ static function X2AbilityTemplate SniperOverwatch()
     Template.TargetingMethod = class'X2TargetingMethod_Cone';
 
     ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
-    ReservePointsEffect.ReserveType = 'M31_SniperOverwatch';
+    ReservePointsEffect.ReserveType = default.SniperOverwatchActionPoint;
     ReservePointsEffect.NumPoints = 1;
     Template.AddShooterEffect(ReservePointsEffect);
 
@@ -2711,6 +2686,8 @@ static function X2AbilityTemplate SniperOverwatch()
     Template.bShowActivation = true;
 
     Template.PostActivationEvents.AddItem('OverwatchUsed');
+
+    Template.AdditionalAbilities.AddItem('M31_SniperOverwatch_Attack');
 
     return Template;
 }
@@ -2773,7 +2750,7 @@ static function X2AbilityTemplate SniperOverwatchAttack()
     ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
     ReserveActionPointCost.iNumPoints = 1;
     ReserveActionPointCost.bFreeCost = false;
-    ReserveActionPointCost.AllowedTypes.AddItem('M31_SniperOverwatch');
+    ReserveActionPointCost.AllowedTypes.AddItem(default.SniperOverwatchActionPoint);
     Template.AbilityCosts.AddItem(ReserveActionPointCost);
 
     AddAmmoCost(Template, 1);
@@ -2802,6 +2779,7 @@ static function X2AbilityTemplate SolidSnake()
     Template = Passive('M31_SolidSnake', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_BloodTrail", false, true);
 
     RangeEffect = new class'X2Effect_ModifyRangePenalties';
+    RangeEffect.EffectName = 'M31_SolidSnake_RangeEffect';
     RangeEffect.RangeOffsetPrc = `GetConfigInt("M31_SolidSnake_PenaltyModifier");
     RangeEffect.BaseRange = `GetConfigInt("M31_SolidSnake_BaseRange");
     RangeEffect.bLongRange = true;

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------------
 //  FILE:   X2Effect_ChangeAbilityHitContext.uc
-//  AUTHOR:  Merist / Based on Mitzruti's MZ_Effect_InvertCounter
+//  AUTHOR: Merist / Based on Mitzruti's MZ_Effect_InvertCounter
 //---------------------------------------------------------------------------------------
 class X2Effect_ChangeAbilityHitContext extends X2Effect_Persistent;
 

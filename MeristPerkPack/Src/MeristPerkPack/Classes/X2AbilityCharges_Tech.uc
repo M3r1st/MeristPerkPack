@@ -19,7 +19,7 @@ function int GetInitialCharges(XComGameState_Ability Ability, XComGameState_Unit
     if (SourceWeapon != none)
     {
         Tech = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceWeapon.GetMyTemplate());
-        Tech = Clamp(Tech, 0, InitialChargesFromTech.Length);
+        Tech = Clamp(Tech, 0, InitialChargesFromTech.Length - 1);
         Charges += InitialChargesFromTech[Tech];
     }
 

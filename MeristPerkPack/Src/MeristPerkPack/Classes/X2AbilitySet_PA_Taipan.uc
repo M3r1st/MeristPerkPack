@@ -77,9 +77,11 @@ static function X2AbilityTemplate VeryAngryBite()
     Template.bOverrideMeleeDeath = false;
     Template.bShowActivation = true;
 
-    SetFireAnim(Template, 'HL_ViciousBite');
+    SetFireAnim(Template, 'HL_M31_ViciousBite');
 
     Template.OverrideAbilityAvailabilityFn = TaipanBite_OverrideAbilityAvailability;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
 
     return Template;
 }
@@ -472,8 +474,6 @@ static function X2AbilityTemplate TaipanWatchThemRunTrigger()
     return Template;
 }
 
-
-
 static function X2AbilityTemplate TaipanBite()
 {
     local X2AbilityTemplate                 Template;
@@ -521,13 +521,15 @@ static function X2AbilityTemplate TaipanBite()
 
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
     
-    Template.CustomFireAnim = 'HL_ViciousBite';
+    Template.CustomFireAnim = 'HL_M31_ViciousBite';
     Template.bSkipMoveStop = true;
     Template.bOverrideMeleeDeath = false;
 
     Template.bShowActivation = true;
 
     Template.OverrideAbilityAvailabilityFn = TaipanBite_OverrideAbilityAvailability;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
 
     return Template;
 }
@@ -629,9 +631,11 @@ static function X2AbilityTemplate TaipanDeadlyBiteAttack()
     Template.AddTargetEffect(CreateTaipanDeadlyBiteDamageEffect());
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
 
-    Template.CustomFireAnim = 'HL_ViciousBite';
+    Template.CustomFireAnim = 'HL_M31_ViciousBite';
     Template.bShowActivation = true;
     Template.bFrameEvenWhenUnitIsHidden = true;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
 
     return Template;
 }
@@ -701,11 +705,11 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
     Template.AddTargetEffect(CreateTaipanDeadlyBiteDamageEffect());
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
 
-    
-
-    Template.CustomFireAnim = 'HL_ViciousBite';
+    Template.CustomFireAnim = 'HL_M31_ViciousBite';
     Template.bShowActivation = true;
     Template.bFrameEvenWhenUnitIsHidden = true;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
 
     return Template;
 }

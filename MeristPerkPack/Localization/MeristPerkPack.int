@@ -75,12 +75,6 @@ M31_PA_HunterDedication_BuffText            = "This unit does not trigger overwa
 M31_ENEMY_ViperPoison_DebuffText            = "The unit is poisoned. Its aim and mobility are reduced, and it takes a small amount of damage at the start of each turn."
 M31_ENEMY_ViperEnhPoison_DebuffText         = "The unit is poisoned. Its aim and mobility are drastically reduced, and it takes damage at the start of each turn."
 
-M31_LocalizedAbility_StandardShot           = "Standard Shot"
-M31_LocalizedAbility_SniperStandardFire     = "Standard Sniper Shot"
-M31_LocalizedAbility_PistolStandardShot     = "Pistol Shot"
-M31_LocalizedAbility_Maim_LW                = "Maim (LW)"
-
-
 [BitterfrostHelper]
 ChillEffectName="Chilled"
 ChillEffectDesc="Mobility and Dodge reduced."
@@ -124,3 +118,21 @@ LostRadRegenEffectLostString="<XGParam:StrValue0/!UnitName/> is no longer regene
 RadBurningTitle="Radiation Burn"
 RadBleedingTitle="Boiling Blood"
 RadDisorientedTitle="Irradiated"
+
+[X2DLCInfo_MeristPerkPack]
++LocalizedAbilities         = "StandardShot"
++LocalizedAbilityNames      = "Standard Shot"
++LocalizedAbilities         = "SniperStandardFire"
++LocalizedAbilityNames      = "Standard Sniper Shot"
++LocalizedAbilities         = "PistolStandardShot"
++LocalizedAbilityNames      = "Pistol Shot"
++LocalizedAbilities         = "Maim_LW"
++LocalizedAbilityNames      = "Maim (LW)"
+
++LocalizedAbilitiesToHide   = "Maim_LW"
++LocalizedAbilitiesToHide   = "PrecisionShotSnapShot"
++LocalizedAbilitiesToHide   = "PrecisionShotSnapShot"
++LocalizedAbilitiesToHide   = "DeadeyeSnapShot"
++LocalizedAbilitiesToHide   = "DisablingShotSnapShot"
++LocalizedAbilitiesToHide   = "M31_DisarmingShot_SnapShot"
++LocalizedAbilitiesToHide   = "M31_Maim_SnapShot"

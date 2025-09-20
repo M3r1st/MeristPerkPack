@@ -47,6 +47,7 @@ static function X2AbilityTemplate Passive(name TemplateName, string IconImage,
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
+    Template.bShowActivation = false;
     Template.bCrossClassEligible = bCrossClassEligible;
 
     return Template;
@@ -75,8 +76,6 @@ static function X2AbilityTemplate SelfTargetActivated(name TemplateName, string 
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-
-    Template.bSkipFireAction = true;
 
     Template.bCrossClassEligible = bCrossClassEligible;
 

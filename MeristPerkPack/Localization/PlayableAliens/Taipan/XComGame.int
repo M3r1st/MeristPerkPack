@@ -46,8 +46,8 @@ LocFlyOverText="Ambush Predator"
 
 [M31_PA_TaipanReturnFire X2AbilityTemplate]
 LocFriendlyName="Return Fire (Taipan)"
-LocLongDescription="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>her bondmate</font>. Ignores cover bonus."
-LocHelpText="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>her bondmate</font>. Ignores cover bonus."
+LocLongDescription="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
+LocHelpText="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed.<br><Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Can only activate once per turn.<br><Bullet> Can be activated by melee and area of effect attacks.<br><Bullet> Will not activate when targeted by overwatch fire."
 
 [M31_PA_TaipanReturnFire_Attack X2AbilityTemplate]

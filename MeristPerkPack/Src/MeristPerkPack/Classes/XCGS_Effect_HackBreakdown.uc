@@ -1,6 +1,7 @@
 class XCGS_Effect_HackBreakdown extends XComGameState_Effect;
 
 var private ShotBreakdown HackedBreakdown;
+var int Counter;
 
 final function int GetUncappedHitChance(X2AbilityTemplate Template, XComGameState_Ability AbilityState, XComGameState_Unit TargetUnit, EAbilityHitResult Type)
 {

@@ -12,7 +12,7 @@ function int GetInitialCharges(XComGameState_Ability Ability, XComGameState_Unit
     if (Unit != none)
         Rank = Unit.GetSoldierRank();
 
-    Rank = Clamp(Rank, 0, InitialChargesFromRank.Length);
+    Rank = Clamp(Rank, 0, InitialChargesFromRank.Length - 1);
     
     Charges += InitialChargesFromRank[Rank];
 

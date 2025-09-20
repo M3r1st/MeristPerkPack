@@ -33,6 +33,10 @@ var config bool bUpdateTemplarShield;
 var config array<name> EMPGrenades;
 var config array<name> EMPGrenades_AdditionalEffectsToRemove;
 
+var localized array<name> LocalizedAbilities;
+var localized array<name> LocalizedAbilitiesToHide;
+var localized array<string> LocalizedAbilityNames;
+
 struct CanAddItemOverrideInfo
 {
     struct CanAddItemOverrideWeaponCatInfo
@@ -228,7 +232,8 @@ static function GetLocalizedAbilityLists()
     local array<X2DataTemplate>     DataTemplates;
     local X2DataTemplate            DataTemplate;
     local X2AbilityTemplate         Template;
-    local string OutString;
+    local int                       Index;
+    local string                    OutString;
 
     local X2AbilityTemplateManager          AbilityMgr;
 
@@ -243,9 +248,15 @@ static function GetLocalizedAbilityLists()
         foreach DataTemplates(DataTemplate)
         {
             Template = X2AbilityTemplate(DataTemplate);
-            OutString = `GetLocalizedString("M31_LocalizedAbility_" $ Template.DataName);
-            if (OutString == "")
+
+            if (default.LocalizedAbilitiesToHide.Find(Template.DataName) != INDEX_NONE)
+                continue;
+
+            Index = default.LocalizedAbilities.Find(Template.DataName);
+            if (Index == INDEX_NONE)
                 OutString = Template.LocFriendlyName;
+            else
+                OutString = default.LocalizedAbilityNames[Index];
 
             if (default.RapidDumping_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.RapidDumping_Abilities.AddItem(OutString);
@@ -699,7 +710,7 @@ static function AddEffectsToGrenades()
     RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
 
     StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(
-        `GetConfigInt("M31_ConcussiveGrenades_StunChance"), `GetConfigInt("M31_ConcussiveGrenades_StunDuration"));
+        `GetConfigInt("M31_ConcussiveGrenades_StunDuration"), `GetConfigInt("M31_ConcussiveGrenades_StunChance"), false);
     StunnedEffect.bRemoveWhenSourceDies = false;
     StunnedEffect.TargetConditions.AddItem(AbilityCondition);
 
@@ -1414,7 +1425,6 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
         case "M31_PA_TaipanDeadlyBite_AimBonus":
         case "M31_PA_TaipanDeadlyBite_CritBonus":
         case "M31_PA_TaipanDeadlyBite_ActivationsPerTurn":
-        case "M31_PA_TaipanCruelty_BaseChance":
         case "M31_PA_TaipanVengeance_AimBonus":
         case "M31_PA_TaipanVengeance_AimBonusHit":
         case "M31_PA_TaipanVengeance_CritBonus":
@@ -1423,6 +1433,7 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
             return true;
 
         case "M31_PA_TaipanVengeance_AllyBonusModifierPrc":
+        case "M31_PA_TaipanCruelty_BaseChance":
         case "M31_PA_TaipanCruelty_DamageBonusPrc":
             OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
             return true;
@@ -1706,7 +1717,7 @@ static private function string GetStringFromLocalizedList(const array<string> Lo
     
     for (Index = 0; Index < LocalizedList.Length; Index++)
     {
-        OutString $= ColorText_Gold(LocalizedList[Index]);
+        OutString $= ColorText_LimeGreen(LocalizedList[Index]);
         if (Index != LocalizedList.Length - 1)
             OutString $= " - ";
     }
@@ -1846,6 +1857,8 @@ static private function string GetFriendlyName(Object ParseObj, Object StrategyP
     local X2AbilityTemplate     AbilityTemplate;
     local XComGameState_Effect  EffectState;
     local XComGameState_Ability AbilityState;
+    local string                OutString;
+    local int                   Index;
 
     AbilityTemplate = X2AbilityTemplate(ParseObj);
 
@@ -1862,9 +1875,18 @@ static private function string GetFriendlyName(Object ParseObj, Object StrategyP
     }
 
     if (AbilityTemplate != none)
-        return ColorText_LimeGreen(AbilityTemplate.LocFriendlyName);
+    {
+        // Index = default.LocalizedAbilities.Find(AbilityTemplate.DataName);
+        // if (Index == INDEX_NONE)
+        //     OutString = AbilityTemplate.LocFriendlyName;
+        // else
+        //     OutString = default.LocalizedAbilityNames[Index];
+            
+        OutString = AbilityTemplate.LocFriendlyName;
+        return ColorText_LimeGreen(OutString);
+    }
 
-    return "?";
+    return ColorText_Grey("?");
 }
 
 
@@ -2106,7 +2128,7 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     {
         Index = GetItemTech(ItemTemplate);
         if (Index != -1)
-            Index = Clamp(Index, 0, Array.Length);
+            Index = Clamp(Index, 0, Array.Length - 1);
     }
 
     if (!bStrategy)
@@ -2201,7 +2223,7 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
     if (SourceUnit != none)
     {
         Index = SourceUnit.GetSoldierRank();
-        Index = Clamp(Index, 0, Array.Length);
+        Index = Clamp(Index, 0, Array.Length - 1);
     }
 
     if (!bStrategy)

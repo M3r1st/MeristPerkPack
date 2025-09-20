@@ -75,7 +75,7 @@ simulated function int GetShieldAmountFromWeapon(const out EffectAppliedData App
     if (SourceItem != none)
     {
         Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceItem.GetMyTemplate());
-        Tier = Clamp(Tier, 0, ShieldAmount.Length);
+        Tier = Clamp(Tier, 0, ShieldAmount.Length - 1);
         Shield = ShieldAmount[Tier];
     }
 
@@ -95,7 +95,7 @@ simulated function int GetShieldAmountFromArmor(const out EffectAppliedData Appl
     if (SourceUnit != none)
     {
         Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
-        Tier = Clamp(Tier, 0, ShieldAmount.Length);
+        Tier = Clamp(Tier, 0, ShieldAmount.Length - 1);
         Shield = ShieldAmount[Tier];
     }
 

@@ -109,7 +109,7 @@ protected function int GetBonusValue(XComGameState_Ability AbilityState, array<i
     local int Tier;
 
     Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(AbilityState.GetSourceWeapon().GetMyTemplate());
-    Tier = Clamp(Tier, 0, BonusArray.Length);
+    Tier = Clamp(Tier, 0, BonusArray.Length - 1);
 
     return BonusArray[Tier];
 }
