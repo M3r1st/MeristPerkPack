@@ -26,9 +26,9 @@ function float GetPreDefaultAttackingDamageModifier_CH(
         if (CurrentDamage > 0)
         {
             if (bCeiling)
-                return FCeil(Attacker.GetCurrentStat(eStat_PsiOffense) * PsiFactor_Damage);
+                return FCeil(Attacker.GetCurrentStat(eStat_PsiOffense) / PsiFactor_Damage);
             else
-                return int(Attacker.GetCurrentStat(eStat_PsiOffense) * PsiFactor_Damage);
+                return int(Attacker.GetCurrentStat(eStat_PsiOffense) / PsiFactor_Damage);
         }
     }
 
@@ -49,9 +49,9 @@ function int GetExtraArmorPiercing(
         return 0;
 
     if (bCeiling)
-        return FCeil(Attacker.GetCurrentStat(eStat_PsiOffense) * PsiFactor_Pierce);
+        return FCeil(Attacker.GetCurrentStat(eStat_PsiOffense) / PsiFactor_Pierce);
     else
-        return int(Attacker.GetCurrentStat(eStat_PsiOffense) * PsiFactor_Pierce);
+        return int(Attacker.GetCurrentStat(eStat_PsiOffense) / PsiFactor_Pierce);
 }
 
 defaultproperties

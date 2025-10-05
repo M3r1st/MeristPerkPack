@@ -133,10 +133,11 @@ static function X2AbilityTemplate Hide()
     Template = Passive('M31_PA_WS_Hide', "img:///UILibrary_PerkIcons.UIPerk_takecover", false, true);
 
     Effect = new class'X2Effect_WS_Hide';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
 
-    GreaterPaddingEffect = new class 'X2Effect_GreaterPadding';
+    GreaterPaddingEffect = new class'X2Effect_GreaterPadding';
     GreaterPaddingEffect.BuildPersistentEffect(1, true, false);
     GreaterPaddingEffect.Padding_HealHP = `GetConfigInt("M31_PA_WS_Hide_PaddingHP");
     Template.AddTargetEffect(GreaterPaddingEffect);
@@ -152,7 +153,7 @@ static function X2AbilityTemplate Entwine()
     Template = Passive('M31_PA_WS_Entwine', "img:///UILibrary_MZChimeraIcons.Ability_TightSqueeze", false, true);
 
     Effect = new class'X2Effect_WS_Entwine';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -167,7 +168,7 @@ static function X2AbilityTemplate ReinforcedScales()
     
     Effect = new class'X2Effect_WS_ReinforcedScales';
     Effect.EffectName = 'M31_PA_WS_ReinforcedScales';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -182,7 +183,7 @@ static function X2AbilityTemplate GlacialArmor()
 
     Effect = new class'X2Effect_WS_GlacialArmor';
     Effect.ActivationsPerTurn = `GetConfigInt("M31_PA_WS_GlacialArmor_ActivationsPerTurn");
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
@@ -319,7 +320,7 @@ static function X2AbilityTemplate Indomitable()
     Effect.AddPersistentStatChange(eStat_Will, float(`GetConfigInt("M31_PA_WS_Indomitable_WillBonus")));
     Effect.AddPersistentStatChange(eStat_Defense, float(`GetConfigInt("M31_PA_WS_Indomitable_DefenseBonus")));
     Effect.AddPersistentStatChange(eStat_ArmorMitigation, float(`GetConfigInt("M31_PA_WS_Indomitable_ArmorBonus")), MODOP_Addition);
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -429,7 +430,7 @@ static function X2AbilityTemplate Vigilance()
     Template = Passive(default.LeadTheTargetRequiredAbilityName, "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_squadsightprotocol", false, true);
     
     Effect = new class'X2Effect_PersistentStatChange';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Effect.AddPersistentStatChange(eStat_SightRadius, `GetConfigInt("M31_PA_WS_Vigilance_SightRangeBonus"));
 
     Template.AdditionalAbilities.AddItem(GetLTTName(default.LeadTheTargetRequiredAbilityName));
@@ -613,7 +614,7 @@ static function X2AbilityTemplate Fracture()
     Template = Passive('M31_PA_WS_Fracture', "img:///UILibrary_SOCombatEngineer.UIPerk_fracture", false, true);
     
     Effect = new class'X2Effect_WS_Fracture';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -627,7 +628,7 @@ static function X2AbilityTemplate AlloyedCores()
     Template = Passive('M31_PA_WS_AlloyedCores', "img:///UILibrary_PerkIcons.UIPerk_throughthewall", false, true);
     
     Effect = new class'X2Effect_WS_AlloyedCores';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -650,7 +651,7 @@ static function X2AbilityTemplate DragonSlayer()
     Template = Passive('M31_PA_WS_DragonSlayer', "img:///KetarosPkg_Abilities.UIPerk_diablo", false, false);
 
     Effect = new class'X2Effect_WS_DragonSlayer';
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddShooterEffect(Effect);
 
@@ -673,7 +674,7 @@ static function X2AbilityTemplate WinterWarfare()
     Condition.IncludeWeaponNames = default.FrostGrenades;
     Condition.bCheckAmmo = true;
     CostEffect.AbilityTargetConditions.AddItem(Condition);
-    CostEffect.BuildPersistentEffect(1, true);
+    CostEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(CostEffect);
 
     BonusItemEffect = new class'XMBEffect_AddItemCharges';

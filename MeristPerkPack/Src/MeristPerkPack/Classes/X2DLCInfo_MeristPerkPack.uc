@@ -878,6 +878,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = string(GetEffectTurnsTicked(ParseObj, StrategyParseOb, GameState));
             return true;
 
+        case "M31_EffectDamageOverTime":
+            OutString = GetEffectDamageOverTimeString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
         case "M31_ShieldRemaining":
             GetShieldEffectValues(ParseObj, StrategyParseOb, GameState, ShieldRemaining, ShieldPriority);
             OutString = string(ShieldRemaining);
@@ -1177,8 +1181,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             return true;
 
         case "M31_BloodThirst_bRefreshDuration":
-        case "M31_BloodThirst_bApplyToAnyMelee":
-        case "M31_BloodThirst_bActivateFromAnyMelee":
+        case "M31_BloodThirst_bMatchSourceWeapon":
         case "M31_BloodThirst_bIncreaseOnlyOnHit":
         case "M31_Frostbane_bMatchSourceWeapon":
         case "M31_OverchargedBlast_bGuaranteedCrit":
@@ -1439,8 +1442,7 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
             return true;
 
         case "M31_PA_TaipanBloodThirst_bRefreshDuration":
-        case "M31_PA_TaipanBloodThirst_bApplyToAnyMelee":
-        case "M31_PA_TaipanBloodThirst_bActivateFromAnyMelee":
+        case "M31_PA_TaipanBloodThirst_bMatchSourceWeapon":
         case "M31_PA_TaipanBloodThirst_bIncreaseOnlyOnHit":
         case "M31_PA_TaipanBite_bAllowCrit":
         case "M31_PA_TaipanDeadlyBite_bExclusiveMark":
@@ -2315,7 +2317,7 @@ static private function string GetExtraDamageOutString(Object ParseObj, Object S
 
     Damage = WeaponTemplate.ExtraDamage[Index];
 
-    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne == 100 ? 1 : 0);
+    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
     iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
     if (iDamageLow < iDamageHigh)
         OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
@@ -2338,7 +2340,7 @@ static private function string GetDamageValueOutString(Object ParseObj, Object S
 
     SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
 
-    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne == 100 ? 1 : 0);
+    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
     iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
     if (iDamageLow < iDamageHigh)
         OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
@@ -2566,6 +2568,53 @@ static private function int GetEffectTurnsTicked(Object ParseObj, Object Strateg
         return EffectState.FullTurnsTicked;
     }
     return -1;
+}
+
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function string GetEffectDamageOverTimeString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Effect          EffectState;
+    local X2Effect_Persistent           PersistentEffect;
+    local X2Effect                      ApplyOnTickEffect;
+    local X2Effect_ApplyWeaponDamage    WeaponDamageEffect;
+    local WeaponDamageValue             Damage;
+    local int                           MinDamage, MaxDamage;
+    local string                        OutString;
+
+    EffectState = XComGameState_Effect(ParseObj);
+
+    if (EffectState != none)
+    {
+        PersistentEffect = EffectState.GetX2Effect();
+        if (PersistentEffect != none)
+        {
+            foreach PersistentEffect.ApplyOnTick(ApplyOnTickEffect)
+            {
+                WeaponDamageEffect = X2Effect_ApplyWeaponDamage(ApplyOnTickEffect);
+                if (WeaponDamageEffect != none)
+                {
+                    Damage = WeaponDamageEffect.EffectDamageValue;
+                    MinDamage = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
+                    MaxDamage = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
+                    if (MinDamage == MaxDamage)
+                    {
+                        OutString = string(MaxDamage);
+                    }
+                    else
+                    {
+                        OutString = string(MinDamage) @ " - " @ string(MaxDamage);
+                    }
+                    return OutString;
+                }
+            }
+        }
+    }
+
+    return "?";
 }
 
 
@@ -2812,7 +2861,7 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
     else if (DamageEffect != none)
     {
         Damage = DamageEffect.EffectDamageValue;
-        iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne == 100 ? 1 : 0);
+        iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
         iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
         if (iDamageLow < iDamageHigh)
             OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);

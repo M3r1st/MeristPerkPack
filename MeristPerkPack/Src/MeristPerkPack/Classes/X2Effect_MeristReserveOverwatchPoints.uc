@@ -167,5 +167,5 @@ delegate int SortOverwatchAbilities(OverwatchAbilityInfo A, OverwatchAbilityInfo
 defaultproperties
 {
     bRemoveActionPoints = false
-    bMatchSourceWeapon = true
+    bMatchSourceWeapon = false
 }

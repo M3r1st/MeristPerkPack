@@ -34,9 +34,9 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     XComGameState NewGameState)
 {
+    local XComGameState_Unit        UnitState;
     local XComGameState_Item        SourceWeapon;
     local XCGS_Effect_BloodThirst   BloodThirstEffectState;
-    local int Index;
     local int iDamagePerStack;
     local int DamageBonus;
 
@@ -57,20 +57,9 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     if (XComGameState_Unit(TargetDamageable) == none)
         return 0;
     
-    iDamagePerStack = iDefaultDamagePerStack;
-
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
-    if (SourceWeapon != none)
-    {
-        for (Index = 0; Index < DamagePerStack.Length; Index++)
-        {
-            if (DamagePerStack[Index].ItemTemplate == SourceWeapon.GetMyTemplateName())
-            {
-                iDamagePerStack = DamagePerStack[Index].iDamagePerStack;
-                break;
-            }
-        }
-    }
+    iDamagePerStack = GetDamagePerStack(UnitState, SourceWeapon);
 
     BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
 

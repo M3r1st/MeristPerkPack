@@ -20,8 +20,8 @@ LocPromotionPopupText="<Bullet> Allows all reaction attacks to crit.<br><Bullet>
 [M31_PA_TaipanBloodThirst X2AbilityTemplate]
 LocFriendlyName="Paint the Moon Red"
 LocLongDescription="Whenever you perform a melee attack, gain a stackable +<Ability:M31_PA_TaipanBloodThirst_DamagePerStack> damage bonus for your melee attacks for <Ability:M31_PA_TaipanBloodThirst_StackDuration> turn(s). Can gain up to <Ability:M31_PA_TaipanBloodThirst_MaxStacksPerTurn> stack(s) per turn and stacks up to <Ability:M31_PA_TaipanBloodThirst_MaxStacks> times.<br><font color='#909497'>\"You can take the Taipan out of the Requiem, but you can't take the Requiem out of the Taipan.\"</font>"
-LocHelpText="Whenever you attack with your <Ability:M31_BoundWeaponName>, gain a stackable +<Ability:M31_PA_TaipanBloodThirst_DamagePerStack> damage bonus for your melee attacks. Can gain up to <Ability:M31_PA_TaipanBloodThirst_MaxStacksPerTurn> stack(s) per turn and stacks up to <Ability:M31_PA_TaipanBloodThirst_MaxStacks> times."
-LocPromotionPopupText="<Bullet> Stacks up to <Ability:M31_PA_TaipanBloodThirst_MaxStacks> times.<br><Bullet> Can gain up to <Ability:M31_PA_TaipanBloodThirst_MaxStacksPerTurn> stack(s) per turn.<br><Bullet> New applications refresh the duration: <Ability:M31_PA_TaipanBloodThirst_bRefreshDuration>.<br><Bullet> Damage bonus is given by all melee attacks: <Ability:M31_PA_TaipanBloodThirst_bApplyToAnyMelee>.<br><Bullet> Damage bonus applies to all melee attacks: <Ability:M31_PA_TaipanBloodThirst_bApplyToAnyMelee>.<br><Bullet> Only succesful hits grant the bonus: <Ability:M31_PA_TaipanBloodThirst_bIncreaseOnlyOnHit>."
+LocHelpText="Whenever you perform a melee attack, gain a stackable +<Ability:M31_PA_TaipanBloodThirst_DamagePerStack> damage bonus for your melee attacks for <Ability:M31_PA_TaipanBloodThirst_StackDuration> turn(s). Can gain up to <Ability:M31_PA_TaipanBloodThirst_MaxStacksPerTurn> stack(s) per turn and stacks up to <Ability:M31_PA_TaipanBloodThirst_MaxStacks> times."
+LocPromotionPopupText="<Bullet> Stacks up to <Ability:M31_PA_TaipanBloodThirst_MaxStacks> times.<br><Bullet> Can gain up to <Ability:M31_PA_TaipanBloodThirst_MaxStacksPerTurn> stack(s) per turn.<br><Bullet> New applications refresh the duration: <Ability:M31_PA_TaipanBloodThirst_bRefreshDuration>.<br><Bullet> Applies only to <Ability:M31_BoundWeaponName> attacks: <Ability:M31_PA_TaipanBloodThirst_bMatchSourceWeapon>.<br><Bullet> The bonus increases only on succesful hits: <Ability:M31_PA_TaipanBloodThirst_bIncreaseOnlyOnHit>."
 LocFlyOverText="Paint the Moon Red"
 
 [M31_PA_TaipanAmbush X2AbilityTemplate]
@@ -45,7 +45,7 @@ LocFriendlyName="Ambush Predator"
 LocFlyOverText="Ambush Predator"
 
 [M31_PA_TaipanReturnFire X2AbilityTemplate]
-LocFriendlyName="Return Fire (Taipan)"
+LocFriendlyName="Return Fire"
 LocLongDescription="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
 LocHelpText="Once per turn, take a free reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed.<br><Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Can only activate once per turn.<br><Bullet> Can be activated by melee and area of effect attacks.<br><Bullet> Will not activate when targeted by overwatch fire."
@@ -66,7 +66,7 @@ LocFriendlyName="Nowhere to Run"
 LocFlyOverText="Nowhere to Run"
 
 [M31_PA_TaipanBite X2AbilityTemplate]
-LocFriendlyName="Vicious Bite (Taipan)"
+LocFriendlyName="Vicious Bite"
 LocLongDescription="Bite any enemy within blue movement range. Costs a single action and doesn't end the turn. Can be used with movement-only actions. Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot target robots and environmental objects."
 LocHelpText="Bite any enemy within blue movement range."
 LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_TaipanBite_Damage> points of damage and inflicts bleeding, causing the target to take <Ability:M31_PA_VeryAngryBite_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_PA_TaipanBite_BleedDuration> turn(s).<br><Bullet> Can crit for +<Ability:M31_PA_TaipanBite_CritDamage> damage.<br><Bullet> <Ability:M31_FriendlyName> has innate +<Ability:M31_PA_TaipanBite_AimBonus> aim and +<Ability:M31_PA_TaipanBite_CritBonus> critical chance.<br><Bullet> Cannot target robots and environmental objects."
@@ -94,6 +94,7 @@ LocPromotionPopupText="<Bullet> Panic can only apply to the primary target of th
 
 [M31_PA_TaipanCruelty_Trigger X2AbilityTemplate]
 LocFriendlyName="Terrifying Cruelty"
+LocFlyOverText="Terrifying Cruelty"
 
 [M31_PA_TaipanVengeance X2AbilityTemplate]
 LocFriendlyName="Vengeful"

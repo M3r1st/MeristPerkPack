@@ -421,14 +421,14 @@ static function AddUnitValueCondition(out X2AbilityTemplate Template, name Value
         ValueCondition = new class'X2Condition_UnitValue';
         ValueCondition.AddCheckValue(ValueName, MaxValue, eCheck_LessThan);
         Template.AbilityShooterConditions.AddItem(ValueCondition);
-
-        UnitValueEffect = new class'X2Effect_IncrementUnitValue';
-        UnitValueEffect.UnitName = ValueName;
-        UnitValueEffect.NewValueToSet = 1;
-        UnitValueEffect.CleanupType = CleanupType;
-        UnitValueEffect.bApplyOnMiss = true;
-        Template.AddShooterEffect(UnitValueEffect);
     }
+
+    UnitValueEffect = new class'X2Effect_IncrementUnitValue';
+    UnitValueEffect.UnitName = ValueName;
+    UnitValueEffect.NewValueToSet = 1;
+    UnitValueEffect.CleanupType = CleanupType;
+    UnitValueEffect.bApplyOnMiss = true;
+    Template.AddShooterEffect(UnitValueEffect);
 }
 
 static function AddOverwatchTrigger(out X2AbilityTemplate Template, optional bool bMovement = true, optional bool bAttack = true)

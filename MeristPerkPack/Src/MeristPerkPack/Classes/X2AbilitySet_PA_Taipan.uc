@@ -156,8 +156,7 @@ static function X2AbilityTemplate TaipanBloodThirst()
     Effect.iMaxStacksPerTurn = `GetConfigInt("M31_PA_TaipanBloodThirst_MaxStacksPerTurn");
     Effect.iStackDuration = `GetConfigInt("M31_PA_TaipanBloodThirst_StackDuration");
     Effect.bRefreshDuration = `GetConfigBool("M31_PA_TaipanBloodThirst_bRefreshDuration");
-    Effect.bApplyToAnyMelee = `GetConfigBool("M31_PA_TaipanBloodThirst_bApplyToAnyMelee");
-    Effect.bActivateFromAnyMelee = `GetConfigBool("M31_PA_TaipanBloodThirst_bActivateFromAnyMelee");
+    Effect.bMatchSourceWeapon = `GetConfigBool("M31_PA_TaipanBloodThirst_bMatchSourceWeapon");
     Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_PA_TaipanBloodThirst_bIncreaseOnlyOnHit");
     Effect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_BloodThirst_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
@@ -267,8 +266,6 @@ static function X2AbilityTemplate TaipanAmbush2Trigger()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
-    local X2Effect_CoveringFire             CoveringFireEffect;
-    local X2Condition_AbilityProperty       CoveringFireCondition;
 
     Template = SelfTargetTrigger('M31_PA_TaipanAmbush2_Trigger', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol");
     
@@ -284,13 +281,7 @@ static function X2AbilityTemplate TaipanAmbush2Trigger()
     Template.AddShooterEffectExclusions();
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
-    CoveringFireEffect = new class'X2Effect_CoveringFire';
-    CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
-    CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-    CoveringFireCondition = new class'X2Condition_AbilityProperty';
-    CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
-    CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
-    Template.AddTargetEffect(CoveringFireEffect);
+    Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
 
     Template.BuildVisualizationFn = Ambush_BuildVisualization;
 
@@ -328,6 +319,7 @@ static function X2AbilityTemplate TaipanReturnFireAttack()
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.Filter = eFilter_None;
     Trigger.ListenerData.EventFn = AbilityTriggerEventListener_TaipanReturnFire;
+    Trigger.ListenerData.Priority = 45;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AbilityShooterConditions.Length = 0;
@@ -443,8 +435,6 @@ static function X2AbilityTemplate TaipanWatchThemRunTrigger()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
-    local X2Effect_CoveringFire             CoveringFireEffect;
-    local X2Condition_AbilityProperty       CoveringFireCondition;
 
     Template = SelfTargetTrigger('M31_PA_TaipanWatchThemRun_Trigger', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist");
 
@@ -459,13 +449,7 @@ static function X2AbilityTemplate TaipanWatchThemRunTrigger()
     Template.AddShooterEffectExclusions();
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
-    CoveringFireEffect = new class'X2Effect_CoveringFire';
-    CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
-    CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-    CoveringFireCondition = new class'X2Condition_AbilityProperty';
-    CoveringFireCondition.OwnerHasSoldierAbilities.AddItem('CoveringFire');
-    CoveringFireEffect.TargetConditions.AddItem(CoveringFireCondition);
-    Template.AddTargetEffect(CoveringFireEffect);
+    Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
 
     AddUnitValueCondition(Template, 'M31_PA_TaipanWatchThemRun_Counter', `GetConfigInt("M31_PA_TaipanWatchThemRun_ActivationsPerTurn"));
 

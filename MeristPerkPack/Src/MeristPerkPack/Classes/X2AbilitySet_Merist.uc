@@ -362,38 +362,41 @@ static function X2AbilityTemplate AssassinTrigger()
 
 static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameState_Unit                SourceUnit;
     local XComGameState_Ability             AbilityState;
     local XComGameStateContext_Ability      AbilityContext;
+    local XComGameState_Unit                SourceUnit;
     local XComGameState_Unit                TargetUnit;
     local GameRulesCache_VisibilityInfo     VisInfo;
 
-    SourceUnit = XComGameState_Unit(EventSource);
-    AbilityState = XComGameState_Ability(CallbackData);
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-    TargetUnit = XComGameState_Unit(EventData);
 
-    if (SourceUnit != none && AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
-        if (AbilityState.GetSourceWeapon().ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
+        SourceUnit = XComGameState_Unit(EventSource);
+        TargetUnit = XComGameState_Unit(EventData);
+        AbilityState = XComGameState_Ability(CallbackData);
+
+        if (SourceUnit != none && TargetUnit != none && AbilityState != none)
         {
-            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex))
+            if (AbilityState.SourceWeapon.ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
             {
-                if (!TargetUnit.CanTakeCover() || VisInfo.TargetCover == CT_None || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0 && TargetUnit.GetTeam() != eTeam_XCom)
+                if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex))
                 {
-                    if (AbilityState.CanActivateAbility(SourceUnit) == 'AA_Success')
+                    if (!TargetUnit.CanTakeCover() || VisInfo.TargetCover == CT_None || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0 && TargetUnit.GetTeam() != eTeam_XCom)
                     {
-                        if (SourceUnit.IsConcealed())
+                        if (AbilityState.CanActivateAbility(SourceUnit) == 'AA_Success')
                         {
-                            SourceUnit.BreakConcealment();
+                            if (SourceUnit.IsConcealed())
+                            {
+                                SourceUnit.BreakConcealment();
+                            }
+                            return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
                         }
-                        return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
                     }
                 }
             }
         }
     }
-
     return ELR_NoInterrupt;
 }
 
@@ -465,8 +468,7 @@ static function X2AbilityTemplate BloodThirst()
     Effect.iMaxStacksPerTurn = `GetConfigInt("M31_BloodThirst_MaxStacksPerTurn");
     Effect.iStackDuration = `GetConfigInt("M31_BloodThirst_StackDuration");
     Effect.bRefreshDuration = `GetConfigBool("M31_BloodThirst_bRefreshDuration");
-    Effect.bApplyToAnyMelee = `GetConfigBool("M31_BloodThirst_bApplyToAnyMelee");
-    Effect.bActivateFromAnyMelee = `GetConfigBool("M31_BloodThirst_bActivateFromAnyMelee");
+    Effect.bMatchSourceWeapon = `GetConfigBool("M31_BloodThirst_bMatchSourceWeapon");
     Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_BloodThirst_bIncreaseOnlyOnHit");
     Effect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_BloodThirst_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
@@ -550,7 +552,8 @@ static function X2AbilityTemplate CallForFire()
     local X2AbilityTemplate                         Template;
     local X2AbilityMultiTarget_Radius               RadiusMultiTarget;
     local X2Condition_UnitProperty                  UnitPropertyCondition;
-    local X2Effect_ThreatAssessment                 CoveringFireEffect;
+    local X2Effect_MeristReserveOverwatchPoints     ReserveEffect;
+    local X2Effect_MeristCoveringFire               CoveringFireEffect;
 
     Template = SelfTargetActivated('M31_CallForFire', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_circle", false);
 
@@ -576,11 +579,11 @@ static function X2AbilityTemplate CallForFire()
     RadiusMultiTarget.bIgnoreBlockingCover = true;
     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
     
-    CoveringFireEffect = new class'X2Effect_ThreatAssessment';
-    CoveringFireEffect.EffectName = 'M31_CallForFire_ThreatAssessment';
-    CoveringFireEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-    CoveringFireEffect.AbilityToActivate = 'OverwatchShot';
-    CoveringFireEffect.ImmediateActionPoint = class'X2CharacterTemplateManager'.default.OverwatchReserveActionPoint;
+    ReserveEffect = new class'X2Effect_MeristReserveOverwatchPoints';
+    Template.AddTargetEffect(ReserveEffect);
+    Template.AddMultiTargetEffect(ReserveEffect);
+
+    CoveringFireEffect = class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect();
     Template.AddTargetEffect(CoveringFireEffect);
     Template.AddMultiTargetEffect(CoveringFireEffect);
     
@@ -604,7 +607,6 @@ simulated function CallForFire_BuildVisualization(XComGameState VisualizeGameSta
 
     local StateObjectReference          SourceUnitRef;
     local StateObjectReference          TargetUnitRef;
-    local XComGameState_Effect          EffectState;
     local X2AbilityTemplate             AbilityTemplate;
 
     local VisualizationActionMetadata   EmptyTrack;
@@ -613,6 +615,8 @@ simulated function CallForFire_BuildVisualization(XComGameState VisualizeGameSta
     local X2Action_PlaySoundAndFlyOver  SoundAndFlyOver;
     local X2Action_PlaySoundAndFlyOver  SoundAndFlyoverTarget;
     local X2Action_PlayAnimation        PlayAnimationAction;
+
+    local int                           Index;
 
     History = `XCOMHISTORY;
     Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
@@ -633,22 +637,18 @@ simulated function CallForFire_BuildVisualization(XComGameState VisualizeGameSta
     PlayAnimationAction.Params.AnimName = AbilityTemplate.CustomFireAnim;
     PlayAnimationAction.bFinishAnimationWait = true;
 
-    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+    for (Index = 0; Index < Context.InputContext.MultiTargets.Length; Index++)
     {
-        if (EffectState.ApplyEffectParameters.EffectRef.SourceTemplateName == AbilityTemplate.DataName)
+        TargetUnitRef = Context.InputContext.MultiTargets[Index];
+        if (TargetUnitRef.ObjectID != 0 && TargetUnitRef.ObjectID != SourceUnitRef.ObjectID)
         {
-            TargetUnitRef = EffectState.ApplyEffectParameters.TargetStateObjectRef;
-            
-            if (TargetUnitRef.ObjectID != 0 && TargetUnitRef.ObjectID != SourceUnitRef.ObjectID)
-            {
-                TargetTrack = EmptyTrack;
-                TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-                TargetTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
-                TargetTrack.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
+            TargetTrack = EmptyTrack;
+            TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+            TargetTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
+            TargetTrack.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
 
-                SoundAndFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, context, false, TargetTrack.LastActionAdded));
-                SoundAndFlyoverTarget.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', eColor_Good, AbilityTemplate.IconImage);
-            }
+            SoundAndFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, context, false, TargetTrack.LastActionAdded));
+            SoundAndFlyoverTarget.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', eColor_Good, AbilityTemplate.IconImage);
         }
     }
 }
@@ -1731,7 +1731,7 @@ static function X2AbilityTemplate OnTheMove()
 
     Effect = new class'X2Effect_OnTheMove';
     Effect.AddPersistentStatChange(eStat_Mobility, 1.0 - `GetConfigInt("M31_OnTheMove_MobilityPenaltyPrc") / 100.0, MODOP_PostMultiplication);
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -3312,7 +3312,7 @@ static function X2AbilityTemplate WatchfulEye()
 
 static function AddWatchfulEyeEffect(out X2AbilityTemplate Template)
 {
-    local X2Effect_Persistent           Effect;
+    local X2Effect_WatchfulEye          Effect;
     local X2Condition_AbilityProperty   AbilityCondition;
     local X2Condition_NoAbilities       NoAbilityCondition;
 
@@ -3322,7 +3322,7 @@ static function AddWatchfulEyeEffect(out X2AbilityTemplate Template)
     AbilityCondition = new class'X2Condition_AbilityProperty';
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('IndependentTracking');
 
-    Effect = new class'X2Effect_Persistent';
+    Effect = new class'X2Effect_WatchfulEye';
     Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
     Effect.bRemoveWhenTargetDies = true;
     Effect.bUseSourcePlayerState = true;
@@ -3330,7 +3330,7 @@ static function AddWatchfulEyeEffect(out X2AbilityTemplate Template)
     Effect.TargetConditions.AddItem(NoAbilityCondition);
     Template.AddTargetEffect(Effect);
 
-    Effect = new class'X2Effect_Persistent';
+    Effect = new class'X2Effect_WatchfulEye';
     Effect.BuildPersistentEffect(2, false, true, false, eGameRule_PlayerTurnBegin);
     Effect.bRemoveWhenTargetDies = true;
     Effect.bUseSourcePlayerState = true;
@@ -3371,7 +3371,6 @@ static function X2AbilityTemplate WatchfulEyeAttack()
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
 
     TargetEffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';

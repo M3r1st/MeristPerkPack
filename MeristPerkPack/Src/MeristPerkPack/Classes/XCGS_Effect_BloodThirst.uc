@@ -11,21 +11,20 @@ var int iStacksThisTurn;
 final function int GetTotalStacksRemaining()
 {
     local X2Effect_BloodThirst  BloodThirstEffect;
-    local XComGameState_Unit    EffectSourceUnit;
+    local XComGameState_Unit    UnitState;
     local int Index;
     local int Count;
 
     BloodThirstEffect = X2Effect_BloodThirst(GetX2Effect());
-    EffectSourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     
     if (BloodThirstEffect != none)
     {
-        for (Index = 0; Index < BloodThirstEffect.GetStackDuration(EffectSourceUnit); Index++)
+        for (Index = 0; Index < BloodThirstEffect.GetStackDuration(UnitState); Index++)
         {
-            `LOG(Index $ ": " $ arrStacksRemaining[Index], class'X2Effect_BloodThirst'.default.bLog, GetFuncName());
             Count += arrStacksRemaining[Index];
         }
-        return Count;
     }
-    return -1;
+
+    return Count;
 }

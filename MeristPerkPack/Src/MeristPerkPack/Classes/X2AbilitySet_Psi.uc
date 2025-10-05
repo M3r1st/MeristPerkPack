@@ -99,7 +99,10 @@ static function X2AbilityTemplate Meltdown()
     DamageEffect.AdditionalDamageTag = 'M31_Psi_MeltdownArmor';
     Template.AddTargetEffect(DamageEffect);
 
-    class'M31_AbilityHelpers'.static.AddRadiationToTarget(Template);
+    if (`GetConfigBool("M31_Psi_Meltdown_bApplyRadiation"))
+    {
+        class'M31_AbilityHelpers'.static.AddRadiationToTarget(Template);
+    }
 
     Template.ActivationSpeech = 'Mindblast';
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
@@ -244,7 +247,7 @@ static function X2AbilityTemplate NullWard()
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
-    local X2Effect_EnhancedEnergyShield     ShieldEffect;
+    local X2Effect_PersonalShield           ShieldEffect;
     local X2Effect_RemoveEffects            RemoveEffect;
 
     Template = SelfTargetActivated('M31_Psi_NullWard', "img:///UILibrary_PerkIcons.UIPerk_aethershift", false);
@@ -279,11 +282,11 @@ static function X2AbilityTemplate NullWard()
     Template.AddTargetEffect(RemoveEffect);
     Template.AddMultiTargetEffect(RemoveEffect);
 
-    ShieldEffect = new class'X2Effect_EnhancedEnergyShield';
+    ShieldEffect = new class'X2Effect_PersonalShield';
     ShieldEffect.EffectName = 'M31_Psi_NullWard';
     ShieldEffect.ShieldAmount = `GetConfigArrayInt("M31_Psi_NullWard_ShieldAmount");
     ShieldEffect.ShieldPriority = `GetConfigInt("M31_Psi_NullWard_ShieldPriority");
-    ShieldEffect.bGetShieldAmountFromArmor = true;
+    ShieldEffect.bGetShieldAmountFromWeapon = true;
     ShieldEffect.BuildPersistentEffect(`GetConfigInt("M31_Psi_NullWard_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
     ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Shield_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
     ShieldEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.static.OnShieldRemoved_BuildVisualization;
@@ -350,7 +353,7 @@ static function X2AbilityTemplate ShadowPhase()
     Template = Passive('M31_ShadowPhase', "img:///UILibrary_PerkIcons.UIPerk_item_wraith", false, true);
     
     ShadowstepEffect = new class'X2Effect_Persistent';
-    ShadowstepEffect.EffectName = 'Shadowstep';
+    ShadowstepEffect.EffectName = 'M31_ShadowPhase';
     ShadowstepEffect.DuplicateResponse = eDupe_Refresh;
     ShadowstepEffect.EffectRank = 99;
     ShadowstepEffect.BuildPersistentEffect(1, true, false);

@@ -54,7 +54,7 @@ LocFlyOverText="Battle Presence"
 LocFriendlyName="Blood Thirst"
 LocLongDescription="Whenever you attack with your <Ability:M31_BoundWeaponName>, gain a stackable +<Ability:M31_BloodThirst_DamagePerStack> damage bonus for your melee attacks for <Ability:M31_BloodThirst_StackDuration> turn(s)."
 LocHelpText="Whenever you attack with your <Ability:M31_BoundWeaponName>, gain a stackable +<Ability:M31_BloodThirst_DamagePerStack> damage bonus for your melee attacks."
-LocPromotionPopupText="<Bullet> Only the <Ability:M31_BoundWeaponName> grant the bonus.<br><Bullet> Stacks up to <Ability:M31_BloodThirst_MaxStacks> time(s).<br><Bullet> Can gain up to <Ability:M31_BloodThirst_MaxStacksPerTurn> stack(s) per turn.<br><Bullet> New applications refresh the duration: <Ability:M31_BloodThirst_bRefreshDuration>.<br><Bullet> Damage bonus applies to all melee attacks: <Ability:M31_BloodThirst_bApplyToAnyMelee>.<br><Bullet> Only succesful hits grant the bonus: <Ability:M31_BloodThirst_bIncreaseOnlyOnHit>."
+LocPromotionPopupText="<Bullet> Stacks up to <Ability:M31_BloodThirst_MaxStacks> time(s).<br><Bullet> Can gain up to <Ability:M31_BloodThirst_MaxStacksPerTurn> stack(s) per turn.<br><Bullet> New applications refresh the duration: <Ability:M31_BloodThirst_bRefreshDuration>.<br><Bullet> Applies only to <Ability:M31_BoundWeaponName> attacks: <Ability:M31_BloodThirst_bMatchSourceWeapon>.<br><Bullet> The bonus increases only on succesful hits: <Ability:M31_BloodThirst_bIncreaseOnlyOnHit>."
 LocFlyOverText="Blood Thirst"
 
 [M31_Botnet X2AbilityTemplate]
@@ -73,8 +73,8 @@ LocFlyOverText="Burst Fire"
 
 [M31_CallForFire X2AbilityTemplate]
 LocFriendlyName="Call for Fire"
-LocLongDescription="Enter Covering Fire overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter Covering Fire overwatch."
-LocHelpText="Enter Covering Fire overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter Covering Fire overwatch."
+LocLongDescription="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
+LocHelpText="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
 LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Affected by <font color='#0bff9b'>By My Command</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocFlyOverText="Call for Fire"
 
@@ -679,18 +679,6 @@ LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> at
 
 [M31_Shiver2_Attack X2AbilityTemplate]
 LocFriendlyName="Greater Shiver"
-
-[M31_ReadyForAnything X2AbilityTemplate]
-LocFriendlyName="Ready for Anything"
-LocHelpText="Once per turn, enter overwatch after taking a standard shot with your <Ability:BOUND_WEAPON_NAME>."
-LocLongDescription="Enter overwatch after firing a turn-ending standard shot with your <Ability:BOUND_WEAPON_NAME>."
-LocPromotionPopupText="<Bullet> Standard shot abilities also include Standard Sniper Shot and Pistol Shot."
-
-[M31_ReadyForAnythingTrigger X2AbilityTemplate]
-LocFriendlyName="Ready for Anything"
-LocFlyOverText="Ready for Anything"
-
-
 
 [M31_Chimera X2AbilityTemplate]
 LocFriendlyName="Chimera"

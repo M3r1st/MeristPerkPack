@@ -309,7 +309,7 @@ LocFlyOverText="Reaver Bolt"
 [M31_PA_WS_Bolt_Poison X2AbilityTemplate]
 LocFriendlyName="Aeonian Bolt"
 LocLongDescription="Special bolt. Explodes, poisoning and disorienting the target and all units in a <Ability:M31_PA_WS_Bolt_Poison_Radius> radius around it. Has <Ability:M31_SelfCharges> charge(s) per mission."
-LocHelpText=""
+LocHelpText="Special bolt. Explodes, poisoning and disorienting the target and nearby units."
 LocPromotionPopupText="<Bullet> Disorientation will not apply against enemies immune to poison.<br><Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Poison_Radius_Ballista>."
 LocFlyOverText="Aeonian Bolt"
 
@@ -327,7 +327,7 @@ LocFlyOverText="Aeonian Bolt"
 [M31_PA_WS_Bolt_Rad X2AbilityTemplate]
 LocFriendlyName="Wasteland Bolt"
 LocLongDescription="Special bolt. Explodes, irradiating the target and all units in a <Ability:M31_PA_WS_Bolt_Rad_Radius> radius around it. Has <Ability:M31_SelfCharges> charge(s) per mission."
-LocHelpText=""
+LocHelpText="Special bolt. Explodes, irradiating the target and nearby units."
 LocPromotionPopupText="<Bullet> Radiation can apply a variety of severe debuffs that affect even the Chosen<br><Bullet> Area damage depends on the weapon.<br><Bullet> When <Ability:M31_PA_WS_Ballista> is equipped, the radius is increased to <Ability:M31_PA_WS_Bolt_Rad_Radius_Ballista>."
 LocFlyOverText="Wasteland Bolt"
 

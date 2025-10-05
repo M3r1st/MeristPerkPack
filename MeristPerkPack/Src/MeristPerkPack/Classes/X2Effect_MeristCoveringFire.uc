@@ -43,6 +43,7 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
     local name                          AbilityName;
 
     local XComGameState                 NewGameState;
+    local bool                          bCleanupPendingGameState;
 
     History = `XCOMHISTORY;
 
@@ -67,18 +68,8 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
             if (CoveringFireEffect.bOnlyDuringEnemyTurn && `TACTICALRULES.GetUnitActionTeam() == CoveringUnit.GetTeam())
                 return ELR_NoInterrupt;
 
-            if (CoveringFireEffect.bPreEmptiveFire)
-            {
-                //  for pre emptive fire, only process during the interrupt step
-                if (AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
-                    return ELR_NoInterrupt;
-            }
-            else
-            {
-                //  for non-pre emptive fire, don't process during the interrupt step
-                if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
-                    return ELR_NoInterrupt;
-            }
+            if (CoveringFireEffect.bPreEmptiveFire != (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt))
+                return ELR_NoInterrupt;
 
             if (CoveringFireEffect.ActivationPercentChance > 0)
             {
@@ -123,6 +114,8 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
 
                 CoveringUnit = XComGameState_Unit(NewGameState.ModifyStateObject(CoveringUnit.Class, CoveringUnit.ObjectID));
                 CoveringUnit.ReserveActionPoints.AddItem(CoveringFireEffect.GrantActionPoint);
+
+                bCleanupPendingGameState = true;
             }
 
             foreach CoveringFireEffect.AbilitiesToActivate(AbilityInfo)
@@ -144,31 +137,31 @@ static function EventListenerReturn NewCoveringFireCheck(Object EventData, Objec
                     AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
                     if (AbilityState != none)
                     {
-                        if (CoveringFireEffect.bSelfTargeting)
+                        if (AbilityState.CanActivateAbilityForObserverEvent(
+                            (CoveringFireEffect.bSelfTargeting ? CoveringUnit : AttackingUnit),
+                            (CoveringFireEffect.bSelfTargeting ? none : CoveringUnit)) == 'AA_Success')
                         {
-                            if (AbilityState.CanActivateAbilityForObserverEvent(CoveringUnit) == 'AA_Success')
+                            if (NewGameState != none)
                             {
+                                bCleanupPendingGameState = false;
                                 `TACTICALRULES.SubmitGameState(NewGameState);
-                                AbilityState.AbilityTriggerAgainstSingleTarget(CoveringUnit.GetReference(), CoveringFireEffect.bUseMultiTargets);
-                                return ELR_NoInterrupt;
                             }
-                        }
-                        else
-                        {
-                            if (AbilityState.CanActivateAbilityForObserverEvent(AttackingUnit) == 'AA_Success')
-                            {
-                                `TACTICALRULES.SubmitGameState(NewGameState);
-                                AbilityState.AbilityTriggerAgainstSingleTarget(AttackingUnit.GetReference(), CoveringFireEffect.bUseMultiTargets);
-                                return ELR_NoInterrupt;
-                            }
+
+                            AbilityState.AbilityTriggerAgainstSingleTarget(
+                                (CoveringFireEffect.bSelfTargeting ? CoveringUnit.GetReference() : AttackingUnit.GetReference()),
+                                CoveringFireEffect.bUseMultiTargets);
+                            return ELR_NoInterrupt;
                         }
                     }
                 }
             }
-            History.CleanupPendingGameState(NewGameState);
+            if (bCleanupPendingGameState)
+            {
+                History.CleanupPendingGameState(NewGameState);
+            }
+            
         }
     }
-
     return ELR_NoInterrupt;
 }
 

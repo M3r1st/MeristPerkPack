@@ -50,7 +50,7 @@ static function X2AbilityTemplate BlindSpot()
     Effect.AbilityTargetConditions.AddItem(UnitPropertyCondition);
     Effect.AbilityTargetConditions.AddItem(default.MatchingWeaponCondition);
     Effect.AbilityTargetConditions.AddItem(VisCondition);
-    Effect.BuildPersistentEffect(1, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
     Effect.EffectName = 'M31_CA_BlindSpot';
 
