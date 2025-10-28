@@ -33,7 +33,7 @@ function bool ChangeHitResultForTarget(XComGameState_Effect EffectState, XComGam
             if (!TargetUnit.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName) &&
                 !TargetUnit.IsUnitAffectedByEffectName(class'X2AbilitySet_PlayableAliens'.default.SidewinderCooldownEffectName))
             {
-                `LOG("Sidewinder activated. Current turn: " $ `TACTICALRULES.GetUnitActionTeam(), true, 'Merist_X2Effect_Sidewinder');
+                // `LOG("Sidewinder activated. Current turn: " $ `TACTICALRULES.GetUnitActionTeam(), true, 'Merist_X2Effect_Sidewinder');
                 NewHitResult = SidewinderNewHitResult;
                 `XEVENTMGR.TriggerEvent(class'X2AbilitySet_PlayableAliens'.default.SidewinderEventName, TargetUnit, TargetUnit);
                 return true;

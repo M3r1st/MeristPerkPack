@@ -1020,7 +1020,6 @@ static function X2AbilityTemplate IronskinBite()
 
     Template.bSkipFireAction = false;
     Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bShowActivation = true;
 
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
@@ -1146,7 +1145,6 @@ static function X2AbilityTemplate RegenBite()
 
     Template.bSkipFireAction = false;
     Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bShowActivation = true;
 
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
@@ -1285,7 +1283,6 @@ static function X2AbilityTemplate WrongAcidBite()
 
     Template.bSkipFireAction = false;
     Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bShowActivation = true;
 
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;

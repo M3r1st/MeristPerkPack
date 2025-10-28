@@ -432,6 +432,7 @@ static function X2AbilityTemplate Vigilance()
     Effect = new class'X2Effect_PersistentStatChange';
     Effect.BuildPersistentEffect(1, true, false);
     Effect.AddPersistentStatChange(eStat_SightRadius, `GetConfigInt("M31_PA_WS_Vigilance_SightRangeBonus"));
+    Template.AddTargetEffect(Effect);
 
     Template.AdditionalAbilities.AddItem(GetLTTName(default.LeadTheTargetRequiredAbilityName));
 
@@ -1036,8 +1037,8 @@ static function X2AbilityTemplate RebelYell()
 
     // Template.CustomFireAnim = 'HL_M31_Escape';
 
-    Template.bSkipFireAction = false;
     Template.bShowActivation = false;
+    Template.bSkipFireAction = false;
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = RebelYell_BuildVisualization;
 
@@ -2091,7 +2092,7 @@ static function X2AbilityTemplate BoltRad()
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.DamageTag = default.BoltPoisonName;
+    DamageEffect.DamageTag = default.BoltRadName;
     Template.AddTargetEffect(DamageEffect);
     Template.AddMultiTargetEffect(DamageEffect);
 
@@ -2135,7 +2136,7 @@ static function X2AbilityTemplate BoltRadLTTAttack()
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
     DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.DamageTag = default.BoltPoisonName;
+    DamageEffect.DamageTag = default.BoltRadName;
     Template.AddTargetEffect(DamageEffect);
     Template.AddMultiTargetEffect(DamageEffect);
 

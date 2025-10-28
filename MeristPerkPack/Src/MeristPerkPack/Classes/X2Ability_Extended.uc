@@ -79,6 +79,9 @@ static function X2AbilityTemplate SelfTargetActivated(name TemplateName, string 
 
     Template.bCrossClassEligible = bCrossClassEligible;
 
+    Template.bShowActivation = true;
+    Template.bSkipFireAction = true;
+
     return Template;
 }
 
@@ -110,10 +113,12 @@ static function X2AbilityTemplate SelfTargetTrigger(name TemplateName, string Ic
 }
 
 static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
-    optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
+    optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true,
+    optional bool bAllowBurning = false, optional bool bAllowDisoriented = false)
 {
-    local X2AbilityTemplate                 Template;
-    local X2Condition_Visibility            VisibilityCondition;
+    local X2AbilityTemplate             Template;
+    local X2Condition_Visibility        VisibilityCondition;
+    local array<name>                   SkipExclusions;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
 
@@ -134,7 +139,11 @@ static function X2AbilityTemplate Attack(name TemplateName, string IconImage,
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-    Template.AddShooterEffectExclusions();
+    if (bAllowDisoriented)
+        SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+    if (bAllowBurning)
+        SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
+    Template.AddShooterEffectExclusions(SkipExclusions);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 

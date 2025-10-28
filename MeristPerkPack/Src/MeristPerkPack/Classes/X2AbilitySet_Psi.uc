@@ -292,9 +292,7 @@ static function X2AbilityTemplate NullWard()
     ShieldEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.static.OnShieldRemoved_BuildVisualization;
     Template.AddTargetEffect(ShieldEffect);
     Template.AddMultiTargetEffect(ShieldEffect);
-    
-    Template.bShowActivation = true;
-    
+        
     Template.BuildVisualizationFn = PsiEnergyShield_BuildVisualization;
 
     Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";

@@ -36,6 +36,7 @@ var config array<name> EMPGrenades_AdditionalEffectsToRemove;
 var localized array<name> LocalizedAbilities;
 var localized array<name> LocalizedAbilitiesToHide;
 var localized array<string> LocalizedAbilityNames;
+var localized array<string> LocalizedRankStrings;
 
 struct CanAddItemOverrideInfo
 {
@@ -1148,7 +1149,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_Coil_NoCoverModifier":
         case "M31_PA_Coil_LowCoverModifier":
         case "M31_PA_Coil_HighCoverModifier":
-            OutString = ColorText_Auto("x" $ TruncateFloat(`GetConfigFloat(InString)),, UnitState);
+            OutString = ColorText_Auto("x" $ TruncateFloat2(`GetConfigFloat(InString)),, UnitState);
             return true;
 
         case "M31_PA_RegenBite_HealPerTurn":
@@ -1165,9 +1166,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_HarrierFuseGrenade_BaseRadiusModifer":
             fValue = `GetConfigFloat(InString);
             if (fValue >= 0)
-                OutString = "+" $ ColorText_Auto(TruncateFloat(fValue) $ "m",, UnitState);
+                OutString = "+" $ ColorText_Auto(TruncateFloat2(fValue,, false) $ "m",, UnitState);
             else
-                OutString = "-" $ ColorText_Auto(TruncateFloat(-1 * fValue) $ "m",, UnitState);
+                OutString = "-" $ ColorText_Auto(TruncateFloat2(-1 * fValue,, false) $ "m",, UnitState);
             return true;
 
         case "M31_SawedOffSweeper_Width":
@@ -1177,7 +1178,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_PA_PoisonSpit_Radius":
         case "M31_PA_FrostSpit_Radius":
         case "M31_PA_FrostBreath_Radius":
-            OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)) $ "m",, UnitState);
+            OutString = ColorText_Auto(TruncateFloat2(`GetConfigFloat(InString)) $ "m",, UnitState);
             return true;
 
         case "M31_BloodThirst_bRefreshDuration":
@@ -1642,7 +1643,7 @@ static function bool GetWinterSentinelOutStrings(string InString, out string Out
         case "M31_PA_WS_Bolt_Psi_Radius_Ballista":
         case "M31_PA_WS_Bolt_Poison_Radius_Ballista":
         case "M31_PA_WS_Bolt_Rad_Radius_Ballista":
-            OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)) $ "m",, UnitState);
+            OutString = ColorText_Auto(TruncateFloat2(`GetConfigFloat(InString)) $ "m",, UnitState);
             return true;
 
         case "M31_PA_WS_NorthernWinds_Damage":
@@ -1769,6 +1770,57 @@ static private function string TruncateFloat(float fValue)
     if (Right(FloatString, 1) == ".")
     {
         FloatString $= "0";
+    }
+
+    return FloatString;
+}
+
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use: a version of TruncateFloat with additional arguments.
+
+static private function string TruncateFloat2(float fValue, optional int Places = 2, optional bool bCanBeInteger = true)
+{
+    local string TempString;
+    local string FloatString;
+    local int i;
+    local float TestFloat;
+    local float TempFloat;
+
+    TempFloat = fValue;
+    
+    for (i = 0; i < Places; i++)
+    {
+        TempFloat *= 10.0;
+    }
+    
+    TempFloat = Round(TempFloat);
+    for (i = 0; i < Places; i++)
+    {
+        TempFloat /= 10.0;
+    }
+
+    TempString = string(TempFloat);
+    for (i = InStr(TempString, ".") + 1; i < Len(TempString) ; i++)
+    {
+        FloatString = Left(TempString, i);
+        TestFloat = float(FloatString);
+        if (TempFloat ~= TestFloat)
+        {
+            break;
+        }
+    }
+
+    if (Right(FloatString, 1) == ".")
+    {
+        if (bCanBeInteger)
+        {
+            FloatString -= ".";
+        }
+        else
+        {
+            FloatString $= "0";
+        }
     }
 
     return FloatString;
@@ -2018,7 +2070,7 @@ static private function string GetWinterSentinelBallistaBonusString(string InStr
                 OutString = string(`GetConfigInt(InString $ BallistaSuffix));
                 break;
             case 'Float':
-                OutString = TruncateFloat(`GetConfigFloat(InString $ BallistaSuffix)) $ "m";
+                OutString = TruncateFloat2(`GetConfigFloat(InString $ BallistaSuffix)) $ "m";
                 break;
             case 'Percent':
                 OutString = string(`GetConfigInt(InString $ BallistaSuffix)) $ "%";
@@ -2034,7 +2086,7 @@ static private function string GetWinterSentinelBallistaBonusString(string InStr
                 OutString = string(`GetConfigInt(InString));
                 break;
             case 'Float':
-                OutString = TruncateFloat(`GetConfigFloat(InString));
+                OutString = TruncateFloat2(`GetConfigFloat(InString)) $ "m";
                 break;
             case 'Percent':
                 OutString = string(`GetConfigInt(InString)) $ "%";
@@ -2206,13 +2258,13 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
 // Use:
 // Typical use case: 
 
-static private function string GetTagValueFromRank(string Tag, Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional bool bSquash)
+static private function string GetTagValueFromRank(string Tag, Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional bool bSquash = true, optional bool bShowRank = true)
 {
     local XComGameState_Unit    SourceUnit;
     local bool          bStrategy;
     local int           i, Index;
-    local array<int>    Array, NewArray;
-    local string        OutString;
+    local array<int>    Array, NewArray, RankArray;
+    local string        RankString, OutString;
 
     bStrategy = StrategyParseObj != none;
     SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
@@ -2245,6 +2297,7 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
                 if (NewArray.Length == 0 || NewArray[NewArray.Length - 1] != Array[i])
                 {
                     NewArray.AddItem(Array[i]);
+                    RankArray.AddItem(i);
                 }
             }
             Array = NewArray;
@@ -2260,27 +2313,61 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
         {
             for (i = 0; i < Array.Length; i++)
             {
-                if (i == 0)
+                if (bShowRank)
                 {
-                    if (i == Index)
-                        OutString = ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
-                    else
-                        OutString = ColorText_Grey(Array[i], true);
+                    RankString = default.LocalizedRankStrings[(bSquash ? RankArray[i] : i)];
                 }
-                else if (i < Array.Length - 1)
+                
+                if (RankString != "")
                 {
-                    if (i == Index)
-                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
+                    RankString = "(" $ RankString $ ")";
+                    if (i == 0)
+                    {
+                        if (i == Index)
+                            OutString = ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString, true);
+                        else
+                            OutString = ColorText_Grey(Array[i] $ " " $ RankString, true);
+                    }
+                    else if (i < Array.Length - 1)
+                    {
+                        if (i == Index)
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString, true);
+                        else
+                            OutString = OutString $ string(Array[i]) $ " " $ RankString;
+                    }
                     else
-                        OutString = OutString $ string(Array[i]);
+                    {
+                        if (i == Index)
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString);
+                        else
+                            OutString = OutString $ string(Array[i]) $ " " $ RankString $ ColorText_Close();
+                    }
                 }
                 else
                 {
-                    if (i == Index)
-                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit);
+                    if (i == 0)
+                    {
+                        if (i == Index)
+                            OutString = ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
+                        else
+                            OutString = ColorText_Grey(Array[i], true);
+                    }
+                    else if (i < Array.Length - 1)
+                    {
+                        if (i == Index)
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
+                        else
+                            OutString = OutString $ string(Array[i]);
+                    }
                     else
-                        OutString = OutString $ string(Array[i]) $ ColorText_Close();
+                    {
+                        if (i == Index)
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit);
+                        else
+                            OutString = OutString $ string(Array[i]) $ ColorText_Close();
+                    }
                 }
+
                 if (i < Array.Length - 1)
                     OutString = OutString $ " / ";
             }
@@ -2655,7 +2742,7 @@ static private function string GetOutStringWithRank(int BaseValue, float PerRank
     OutString $= ColorText_Auto(FullValue $ strExtra,, SourceUnit);
     
     if (bStrategy && PerRankValue != 0 && iRank < iMaxRank)
-        OutString $= ColorText_Grey(" (" $ BaseValue $ strExtra $ " + " $  TruncateFloat(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+        OutString $= ColorText_Grey(" (" $ BaseValue $ strExtra $ " + " $  TruncateFloat2(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
     
     return OutString;
 }
@@ -2762,11 +2849,11 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
                 {
                     if (iDamageLowBase < iDamageHighBase)
                         OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase
-                            $ " + " $  TruncateFloat(DamageEffectHPRank.fBaseDmgPerRank)
+                            $ " + " $  TruncateFloat2(DamageEffectHPRank.fBaseDmgPerRank)
                             $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                     else
                         OutString $= ColorText_Grey(" (" $ iDamageLowBase
-                            $ " + " $  TruncateFloat(DamageEffectHPRank.fBaseDmgPerRank)
+                            $ " + " $  TruncateFloat2(DamageEffectHPRank.fBaseDmgPerRank)
                             $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                 }
             }
@@ -2775,11 +2862,11 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
                 if (bNeedsPlus)
                     OutString $= " + ";
 
-                OutString $= ColorText_Auto(TruncateFloat(fDamagePrc) $ "%",, SourceUnit);
+                OutString $= ColorText_Auto(TruncateFloat2(fDamagePrc) $ "%",, SourceUnit);
                 if (bStrategy && DamageEffectHPRank.fPrcDmgPerRank > 0 && iRank < iMaxRank)
                 {
                     OutString $= ColorText_Grey(" (" $ DamageEffectHPRank.fPrcDmg $ "%"
-                        $ " + " $  TruncateFloat(DamageEffectHPRank.fPrcDmgPerRank) $ "% "
+                        $ " + " $  TruncateFloat2(DamageEffectHPRank.fPrcDmgPerRank) $ "% "
                         $ `GetLocalizedString("M31_PerRank") $ ")");
                 }
             }
@@ -2816,7 +2903,7 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
                 if (bNeedsPlus)
                     OutString $= " + ";
 
-                OutString $= ColorText_Auto(TruncateFloat(fDamagePrc) $ "%",, SourceUnit);
+                OutString $= ColorText_Auto(TruncateFloat2(fDamagePrc) $ "%",, SourceUnit);
             }
         }
         else
@@ -2845,10 +2932,10 @@ static private function bool ProcessDamageEffect(out string OutString, bool bStr
             if (bStrategy && DamageEffectRank.fDamagePerRank != 0 && iRank < iMaxRank)
             {
                 if (iDamageLowBase < iDamageHighBase)
-                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
+                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase $ " + " $  TruncateFloat2(DamageEffectRank.fDamagePerRank)
                         $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
                 else
-                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " + " $  TruncateFloat(DamageEffectRank.fDamagePerRank)
+                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " + " $  TruncateFloat2(DamageEffectRank.fDamagePerRank)
                         $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
             }
             return true;

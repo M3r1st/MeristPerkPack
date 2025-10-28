@@ -66,7 +66,7 @@ static function EventListenerReturn AbilityTriggerEventListener_SleightOfHand(Ob
         if (NumShots > 0)
         {
             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-            SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', SourceUnit.GetReference().ObjectID));
+            SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', SourceUnit.ObjectID));
             SourceUnit.GetUnitValue(default.UnitValueName, UnitValue);
             SourceUnit.SetUnitFloatValue(default.UnitValueName, Min(`GetConfigInt("M31_SleightOfHand_MaxStacks"), UnitValue.fValue + NumShots), eCleanup_BeginTactical);
             `TACTICALRULES.SubmitGameState(NewGameState);

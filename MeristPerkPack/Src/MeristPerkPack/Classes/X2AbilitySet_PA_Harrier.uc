@@ -42,6 +42,7 @@ static function X2AbilityTemplate HarrierBullRush()
     StandardMelee.BuiltInCritMod = `GetConfigInt("M31_PA_HarrierBullRush_CritBonus");
     Template.AbilityToHitCalc = StandardMelee;
 
+    AddSuppressedCondition(Template);
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
     
@@ -422,6 +423,7 @@ static function X2AbilityTemplate HarrierCyclic(name DataName, optional name Pos
         AmmoCost.iAmmo = 1;
         Template.AbilityCosts.AddItem(AmmoCost);
 
+        AddSuppressedCondition(Template);
         AddCooldown(Template, `GetConfigInt("M31_PA_HarrierCyclic_Cooldown"));
         AddActionPointCost(Template, eCost_DoubleConsumeAll);
 

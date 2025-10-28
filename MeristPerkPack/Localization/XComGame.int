@@ -694,8 +694,6 @@ LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/
 
 [M31_HypothermiaRounds_Attack X2AbilityTemplate]
 LocFriendlyName="Withering Frost"
-M31_ReadyForAnythingTrigger
-
 
 [M31_SpectralZombie_M1 X2CharacterTemplate]
 strCharacterName="Lesser Frost Specter"

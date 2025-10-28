@@ -10,17 +10,11 @@ function GetToHitAsTargetModifiers(
     out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo	ModInfo;
-    local int CritResistance;
-
-    CritResistance = `GetConfigInt("M31_PA_WS_ReinforcedScales_CritResistance");
-
-    if (CritResistance != 0)
-    {
-        ModInfo.ModType = eHit_Crit;
-        ModInfo.Reason = FriendlyName;
-        ModInfo.Value = -1 * CritResistance;
-        ShotModifiers.AddItem(ModInfo);
-    }
+    
+    ModInfo.ModType = eHit_Crit;
+    ModInfo.Reason = FriendlyName;
+    ModInfo.Value = -1 * `GetConfigInt("M31_PA_WS_ReinforcedScales_CritResistance");
+    ShotModifiers.AddItem(ModInfo);
 }
 
 function int GetDefendingDamageModifier(

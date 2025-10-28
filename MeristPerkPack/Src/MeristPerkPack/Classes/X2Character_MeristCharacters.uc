@@ -4,29 +4,29 @@ static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
 
-    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M1', 'M31_SpectralZombie_M1_Loadout'));
-    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M2', 'M31_SpectralZombie_M2_Loadout'));
-    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M3', 'M31_SpectralZombie_M3_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M1', 'M31_SpectralZombie_M1_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M2', 'M31_SpectralZombie_M2_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M3', 'M31_SpectralZombie_M3_Loadout'));
 
-    Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M1', 'M31_EnhSpectralZombie_M1_Loadout'));
-    Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M2', 'M31_EnhSpectralZombie_M2_Loadout'));
-    Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M3', 'M31_EnhSpectralZombie_M3_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M1', 'M31_EnhSpectralZombie_M1_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M2', 'M31_EnhSpectralZombie_M2_Loadout'));
+    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M3', 'M31_EnhSpectralZombie_M3_Loadout'));
 
-    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M1', 'M31_SpectralLancer_M1_Loadout'));
-    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M2', 'M31_SpectralLancer_M2_Loadout'));
-    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M3', 'M31_SpectralLancer_M3_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M1', 'M31_SpectralLancer_M1_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M2', 'M31_SpectralLancer_M2_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M3', 'M31_SpectralLancer_M3_Loadout'));
 
-    Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M1', 'M31_EnhSpectralLancer_M1_Loadout'));
-    Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M2', 'M31_EnhSpectralLancer_M2_Loadout'));
-    Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M3', 'M31_EnhSpectralLancer_M3_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M1', 'M31_EnhSpectralLancer_M1_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M2', 'M31_EnhSpectralLancer_M2_Loadout'));
+    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M3', 'M31_EnhSpectralLancer_M3_Loadout'));
 
-    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M1', 'M31_SpectralCreature_M1_Loadout'));
-    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M2', 'M31_SpectralCreature_M2_Loadout'));
-    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M3', 'M31_SpectralCreature_M3_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M1', 'M31_SpectralCreature_M1_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M2', 'M31_SpectralCreature_M2_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M3', 'M31_SpectralCreature_M3_Loadout'));
 
-    Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M1', 'M31_EnhSpectralCreature_M1_Loadout'));
-    Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M2', 'M31_EnhSpectralCreature_M2_Loadout'));
-    Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M3', 'M31_EnhSpectralCreature_M3_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M1', 'M31_EnhSpectralCreature_M1_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M2', 'M31_EnhSpectralCreature_M2_Loadout'));
+    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M3', 'M31_EnhSpectralCreature_M3_Loadout'));
 
     return Templates;
 }
@@ -167,7 +167,7 @@ static function X2CharacterTemplate SpectralCreature(Name DataName, name Loadout
 {
     local X2CharacterTemplate CharTemplate;
 
-    `CREATE_X2CHARACTER_TEMPLATE(CharTemplate, 'NeonateChryssalid');
+    `CREATE_X2CHARACTER_TEMPLATE(CharTemplate, DataName);
     CharTemplate.CharacterGroupName = 'SpectralChryssalid';
     CharTemplate.DefaultLoadout = LoadoutName;
     CharTemplate.BehaviorClass = class'XGAIBehavior';

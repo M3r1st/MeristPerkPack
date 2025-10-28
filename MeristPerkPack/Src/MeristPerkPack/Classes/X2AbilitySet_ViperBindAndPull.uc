@@ -343,10 +343,10 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
     Template.AddTargetEffect(SustainedEffect);
 
     // The shooter gets a free point that can be used to end the bind
-    ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-    ActionPointsEffect.NumActionPoints = 1;
-    ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-    Template.AddShooterEffect(ActionPointsEffect);
+    // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+    // ActionPointsEffect.NumActionPoints = 1;
+    // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+    // Template.AddShooterEffect(ActionPointsEffect);
 
     // Ability causes damage by crushing
     PhysicalDamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -415,10 +415,10 @@ static function X2AbilityTemplate BindCrush(name DataName, optional bool bInputT
         Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_SustainedEffect');
 
         // The shooter gets a free point that can be used to end the bind
-        ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-        ActionPointsEffect.NumActionPoints = 1;
-        ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-        Template.AddShooterEffect(ActionPointsEffect);
+        // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+        // ActionPointsEffect.NumActionPoints = 1;
+        // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+        // Template.AddShooterEffect(ActionPointsEffect);
     }
 
     // While sustained this ability causes damage by crushing
@@ -624,10 +624,10 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
     Template.AddTargetEffect(SustainedEffect);
 
     // The shooter gets a free point that can be used to end the bind
-    ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-    ActionPointsEffect.NumActionPoints = 1;
-    ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-    Template.AddShooterEffect(ActionPointsEffect);
+    // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+    // ActionPointsEffect.NumActionPoints = 1;
+    // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+    // Template.AddShooterEffect(ActionPointsEffect);
 
     // Ability causes damage by crushing
     PhysicalDamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -698,10 +698,10 @@ static function X2AbilityTemplate RushAndBindCrush(name DataName, optional bool 
         Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_SustainedEffect');
 
         // The shooter gets a free point that can be used to end the bind
-        ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-        ActionPointsEffect.NumActionPoints = 1;
-        ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-        Template.AddShooterEffect(ActionPointsEffect);
+        // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+        // ActionPointsEffect.NumActionPoints = 1;
+        // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+        // Template.AddShooterEffect(ActionPointsEffect);
     }
 
     // While sustained this ability causes damage by crushing
@@ -869,10 +869,10 @@ static function X2AbilityTemplate RushAndBindBindSentinel(name DataName, name Cr
     Template.AddTargetEffect(SustainedEffect);
 
     // The shooter gets a free point that can be used to end the bind
-    ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-    ActionPointsEffect.NumActionPoints = 1;
-    ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-    Template.AddShooterEffect(ActionPointsEffect);
+    // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+    // ActionPointsEffect.NumActionPoints = 1;
+    // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+    // Template.AddShooterEffect(ActionPointsEffect);
 
     // Ability causes damage by crushing
     PhysicalDamageEffect = new class'X2Effect_ApplyWeaponDamage';
@@ -943,10 +943,10 @@ static function X2AbilityTemplate RushAndBindCrushSentinel(name DataName, option
         Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_SustainedEffect');
 
         // The shooter gets a free point that can be used to end the bind
-        ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-        ActionPointsEffect.NumActionPoints = 1;
-        ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-        Template.AddShooterEffect(ActionPointsEffect);
+        // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+        // ActionPointsEffect.NumActionPoints = 1;
+        // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+        // Template.AddShooterEffect(ActionPointsEffect);
     }
 
     // While sustained this ability causes damage by crushing
@@ -959,10 +959,10 @@ static function X2AbilityTemplate RushAndBindCrushSentinel(name DataName, option
     // Template.AddTargetEffect(class'BitterfrostHelper'.static.ChillEffect());
 
     // The shooter gets a free point that can be used to end the bind
-    ActionPointsEffect = new class'X2Effect_GrantActionPoints';
-    ActionPointsEffect.NumActionPoints = 1;
-    ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
-    Template.AddShooterEffect(ActionPointsEffect);
+    // ActionPointsEffect = new class'X2Effect_GrantActionPoints';
+    // ActionPointsEffect.NumActionPoints = 1;
+    // ActionPointsEffect.PointType = class'X2CharacterTemplateManager'.default.EndBindActionPoint;
+    // Template.AddShooterEffect(ActionPointsEffect);
 
     Template.bSkipFireAction = true;
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;

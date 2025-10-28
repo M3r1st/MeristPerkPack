@@ -634,6 +634,7 @@ static function X2AbilityTemplate MutonBullRush()
     StandardMelee.BuiltInCritMod = `GetConfigInt("M31_PA_MutonBullRush_CritBonus");
     Template.AbilityToHitCalc = StandardMelee;
 
+    AddSuppressedCondition(Template);
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
     
@@ -689,10 +690,6 @@ static function X2AbilityTemplate HunterMark()
     EffectCondition.AddExcludeEffect(class'X2Effect_PA_HunterMark'.default.EffectName, 'AA_DuplicateEffectIgnored');
     Template.AbilityTargetConditions.AddItem(EffectCondition);
 
-    // Template.bSkipFireAction = false;
-    // Template.CustomFireAnim = 'HL_SignalPoint';
-    Template.bShowActivation = true;
-    
     return Template;
 }
 
@@ -792,8 +789,6 @@ static function X2AbilityTemplate HunterDedication()
     Effect.BuildPersistentEffect(`GetConfigInt("M31_PA_HunterDedication_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_PA_HunterDedication_BuffText"), Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
-
-    Template.bShowActivation = true;
     
     return Template;
 }
@@ -870,6 +865,67 @@ static function X2AbilityTemplate StayFrostyAttack()
 
     Template.bShowActivation = true;
     Template.bFrameEvenWhenUnitIsHidden = true;
+
+    return Template;
+}
+
+static function X2AbilityTemplate ChargeAndShoot()
+{
+    local X2AbilityTemplate             Template;
+    local X2Condition_CanAffordCost     CostCondition;
+
+    Template = MovingMelee('M31_PA_ChargeAndShoot', "", false, true);
+
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+    AddCooldown(Template, `GetConfigInt("M31_PA_ChargeAndShoot_Cooldown"));
+
+    CostCondition = new class'X2Condition_CanAffordCost';
+    CostCondition.AbilityName = 'M31_PA_ChargeAndShoot2';
+    CostCondition.bValidateAmmoCost = true;
+    Template.AbilityShooterConditions.AddItem(CostCondition);
+
+    AddSuppressedCondition(Template);
+    Template.AddShooterEffectExclusions();
+    
+    Template.bShowActivation = true;
+    Template.bSkipFireAction = false;
+
+    Template.bOverrideMeleeDeath = true;
+
+    Template.PostActivationEvents.AddItem('M31_PA_ChargeAndShoot2');
+
+    Template.DefaultSourceItemSlot = eInvSlot_SecondaryWeapon;
+
+    return Template;
+}
+
+static function X2AbilityTemplate ChargeAndShoot2()
+{
+    local X2AbilityTemplate                 Template;
+    local X2AbilityTrigger_EventListener    Trigger;
+
+    Template = Attack('M31_PA_ChargeAndShoot2', "", false, true);
+    
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.BuildInterruptGameStateFn = none;
+
+    Template.AbilityTriggers.Length = 0;
+
+    Trigger = new class'X2AbilityTrigger_EventListener';
+    Trigger.ListenerData.EventID = 'M31_PA_ChargeAndShoot2';
+    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+    Trigger.ListenerData.Filter = eFilter_Unit;
+    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_OriginalTarget;
+    Trigger.ListenerData.Priority = 80;
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    AddAmmoCost(Template, 1);
+
+    Template.MergeVisualizationFn = SequentialShot_MergeVisualization;
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }

@@ -11,7 +11,7 @@ var bool bCountsAsAmmoEffect;
 var bool bCountsAsWeaponEffect;
 
 // If true, requires the attack's source weapon and the follow-up ability's source weapon to match
-// OR the attack's source weapon's category should match of the additional categories
+// OR the category  of the source weapon should match one of the additional categories
 var bool bMatchSourceWeapon;
 var array<name> AdditionalWeaponCategories;
 

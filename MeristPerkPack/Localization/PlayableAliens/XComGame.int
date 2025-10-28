@@ -126,11 +126,11 @@ LocPromotionPopupText="<Bullet> Shield priority: <Ability:M31_PA_IronskinBite_Sh
 LocFlyOverText="Ironskin Bite"
 
 [M31_PA_RegenBite X2AbilityTemplate]
-LocFriendlyName="Regenerating Bite"
+LocFriendlyName="Regenerative Bite"
 LocLongDescription="Not-so-gently bite an adjacent ally. Applies regeneration, healing <Ability:M31_PA_RegenBite_HealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_Duration> turn(s). Has <Ability:M31_SelfCharges> charge(s) per mission."
 LocHelpText="Not-so-gently bite an adjacent ally. Applies regeneration, healing <Ability:M31_PA_RegenBite_HealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission.<br><Bullet> If <font color='#0bff9b'>Enhanced Poison</font> is learned, regeneration will heal <Ability:M31_PA_RegenBite_EnhHealPerTurn> HP per turn for <Ability:M31_PA_RegenBite_EnhDuration> turn(s).<br><Bullet> Can be used to stabilize bleeding out soldiers: <Ability:M31_PA_RegenBite_bStabilize>.<br><Bullet> Cures poison: <Ability:M31_PA_RegenBite_bRemovePoison>. Provides poison immunity for the duration: <Ability:M31_PA_RegenBite_bProvidesPoisonImmunity>.<br><Bullet> Can target Vipers: <Ability:M31_PA_ViperBite_bCanTargetVipers>.<br><Bullet> Cannot target robots."
-LocFlyOverText="Regenerating Bite"
+LocFlyOverText="Regenerative Bite"
 
 [M31_PA_MemeBite X2AbilityTemplate]
 LocFriendlyName="\"Acid\" Bite"
