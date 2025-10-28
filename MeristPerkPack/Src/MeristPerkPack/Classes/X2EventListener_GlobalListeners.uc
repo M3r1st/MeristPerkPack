@@ -1,15 +1,16 @@
-class X2EventListener_Tactical extends X2EventListener;
+class X2EventListener_GlobalListeners extends X2EventListener;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
 
-    Templates.AddItem(CreateRetainConcealmentListeners());
+    Templates.AddItem(CreateTacticalListeners());
+    Templates.AddItem(CreateStrategyListeners());
 
     return Templates;
 }
 
-static function CHEventListenerTemplate CreateRetainConcealmentListeners()
+static function CHEventListenerTemplate CreateTacticalListeners()
 {
     local CHEventListenerTemplate Template;
 
@@ -17,8 +18,22 @@ static function CHEventListenerTemplate CreateRetainConcealmentListeners()
     Template.AddCHEvent('RetainConcealmentOnActivation', OnRetainConcealmentOnActivation, ELD_Immediate);
     Template.AddCHEvent('KilledbyExplosion', OnKilledbyExplosion, ELD_Immediate);
     Template.AddCHEvent('OverrideDamageRemovesReserveActionPoints', OnOverrideDamageRemovesReserveActionPoints, ELD_Immediate);
+    Template.AddCHEvent('UnitBleedingOut', OnUnitBleedingOut, ELD_Immediate);
 
     Template.RegisterInTactical = true;
+
+    return Template;
+}
+
+static function CHEventListenerTemplate CreateStrategyListeners()
+{
+    local CHEventListenerTemplate Template;
+
+    `CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'M31_StrategyListeners');
+
+    Template.AddCHEvent('PostMissionUpdateSoldierHealing', OnPostMissionUpdateSoldierHealing, ELD_Immediate);
+
+    Template.RegisterInStrategy = true;
 
     return Template;
 }
@@ -150,6 +165,55 @@ static function EventListenerReturn OnOverrideDamageRemovesReserveActionPoints(O
                 bDamageRemovesReserveActionPoints = false;
                 Tuple.Data[0].b = bDamageRemovesReserveActionPoints;
             }
+        }
+    }
+
+    return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn OnUnitBleedingOut(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
+{
+    local XComGameState_Unit Unit;
+
+    Unit = XComGameState_Unit(EventData);
+    if (Unit != none)
+    {
+        if (Unit.IsBleedingOut() && Unit.GetBleedingOutTurnsRemaining() > 0)
+        {
+            Unit = XComGameState_Unit(NewGameState.ModifyStateObject(Unit.Class, Unit.ObjectID));
+            Unit.SetUnitFloatValue(class'X2Effect_HealOnMissionEnd'.default.BleedoutValueName, 1, eCleanup_BeginTactical);
+        }
+    }
+
+    return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn OnPostMissionUpdateSoldierHealing(Object EventData, Object EventSource, XComGameState NewGameState, Name InEventID, Object CallbackData)
+{
+    local XComGameState_Unit    Unit;
+    local UnitValue             UnitVal;
+    local int AmountToHeal, CurrentHP, MaxHP;
+
+    Unit = XComGameState_Unit(EventSource);
+
+    if (Unit != none && Unit.GetUnitValue(class'X2Effect_HealOnMissionEnd'.default.HealValueName, UnitVal))
+    {
+        AmountToHeal = int(UnitVal.fValue);
+        if (AmountToHeal > 0)
+        {
+            Unit = XComGameState_Unit(NewGameState.ModifyStateObject(Unit.Class, Unit.ObjectID));
+            if (class'X2Effect_HealOnMissionEnd'.static.IsEffectValidForTarget(Unit))
+            {
+                Unit.LowestHP = Min(Unit.HighestHP, Unit.LowestHP + AmountToHeal);
+
+                CurrentHP = Unit.GetCurrentStat(eStat_HP);
+                MaxHP = Unit.GetMaxStat(eStat_HP);
+                if (CurrentHP < MaxHP)
+                {
+                    Unit.ModifyCurrentStat(eStat_HP, Min(MaxHP - CurrentHP, AmountToHeal));
+                }
+            }
+            Unit.ClearUnitValue(class'X2Effect_HealOnMissionEnd'.default.HealValueName);
         }
     }
 
