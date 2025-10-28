@@ -363,6 +363,7 @@ static function X2AbilityTemplate AssassinTrigger()
 static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XComGameState_Ability             AbilityState;
+    local XComGameState_Ability             KillingAbilityState;
     local XComGameStateContext_Ability      AbilityContext;
     local XComGameState_Unit                SourceUnit;
     local XComGameState_Unit                TargetUnit;
@@ -375,8 +376,9 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
         SourceUnit = XComGameState_Unit(EventSource);
         TargetUnit = XComGameState_Unit(EventData);
         AbilityState = XComGameState_Ability(CallbackData);
+        KillingAbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
 
-        if (SourceUnit != none && TargetUnit != none && AbilityState != none)
+        if (SourceUnit != none && TargetUnit != none && AbilityState != none && KillingAbilityState != none)
         {
             if (AbilityState.SourceWeapon.ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
             {
@@ -386,11 +388,14 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
                     {
                         if (AbilityState.CanActivateAbility(SourceUnit) == 'AA_Success')
                         {
-                            if (SourceUnit.IsConcealed())
+                            if (!SourceUnit.IsConcealed() || !KillingAbilityState.RetainConcealmentOnActivation(AbilityContext))
                             {
-                                SourceUnit.BreakConcealment();
+                                if (SourceUnit.IsConcealed())
+                                {
+                                    SourceUnit.BreakConcealment();
+                                }
+                                return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
                             }
-                            return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
                         }
                     }
                 }
@@ -507,8 +512,6 @@ static function X2AbilityTemplate Botnet()
 
     Template.AddTargetEffect(Effect);
     Template.AddMultiTargetEffect(Effect);
-
-    Template.bShowActivation = true;
 
     Template.AbilityConfirmSound = "Unreal2DSounds_TargetLock";
 
@@ -843,7 +846,7 @@ static function X2AbilityTemplate DisarmingShotSnap()
     local X2AbilityTemplate             Template;
     local X2AbilityCooldown_Extended    Cooldown;
     local X2Condition_AbilityProperty   AbilityCondition;
-    local X2Condition_SnapShotAction    SnapShotActionCondition;
+    local X2Condition_CanAffordCost     CostCondition;
 
     Template = Attack('M31_DisarmingShot_SnapShot', "img:///UILibrary_MeristPerkIcons.UIPerk_DisarmingShot", false, true);
     
@@ -872,9 +875,11 @@ static function X2AbilityTemplate DisarmingShotSnap()
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
     Template.AbilityShooterConditions.Additem(AbilityCondition);
 
-    SnapShotActionCondition = new class'X2Condition_SnapShotAction';
-    SnapShotActionCondition.StandardAbilityName = 'M31_DisarmingShot';
-    Template.AbilityShooterConditions.Additem(SnapShotActionCondition);
+    CostCondition = new class'X2Condition_CanAffordCost';
+    CostCondition.AbilityName = 'M31_DisarmingShot';
+    CostCondition.bValidateActionPointCost = true;
+    CostCondition.bFailIfCanAfford = true;
+    Template.AbilityShooterConditions.Additem(CostCondition);
     
     return Template;
 }
@@ -1039,7 +1044,6 @@ static function X2AbilityTemplate EnergyShield()
     Template.AddTargetEffect(ShieldEffect);
     Template.AddMultiTargetEffect(ShieldEffect);
     
-    Template.bShowActivation = true;
     Template.bSkipFireAction = false;
     
     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
@@ -1420,7 +1424,7 @@ static function X2AbilityTemplate MaimSnap()
     local X2AbilityTemplate             Template;
     local X2AbilityCooldown_Extended    Cooldown;
     local X2Condition_AbilityProperty   AbilityCondition;
-    local X2Condition_SnapShotAction    SnapShotActionCondition;
+    local X2Condition_CanAffordCost     CostCondition;
 
     Template = Attack('M31_Maim_SnapShot', "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom", false, true);
     
@@ -1447,10 +1451,36 @@ static function X2AbilityTemplate MaimSnap()
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
     Template.AbilityShooterConditions.Additem(AbilityCondition);
 
-    SnapShotActionCondition = new class'X2Condition_SnapShotAction';
-    SnapShotActionCondition.StandardAbilityName = 'M31_Maim';
-    Template.AbilityShooterConditions.Additem(SnapShotActionCondition);
+    CostCondition = new class'X2Condition_CanAffordCost';
+    CostCondition.AbilityName = 'M31_Maim';
+    CostCondition.bValidateActionPointCost = true;
+    CostCondition.bFailIfCanAfford = true;
+    Template.AbilityShooterConditions.Additem(CostCondition);
     
+    return Template;
+}
+
+static function X2AbilityTemplate ManualOverride()
+{
+    local X2AbilityTemplate             Template;
+    local X2Effect_ReduceCooldowns      Effect;
+
+    Template = SelfTargetActivated('M31_ManualOverride', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ManualOverride");
+    
+    AddActionPointCost(Template, eCost_Single);
+    AddCooldown(Template, `GetConfigInt("M31_ManualOverride_Cooldown"));
+
+    AddSuppressedCondition(Template);
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_ManualOverride');
+
+    Effect = new class'X2Effect_ReduceCooldowns';
+    Effect.Amount = `GetConfigInt("M31_ManualOverride_CooldownReduction");
+    Effect.ReduceAll = false;
+    Template.AddTargetEffect(Effect);
+
+    Template.AbilityConfirmSound = "Manual_Override_Activate";
+    Template.ActivationSpeech = 'ManualOverride';
+
     return Template;
 }
 
@@ -2683,8 +2713,6 @@ static function X2AbilityTemplate SniperOverwatch()
 
     Template.AbilityConfirmSound = "Unreal2DSounds_OverWatch";
 
-    Template.bShowActivation = true;
-
     Template.PostActivationEvents.AddItem('OverwatchUsed');
 
     Template.AdditionalAbilities.AddItem('M31_SniperOverwatch_Attack');
@@ -3519,19 +3547,6 @@ static function X2AbilityTemplate Bloodlet()
 }
 
 static function X2AbilityTemplate BloodletAttack()
-{
-    local X2AbilityTemplate Template;
-
-    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
-        'M31_Bloodlet_Attack',
-        "img:///UILibrary_FavidsPerkPack.Perk_Ph_Bloodlet",
-        CreateBloodletBleedingEffect()
-    );
-
-    return Template;
-}
-
-static function X2AbilityTemplate BloodletAttackPistol()
 {
     local X2AbilityTemplate Template;
 
