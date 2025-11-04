@@ -157,7 +157,7 @@ static event OnPostTemplatesCreated()
     {
         AddWatchfulEyeToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
-    
+
     if (default.bUpdateTemplarShield)
     {
         PatchTemplarShield(AbilityTemplateManager.FindAbilityTemplate('IRI_TemplarShield'));

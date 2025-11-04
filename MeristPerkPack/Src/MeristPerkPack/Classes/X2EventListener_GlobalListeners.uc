@@ -1,4 +1,7 @@
-class X2EventListener_GlobalListeners extends X2EventListener;
+class X2EventListener_GlobalListeners extends X2EventListener config(Game);
+
+var config bool bLog;
+var config int EventPriority_OnPostMissionUpdateSoldierHealing;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -31,7 +34,7 @@ static function CHEventListenerTemplate CreateStrategyListeners()
 
     `CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'M31_StrategyListeners');
 
-    Template.AddCHEvent('PostMissionUpdateSoldierHealing', OnPostMissionUpdateSoldierHealing, ELD_Immediate);
+    Template.AddCHEvent('PostMissionUpdateSoldierHealing', OnPostMissionUpdateSoldierHealing, ELD_Immediate, default.EventPriority_OnPostMissionUpdateSoldierHealing);
 
     Template.RegisterInStrategy = true;
 
@@ -194,6 +197,8 @@ static function EventListenerReturn OnPostMissionUpdateSoldierHealing(Object Eve
     local UnitValue             UnitVal;
     local int AmountToHeal, CurrentHP, MaxHP;
 
+    `LOG(GetFuncName(), default.bLog, GetFuncName());
+
     Unit = XComGameState_Unit(EventSource);
 
     if (Unit != none && Unit.GetUnitValue(class'X2Effect_HealOnMissionEnd'.default.HealValueName, UnitVal))
@@ -201,20 +206,27 @@ static function EventListenerReturn OnPostMissionUpdateSoldierHealing(Object Eve
         AmountToHeal = int(UnitVal.fValue);
         if (AmountToHeal > 0)
         {
+            `LOG(Unit.GetFullName() $ " can be healed for " $ AmountToHeal $ " HP", default.bLog, GetFuncName());
             Unit = XComGameState_Unit(NewGameState.ModifyStateObject(Unit.Class, Unit.ObjectID));
             if (class'X2Effect_HealOnMissionEnd'.static.IsEffectValidForTarget(Unit))
             {
+                `LOG("The healing is valid for the target", default.bLog, GetFuncName());
+                `LOG("Previous LowestHP = " $ Unit.LowestHP, default.bLog, GetFuncName());
                 Unit.LowestHP = Min(Unit.HighestHP, Unit.LowestHP + AmountToHeal);
+                `LOG("New LowestHP = " $ Unit.LowestHP, default.bLog, GetFuncName());
 
                 CurrentHP = Unit.GetCurrentStat(eStat_HP);
                 MaxHP = Unit.GetMaxStat(eStat_HP);
                 if (CurrentHP < MaxHP)
                 {
+                    `LOG("Previous HP = " $ Unit.GetCurrentStat(eStat_HP), default.bLog, GetFuncName());
                     Unit.ModifyCurrentStat(eStat_HP, Min(MaxHP - CurrentHP, AmountToHeal));
+                    `LOG("New HP = " $ Unit.GetCurrentStat(eStat_HP), default.bLog, GetFuncName());
                 }
             }
-            Unit.ClearUnitValue(class'X2Effect_HealOnMissionEnd'.default.HealValueName);
         }
+        `LOG("Clearing the value", default.bLog, GetFuncName());
+        Unit.ClearUnitValue(class'X2Effect_HealOnMissionEnd'.default.HealValueName);
     }
 
     return ELR_NoInterrupt;

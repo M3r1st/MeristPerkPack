@@ -126,9 +126,9 @@ static function array<X2DataTemplate> CreateTemplates()
 
 static function X2AbilityTemplate Hide()
 {
-    local X2AbilityTemplate         Template;
-    local X2Effect_WS_Hide          Effect;
-    local X2Effect_GreaterPadding   GreaterPaddingEffect;
+    local X2AbilityTemplate             Template;
+    local X2Effect_WS_Hide              Effect;
+    local X2Effect_HealOnMissionEnd     HealEffect;
 
     Template = Passive('M31_PA_WS_Hide', "img:///UILibrary_PerkIcons.UIPerk_takecover", false, true);
 
@@ -137,10 +137,11 @@ static function X2AbilityTemplate Hide()
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
 
-    GreaterPaddingEffect = new class'X2Effect_GreaterPadding';
-    GreaterPaddingEffect.BuildPersistentEffect(1, true, false);
-    GreaterPaddingEffect.Padding_HealHP = `GetConfigInt("M31_PA_WS_Hide_PaddingHP");
-    Template.AddTargetEffect(GreaterPaddingEffect);
+    HealEffect = new class'X2Effect_HealOnMissionEnd';
+    HealEffect.bApplyToSelf = true;
+    HealEffect.HealAmount = `GetConfigInt("M31_PA_WS_Hide_PaddingHP");
+    HealEffect.BuildPersistentEffect(1, true, true);
+    Template.AddTargetEffect(HealEffect);
 
     return Template;
 }
@@ -504,9 +505,12 @@ static function X2AbilityTemplate VigilanceLeadTheTarget()
     ActionPointCost.AllowedTypes.RemoveItem(class'X2CharacterTemplateManager'.default.SkirmisherInterruptActionPoint);
     Template.AbilityCosts.AddItem(ActionPointCost);
 
-    ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
-    ReservePointsEffect.ReserveType = default.LeadTheTargetReserveActionName;
-    Template.AddShooterEffect(ReservePointsEffect);
+    if (`GetConfigBool("M31_PA_WS_Vigilance_bUseReserveAP"))
+    {
+        ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
+        ReservePointsEffect.ReserveType = default.LeadTheTargetReserveActionName;
+        Template.AddShooterEffect(ReservePointsEffect);
+    }
     
     Template.AbilityToHitCalc = default.DeadEye;
 
@@ -556,6 +560,7 @@ static function X2AbilityTemplate VigilanceLeadTheTargetAttack()
     Template.AbilityTargetConditions.AddItem(VisibilityCondition);
     Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    AddBladestormMark(Template, GetLTTAttackName(default.LeadTheTargetRequiredAbilityName));
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
@@ -576,10 +581,13 @@ static function X2AbilityTemplate VigilanceLeadTheTargetAttack()
     AmmoCost.iAmmo = 1;
     Template.AbilityCosts.AddItem(AmmoCost);
 
-    ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
-    ReserveActionPointCost.iNumPoints = 1;
-    ReserveActionPointCost.AllowedTypes.AddItem(default.LeadTheTargetReserveActionName);
-    Template.AbilityCosts.AddItem(ReserveActionPointCost);
+    if (`GetConfigBool("M31_PA_WS_Vigilance_bUseReserveAP"))
+    {
+        ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
+        ReserveActionPointCost.iNumPoints = 1;
+        ReserveActionPointCost.AllowedTypes.AddItem(default.LeadTheTargetReserveActionName);
+        Template.AbilityCosts.AddItem(ReserveActionPointCost);
+    }
 
     Template.AbilityToHitCalc = default.SimpleStandardAim;
     Template.AbilityToHitOwnerOnMissCalc = default.SimpleStandardAim;
@@ -2294,9 +2302,12 @@ static function X2AbilityTemplate BoltLeadTheTarget(
     ActionPointCost.AllowedTypes.RemoveItem(class'X2CharacterTemplateManager'.default.SkirmisherInterruptActionPoint);
     Template.AbilityCosts.AddItem(ActionPointCost);
 
-    ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
-    ReservePointsEffect.ReserveType = default.LeadTheTargetReserveActionName;
-    Template.AddShooterEffect(ReservePointsEffect);
+    if (`GetConfigBool("M31_PA_WS_Vigilance_bUseReserveAP"))
+    {
+        ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
+        ReservePointsEffect.ReserveType = default.LeadTheTargetReserveActionName;
+        Template.AddShooterEffect(ReservePointsEffect);
+    }
     
     Template.AbilityToHitCalc = default.DeadEye;
 
@@ -2351,6 +2362,7 @@ static function X2AbilityTemplate BoltLeadTheTargetAttack(
     Template.AbilityTargetConditions.AddItem(VisibilityCondition);
     Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    AddBladestormMark(Template, GetLTTAttackName(TemplateName));
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
@@ -2373,10 +2385,13 @@ static function X2AbilityTemplate BoltLeadTheTargetAttack(
 
     AddBoltCharges(Template, TemplateName);
 
-    ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
-    ReserveActionPointCost.iNumPoints = 1;
-    ReserveActionPointCost.AllowedTypes.AddItem(default.LeadTheTargetReserveActionName);
-    Template.AbilityCosts.AddItem(ReserveActionPointCost);
+    if (`GetConfigBool("M31_PA_WS_Vigilance_bUseReserveAP"))
+    {
+        ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
+        ReserveActionPointCost.iNumPoints = 1;
+        ReserveActionPointCost.AllowedTypes.AddItem(default.LeadTheTargetReserveActionName);
+        Template.AbilityCosts.AddItem(ReserveActionPointCost);
+    }
 
     Template.AbilityToHitCalc = default.SimpleStandardAim;
     Template.AbilityToHitOwnerOnMissCalc = default.SimpleStandardAim;

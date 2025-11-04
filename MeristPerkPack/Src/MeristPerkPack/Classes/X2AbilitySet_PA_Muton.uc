@@ -138,7 +138,7 @@ static function X2DataTemplate PersonalShield()
     Template.bCrossClassEligible = false;
     Template.bDisplayInUITooltip = true;
     Template.bDisplayInUITacticalText = true;
-    Template.bShowActivation = true;
+    Template.bShowActivation = false;
     // Template.bSkipFireAction = true;
 
     Template.CustomFireAnim = 'HL_SignalPositive';

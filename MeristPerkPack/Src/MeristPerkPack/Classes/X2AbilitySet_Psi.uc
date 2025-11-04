@@ -1,7 +1,5 @@
 class X2AbilitySet_Psi extends X2Ability_Extended config(GameData_SoldierSkills);
 
-var config array<CooldownModifierInfo> EnergyShield_CooldownModifiers;
-
 var privatewrite name SpectralZombieLinkName;
 var privatewrite name SpectralLancerLinkName;
 var privatewrite name SpectralCreatureLinkName;

@@ -72,6 +72,7 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(MaimSnap());
     Templates.AddItem(Malevolence());
         Templates.AddItem(MalevolenceAttack());
+    Templates.AddItem(ManualOverride());
     Templates.AddItem(MarauderElite());
     Templates.AddItem(Meld());
     Templates.AddItem(Minelayer2());
@@ -791,7 +792,7 @@ static function X2AbilityTemplate DervishTrigger()
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = 'KillMail';
-    Trigger.ListenerData.Filter = eFilter_None;
+    Trigger.ListenerData.Filter = eFilter_Unit;
     Trigger.ListenerData.EventFn = class'M31_AbilityHelpers'.static.KillMailListener_Self;
     Trigger.ListenerData.Priority = 30;
     Template.AbilityTriggers.AddItem(Trigger);
@@ -1313,8 +1314,6 @@ static function EventListenerReturn AbilityTriggerEventListener_FutureWarfare(Ob
     AbilityState = XComGameState_Ability(CallbackData);
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 
-    `LOG("Listening to " $ EventAbilityState.GetMyTemplateName(), true, 'Merist_FutureWarfare');
-
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt
         && default.FutureWarfare_AllowedAbilities.Find(EventAbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
@@ -1816,6 +1815,7 @@ static function X2AbilityTemplate Overpower()
     AddCooldown(Template, `GetConfigInt("M31_Overpower_Cooldown"));
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeFriendlyToSource = false;
     UnitPropertyCondition.FailOnNonUnits = true;
     UnitPropertyCondition.ExcludeLargeUnits = true;
 
