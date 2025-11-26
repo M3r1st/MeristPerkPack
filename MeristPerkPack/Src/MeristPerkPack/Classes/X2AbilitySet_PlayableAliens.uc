@@ -51,9 +51,9 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(FrostbiteSpit());
     Templates.AddItem(FrostBreath());
 
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_FrostSpit_Anims', "M31_PA_Vipers.Anims.AS_ViperKing"));
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_ViperBite_Anims', "M31_PA_Vipers.Anims.AS_ViperBite"));
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_ViperBash_Anims', "Viper_FireAndMeleeAnims.Anims.AS_Viper"));
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_FrostSpit_Anims', "M31_PA_Vipers.Anims.AS_ViperKing"));
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_ViperBite_Anims', "M31_PA_Vipers.Anims.AS_ViperBite"));
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_ViperBash_Anims', "Viper_FireAndMeleeAnims.Anims.AS_Viper"));
 
     return Templates;
 }
@@ -513,8 +513,8 @@ static function X2AbilityTemplate LockjawAttack()
     AddBladestormMark(Template, 'M31_PA_Lockjaw_MarkTarget');
     AddSuppressedCondition(Template);
 
-    class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToTarget(Template);
-    class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToTarget(Template);
+    class'M31_Helpers'.static.AddEnhancedPoisonEffectToTarget(Template);
+    class'M31_Helpers'.static.AddBlindingPoisonEffectToTarget(Template);
 
     Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunnedStatusEffect(1, 100, false));
     Template.AddTargetEffect(CreateLockjawDamageEffect());
@@ -937,8 +937,8 @@ static function X2AbilityTemplate ViperBite()
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
     
-    class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToTarget(Template);
-    class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToTarget(Template);
+    class'M31_Helpers'.static.AddEnhancedPoisonEffectToTarget(Template);
+    class'M31_Helpers'.static.AddBlindingPoisonEffectToTarget(Template);
 
     PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
     PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_ViperBite_Damage");
@@ -1127,10 +1127,11 @@ static function X2AbilityTemplate RegenBite()
     if (`GetConfigBool("M31_PA_RegenBite_bStabilize"))
     {
         UnitPropertyCondition = new class'X2Condition_UnitProperty';
-        UnitPropertyCondition.ExcludeAlive = true;
+        UnitPropertyCondition.ExcludeAlive = false;
         UnitPropertyCondition.ExcludeDead = false;
         UnitPropertyCondition.ExcludeHostileToSource = true;
         UnitPropertyCondition.ExcludeFriendlyToSource = false;
+        UnitPropertyCondition.IsBleedingOut = true;
         UnitPropertyCondition.FailOnNonUnits = true;
 
         RemoveEffects = new class'X2Effect_RemoveEffects';
@@ -1229,7 +1230,7 @@ static function X2AbilityTemplate WrongAcidBite()
     PoisonedEffect.TargetConditions.AddItem(HostileCondition);
     Template.AddTargetEffect(PoisonedEffect);
 
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(`GetConfigInt("M31_PA_MemeBite_H"), 3, 0);
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(`GetConfigInt("M31_PA_MemeBite_H"), 3, 0);
     BleedingEffect.TargetConditions.AddItem(HostileCondition);
     Template.AddTargetEffect(BleedingEffect);
     
@@ -1335,7 +1336,7 @@ static function X2AbilityTemplate WrongAcidBitePanic()
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.MergeVisualizationFn = class'M31_AbilityHelpers'.static.FollowUpShot_MergeVisualization;
+    Template.MergeVisualizationFn = class'M31_Helpers'.static.FollowUpShot_MergeVisualization;
     Template.BuildInterruptGameStateFn = none;
     Template.bCrossClassEligible = false;
 
@@ -1498,8 +1499,8 @@ static function X2AbilityTemplate PoisonSpit()
     Cooldown.AddCooldownModifier('M31_PA_NeuroPoison', -1 * `GetConfigInt("M31_PA_NeuroPoison_CooldownReduction"));
     Template.AbilityCooldown = Cooldown;
 
-    class'M31_AbilityHelpers'.static.AddEnhancedPoisonEffectToMultiTarget(Template);
-    class'M31_AbilityHelpers'.static.AddBlindingPoisonEffectToMultiTarget(Template);
+    class'M31_Helpers'.static.AddEnhancedPoisonEffectToMultiTarget(Template);
+    class'M31_Helpers'.static.AddBlindingPoisonEffectToMultiTarget(Template);
 
     if (`GetConfigBool("M31_PA_PoisonSpit_bDealsDamage"))
     {

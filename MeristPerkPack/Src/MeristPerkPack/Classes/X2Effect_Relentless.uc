@@ -22,7 +22,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     local int                                   iCounter;
     local UnitValue                             UnitValue;
 
-    if (class'M31_AbilityHelpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
+    if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
         return false;
 
     SourceUnit.GetUnitValue(CounterName, UnitValue);

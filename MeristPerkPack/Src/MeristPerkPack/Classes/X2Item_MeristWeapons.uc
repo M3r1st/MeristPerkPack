@@ -4,25 +4,37 @@ var config WeaponDamageValue Zombie_M1_Damage;
 var config WeaponDamageValue Zombie_M2_Damage;
 var config WeaponDamageValue Zombie_M3_Damage;
 
-var config WeaponDamageValue EnhZombie_M1_Damage;
-var config WeaponDamageValue EnhZombie_M2_Damage;
-var config WeaponDamageValue EnhZombie_M3_Damage;
+var config int Zombie_Crit;
+
+var config WeaponDamageValue AdvZombie_M1_Damage;
+var config WeaponDamageValue AdvZombie_M2_Damage;
+var config WeaponDamageValue AdvZombie_M3_Damage;
+
+var config int AdvZombie_Crit;
 
 var config WeaponDamageValue Lancer_M1_Damage;
 var config WeaponDamageValue Lancer_M2_Damage;
 var config WeaponDamageValue Lancer_M3_Damage;
 
-var config WeaponDamageValue EnhLancer_M1_Damage;
-var config WeaponDamageValue EnhLancer_M2_Damage;
-var config WeaponDamageValue EnhLancer_M3_Damage;
+var config int Lancer_Crit;
+
+var config WeaponDamageValue AdvLancer_M1_Damage;
+var config WeaponDamageValue AdvLancer_M2_Damage;
+var config WeaponDamageValue AdvLancer_M3_Damage;
+
+var config int AdvLancer_Crit;
 
 var config WeaponDamageValue Creature_M1_Damage;
 var config WeaponDamageValue Creature_M2_Damage;
 var config WeaponDamageValue Creature_M3_Damage;
 
-var config WeaponDamageValue EnhCreature_M1_Damage;
-var config WeaponDamageValue EnhCreature_M2_Damage;
-var config WeaponDamageValue EnhCreature_M3_Damage;
+var config int Creature_Crit;
+
+var config WeaponDamageValue AdvCreature_M1_Damage;
+var config WeaponDamageValue AdvCreature_M2_Damage;
+var config WeaponDamageValue AdvCreature_M3_Damage;
+
+var config int AdvCreature_Crit;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -32,9 +44,9 @@ static function array<X2DataTemplate> CreateTemplates()
     Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_SpectralZombie_M2_Melee', default.Zombie_M2_Damage));
     Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_SpectralZombie_M3_Melee', default.Zombie_M3_Damage));
 
-    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_EnhSpectralZombie_M1_Melee', default.EnhZombie_M1_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_EnhSpectralZombie_M2_Melee', default.EnhZombie_M2_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_EnhSpectralZombie_M3_Melee', default.EnhZombie_M3_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_AdvSpectralZombie_M1_Melee', default.AdvZombie_M1_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_AdvSpectralZombie_M2_Melee', default.AdvZombie_M2_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralZombie_MeleeAttack('M31_AdvSpectralZombie_M3_Melee', default.AdvZombie_M3_Damage, true));
 
 
     Weapons.AddItem(CreateTemplate_SpectralLancer_FakeRifle('M31_SpectralLancer_FakeRifle'));
@@ -43,18 +55,18 @@ static function array<X2DataTemplate> CreateTemplates()
     Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_SpectralLancer_M2_Melee', default.Lancer_M2_Damage));
     Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_SpectralLancer_M3_Melee', default.Lancer_M3_Damage));
 
-    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_EnhSpectralLancer_M1_Melee', default.EnhLancer_M1_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_EnhSpectralLancer_M2_Melee', default.EnhLancer_M2_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_EnhSpectralLancer_M3_Melee', default.EnhLancer_M3_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_AdvSpectralLancer_M1_Melee', default.AdvLancer_M1_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_AdvSpectralLancer_M2_Melee', default.AdvLancer_M2_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralLancer_MeleeAttack('M31_AdvSpectralLancer_M3_Melee', default.AdvLancer_M3_Damage, true));
 
 
     Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_SpectralCreature_M1_Melee', default.Creature_M1_Damage));
     Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_SpectralCreature_M2_Melee', default.Creature_M2_Damage));
     Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_SpectralCreature_M3_Melee', default.Creature_M3_Damage));
 
-    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_EnhSpectralCreature_M1_Melee', default.EnhCreature_M1_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_EnhSpectralCreature_M2_Melee', default.EnhCreature_M2_Damage, true));
-    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_EnhSpectralCreature_M3_Melee', default.EnhCreature_M3_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_AdvSpectralCreature_M1_Melee', default.AdvCreature_M1_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_AdvSpectralCreature_M2_Melee', default.AdvCreature_M2_Damage, true));
+    Weapons.AddItem(CreateTemplate_SpectralCreature_MeleeAttack('M31_AdvSpectralCreature_M3_Melee', default.AdvCreature_M3_Damage, true));
     
     return Weapons;
 }
@@ -94,10 +106,12 @@ static function X2DataTemplate CreateTemplate_SpectralZombie_MeleeAttack(name Da
     if (bImproved)
     {
         Template.Abilities.AddItem('SwordSlice');
+        Template.CritChance = default.AdvZombie_Crit;
     }
     else
     {
         Template.Abilities.AddItem('StandardMelee');
+        Template.CritChance = default.Zombie_Crit;
     }
 
     return Template;
@@ -163,11 +177,18 @@ static function X2DataTemplate CreateTemplate_SpectralLancer_MeleeAttack(name Da
     Template.StartingItem = false;
     Template.CanBeBuilt = false;
 
-    Template.Abilities.AddItem('SwordSlice');
+    Template.bDisplayWeaponAndAmmo = false;
     
     if (bImproved)
     {
+        Template.Abilities.AddItem('SwordSlice');
         Template.Abilities.AddItem('Whirlwind2');
+        Template.CritChance = default.AdvLancer_Crit;
+    }
+    else
+    {
+        Template.Abilities.AddItem('SwordSlice');
+        Template.CritChance = default.Lancer_Crit;
     }
 
     return Template;
@@ -205,7 +226,17 @@ static function X2DataTemplate CreateTemplate_SpectralCreature_MeleeAttack(name 
 
     Template.bDisplayWeaponAndAmmo = false;
 
-    Template.Abilities.AddItem('M31_ENEMY_LightningClaw');
+    if (bImproved)
+    {
+        Template.Abilities.AddItem('M31_ENEMY_Claw');
+        Template.Abilities.AddItem('M31_ENEMY_LightningClaw');
+        Template.CritChance = default.AdvCreature_Crit;
+    }
+    else
+    {
+        Template.Abilities.AddItem('M31_ENEMY_Claw');
+        Template.CritChance = default.Creature_Crit;
+    }
 
     return Template;
 }

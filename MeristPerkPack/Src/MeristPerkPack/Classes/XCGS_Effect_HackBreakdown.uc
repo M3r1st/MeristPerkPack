@@ -28,7 +28,7 @@ final function int GetUncappedHitChance(X2AbilityTemplate Template, XComGameStat
 
     Template.AbilityToHitCalc.GetShotBreakdown(AbilityState, AvTarget, Breakdown);
 
-    return Breakdown.ResultTable[Type];	
+    return Breakdown.ResultTable[Type];
 }
 
 private function bool ShotBreakdownHack(X2AbilityToHitCalc AbilityToHitCalc, out ShotBreakdown ShotBreakdown)

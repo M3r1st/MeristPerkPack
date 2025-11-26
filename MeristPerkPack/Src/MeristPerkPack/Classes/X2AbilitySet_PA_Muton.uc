@@ -31,7 +31,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(StayFrosty());
         Templates.AddItem(StayFrostyAttack());
 
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_MutonPunch_Anims', "M31_PA_Mutons.Anims.AS_MutonPunch"));
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_MutonPunch_Anims', "M31_PA_Mutons.Anims.AS_MutonPunch"));
 
     return Templates;
 }
@@ -300,7 +300,7 @@ static function X2AbilityTemplate CreateBayonetAbility(name TemplateName, bool b
 
     // Impairing effects need to come after the damage. This is needed for proper visualization ordering.
     // Effect on a successful melee attack is triggering the Apply Impairing Effect Ability
-    Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateImpairingEffect());
+    Template.AddTargetEffect(class'M31_Helpers'.static.CreateImpairingEffect());
 
     if (bCounterattack)
     {
@@ -392,7 +392,7 @@ static function X2AbilityTemplate CreateBayonetChargeAbility(name TemplateName)
 
     // Impairing effects need to come after the damage. This is needed for proper visualization ordering.
     // Effect on a successful melee attack is triggering the Apply Impairing Effect Ability
-    // Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateImpairingEffect());
+    // Template.AddTargetEffect(class'M31_Helpers'.static.CreateImpairingEffect());
 
     Template.BuildNewGameStateFn = TypicalMoveEndAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
@@ -568,12 +568,12 @@ static function X2AbilityTemplate ExcessiveForce()
     AbilitiesToAdd.Length = 0;
     AbilitiesToAdd.AddItem('SkirmisherStrike');
 
-    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     AbilitiesToAdd.Length = 0;
     AbilitiesToAdd.AddItem('TraverseFire');
 
-    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_CannonCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_CannonCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
@@ -590,7 +590,7 @@ static function X2AbilityTemplate ChargeIn()
     AbilitiesToAdd.Length = 0;
     AbilitiesToAdd.AddItem('ExtraConditioning');
 
-    class'M31_AbilityHelpers'.static.AddConditionalAbilityEffect(Template, default.ChargeIn_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ChargeIn_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
 
     return Template;
 }
@@ -890,10 +890,8 @@ static function X2AbilityTemplate ChargeAndShoot()
     Template.AddShooterEffectExclusions();
     
     Template.bShowActivation = true;
-    Template.bSkipFireAction = false;
 
-    Template.bOverrideMeleeDeath = true;
-
+    Template.DamagePreviewFn = ChargeAndShootDamagePreview;
     Template.PostActivationEvents.AddItem('M31_PA_ChargeAndShoot2');
 
     Template.DefaultSourceItemSlot = eInvSlot_SecondaryWeapon;
@@ -923,9 +921,29 @@ static function X2AbilityTemplate ChargeAndShoot2()
 
     AddAmmoCost(Template, 1);
 
-    Template.MergeVisualizationFn = SequentialShot_MergeVisualization;
+    // Template.MergeVisualizationFn = SequentialShot_MergeVisualization;
 
     Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
+}
+
+function bool ChargeAndShootDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    local XComGameState_Unit        AbilityOwner;
+    local StateObjectReference      ChainShot2Ref;
+    local XComGameState_Ability     ChainShot2Ability;
+    local XComGameStateHistory      History;
+
+    AbilityState.NormalDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+
+    History = `XCOMHISTORY;
+    AbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+    ChainShot2Ref = AbilityOwner.FindAbility('M31_PA_ChargeAndShoot2');
+    ChainShot2Ability = XComGameState_Ability(History.GetGameStateForObjectID(ChainShot2Ref.ObjectID));
+    if (ChainShot2Ability != none)
+    {
+        ChainShot2Ability.NormalDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+    }
+    return true;
 }

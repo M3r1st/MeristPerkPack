@@ -38,10 +38,14 @@ static function X2Effect_VileMix HarrierVileMixEffect()
         `GetLocalizedString("M31_PA_HarrierVileMix_FriendlyName"),
         `GetLocalizedString("M31_PA_HarrierVileMix_DebuffText"),
         "img:///UILibrary_PerkIcons.UIPerk_andromedon_acidblob", true, , 'eAbilitySource_Perk');
-    Effect.DuplicateResponse = eDupe_Allow;
     AbilityCondition = new class'X2Condition_AbilityProperty';
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_PA_HarrierVileMix');
     Effect.TargetConditions.AddItem(AbilityCondition);
 
     return Effect;
+}
+
+defaultproperties
+{
+    DuplicateResponse = eDupe_Refresh
 }

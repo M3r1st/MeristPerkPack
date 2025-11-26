@@ -11,7 +11,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     local GameRulesCache_VisibilityInfo     VisInfo;
     local bool bFlanking;
 
-    if (class'M31_AbilityHelpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
+    if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
         return false;
 
     AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));

@@ -61,7 +61,7 @@ function int GetAttackingDamageModifier(
                 return 0;
 
             CritChance = HackBreakdown.GetUncappedHitChance(AbilityTemplate, AbilityState, XComGameState_Unit(TargetDamageable), eHit_Crit);
-            CritChance = CritChance - 100;
+            CritChance = Max(0, CritChance - 100);
             if (NewGameState != none)
             {
                 HackBreakdown = XCGS_Effect_HackBreakdown(NewGameState.ModifyStateObject(HackBreakdown.Class, HackBreakdown.ObjectID));

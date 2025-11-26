@@ -4,29 +4,29 @@ static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
 
-    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M1', 'M31_SpectralZombie_M1_Loadout'));
-    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M2', 'M31_SpectralZombie_M2_Loadout'));
-    // Templates.AddItem(SpectralZombie('M31_SpectralZombie_M3', 'M31_SpectralZombie_M3_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M1', 'M31_SpectralZombie_M1_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M2', 'M31_SpectralZombie_M2_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_SpectralZombie_M3', 'M31_SpectralZombie_M3_Loadout'));
 
-    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M1', 'M31_EnhSpectralZombie_M1_Loadout'));
-    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M2', 'M31_EnhSpectralZombie_M2_Loadout'));
-    // Templates.AddItem(SpectralZombie('M31_EnhSpectralZombie_M3', 'M31_EnhSpectralZombie_M3_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_AdvSpectralZombie_M1', 'M31_AdvSpectralZombie_M1_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_AdvSpectralZombie_M2', 'M31_AdvSpectralZombie_M2_Loadout'));
+    Templates.AddItem(SpectralZombie('M31_AdvSpectralZombie_M3', 'M31_AdvSpectralZombie_M3_Loadout'));
 
-    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M1', 'M31_SpectralLancer_M1_Loadout'));
-    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M2', 'M31_SpectralLancer_M2_Loadout'));
-    // Templates.AddItem(SpectralLancer('M31_SpectralLancer_M3', 'M31_SpectralLancer_M3_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M1', 'M31_SpectralLancer_M1_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M2', 'M31_SpectralLancer_M2_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_SpectralLancer_M3', 'M31_SpectralLancer_M3_Loadout'));
 
-    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M1', 'M31_EnhSpectralLancer_M1_Loadout'));
-    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M2', 'M31_EnhSpectralLancer_M2_Loadout'));
-    // Templates.AddItem(SpectralLancer('M31_EnhSpectralLancer_M3', 'M31_EnhSpectralLancer_M3_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_AdvSpectralLancer_M1', 'M31_AdvSpectralLancer_M1_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_AdvSpectralLancer_M2', 'M31_AdvSpectralLancer_M2_Loadout'));
+    Templates.AddItem(SpectralLancer('M31_AdvSpectralLancer_M3', 'M31_AdvSpectralLancer_M3_Loadout'));
 
-    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M1', 'M31_SpectralCreature_M1_Loadout'));
-    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M2', 'M31_SpectralCreature_M2_Loadout'));
-    // Templates.AddItem(SpectralCreature('M31_SpectralCreature_M3', 'M31_SpectralCreature_M3_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M1', 'M31_SpectralCreature_M1_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M2', 'M31_SpectralCreature_M2_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_SpectralCreature_M3', 'M31_SpectralCreature_M3_Loadout'));
 
-    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M1', 'M31_EnhSpectralCreature_M1_Loadout'));
-    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M2', 'M31_EnhSpectralCreature_M2_Loadout'));
-    // Templates.AddItem(SpectralCreature('M31_EnhSpectralCreature_M3', 'M31_EnhSpectralCreature_M3_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_AdvSpectralCreature_M1', 'M31_AdvSpectralCreature_M1_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_AdvSpectralCreature_M2', 'M31_AdvSpectralCreature_M2_Loadout'));
+    Templates.AddItem(SpectralCreature('M31_AdvSpectralCreature_M3', 'M31_AdvSpectralCreature_M3_Loadout'));
 
     return Templates;
 }
@@ -90,6 +90,7 @@ static function X2CharacterTemplate SpectralZombie(Name DataName, name LoadoutNa
     CharTemplate.ImmuneTypes.AddItem('Acid');
 
     CharTemplate.Abilities.AddItem('StandardMove');
+    CharTemplate.Abilities.AddItem('M31_Psi_SpectralZombieInit');
 
     CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_Alien;
 
@@ -138,6 +139,7 @@ static function X2CharacterTemplate SpectralLancer(Name DataName, name LoadoutNa
     CharTemplate.bIsPsionic = false;
     CharTemplate.bIsRobotic = false;
     CharTemplate.bIsSoldier = false;
+    CharTemplate.bIsMeleeOnly = true;
 
     CharTemplate.bAllowSpawnFromATT = false;
 
@@ -154,6 +156,7 @@ static function X2CharacterTemplate SpectralLancer(Name DataName, name LoadoutNa
     CharTemplate.ImmuneTypes.AddItem('Acid');
 
     // CharTemplate.Abilities.AddItem('SpectralArmyUnitInitialize');
+    CharTemplate.Abilities.AddItem('M31_Psi_SpectralLancerInit');
     CharTemplate.Abilities.AddItem('Shadowstep');
     CharTemplate.Abilities.AddItem('Infighter');
 
@@ -217,8 +220,8 @@ static function X2CharacterTemplate SpectralCreature(Name DataName, name Loadout
     CharTemplate.ImmuneTypes.AddItem(class'X2Item_DefaultDamageTypes'.default.ParthenogenicPoisonType);
     CharTemplate.ImmuneTypes.AddItem('Acid');
 
+    CharTemplate.Abilities.AddItem('M31_Psi_SpectralCreatureInit');
     CharTemplate.Abilities.AddItem('LightningReflexes_LW');
-    CharTemplate.Abilities.AddItem('ZoneOfControl_LW');
 
     CharTemplate.strTargetIconImage = class'UIUtilities_Image'.const.TargetIcon_Alien;
 

@@ -12,19 +12,16 @@ var delegate<ShieldsTakeDamage> ShieldsTakeDamageFn;
 delegate ShieldsTakeDamage(X2Effect_EnergyShieldExtended ShieldEffect, XComGameState_Effect kNewEffectState, XComGameState NewGameState, XComGameState_Unit kTargetUnitState, int DamageTaken);
 
 // Override definition in X2Effect_EnergyShield
-function RegisterForEvents(XComGameState_Effect EffectGameState){}
+function RegisterForEvents(XComGameState_Effect EffectGameState);
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit                kTargetUnitState;
     local XCGS_Effect_EnergyShieldExtended  EffectState;
-    local XCGS_Effect_EnergyShieldHandler HandlerEffectState;
-    local int ShieldStrength;
+    local XCGS_Effect_EnergyShieldHandler   HandlerEffectState;
+    local int                               ShieldStrength;
 
-    kTargetUnitState = XComGameState_Unit(kNewTargetState);
-    `assert(kTargetUnitState != none);
     EffectState = XCGS_Effect_EnergyShieldExtended(NewEffectState);
-    EffectState.AddLinkedHandlerID();
+    EffectState.SetHandlerID(NewGameState);
 
     ShieldStrength = GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, EffectState);
 
@@ -34,19 +31,19 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     EffectState.ShieldPriority = ShieldPriority;
     EffectState.ShieldRemaining = ShieldStrength;
 
-    HandlerEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldHandler', EffectState.LinkedHandlerID));
+    HandlerEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldHandler', EffectState.HandlerID));
     `assert(HandlerEffectState != none);
-    HandlerEffectState.AddShieldEffectToHandler(EffectState);
-    HandlerEffectState.LogShieldEffectStates(NewGameState);
+    HandlerEffectState.AddShieldEffect(EffectState, NewGameState);
+    HandlerEffectState.LogShields(NewGameState);
     
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
-    local XComGameState_Unit                UnitState;	
+    local XComGameState_Unit                UnitState;
     local XCGS_Effect_EnergyShieldExtended  EffectState;
-    local XCGS_Effect_EnergyShieldHandler HandlerEffectState;
+    local XCGS_Effect_EnergyShieldHandler   HandlerEffectState;
     local int ShieldCurrent;
     local int ShieldRemaining;
     local int NewShieldHP;
@@ -59,10 +56,10 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     ShieldCurrent = UnitState.GetCurrentStat(eStat_ShieldHP);
     NewShieldHP = ShieldCurrent - ShieldRemaining;
 
-    HandlerEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldHandler', EffectState.LinkedHandlerID));
+    HandlerEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldHandler', EffectState.HandlerID));
     `assert(HandlerEffectState != none);
-    HandlerEffectState.RemoveShieldEffectFromHandler(EffectState);
-    HandlerEffectState.LogShieldEffectStates(NewGameState);
+    HandlerEffectState.RemoveShieldEffect(EffectState, NewGameState);
+    HandlerEffectState.LogShields(NewGameState);
 
     super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 

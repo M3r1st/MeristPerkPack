@@ -102,7 +102,7 @@ static function X2Effect_Persistent CreateVeryAngryBiteBleedingEffect()
 {
     local X2Effect_Persistent BleedingEffect;
     
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDuration"),
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage"),
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage_Spread"),
@@ -532,7 +532,7 @@ static function X2Effect_Persistent CreateTaipanBiteBleedingEffect()
 
     local X2Effect_Persistent BleedingEffect;
     
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_TaipanBite_BleedDuration"),
         `GetConfigInt("M31_PA_TaipanBite_BleedDamage"),
         `GetConfigInt("M31_PA_TaipanBite_BleedDamage_Spread"),
@@ -650,7 +650,7 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
     Trigger.ListenerData.EventID = 'AbilityActivated';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'M31_AbilityHelpers'.static.AbilityTriggerEventListener_ChasingAttack;
+    Trigger.ListenerData.EventFn = class'M31_Helpers'.static.AbilityTriggerEventListener_ChasingAttack;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AbilityShooterConditions.Length = 0;
@@ -803,6 +803,7 @@ static function X2AbilityTemplate TaipanVengeance()
 {
     local X2AbilityTemplate             Template;
     local X2Effect_PA_TaipanVengeance   Effect;
+    local X2Effect_DedicatedOverwatch   OverwatchEffect;
     
     Template = Passive('M31_PA_TaipanVengeance', "img:///UILibrary_MW.UIPerk_triangulation", false, true);
 
@@ -818,6 +819,10 @@ static function X2AbilityTemplate TaipanVengeance()
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
+
+    OverwatchEffect = new class'X2Effect_DedicatedOverwatch';
+    OverwatchEffect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(OverwatchEffect);
 
     return Template;
 }

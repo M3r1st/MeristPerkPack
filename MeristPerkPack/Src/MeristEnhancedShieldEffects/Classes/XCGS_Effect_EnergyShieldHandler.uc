@@ -13,22 +13,23 @@ struct ShieldEffectInfo
 
 var array<ShieldEffectInfo> LinkedShieldEffects;
 
-function LogShieldEffectStates(XComGameState GameState)
+simulated function LogShields(XComGameState GameState)
 {
     local XCGS_Effect_EnergyShieldExtended  EffectState;
     local ShieldEffectInfo                  ShieldEffect;
-    `LOG("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+
+    `LOG("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
     foreach LinkedShieldEffects(ShieldEffect)
     {
         EffectState = XCGS_Effect_EnergyShieldExtended(GameState.GetGameStateForObjectID(ShieldEffect.EffectID));
 
         if (EffectState != none)
         {
-            `LOG(ShieldEffect.EffectName $ " --- Remaining Shields: " $ EffectState.ShieldRemaining $ " --- Priority: " $ EffectState.ShieldPriority, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+            `LOG(ShieldEffect.EffectName $ " --- Remaining Shields: " $ EffectState.ShieldRemaining $ " --- Priority: " $ EffectState.ShieldPriority, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
         }
         else
         {
-            `LOG("Error: effect with ID " $ ShieldEffect.EffectID $ " is not a shield effect", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+            `LOG("Error! Effect with ID " $ ShieldEffect.EffectID $ " is not a shield effect", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
         }
     }
 }
@@ -48,7 +49,7 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
     OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitState.ObjectID,, GameState.HistoryIndex - 1));
     ShieldDamageRemaining = OldUnitState.GetCurrentStat(eStat_ShieldHP) - UnitState.GetCurrentStat(eStat_ShieldHP);
 
-    `LOG("Total damage to shields: " $ ShieldDamageRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+    `LOG("Total damage to shields: " $ ShieldDamageRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
     for (Index = LinkedShieldEffects.Length - 1; Index >= 0 && ShieldDamageRemaining > 0; Index--)
     {
@@ -60,9 +61,9 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
         ShieldDamageRemaining -= x;
         ShieldEffectState.ShieldRemaining -= x;
 
-        `LOG("Damaging " $ ShieldEffectState.GetX2Effect().EffectName $ ":", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
-        `LOG("    Remaining shield: " $ ShieldEffectState.ShieldRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
-        `LOG("    Remaining damage: " $ ShieldDamageRemaining,class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+        `LOG("Damaging " $ ShieldEffectState.GetX2Effect().EffectName $ ":", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        `LOG("    Remaining shield: " $ ShieldEffectState.ShieldRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        `LOG("    Remaining damage: " $ ShieldDamageRemaining,class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
         ShieldEffect = X2Effect_EnergyShieldExtended(ShieldEffectState.GetX2Effect());
         if (ShieldEffect.ShieldsTakeDamageFn != none)
@@ -70,7 +71,7 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
     }
     if (bShouldSubmitState)
     {
-        LogShieldEffectStates(NewGameState);
+        LogShields(NewGameState);
         `TACTICALRULES.SubmitGameState(NewGameState);
     }
     return ELR_NoInterrupt;
@@ -84,14 +85,14 @@ function EventListenerReturn RemoveDepletedShields(Object EventData, Object Even
     local bool bAtLeastOneRemoved;
     local int Index;
     
-    `LOG("Removing depleted shields", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+    `LOG("", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
     for (Index = LinkedShieldEffects.Length - 1; Index >= 0; Index--)
     {
         ShieldEffectState = XCGS_Effect_EnergyShieldExtended(`XCOMHISTORY.GetGameStateForObjectID(LinkedShieldEffects[Index].EffectID));
         
         if (!ShieldEffectState.bRemoved && ShieldEffectState.ShieldRemaining == 0)
         {
-            `LOG(ShieldEffectState.GetX2Effect().EffectName $ " ---- Shield Depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+            `LOG(ShieldEffectState.GetX2Effect().EffectName $ " ---- Shield Depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
             if (!bAtLeastOneRemoved)
             {
                 EffectRemovedContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(ShieldEffectState);
@@ -109,48 +110,63 @@ function EventListenerReturn RemoveDepletedShields(Object EventData, Object Even
     }
     if (bAtLeastOneRemoved)
     {
-        LogShieldEffectStates(NewGameState);
+        LogShields(NewGameState);
         `TACTICALRULES.SubmitGameState(NewGameState);
     }
     else
     {
-        `LOG("No shields were depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, 'XCGS_Effect_EnergyShieldHandler');
+        `LOG("No shields were depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
     }
     return ELR_NoInterrupt;
 }
 
-simulated function bool AddShieldEffectToHandler(XCGS_Effect_EnergyShieldExtended EffectState)
+simulated function bool AddShieldEffect(XCGS_Effect_EnergyShieldExtended EffectState, XComGameState NewGameState)
 {
-    local ShieldEffectInfo NewEffectInfo;
-    local int Index;
+    local XCGS_Effect_EnergyShieldHandler   NewEffectState;
+    local ShieldEffectInfo                  NewEffectInfo;
+    local int                               Index;
 
     if (EffectState == none)
         return false;
 
-    for (Index = 0; Index < LinkedShieldEffects.Length && EffectState.ShieldPriority <= LinkedShieldEffects[Index].ShieldPriority; Index++)
+    NewEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(Class, ObjectID));
+
+    Index = 0;
+    while (Index < NewEffectState.LinkedShieldEffects.Length && EffectState.ShieldPriority <= NewEffectState.LinkedShieldEffects[Index].ShieldPriority)
+    {
+        Index++;
+    }
 
     NewEffectInfo.EffectID = EffectState.ObjectID;
-    NewEffectInfo.EffectName = EffectState.GetMyTemplateName();
+    NewEffectInfo.EffectName = EffectState.GetX2Effect().EffectName;
     NewEffectInfo.ShieldPriority = EffectState.ShieldPriority;
+    
+    `LOG("--- Index: "  $ Index $ " --- ID: " $ NewEffectInfo.EffectID $ " --- Name: " $ NewEffectInfo.EffectName $ " --- Priority: " $ NewEffectInfo.ShieldPriority, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
-    LinkedShieldEffects.InsertItem(Index, NewEffectInfo);
+    NewEffectState.LinkedShieldEffects.InsertItem(Index, NewEffectInfo);
 
     return true;
 }
 
-simulated function bool RemoveShieldEffectFromHandler(XCGS_Effect_EnergyShieldExtended RemovedEffectState)
+simulated function bool RemoveShieldEffect(XCGS_Effect_EnergyShieldExtended RemovedEffectState, XComGameState NewGameState)
 {
-    local int Index;
+    local XCGS_Effect_EnergyShieldHandler   NewEffectState;
+    local int                               Index;
 
     if (RemovedEffectState == none)
         return false;
 
-    Index = LinkedShieldEffects.Find('EffectID', RemovedEffectState.ObjectID);
+    NewEffectState = XCGS_Effect_EnergyShieldHandler(NewGameState.ModifyStateObject(Class, ObjectID));
+
+    Index = NewEffectState.LinkedShieldEffects.Find('EffectID', RemovedEffectState.ObjectID);
     if (Index != INDEX_NONE)
     {
-        LinkedShieldEffects.Remove(Index, 1);
+        `LOG("--- Index: "  $ Index $ " --- ID: " $ RemovedEffectState.ObjectID $ " --- Name: " $ RemovedEffectState.GetX2Effect().EffectName, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        NewEffectState.LinkedShieldEffects.Remove(Index, 1);
         return true;
     }
+
+    `LOG("Error! Effect with ID " $ RemovedEffectState.ObjectID $ " was not found", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
     return false;
 }

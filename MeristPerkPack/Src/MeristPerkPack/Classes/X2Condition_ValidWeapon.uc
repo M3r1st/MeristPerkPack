@@ -2,7 +2,6 @@
 //  FILE:    X2Condition_ValidWeapon.uc
 //  AUTHOR:  Merist / based on X2Condition_WOTC_APA_Class_ValidWeaponCategory
 //---------------------------------------------------------------------------------------
-
 class X2Condition_ValidWeapon extends X2Condition;
 
 // Variables to pass into the condition check:

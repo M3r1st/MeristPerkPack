@@ -6,14 +6,14 @@ var bool bMatchSourceWeapon;
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
     local X2EventManager        EventMgr;
-    local XComGameState_Unit    SourceUnitState;
+    local XComGameState_Unit    UnitState;
     local Object                EffectObj;
 
     EventMgr = `XEVENTMGR;
     EffectObj = EffectGameState;
-    SourceUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', AbilityTriggerEventListener_SleightOfHand, ELD_OnStateSubmitted, 30, SourceUnitState,, EffectObj);
+    EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', AbilityTriggerEventListener_SleightOfHand, ELD_OnStateSubmitted, 30, UnitState,, EffectObj);
 }
 
 static function EventListenerReturn AbilityTriggerEventListener_SleightOfHand(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -25,9 +25,8 @@ static function EventListenerReturn AbilityTriggerEventListener_SleightOfHand(Ob
     local X2AbilityTemplate                 AbilityTemplate;
     local X2AbilityMultiTarget_BurstFire    BurstFire;
     local XComGameState                     NewGameState;
-    local UnitValue UnitValue;
-    local int NumShots;
-    // local int Index;
+    local int                               NumShots;
+    local int                               NewStackCount;
 
     SourceUnit = XComGameState_Unit(EventSource);
     AbilityState = XComGameState_Ability(EventData);
@@ -67,19 +66,14 @@ static function EventListenerReturn AbilityTriggerEventListener_SleightOfHand(Ob
         {
             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
             SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', SourceUnit.ObjectID));
-            SourceUnit.GetUnitValue(default.UnitValueName, UnitValue);
-            SourceUnit.SetUnitFloatValue(default.UnitValueName, Min(`GetConfigInt("M31_SleightOfHand_MaxStacks"), UnitValue.fValue + NumShots), eCleanup_BeginTactical);
+            NewStackCount = Min(GetMaxStacks(SourceUnit), GetCurrentStackCount(SourceUnit) + NumShots);
+            SourceUnit.SetUnitFloatValue(default.UnitValueName, NewStackCount, eCleanup_BeginTactical);
             `TACTICALRULES.SubmitGameState(NewGameState);
         }
     }
 
 
     return ELR_NoInterrupt;
-}
-
-function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
-{
-    return GetCurrentStackCount(TargetUnit) > 0;
 }
 
 function GetToHitModifiers(
@@ -116,17 +110,60 @@ function GetToHitModifiers(
     }
 }
 
+simulated function bool OnEffectTicked(
+    const out EffectAppliedData ApplyEffectParameters,
+    XComGameState_Effect kNewEffectState,
+    XComGameState NewGameState,
+    bool FirstApplication,
+    XComGameState_Player Player)
+{
+    local XComGameState_Unit    UnitState;
+    local bool                  bContinueTicking;
+    local int                   NewStackCount;
+
+    bContinueTicking = super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
+
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+    if (UnitState != none)
+    {
+        UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(UnitState.Class, UnitState.ObjectID));
+        NewStackCount = Max(0, GetCurrentStackCount(UnitState) - GetStackDecay(UnitState));
+        UnitState.SetUnitFloatValue(default.UnitValueName, NewStackCount, eCleanup_BeginTactical);
+    }
+
+    return bContinueTicking;
+}
+
 static function int GetCurrentStackCount(XComGameState_Unit UnitState)
 {
     local UnitValue Counter;
     local int CurrentCount;
+
     UnitState.GetUnitValue(default.UnitValueName, Counter);
-    CurrentCount = Min(int(Counter.fValue), `GetConfigInt("M31_SleightOfHand_MaxStacks"));
+    CurrentCount = int(Counter.fValue);
+
     return CurrentCount;
+}
+
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
+{
+    return GetCurrentStackCount(TargetUnit) > 0;
+}
+
+static function int GetMaxStacks(optional XComGameState_Unit SourceUnit)
+{
+    return `GetConfigInt("M31_SleightOfHand_MaxStacks");
+}
+
+static function int GetStackDecay(optional XComGameState_Unit SourceUnit)
+{
+    return `GetConfigInt("M31_SleightOfHand_StackDecay");
 }
 
 defaultproperties
 {
+    EffectName = M31_SleightOfHand
     DuplicateResponse = eDupe_Ignore
     UnitValueName = M31_SleightOfHand_Counter
 }

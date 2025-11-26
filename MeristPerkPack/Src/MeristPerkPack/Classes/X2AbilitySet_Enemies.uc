@@ -28,7 +28,8 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(CoilHunkerPassive('M31_ENEMY_CoilHunkerDamaged', 'M31_ENEMY_CoilHunkerDamaged_Trigger'));
         Templates.AddItem(CoilHunkerDamaged('M31_ENEMY_CoilHunkerDamaged_Trigger'));
 
-    Templates.AddItem(ChryssalidMeleeAttack('M31_ENEMY_LightningClaw'));
+    Templates.AddItem(ChryssalidMeleeAttack('M31_ENEMY_Claw'));
+    Templates.AddItem(ChryssalidMeleeAttack('M31_ENEMY_LightningClaw', true));
 
     return Templates;
 }
@@ -550,14 +551,14 @@ static function AddEnhancedPoisonEffectToTarget(out X2AbilityTemplate Template)
 {
     Template.AddTargetEffect(CreateEnhancedPoisonedEffect());
     Template.AddTargetEffect(CreatePoisonedEffect());
-    Template.AddTargetEffect(class'M31_AbilityHelpers'.static.CreateNeuroPoisonEffect());
+    Template.AddTargetEffect(class'M31_Helpers'.static.CreateNeuroPoisonEffect());
 }
 
 static function AddEnhancedPoisonEffectToMultiTarget(out X2AbilityTemplate Template)
 {
     Template.AddMultiTargetEffect(CreateEnhancedPoisonedEffect());
     Template.AddMultiTargetEffect(CreatePoisonedEffect());
-    Template.AddMultiTargetEffect(class'M31_AbilityHelpers'.static.CreateNeuroPoisonEffect());
+    Template.AddMultiTargetEffect(class'M31_Helpers'.static.CreateNeuroPoisonEffect());
 }
 
 static function X2Effect_PersistentStatChange CreatePoisonedEffect()
@@ -850,7 +851,7 @@ static function X2AbilityTemplate CoilHunker_Base(name DataName)
     return Template;
 }
 
-static function X2AbilityTemplate ChryssalidMeleeAttack(name DataName)
+static function X2AbilityTemplate ChryssalidMeleeAttack(name DataName, optional bool bFixed)
 {
     local X2AbilityTemplate Template;
     local array<name> SkipExclusions;
@@ -864,16 +865,27 @@ static function X2AbilityTemplate ChryssalidMeleeAttack(name DataName)
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
 
-    AddActionPointCost(Template, eCost_Single);
+    if (bFixed)
+    {
+        AddActionPointCost(Template, eCost_Single);
+    }
+    else
+    {
+        AddActionPointCost(Template, eCost_SingleConsumeAll);
+    }
+    
 
     Template.CinescriptCameraType = "Chryssalid_PoisonousClaws";
     Template.CustomFireAnim = 'FF_Melee';
     Template.bSkipMoveStop = true;
     Template.bFrameEvenWhenUnitIsHidden = true;
 
-    MeleeTarget = new class'X2AbilityTarget_MovingMelee_FixedRange';
-    MeleeTarget.iFixedRange = 1;
-    Template.AbilityTargetStyle = MeleeTarget;
+    if (bFixed)
+    {
+        MeleeTarget = new class'X2AbilityTarget_MovingMelee_FixedRange';
+        MeleeTarget.iFixedRange = 1;
+        Template.AbilityTargetStyle = MeleeTarget;
+    }
 
     return Template;
 }

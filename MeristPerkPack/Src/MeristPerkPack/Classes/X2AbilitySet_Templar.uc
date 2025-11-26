@@ -89,6 +89,7 @@ static function X2AbilityTemplate TeleportSlash()
 
     Template.AbilityTargetConditions.AddItem(new class'X2Condition_Wrath');
     Template.TargetingMethod = class'X2TargetingMethod_NXWrath';
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
     Template.BuildNewGameStateFn = TeleportSlash_BuildGameState;
     Template.BuildVisualizationFn = TeleportSlash_BuildVisualization;
@@ -149,9 +150,9 @@ static function TeleportSlash_BuildVisualization(XComGameState VisualizeGameStat
     local X2Action_MoveTurn                 MoveTurnAction;
     local X2Action_PlaySoundAndFlyOver      SoundAndFlyover;
     local X2Action_ExitCover                ExitCoverAction;
-    local X2Action_MoveTeleport             TeleportMoveAction;
+    // local X2Action_MoveTeleport             TeleportMoveAction;
     local X2Action_Delay                    MoveDelay;
-    local X2Action_MoveEnd                  MoveEnd;
+    // local X2Action_MoveEnd                  MoveEnd;
     local X2Action_MarkerNamed              JoinActions;
     local array<X2Action>                   LeafNodes;
     local X2Action_WaitForAnotherAction     WaitForFireAction;

@@ -54,5 +54,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
 defaultproperties
 {
+    EffectName = M31_AddGrenadeEffect
     bAllowUpgrades = true;
 }

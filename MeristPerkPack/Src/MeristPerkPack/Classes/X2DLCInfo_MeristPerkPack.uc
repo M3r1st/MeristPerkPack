@@ -60,8 +60,10 @@ struct TextColorByClass
 var config array<TextColorByClass> SpecialColors;
 var config string DefaultSpecialColor;
 
+var privatewrite config array<string> ControlledDetonation_Abilities;
 var privatewrite config array<string> RapidDumping_Abilities;
 var privatewrite config array<string> FutureWarfare_Abilities;
+var privatewrite config array<string> LetItGo_Abilities;
 var privatewrite config array<string> MarauderElite_Abilities;
 var privatewrite config array<string> Reposition_Abilities;
 var privatewrite config array<string> TraverseFirePlus_Abilities;
@@ -111,6 +113,11 @@ static event OnPostTemplatesCreated()
     foreach default.TroubleShooter_AllowedAbilities(AbilityName)
     {
         AddTroubleShooterToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
+    }
+
+    foreach class'X2AbilitySet_Psi'.default.LetItGo_AllowedAbilities(AbilityName)
+    {
+        AddLetItGoToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
 
     foreach default.MarauderElite_AllowedAbilities(AbilityName)
@@ -163,10 +170,25 @@ static event OnPostTemplatesCreated()
         PatchTemplarShield(AbilityTemplateManager.FindAbilityTemplate('IRI_TemplarShield'));
     }
 
+    PatchGuardForAutoGuard(AbilityTemplateManager.FindAbilityTemplate('IRI_Rider_Guard'));
+
     AddEffectsToGrenades();
+    AddModifiersToGrenadeAbilities();
 
     GetLocalizedAbilityLists();
+
+    // ChainVolt(AbilityTemplateManager.FindAbilityTemplate('Volt'));
 }
+
+// static function ChainVolt(X2AbilityTemplate Template)
+// {
+//     if (Template != none)
+//     {
+//         Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_Fork';
+//         Template.TargetingMethod = class'X2TargetingMethod_Chain';
+//         Template.ActionFireClass = class'X2Action_Fire_Fork_Volt';
+//     }
+// }
 
 static function bool CanAddItemToInventory_CH_Improved(
     out int bCanAddItem,
@@ -259,11 +281,18 @@ static function GetLocalizedAbilityLists()
             else
                 OutString = default.LocalizedAbilityNames[Index];
 
+                
+            if (class'X2Effect_ControlledDetonation'.default.ControlledDetonation_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
+                default.ControlledDetonation_Abilities.AddItem(OutString);
+
             if (default.RapidDumping_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.RapidDumping_Abilities.AddItem(OutString);
 
             if (class'X2AbilitySet_Merist'.default.FutureWarfare_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.FutureWarfare_Abilities.AddItem(OutString);
+
+            if (class'X2AbilitySet_Psi'.default.LetItGo_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
+                default.LetItGo_Abilities.AddItem(OutString);
 
             if (default.MarauderElite_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.MarauderElite_Abilities.AddItem(OutString);
@@ -278,9 +307,10 @@ static function GetLocalizedAbilityLists()
                 default.Serpentine_Abilities.AddItem(OutString);
         }
     }
-
+    default.ControlledDetonation_Abilities.Sort(SortAbilities);
     default.RapidDumping_Abilities.Sort(SortAbilities);
     default.FutureWarfare_Abilities.Sort(SortAbilities);
+    default.LetItGo_Abilities.Sort(SortAbilities);
     default.MarauderElite_Abilities.Sort(SortAbilities);
     default.Reposition_Abilities.Sort(SortAbilities);
     default.TraverseFirePlus_Abilities.Sort(SortAbilities);
@@ -321,7 +351,7 @@ static function AddBotnetEffectToAbility(X2AbilityTemplate Template)
     EffectCondition = new class'X2Condition_UnitEffectsOnSource';
     EffectCondition.AddRequireEffect('M31_Botnet_Valid', 'AA_MissingRequiredEffect');
 
-    HackDefenseEffect = class'M31_AbilityHelpers'.static.CreateHackDefenseReductionStatusEffect(
+    HackDefenseEffect = class'M31_Helpers'.static.CreateHackDefenseReductionStatusEffect(
         'M31_Botnet_HackEffect',
         `GetConfigInt("M31_Botnet_HackDefenseChange") * -1,
         UnitPropertyCondition);
@@ -362,7 +392,7 @@ static function AddImparingAttackToAbility(X2AbilityTemplate Template)
         {
             i++;
         }
-        Template.AbilityTargetEffects.InsertItem(i, class'M31_AbilityHelpers'.static.CreateImpairingEffect());
+        Template.AbilityTargetEffects.InsertItem(i, class'M31_Helpers'.static.CreateImpairingEffect());
     }
 }
 
@@ -428,7 +458,7 @@ static function AddImprovedSuppressionToAbility(X2AbilityTemplate Template)
 
         if (`GetConfigBool("M31_ImprovedSuppression_bApplyToRobotic"))
         {
-            RobotocDisorientedEffect = class'M31_AbilityHelpers'.static.CreateRoboticDisorientedStatusEffect();
+            RobotocDisorientedEffect = class'M31_Helpers'.static.CreateRoboticDisorientedStatusEffect();
             RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
             Template.AddTargetEffect(RobotocDisorientedEffect);
         }
@@ -449,7 +479,7 @@ static function AddTroubleShooterToAbility(X2AbilityTemplate Template)
     AbilityCondition = new class'X2Condition_AbilityProperty';
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_TroubleShooter');
 
-    HackDefenseEffect = class'M31_AbilityHelpers'.static.CreateHackDefenseReductionStatusEffect(
+    HackDefenseEffect = class'M31_Helpers'.static.CreateHackDefenseReductionStatusEffect(
         'M31_TroubleShooter_HackEffect',
         `GetConfigInt("M31_TroubleShooter_HackDefenseReduction") * -1,
         UnitPropertyCondition);
@@ -462,10 +492,28 @@ static function AddTroubleShooterToAbility(X2AbilityTemplate Template)
     Template.AddTargetEffect(HackDefenseEffect);
 }
 
+static function AddLetItGoToAbility(X2AbilityTemplate Template)
+{
+    local X2AbilityCost                 AbilityCost;
+    local X2AbilityCost_ActionPoints    ActionPointCost;
+
+    if (Template != none)
+    {
+        foreach Template.AbilityCosts(AbilityCost)
+        {
+            ActionPointCost = X2AbilityCost_ActionPoints(AbilityCost);
+            if (ActionPointCost != none)
+            {
+                ActionPointCost.DoNotConsumeAllSoldierAbilities.AddItem('M31_LetItGo');
+            }
+        }
+    }
+}
+
 static function AddMarauderEliteToAbility(X2AbilityTemplate Template)
 {
-    local X2AbilityCost                     AbilityCost;
-    local X2AbilityCost_ActionPoints        ActionPointCost;
+    local X2AbilityCost                 AbilityCost;
+    local X2AbilityCost_ActionPoints    ActionPointCost;
 
     if (Template != none)
     {
@@ -660,6 +708,21 @@ static function PatchTemplarShield(X2AbilityTemplate Template)
     }
 }
 
+static function PatchGuardForAutoGuard(X2AbilityTemplate Template)
+{
+    local X2AbilityTrigger_EventListener Trigger;
+
+    if (Template != none)
+    {
+        Trigger = new class'X2AbilityTrigger_EventListener';
+        Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
+        Trigger.ListenerData.EventID = 'PlayerTurnBegun';
+        Trigger.ListenerData.Filter = eFilter_Player;
+        Trigger.ListenerData.EventFn = class'X2AbilitySet_Merist'.static.AbilityTriggerEventListener_AutoGuard;
+        Template.AbilityTriggers.AddItem(Trigger);
+    }
+}
+
 static function AddEffectsToGrenades()
 {
     local X2ItemTemplateManager         ItemManager;
@@ -706,7 +769,7 @@ static function AddEffectsToGrenades()
     DisorientedEffect.bRemoveWhenSourceDies = false;
     DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
 
-    RobotocDisorientedEffect = class'M31_AbilityHelpers'.static.CreateRoboticDisorientedStatusEffect();
+    RobotocDisorientedEffect = class'M31_Helpers'.static.CreateRoboticDisorientedStatusEffect();
     RobotocDisorientedEffect.bRemoveWhenSourceDies = false;
     RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
 
@@ -736,11 +799,15 @@ static function AddEffectsToGrenades()
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(RobotocDisorientedEffect);
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(StunnedEffect);
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(StunnedEffect);
-                    GrenadeTemplate.ThrownGrenadeEffects.AddItem(class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
-                    GrenadeTemplate.LaunchedGrenadeEffects.AddItem(class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
 
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(class'X2Effect_VileMix'.static.HarrierVileMixEffect());
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(class'X2Effect_VileMix'.static.HarrierVileMixEffect());
+
+                    if (default.EMPGrenades.Find(GrenadeTemplate.DataName) == INDEX_NONE)
+                    {
+                        GrenadeTemplate.ThrownGrenadeEffects.AddItem(class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
+                        GrenadeTemplate.LaunchedGrenadeEffects.AddItem(class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
+                    }
                 }
                 if (default.SmokeGrenades.Find(GrenadeTemplate.DataName) != INDEX_NONE)
                 {
@@ -822,6 +889,26 @@ static function AddEffectsToEMPGrenade(X2GrenadeTemplate GrenadeTemplate)
     }
 }
 
+static function AddModifiersToGrenadeAbilities()
+{
+    local X2AbilityTemplateManager      AbilityTemplateManager;
+    local X2AbilityTemplate             AbilityTemplate;
+    local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
+    local name                          AbilityName;
+
+    AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+
+    foreach default.GrenadeAbilities(AbilityName)
+    {
+        AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityName);
+        RadiusMultiTarget = X2AbilityMultiTarget_Radius(AbilityTemplate.AbilityMultiTargetStyle);
+        if (RadiusMultiTarget != none)
+        {
+            RadiusMultiTarget.AddAbilityBonusRadius('M31_Warbringer', `GetConfigFloat("M31_Warbringer_RadiusBonus"));
+        }
+    }
+}
+
 
 //======================================================================================
 //                            HIGHLANDER DLC HOOKS
@@ -873,6 +960,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 
         case "M31_FreeAction":
             OutString = ColorText_Green(`GetLocalizedString(InString));
+            return true;
+
+        case "M31_AutoFont":
+            OutString = ColorText_Auto("", true, UnitState);
             return true;
 
         case "M31_EffectTurnsTicked":
@@ -1281,21 +1372,22 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 
         case "M31_Shiver2_PrcChance":
         case "M31_HypothermiaRounds_PrcChance":
+        case "M31_ShiverCrit2_PrcChance":
             OutString = GetOutStringWithRank(`GetConfigInt(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState, "%", true, 0, 100);
             return true;
 
         case "M31_PA_Poison_DamagePerTurn":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_AbilityHelpers'.static.CreatePoisonedEffect(), true);
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreatePoisonedEffect(), true);
             return true;
         case "M31_PA_Poison_DamagePerTurn_Debuff":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_AbilityHelpers'.static.CreatePoisonedEffect());
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreatePoisonedEffect());
             return true;
 
         case "M31_PA_EnhancedPoison_DamagePerTurn":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_AbilityHelpers'.static.CreateEnhancedPoisonedEffect(), true);
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreateEnhancedPoisonedEffect(), true);
             return true;
         case "M31_PA_EnhancedPoison_DamagePerTurn_Debuff":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_AbilityHelpers'.static.CreateEnhancedPoisonedEffect());
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreateEnhancedPoisonedEffect());
             return true;
 
         case "M31_PA_Lockjaw_CritDamage":
@@ -1357,6 +1449,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
     if (GetChosenArsenalOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
         return true;
 
+    if (GetPsiOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
     return false;
 }
 
@@ -1364,12 +1459,20 @@ static function bool GetLocalizedListOutStrings(string InString, out string OutS
 {
     switch (InString)
     {
+        case "M31_ControlledDetonation_Abilities":
+            OutString = GetStringFromLocalizedList(default.ControlledDetonation_Abilities);
+            return true;
+
         case "M31_RapidDumping_Abilities":
             OutString = GetStringFromLocalizedList(default.RapidDumping_Abilities);
             return true;
 
         case "M31_FutureWarfare_Abilities":
             OutString = GetStringFromLocalizedList(default.FutureWarfare_Abilities);
+            return true;
+
+        case "M31_LetItGo_Abilities":
+            OutString = GetStringFromLocalizedList(default.LetItGo_Abilities);
             return true;
 
         case "M31_MarauderElite_Abilities":
@@ -1632,6 +1735,7 @@ static function bool GetWinterSentinelOutStrings(string InString, out string Out
         case "M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable":
         case "M31_PA_WS_DragonSlayer_DamageBonusPrc_Large":
         case "M31_PA_WS_GlacialArmor_DamageReduction_Prc":
+        case "M31_PA_WS_Bolt_Maelstrom_MaxDamageBonus":
 
         case "M31_PA_WS_Bolt_Crit_BasePrcCritDamageBonus_Ballista":
         case "M31_PA_WS_Bolt_Fire_BurnChance_Ballista":
@@ -1701,6 +1805,63 @@ static function bool GetChosenArsenalOutStrings(string InString, out string OutS
         case "M31_CA_ChaosDriver_PenaltyPerCharge":
         case "M31_CA_CollectBounty_DamagePrc":
             OutString = ColorText_Gold(`GetConfigInt(InString) $ "%");
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetPsiOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit UnitState;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    switch (InString)
+    {
+        case "M31_PsionicReaper_DamagePsiFactor":
+        case "M31_PsionicReaper_PiercePsiFactor":
+        case "M31_PA_PsionicReaper_DamagePsiFactor":
+        case "M31_PA_PsionicReaper_PiercePsiFactor":
+        case "M31_Psi_NullWard_Radius":
+        case "M31_Psi_NullWard_ShieldPriority":
+        case "M31_Psi_NullWard_Duration":
+        case "M31_Psi_GreatestChampion_CooldownReduction":
+        case "M31_Psi_GreatestChampion_DefensePenalty":
+        case "M31_Psi_Blend_Duration":
+        case "M31_Psi_Cryotherapy_Range":
+        case "M31_Psi_Cryotherapy_Charges":
+        case "M31_Psi_MassCryotherapy_Radius":
+        case "M31_Psi_MassCryotherapy_Charges":
+        case "M31_Psi_MassCryotherapy_ChargeCost":
+        case "M31_Psi_SummonSpectralZombie_Charges":
+        case "M31_Psi_SummonSpectralCreature_Charges":
+        case "M31_Psi_SummonSpectralLancer_Charges":
+        case "M31_Psi_SummonRange":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_Psi_Compulsion_BaseChance":
+        case "M31_Psi_GreatestChampion_DamageBonusPrc":
+        case "M31_Psi_GreatestChampion_DRBonusPrc":
+            OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+            return true;
+
+        case "M31_Psi_Meltdown_bApplyRadiation":
+        case "M31_Psi_Blend_bRemoveWhenSourceImpaired":
+        case "M31_Psi_Stealth_bRemoveWhenSourceImpaired":
+        case "M31_Psi_Cryotherapy_bSharedCooldown":
+        case "M31_Psi_Cryotherapy_bStabilize":
+        case "M31_Psi_MassCryotherapy_bApplyToSelf":
+        case "M31_Psi_MassCryotherapy_bStabilize":
+            OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
+            return true;
+
+        case "M31_Psi_NullWard_ShieldAmount":
+        case "M31_Psi_Cryotherapy_HealAmount":
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState,, true);
             return true;
 
         default:

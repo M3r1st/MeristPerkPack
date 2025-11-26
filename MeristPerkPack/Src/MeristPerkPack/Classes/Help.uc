@@ -74,12 +74,12 @@ class'X2CharacterTemplateManager'.default.SkirmisherInterruptActionPoint
 //---------------------------------------------------------------------------------------
 /*
 
-'eAbilitySource_Perk'		: yellow
-'eAbilitySource_Debuff'		: red
-'eAbilitySource_Psionic'	: purple
-'eAbilitySource_Commander'	: green 
-'eAbilitySource_Item'		: blue (cyan)
-'eAbilitySource_Standard'	: blue (cyan)
+'eAbilitySource_Perk'       : yellow
+'eAbilitySource_Debuff'     : red
+'eAbilitySource_Psionic'    : purple
+'eAbilitySource_Commander'  : green 
+'eAbilitySource_Item'       : blue (cyan)
+'eAbilitySource_Standard'   : blue (cyan)
 
 */
 //=======================================================================================
@@ -259,7 +259,7 @@ static final function int GetTileDistanceBetweenTiles(const TTile TileA, const T
 // Rank = 0 for Squaddie
 // Note: ModifyEarnedSoldierAbilities DLC hook is usually better for non-temporary ability granting.
 static function GiveSoldierAbilityToUnit(const name AbilityName, const int Rank, XComGameState_Unit UnitState, XComGameState NewGameState)
-{	
+{
     local SoldierClassAbilityType AbilityStruct;
     local int Index;
 
@@ -273,11 +273,11 @@ static function GiveSoldierAbilityToUnit(const name AbilityName, const int Rank,
 
 static final function array<XComGameState_Unit> GetSquadUnitStates()
 {
-    local XComGameState_HeadquartersXCom	XComHQ;
-    local StateObjectReference				SquadUnitRef;
-    local array<XComGameState_Unit>			UnitStates;
-    local XComGameState_Unit				UnitState;
-    local XComGameStateHistory				History;
+    local XComGameState_HeadquartersXCom    XComHQ;
+    local StateObjectReference              SquadUnitRef;
+    local array<XComGameState_Unit>         UnitStates;
+    local XComGameState_Unit                UnitState;
+    local XComGameStateHistory              History;
 
     XComHQ = `XCOMHQ;
     History = `XCOMHISTORY;
@@ -321,13 +321,13 @@ static final function bool IsInStrategy()
 
 static final function bool ReallyIsInStrategy()
 {
-    return `HQGAME  != none && `HQPC != None && `HQPRES != none;
+    return `HQGAME  != none && `HQPC != none && `HQPRES != none;
 }
 
 static final function PlayStrategySoundEvent(string strKey, Actor InActor)
 {
-    local string	SoundEventPath;
-    local AkEvent	SoundEvent;
+    local string    SoundEventPath;
+    local AkEvent   SoundEvent;
 
     foreach class'XComStrategySoundManager'.default.SoundEventPaths(SoundEventPath)
     {
@@ -345,8 +345,8 @@ static final function PlayStrategySoundEvent(string strKey, Actor InActor)
 
 static final function int GetForceLevel()
 {
-    local XComGameStateHistory		History;
-    local XComGameState_BattleData	BattleData;
+    local XComGameStateHistory      History;
+    local XComGameState_BattleData  BattleData;
 
     History = `XCOMHISTORY;
     BattleData = XComGameState_BattleData(History.GetSingleGameStateObjectForClass(class'XComGameState_BattleData', true));
@@ -361,13 +361,13 @@ static final function int GetForceLevel()
 
 static final function AddItemToHQInventory(const name TemplateName)
 {
-    local XComGameState						NewGameState;
+    local XComGameState                     NewGameState;
     local XComGameState_HeadquartersXCom    XComHQ;
     local XComGameState_Item                ItemState;
     local X2ItemTemplate                    ItemTemplate;
-    local X2ItemTemplateManager				ItemMgr;
+    local X2ItemTemplateManager             ItemMgr;
 
-    ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();    
+    ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
 
     ItemTemplate = ItemMgr.FindItemTemplate(TemplateName);
 

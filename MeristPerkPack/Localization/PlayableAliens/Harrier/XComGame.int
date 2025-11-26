@@ -29,7 +29,7 @@ LocPromotionPopupText="<Bullet> Note that terrain effects left by these abilitie
 LocFriendlyName="Vile Mix"
 LocLongDescription="Your damage-over-time effects deal <Ability:M31_PA_HarrierVileMix_DOTDamageBonus> additional damage. Your grenades and Harrier Launcher attacks apply a stackable debuff that increases the damage the enemies take from damage-over-time effects by <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> for <Ability:M31_PA_HarrierVileMix_Duration> turn(s)."
 LocHelpText="Your damage-over-time effects deal <Ability:M31_PA_HarrierVileMix_DOTDamageBonus> additional damage. Your grenades and Harrier Launcher attacks apply a stackable debuff that increases the damage the enemies take from damage-over-time effects by <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> for <Ability:M31_PA_HarrierVileMix_Duration> turn(s)."
-LocPromotionPopupText="<Bullet> The debuff will increase the damage from damage-over-time effects from all sources."
+LocPromotionPopupText="<Bullet> The debuff will increase the damage from damage-over-time effects from all sources.<br><Bullet> The debuff doesn't stack."
 
 [M31_PA_HarrierBlasterMaster X2AbilityTemplate]
 LocFriendlyName="Blaster Master"

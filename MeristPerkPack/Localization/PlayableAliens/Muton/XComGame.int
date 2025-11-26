@@ -123,3 +123,14 @@ LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> 
 [M31_PA_StayFrosty_Attack X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"
 LocFlyOverText="Stay Frosty"
+
+[M31_PA_ChargeAndShoot X2AbilityTemplate]
+LocFriendlyName="Follow Up"
+LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName>. Follow up with a <Ability:WeaponName> shot if they are still alive. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Attack any enemy within movement range with your <Ability:SecondaryWeaponName>. Follow up with a <Ability:WeaponName> shot if they are still alive."
+LocPromotionPopupText="Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText="Follow Up"
+
+[M31_PA_ChargeAndShoot2 X2AbilityTemplate]
+LocFriendlyName="Follow Up"
+LocFlyOverText="Follow Up"

@@ -23,7 +23,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
         {
             AllowedActions.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
             AllowedActions.AddItem(class'X2CharacterTemplateManager'.default.RunAndGunActionPoint);
-            ActionPoints = class'M31_AbilityHelpers'.static.GetActionPoints(SourceUnit, AllowedActions);
+            ActionPoints = class'M31_Helpers'.static.GetActionPoints(SourceUnit, AllowedActions);
 
             CritDamageModifier = (ActionPoints * `GetConfigInt("M31_Pinpoint_CritDamagePerAction") + `GetConfigInt("M31_Pinpoint_CritDamageBase")) / 100.0f;
             return CurrentDamage * CritDamageModifier;
@@ -56,7 +56,7 @@ function GetToHitModifiers(
     {
         AllowedActions.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
         AllowedActions.AddItem(class'X2CharacterTemplateManager'.default.RunAndGunActionPoint);
-        ActionPoints = class'M31_AbilityHelpers'.static.GetActionPoints(Attacker, AllowedActions);
+        ActionPoints = class'M31_Helpers'.static.GetActionPoints(Attacker, AllowedActions);
 
         HitChanceBonus = ActionPoints * `GetConfigInt("M31_Pinpoint_AimPerAction") + `GetConfigInt("M31_Pinpoint_AimBase");
         CritChanceBonus = ActionPoints * `GetConfigInt("M31_Pinpoint_CritPerAction") + `GetConfigInt("M31_Pinpoint_CritBase");

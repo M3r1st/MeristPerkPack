@@ -13,23 +13,30 @@ var name AltUnitToSpawnName;
 var name AltUnitToSpawnNameT2;
 var name AltUnitToSpawnNameT3;
 
-var int NumStartingPoint;
+var int NumStartingPoints;
+
+var privatewrite bool bLog;
 
 function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, StateObjectReference NewUnitRef, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     local XComGameState_Unit SpectralUnit;
     local EffectAppliedData NewEffectParams;
     local X2Effect SpectralArmyLinkEffect;
+    local int i;
 
     SpectralUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(NewUnitRef.ObjectID));
 
     if (SpectralUnit == none)
     {
-        `RedScreen("X2Effect_SummonUnit: spawned unit is missing: " $ SpectralUnit.ObjectID);
+        `LOG(GetFuncName() $ ": spawned unit is missing", default.bLog, self.Class.Name);
         return;
     }
 
-    SpectralUnit.ActionPoints.Length = NumStartingPoint;
+    SpectralUnit.ActionPoints.Length = 0;
+    for (i = 0; i < NumStartingPoints; i++)
+    {
+        SpectralUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
+    }
 
     //SpectralUnit.GhostSourceUnit = ApplyEffectParameters.SourceStateObjectRef;
     SpectralUnit.SetUnitFloatValue('TurnedIntoZombie', 1, eCleanup_BeginTactical);
@@ -49,9 +56,9 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 
     SpectralArmyLinkEffect = class'X2Effect'.static.GetX2Effect(NewEffectParams.EffectRef);
 
-    if (SpectralUnit == none)
+    if (SpectralArmyLinkEffect == none)
     {
-        `RedScreen("X2Effect_SpawnFrostZombies: Spectral Army Link Effect is missing.");
+        `LOG(GetFuncName() $ ": link effect is missing", default.bLog, self.Class.Name);
         return;
     }
 
@@ -112,6 +119,7 @@ function vector GetSpawnLocation(const out EffectAppliedData ApplyEffectParamete
 
     if (ApplyEffectParameters.AbilityInputContext.TargetLocations.Length == 0)
     {
+        `LOG(GetFuncName() $ ": attempting to create without a target location!", default.bLog, self.Class.Name);
         return vect(0,0,0);
     }
     
@@ -167,4 +175,5 @@ defaultproperties
 {
     bKnockbackAffectsSpawnLocation = false
     bAddToSourceGroup = true
+    bLog = true
 }

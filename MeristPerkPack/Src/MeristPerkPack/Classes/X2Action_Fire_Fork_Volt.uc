@@ -1,0 +1,6 @@
+class X2Action_Fire_Fork_Volt extends X2Action_Fire_Fork;
+
+defaultproperties
+{
+    AnimName = "HL_Volt"
+}

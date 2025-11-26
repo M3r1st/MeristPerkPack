@@ -1,4 +1,4 @@
-class M31_AbilityHelpers extends X2Ability;
+class M31_Helpers extends X2Ability;
 
 static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName, string IconImage, optional X2Effect Effect = none)
 {
@@ -7,11 +7,12 @@ static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName,
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
 
     Template.IconImage = IconImage;
-    Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Neutral;
 
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
@@ -27,19 +28,22 @@ static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName,
         Template.AddTargetEffect(Effect);
     }
 
-    Template.FrameAbilityCameraType = eCameraFraming_Never; 
+    Template.FrameAbilityCameraType = eCameraFraming_Never;
     Template.bSkipExitCoverWhenFiring = true;
     Template.bSkipFireAction = true;
     Template.bShowActivation = false;
     Template.bUsesFiringCamera = false;
 
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
+
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    // Template.BuildVisualizationFn = FollowUpShot_BuildVisualization;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.MergeVisualizationFn = FollowUpShot_MergeVisualization;
+
     Template.BuildInterruptGameStateFn = none;
+
     Template.bCrossClassEligible = false;
+
     return Template;
 }
 

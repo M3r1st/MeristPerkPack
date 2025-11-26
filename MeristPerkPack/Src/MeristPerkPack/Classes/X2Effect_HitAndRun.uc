@@ -41,7 +41,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     if (!ValidateSuperKill(SourceUnit))
         return false;
 
-    if (class'M31_AbilityHelpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
+    if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
         return false;
 
     SourceUnit.GetUnitValue(CounterName, UnitValue);

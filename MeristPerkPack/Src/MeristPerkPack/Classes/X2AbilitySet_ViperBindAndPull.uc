@@ -263,7 +263,7 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
     local X2Condition_Visibility                TargetVisibilityCondition;
     local X2Effect_Persistent                   BoundEffect;
     local X2Effect_ViperBindSustainedExtended   SustainedEffect;
-    local X2Effect_GrantActionPoints            ActionPointsEffect;
+    // local X2Effect_GrantActionPoints            ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage            PhysicalDamageEffect;
     local X2Effect_ApplyDirectionalWorldDamage  EnvironmentDamageEffect;
 
@@ -382,7 +382,7 @@ static function X2AbilityTemplate BindCrush(name DataName, optional bool bInputT
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitEffectsWithAbilitySource UnitEffectsCondition;
-    local X2Effect_GrantActionPoints        ActionPointsEffect;
+    // local X2Effect_GrantActionPoints        ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage        PhysicalDamageEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
@@ -548,7 +548,7 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
     local X2AbilityCost_ActionPoints            ActionPointCost;
     local X2Effect_Persistent                   BoundEffect;
     local X2Effect_ViperBindSustainedExtended   SustainedEffect;
-    local X2Effect_GrantActionPoints            ActionPointsEffect;
+    // local X2Effect_GrantActionPoints            ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage            PhysicalDamageEffect;
     local X2Effect_ApplyDirectionalWorldDamage  EnvironmentDamageEffect;
     local X2Condition_Visibility                TargetVisibilityCondition;
@@ -666,7 +666,7 @@ static function X2AbilityTemplate RushAndBindCrush(name DataName, optional bool 
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitEffectsWithAbilitySource UnitEffectsCondition;
-    local X2Effect_GrantActionPoints        ActionPointsEffect;
+    // local X2Effect_GrantActionPoints        ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage        PhysicalDamageEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
@@ -794,7 +794,7 @@ static function X2AbilityTemplate RushAndBindBindSentinel(name DataName, name Cr
     local X2Condition_Visibility                TargetVisibilityCondition;
     local X2Effect_Persistent                   BoundEffect;
     local X2Effect_ViperBindSustainedExtended   SustainedEffect;
-    local X2Effect_GrantActionPoints            ActionPointsEffect;
+    // local X2Effect_GrantActionPoints            ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage            PhysicalDamageEffect;
     local X2Effect_ApplyDirectionalWorldDamage  EnvironmentDamageEffect;
 
@@ -910,7 +910,7 @@ static function X2AbilityTemplate RushAndBindCrushSentinel(name DataName, option
 {
     local X2AbilityTemplate                 Template;
     local X2Condition_UnitEffectsWithAbilitySource UnitEffectsCondition;
-    local X2Effect_GrantActionPoints        ActionPointsEffect;
+    // local X2Effect_GrantActionPoints        ActionPointsEffect;
     local X2Effect_ApplyWeaponDamage        PhysicalDamageEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);

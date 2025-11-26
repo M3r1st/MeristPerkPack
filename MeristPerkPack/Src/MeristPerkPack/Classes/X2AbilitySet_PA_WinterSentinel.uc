@@ -76,7 +76,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(ThrillOfTheHunt());
         Templates.AddItem(ThrillOfTheHuntUpdate());
 
-    Templates.AddItem(class'M31_AbilityHelpers'.static.CreateAnimSetPassive('M31_PA_WS_AnimSets', "M31_PA_Vipers.Anims.AS_Sentinel"));
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_WS_AnimSets', "M31_PA_Vipers.Anims.AS_Sentinel"));
 
     Templates.AddItem(BallistaPassive());
     Templates.AddItem(BoltToHitBonus());
@@ -740,7 +740,7 @@ static function X2AbilityTemplate ChillingMistAttack()
 {
     local X2AbilityTemplate                 Template;
 
-    Template = class'M31_AbilityHelpers'.static.CreatePassiveWeaponEffectAttack(
+    Template = class'M31_Helpers'.static.CreatePassiveWeaponEffectAttack(
         'M31_PA_WS_ChillingMist_Attack',
         "img:///UILibrary_DLC2Images.UIPerk_freezingbreath",
         GetChillingMistHypothermiaEffect()
@@ -1042,6 +1042,7 @@ static function X2AbilityTemplate RebelYell()
     Template.AddShooterEffectExclusions();
 
     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
+    Template.ConcealmentRule = eConceal_Never;
 
     // Template.CustomFireAnim = 'HL_M31_Escape';
 
@@ -1650,11 +1651,11 @@ static function X2AbilityTemplate BoltStun()
 
     CrippleEffect = new class'X2Effect_PersistentStatChange';
     CrippleEffect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_PA_WS_Bolt_Stun_MobilityPenalty"));
-    CrippleEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration"), false, false, true, eGameRule_PlayerTurnBegin);
+    CrippleEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration"), false, false, false, eGameRule_PlayerTurnBegin);
     CrippleEffect.TargetConditions.AddItem(GetNoBallistaCondition());
     Template.AddTargetEffect(CrippleEffect);
 
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration"), `GetConfigInt("M31_PA_WS_Bolt_Stun_BleedDamage"));
     BleedingEffect.TargetConditions.AddItem(GetNoBallistaCondition());
     Template.AddTargetEffect(BleedingEffect);
@@ -1672,11 +1673,11 @@ static function X2AbilityTemplate BoltStun()
 
     CrippleEffect = new class'X2Effect_PersistentStatChange';
     CrippleEffect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_PA_WS_Bolt_Stun_MobilityPenalty_Ballista"));
-    CrippleEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration_Ballista"), false, false, true, eGameRule_PlayerTurnBegin);
+    CrippleEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration_Ballista"), false, false, false, eGameRule_PlayerTurnBegin);
     CrippleEffect.TargetConditions.AddItem(GetBallistaCondition());
     Template.AddTargetEffect(CrippleEffect);
 
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration_Ballista"), `GetConfigInt("M31_PA_WS_Bolt_Stun_BleedDamage_Ballista"));
     BleedingEffect.TargetConditions.AddItem(GetBallistaCondition());
     Template.AddTargetEffect(BleedingEffect);
@@ -1725,7 +1726,7 @@ static function X2AbilityTemplate BoltStunLTTAttack()
     CrippleEffect.TargetConditions.AddItem(GetNoBallistaCondition());
     Template.AddTargetEffect(CrippleEffect);
 
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration"), `GetConfigInt("M31_PA_WS_Bolt_Stun_BleedDamage"));
     BleedingEffect.TargetConditions.AddItem(GetNoBallistaCondition());
     Template.AddTargetEffect(BleedingEffect);
@@ -1747,7 +1748,7 @@ static function X2AbilityTemplate BoltStunLTTAttack()
     CrippleEffect.TargetConditions.AddItem(GetBallistaCondition());
     Template.AddTargetEffect(CrippleEffect);
 
-    BleedingEffect = class'M31_AbilityHelpers'.static.CreateBleedingStatusEffect(
+    BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_WS_Bolt_Stun_DebuffDuration_Ballista"), `GetConfigInt("M31_PA_WS_Bolt_Stun_BleedDamage_Ballista"));
     BleedingEffect.TargetConditions.AddItem(GetBallistaCondition());
     Template.AddTargetEffect(BleedingEffect);
@@ -2091,7 +2092,7 @@ static function X2AbilityTemplate BoltRad()
     // Template.AddTargetEffect(new class'X2Effect_WS_ApplyBoltDamage');
     Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
-    RadiationEffects = class'M31_AbilityHelpers'.static.CreateRadiationEffects();
+    RadiationEffects = class'M31_Helpers'.static.CreateRadiationEffects();
     foreach RadiationEffects(Effect)
     {
         Template.AddTargetEffect(Effect);
@@ -2135,7 +2136,7 @@ static function X2AbilityTemplate BoltRadLTTAttack()
     // Template.AddTargetEffect(new class'X2Effect_WS_ApplyBoltDamage');
     Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
-    RadiationEffects = class'M31_AbilityHelpers'.static.CreateRadiationEffects();
+    RadiationEffects = class'M31_Helpers'.static.CreateRadiationEffects();
     foreach RadiationEffects(Effect)
     {
         Template.AddTargetEffect(Effect);

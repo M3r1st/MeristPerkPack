@@ -6,8 +6,6 @@
 class X2Effect_ModifyRangePenalties extends X2Effect_Persistent;
 
 var int RangeOffsetPrc;
-var int MinOffset;
-var int MaxOffset;
 var bool bShowNamedModifier;
 
 var int BaseRange;
@@ -63,10 +61,8 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
         }
     
         OffsetValue = int((OffsetRangeAccuracy - CurrentRangeAccuracy) * RangeOffsetPrc / 100.0);
-        if (MinOffset < MaxOffset)
-            OffsetValue = Clamp(OffsetValue, MinOffset, MaxOffset);
 
-        if (OffsetValue != 0)
+        if (OffsetValue > 0)
         {
             ShotInfo.ModType = eHit_Success;
             if (bShowNamedModifier)
@@ -84,6 +80,4 @@ defaultproperties
     DuplicateResponse = eDupe_Ignore
     bMatchSourceWeapon = true
     RangeOffsetPrc = 100
-    MinOffset = 0
-    MaxOffset = 0
 }

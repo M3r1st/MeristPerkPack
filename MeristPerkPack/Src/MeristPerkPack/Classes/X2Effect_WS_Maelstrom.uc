@@ -79,13 +79,13 @@ function float GetPreDefaultAttackingDamageModifier_CH(
 
     FinalOverflow = MaelstromEffectState.GetFinalOverflow(AbilityTemplate, AbilityState, XComGameState_Unit(Target));
 
-    `LOG("FinalOverflow = " $ FinalOverflow);
-    `LOG("CurrentDamage = " $ CurrentDamage);
+    if (`GetConfigInt("M31_PA_WS_Bolt_Maelstrom_MaxDamageBonus") > 0)
+    {
+        FinalOverflow = Min(FinalOverflow, `GetConfigInt("M31_PA_WS_Bolt_Maelstrom_MaxDamageBonus"));
+    }
 
     DamageBonus = CurrentDamage * (1.0f * FinalOverflow / 100);
     
-    `LOG("DamageBonus = " $ DamageBonus);
-
     return DamageBonus;
 }
 

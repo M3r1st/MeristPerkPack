@@ -342,7 +342,7 @@ static function X2AbilityTemplate HarrierRadGrenade()
     Cooldown.AddCooldownModifier('M31_PA_HarrierEndOfGeneva', -1 * `GetConfigInt("M31_PA_HarrierRadGrenade_CooldownReductionEOG"));
     Template.AbilityCooldown = Cooldown;
 
-    RadiationEffects = class'M31_AbilityHelpers'.static.CreateRadiationEffects();
+    RadiationEffects = class'M31_Helpers'.static.CreateRadiationEffects();
     foreach RadiationEffects(Effect)
     {
         Template.AddTargetEffect(Effect);

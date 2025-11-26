@@ -1,0 +1,121 @@
+[M31_Psi_Meltdown X2AbilityTemplate]
+LocFriendlyName="Meltdown"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+LocFlyOverText="Meltdown"
+
+[M31_PsionicReaper X2AbilityTemplate]
+LocFriendlyName="Resonance"
+LocLongDescription="This weapon's attacks gain +<Ability:M31_AutoFont>1</font> damage and pierce an additional point of armor for every <Ability:M31_PsionicReaper_DamagePsiFactor> psi offense the soldier has."
+LocHelpText="This weapon's attacks gain +<Ability:M31_AutoFont>1</font> damage and pierce an additional point of armor for every <Ability:M31_PsionicReaper_DamagePsiFactor> psi offense the soldier has."
+LocPromotionPopupText=""
+LocFlyOverText="Resonance"
+
+[M31_PA_PsionicReaper X2AbilityTemplate]
+LocFriendlyName="Resonance"
+LocLongDescription="This weapon's attacks gain +<Ability:M31_AutoFont>1</font> damage and pierce an additional point of armor for every <Ability:M31_PA_PsionicReaper_DamagePsiFactor> psi offense the soldier has."
+LocHelpText="This weapon's attacks gain +<Ability:M31_AutoFont>1</font> damage and pierce an additional point of armor for every <Ability:M31_PA_PsionicReaper_DamagePsiFactor> psi offense the soldier has."
+LocPromotionPopupText=""
+LocFlyOverText="Resonance"
+
+[M31_Psi_FrostChainLightning X2AbilityTemplate]
+LocFriendlyName=""
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+LocFlyOverText=""
+
+[M31_Psi_NullWard X2AbilityTemplate]
+LocFriendlyName="Null Ward"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+LocFlyOverText="Null Ward"
+
+[M31_ShadowPhase X2AbilityTemplate]
+LocFriendlyName=""
+LocLongDescription="The <Ability:ClassName> does not trigger overwatch or reaction fire and can pass through obstacles freely."
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_ShadowPhaseFortress X2AbilityTemplate]
+LocFriendlyName=""
+LocLongDescription="The <Ability:ClassName> gains <font color='#0bff9b'>Fortress</font>, does not trigger overwatch or reaction fire and can pass through obstacles freely."
+LocHelpText="The <Ability:ClassName> gains <font color='#0bff9b'>Fortress</font>, does not trigger overwatch or reaction fire and can pass through obstacles freely."
+LocPromotionPopupText=""
+
+[M31_Psi_Compulsion X2AbilityTemplate]
+LocFriendlyName="Compulsion"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+LocFlyOverText="Compulsion"
+
+[M31_Psi_GreatestChampion X2AbilityTemplate]
+LocFriendlyName="Commander's Greatest Champion"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_Psi_Stealth X2AbilityTemplate]
+LocFriendlyName=""
+LocLongDescription="Conceal an ally. Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Concealment is lost if the <Ability:ClassName> becomes impaired: <Ability:M31_Psi_Stealth_bRemoveWhenSourceImpaired>.<br><Bullet> Costs a single action and ends the turn.<br><Bullet> Has <Ability:M31_SelfCharges> charge(s) per mission.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText=""
+
+[M31_Psi_Blend X2AbilityTemplate]
+LocFriendlyName="Obscure"
+LocLongDescription="Conceal an ally for <Ability:M31_Psi_Blend_Duration> turn(s). Has a <Ability:M31_SelfCooldown> turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Conceal an ally for <Ability:M31_Psi_Blend_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> Concealment is lost if the <Ability:ClassName> becomes impaired: <Ability:M31_Psi_Blend_bRemoveWhenSourceImpaired>.<br><Bullet> Costs a single action.<br><Bullet> Doesn't end the turn.<br><Bullet> Has <Ability:M31_SelfCharges> charge(s) per mission.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText="Obscure"
+
+[M31_Psi_Cryotherapy X2AbilityTemplate]
+LocFriendlyName="Cryotherapy"
+LocLongDescription="Heal an organic ally for <Ability:M31_Psi_Cryotherapy_HealAmount> HP. Removes burning and bitterfrost from the target."
+LocHelpText="Heal an ally for <Ability:M31_Psi_Cryotherapy_HealAmount> HP."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_Psi_Cryotherapy_Range> tile range.<br><Bullet> Costs a single action.<br><Bullet> Doesn't end the turn.<br><Bullet> Has <Ability:M31_SelfCharges> charge(s) per mission. Charges are shared with <font color='#0bff9b'>Mass Cryotherapy</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown. The cooldown is shared with <font color='#0bff9b'>Mass Cryotherapy</font>.<br><Bullet> Can stabilize: <Ability:M31_Psi_Cryotherapy_bStabilize>."
+LocFlyOverText="Cryotherapy"
+
+[M31_Psi_MassCryotherapy X2AbilityTemplate]
+LocFriendlyName="Mass Cryotherapy"
+LocLongDescription="Heal all organic allies in <Ability:M31_Psi_MassCryotherapy_Radius> tile radius around the <Ability:ClassName> for <Ability:M31_Psi_Cryotherapy_HealAmount> HP. Removes burning and bitterfrost from the targets."
+LocHelpText="Heal all allies in <Ability:M31_Psi_MassCryotherapy_Radius> tile radius around the <Ability:ClassName>."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_Psi_MassCryotherapy_Radius> tile radius.<br><Bullet> Costs a single action and ends the turn.<br><Bullet> Requires <Ability:M31_Psi_MassCryotherapy_ChargeCost> charge(s).<br><Bullet> Has <Ability:M31_SelfCharges> charge(s) per mission. Charges are shared with <font color='#0bff9b'>Cryotherapy</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown. The cooldown is shared with <font color='#0bff9b'>Cryotherapy</font>.<br><Bullet> Applies to the caster: <Ability:M31_Psi_MassCryotherapy_bApplyToSelf>.<br><Bullet> Can stabilize: <Ability:M31_Psi_MassCryotherapy_bStabilize>."
+LocFlyOverText="Mass Cryotherapy"
+
+[M31_LetItGo X2AbilityTemplate]
+LocFriendlyName="Let It Go"
+LocLongDescription="Many frost-related abilities are no longer turn-ending.<br><font color='#909497'>\"The snow glows white on the mountain tonight...\"</font>"
+LocHelpText="Many frost-related abilities are no longer turn-ending."
+LocPromotionPopupText="<Bullet> Applies to <Ability:M31_LetItGo_Abilities>."
+LocFlyOverText="Let It Go"
+
+[M31_Psi_SummonSpectralZombie X2AbilityTemplate]
+LocFriendlyName="Summon Spectral Zombie"
+LocLongDescription="Summon a spectral zombie on the selected tile."
+LocHelpText="Summon a Spectral Zombie."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText="Summon Spectral Zombie"
+
+[M31_Psi_SummonSpectralLancer X2AbilityTemplate]
+LocFriendlyName="Summon Spectral Lancer"
+LocLongDescription="Summon a Spectral Lancer on the selected tile."
+LocHelpText="Summon a spectral lancer."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText="Summon Spectral Lancer"
+
+[M31_Psi_SummonSpectralCreature X2AbilityTemplate]
+LocFriendlyName="Summon Spectral Creature"
+LocLongDescription="Summon a Spectral Creature on the selected tile."
+LocHelpText="Summon a Spectral Creature."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocFlyOverText="Summon Spectral Creature"
+
+[M31_Psi_StrongerSpectres X2AbilityTemplate]
+LocFriendlyName="Spiritcaller"
+LocLongDescription="The spectres summoned by the <Ability:ClassName> gain additional stats and abilities."
+LocHelpText="The spectres summoned by the <Ability:ClassName> gain additional stats and abilities."
+LocPromotionPopupText="<Bullet> Incrases the HP of all specters by 2.<br><Bullet> Spectral Zombies gain +2 damage and the ability to perform a dashing melee attack.<br><Bullet> Spectral Lancers +15 aim, +25 critical chance, +2 critical damage and Whirlwind.<br><Bullet> Spectral Creature gains +3 mobility and the ability to perform a non-turn-ending melee attack against any enemy in a blue movement range."
