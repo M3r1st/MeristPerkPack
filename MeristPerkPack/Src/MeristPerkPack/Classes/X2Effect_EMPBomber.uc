@@ -21,7 +21,6 @@ static function EventListenerReturn OnKilledByExplosion(Object EventData, Object
     local XComGameState_Ability         AbilityState;
     local XComGameState_Item            SourceWeapon;
     local X2WeaponTemplate              WeaponTemplate;
-    local bool                          bIsGrenade;
     local bool                          bIsEMPGrenade;
 
     Tuple = XComLWTuple(EventData);

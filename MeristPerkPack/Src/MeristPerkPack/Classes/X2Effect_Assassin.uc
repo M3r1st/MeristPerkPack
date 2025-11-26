@@ -13,6 +13,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', OnRetainConcealmentOnActivation, ELD_Immediate,,,, EffectObj);
 }
+
 static function EventListenerReturn OnRetainConcealmentOnActivation(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XComLWTuple                   Tuple;

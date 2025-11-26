@@ -52,8 +52,22 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     AddUtilityItem(NewUnit, ItemTemplate, NewGameState, NewEffectState);
 }
 
+static function X2Effect_AddGrenade AddGrenadeEffect(name ItemName, optional bool bCanUpgrade = true, optional bool bSkipWeight = true)
+{
+    local X2Effect_AddGrenade Effect;
+
+    Effect = new class'X2Effect_AddGrenade';
+    Effect.DataName = ItemName;
+    Effect.bAllowUpgrades = bCanUpgrade;
+    if (bSkipWeight)
+        Effect.SkipAbilities.AddItem('SmallItemWeight');
+    Effect.BuildPersistentEffect(1, true, false);
+    
+    return Effect;
+}
+
 defaultproperties
 {
-    EffectName = M31_AddGrenadeEffect
+    EffectName = M31_AddGrenade
     bAllowUpgrades = true;
 }

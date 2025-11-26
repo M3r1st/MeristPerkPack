@@ -926,20 +926,13 @@ static function X2AbilityTemplate EMPBomber()
 {
     local X2AbilityTemplate     Template;
     local X2Effect_EMPBomber    NeedleEffect;
-    local X2Effect_AddGrenade   Effect;
 
     Template = Passive('M31_EMPBomber', "img:///UILibrary_MeristPerkIcons.UIPerk_EMPPlus", false, true);
     
     NeedleEffect = new class'X2Effect_EMPBomber';
     NeedleEffect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'EMPGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+    Template.AddTargetEffect(NeedleEffect);
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('EMPGrenade'));
 
     return Template;
 }
@@ -1324,65 +1317,14 @@ static function EventListenerReturn AbilityTriggerEventListener_FutureWarfare(Ob
 
 static function X2AbilityTemplate GenevaSuggestion()
 {
-    local X2AbilityTemplate     Template;
-    local X2Effect_AddGrenade   Effect;
-    // local X2Condition_ValidWeapon   GrenadeLauncherCondition;
-    // local X2Condition_ValidWeapon   RocketLauncherCondition;
-
+    local X2AbilityTemplate Template;
+    
     Template = Passive('M31_GenevaSuggestion', "img:///KetarosPkg_Abilities.UIPerk_bomb", false, false);
 
-    // GrenadeLauncherCondition = new class'X2Condition_ValidWeapon';
-    // GrenadeLauncherCondition.AllowedWeaponCategories.AddItem('grenade_launcher');
-    // GrenadeLauncherCondition.bCheckSpecificSlot = true;
-    // GrenadeLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('AcidGrenade'));
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('GasGrenade'));
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('Firebomb'));
 
-    // RocketLauncherCondition = new class'X2Condition_ValidWeapon';
-    // RocketLauncherCondition.AllowedWeaponCategories.AddItem('iri_rocket_launcher');
-    // RocketLauncherCondition.bCheckSpecificSlot = true;
-    // RocketLauncherCondition.bValidateTier = true;
-    // RocketLauncherCondition.ExcludedWeaponTiers.AddItem('conventional');
-    // RocketLauncherCondition.SpecificSlot = eInvSlot_SecondaryWeapon;
-
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'AcidGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'GasGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'Firebomb';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.TargetConditions.AddItem(GrenadeLauncherCondition);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    // Effect= new class'X2Effect_AddGrenade';
-    // Effect.bAllowUpgrades = false;
-    // Effect.DataName = 'IRI_X2Rocket_Napalm';
-    // Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.TargetConditions.AddItem(RocketLauncherCondition);
-    // Effect.BuildPersistentEffect(1, true, false);
-    // Template.AddTargetEffect(Effect);
-
-    // Effect = new class'X2Effect_AddGrenade';
-    // Effect.bAllowUpgrades = false;
-    // Effect.DataName = 'IRI_X2Rocket_WhitePh';
-    // Effect.SkipAbilities.AddItem('SmallItemWeight');
-    // Effect.TargetConditions.AddItem(RocketLauncherCondition);
-    // Effect.BuildPersistentEffect(1, true, false);
-    // Template.AddTargetEffect(Effect);
-    
     return Template;
 }
 
@@ -1706,13 +1648,9 @@ static function X2AbilityTemplate Minelayer2()
     local X2Effect_AddGrenade   Effect;
 
     Template = Passive('M31_Minelayer2', "img:///UILibrary_MZChimeraIcons.Item_TeleportDisc", false, true);
-        
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'ProximityMine';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+
+    Effect = class'X2Effect_AddGrenade'.static.AddGrenadeEffect('ProximityMine');
+    Effect.BaseCharges = 2;
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -2383,16 +2321,10 @@ static function X2AbilityTemplate ShadowstepAid()
 static function X2AbilityTemplate ShockGrenadier()
 {
     local X2AbilityTemplate     Template;
-    local X2Effect_AddGrenade   Effect;
 
     Template = Passive('M31_ShockGrenadier', "img:///UILibrary_MeristPerkIcons.UIPerk_ShockBox", false, true);
-        
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'EMPGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('EMPGrenade'));
 
     return Template;
 }
@@ -2613,17 +2545,11 @@ static function X2AbilityTemplate SleightOfHand()
 
 static function X2AbilityTemplate SmokeGrenadier()
 {
-    local X2AbilityTemplate     Template;
-    local X2Effect_AddGrenade   Effect;
+    local X2AbilityTemplate Template;
 
     Template = Passive('M31_SmokeGrenadier', "img:///UILibrary_XPerkIconPack.UIPerk_smoke_box", false, true);
-    
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = true;
-    Effect.DataName = 'SmokeGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+
+    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.AddGrenadeEffect('SmokeGrenade'));
 
     return Template;
 }
