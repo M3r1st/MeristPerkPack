@@ -709,9 +709,8 @@ LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> at
 [M31_ShiverCrit2_Attack X2AbilityTemplate]
 LocFriendlyName="Chilling Critical"
 
-
 [M31_Rider_AutoGuard X2AbilityTemplate]
-LocFriendlyName=""
+LocFriendlyName="Quick Guard"
 LocLongDescription="Automatically <font color='#0bff9b'>Guard</font> at the start of each turn."
 LocHelpText="Automatically <font color='#0bff9b'>Guard</font> at the start of each turn."
 LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> will not activate if the <Ability:ClassName> is disoriented, stunned, panicking, on fire or otherwise impaired."

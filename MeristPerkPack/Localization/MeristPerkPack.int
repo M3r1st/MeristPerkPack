@@ -75,6 +75,11 @@ M31_PA_HunterDedication_BuffText            = "This unit does not trigger overwa
 M31_ENEMY_ViperPoison_DebuffText            = "The unit is poisoned. Its aim and mobility are reduced, and it takes a small amount of damage at the start of each turn."
 M31_ENEMY_ViperEnhPoison_DebuffText         = "The unit is poisoned. Its aim and mobility are drastically reduced, and it takes damage at the start of each turn."
 
+[X2Effect_PA_TaipanBloodThirst]
+TaipanBloodThirstTitle = "Paint the Moon Red"
+TaipanBloodThirstDesc = "<Ability:M31_PA_TaipanBloodThirst_BuffText>"
+TaipanBloodThirstDescDefault = "Number of Paint the Moon Red stacks."
+
 [BitterfrostHelper]
 ChillEffectName="Chilled"
 ChillEffectDesc="Mobility and Dodge reduced."

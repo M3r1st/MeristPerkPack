@@ -158,7 +158,7 @@ function HandleSingleTarget(int ObjectID, int TargetObjectID, name StartSocket, 
 
             `XEVENTMGR.TriggerEvent('Visualizer_ProjectileHit', History.GetGameStateForObjectID(TargetObjectID), self);
 
-            NotifyInterveningStateObjects( Origin, Delta );
+            NotifyInterveningStateObjects(Origin, Delta);
 
             TargetsNotified++;
         }

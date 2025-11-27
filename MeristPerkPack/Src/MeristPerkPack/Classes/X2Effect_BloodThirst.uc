@@ -67,7 +67,7 @@ static function EventListenerReturn AbilityTriggerEventListener_BloodThirst(Obje
     if (BloodThirstEffectState == none || BloodThirstEffect ==  none)
         return ELR_NoInterrupt;
 
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
     if (UnitState == none)
         return ELR_NoInterrupt;
@@ -103,7 +103,7 @@ static function EventListenerReturn AbilityTriggerEventListener_BloodThirst(Obje
     MaxCount = BloodThirstEffect.GetMaxStackCount(UnitState);
     MaxCountPerTurn = BloodThirstEffect.GetMaxStackCountPerTurn(UnitState);
 
-    if (MaxCountPerTurn != 0 && BloodThirstEffectState.iStacksThisTurn >= MaxCountPerTurn)
+    if (MaxCountPerTurn > 0 && BloodThirstEffectState.iStacksThisTurn >= MaxCountPerTurn)
         return ELR_NoInterrupt;
 
     NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
@@ -111,7 +111,7 @@ static function EventListenerReturn AbilityTriggerEventListener_BloodThirst(Obje
 
     Length = BloodThirstEffect.GetStackDuration(UnitState);
 
-    if (MaxCount != 0 && BloodThirstEffectState.GetTotalStacksRemaining() >= MaxCount)
+    if (MaxCount > 0 && BloodThirstEffectState.GetTotalStacksRemaining() >= MaxCount)
     {
         for (Index = 0; Index < Length; Index++)
         {
@@ -154,7 +154,7 @@ simulated function bool OnEffectTicked(
     bContinueTicking = super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
 
     BloodThirstEffectState = XCGS_Effect_BloodThirst(kNewEffectState);
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
     if (BloodThirstEffectState != none && UnitState != none)
     {
@@ -205,7 +205,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     if (XComGameState_Unit(TargetDamageable) == none)
         return 0;
     
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
     iDamagePerStack = GetDamagePerStack(UnitState, SourceWeapon);
 

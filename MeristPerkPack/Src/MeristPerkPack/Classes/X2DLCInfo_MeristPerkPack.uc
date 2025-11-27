@@ -1593,6 +1593,10 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateTaipanBiteBleedingEffect());
             return true;
 
+        case "M31_PA_TaipanBloodThirst_BuffText":
+            OutString = GetTaipanBloodThirstOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
         default:
             return false;
     }
@@ -2683,7 +2687,7 @@ static private function string GetBloodThirstOutString(Object ParseObj, Object S
     local XComGameState_Effect      EffectState;
     local XCGS_Effect_BloodThirst   BloodThirstEffectState;
     local X2Effect_BloodThirst      BloodThirstEffect;
-    local XComGameState_Unit        EffectSourceUnit;
+    local XComGameState_Unit        UnitState;
     local string OutString;
     local string NewString;
     local int Index;
@@ -2694,8 +2698,8 @@ static private function string GetBloodThirstOutString(Object ParseObj, Object S
     {
         BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
         BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
-        EffectSourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-        if (BloodThirstEffectState != none && BloodThirstEffect != none && EffectSourceUnit != none)
+        UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+        if (BloodThirstEffectState != none && BloodThirstEffect != none && UnitState != none)
         {
             iCount = BloodThirstEffectState.GetTotalStacksRemaining();
             if (iCount == 0)
@@ -2707,7 +2711,58 @@ static private function string GetBloodThirstOutString(Object ParseObj, Object S
                 OutString = NewString;
             }
 
-            for (Index = 0; Index < BloodThirstEffect.GetStackDuration(EffectSourceUnit); Index++)
+            for (Index = 0; Index < BloodThirstEffect.GetStackDuration(UnitState); Index++)
+            {
+                if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
+                {                 
+                    if (Index == 0)
+                    {
+                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
+                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]) $ "<br>";
+                        OutString $= NewString;
+                    }
+                    else
+                    {
+                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp");
+                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]);
+                        NewString = Repl(NewString, "[y]", Index + 1) $ "<br>";
+                        OutString $= NewString;
+                    }
+                }
+            }
+            return OutString;
+        }
+    }
+    return "?";
+}
+
+
+// Purpose: helper function for AbilityTagExpandHandler_CH().
+// Use:
+// Typical use case: 
+
+static private function string GetTaipanBloodThirstOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Effect      EffectState;
+    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
+    local X2Effect_BloodThirst      BloodThirstEffect;
+    local XComGameState_Unit        UnitState;
+    local string OutString;
+    local string NewString;
+    local int Index;
+
+    EffectState = XComGameState_Effect(ParseObj);
+    if (EffectState != none)
+    {
+        BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
+        BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
+        UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+        if (BloodThirstEffectState != none && BloodThirstEffect != none && UnitState != none)
+        {
+            if (BloodThirstEffectState.GetTotalStacksRemaining() == 0)
+                return class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDescDefault;
+
+            for (Index = 0; Index < BloodThirstEffect.GetStackDuration(UnitState); Index++)
             {
                 if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
                 {                 

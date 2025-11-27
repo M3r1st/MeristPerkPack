@@ -1,27 +1,96 @@
-class X2Effect_PA_TaipanBloodThirst extends X2Effect_BloodThirst;
+class X2Effect_PA_TaipanBloodThirst extends X2Effect_BloodThirst config(GameData_SoldierSkills);
+
+var config bool bUseFocusUI;
+var config string TaipanBloodThirstColor;
+var config string TaipanBloodThirstIcon;
+var localized string TaipanBloodThirstTitle;
+var localized string TaipanBloodThirstDesc;
+var localized string TaipanBloodThirstDescDefault;
+
+function RegisterForEvents(XComGameState_Effect EffectGameState)
+{
+    local X2EventManager        EventMgr;
+    local Object                EffectObj;
+    local XComGameState_Unit    TargetState;
+
+    super.RegisterForEvents(EffectGameState);
+
+    EventMgr = `XEVENTMGR;
+    EffectObj = EffectGameState;
+    TargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+    if (bUseFocusUI)
+    {
+        EventMgr.RegisterForEvent(EffectObj, 'OverrideUnitFocusUI', OnOverrideFocus, ELD_Immediate,, TargetState,, EffectObj);
+    }
+}
+
+static function EventListenerReturn OnOverrideFocus(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+    local XComLWTuple               Tuple;
+    local XComGameState_Unit        UnitState;
+    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
+    local X2Effect_PA_TaipanBloodThirst BloodThirstEffect;
+    local X2AbilityTag              AbilityTag;
+
+    Tuple = XComLWTuple(EventData);
+
+    `assert(Tuple != none);
+    `assert(Tuple.Id == 'OverrideUnitFocusUI');
+
+    UnitState = XComGameState_Unit(EventSource);
+    BloodThirstEffectState = XCGS_Effect_BloodThirst(CallbackData);
+    BloodThirstEffect = X2Effect_PA_TaipanBloodThirst(BloodThirstEffectState.GetX2Effect());
+
+    if (UnitState == none || BloodThirstEffectState == none || BloodThirstEffect == none)
+        return ELR_NoInterrupt;
+
+    AbilityTag = X2AbilityTag(`XEXPANDCONTEXT.FindTag("Ability"));
+    AbilityTag.ParseObj = BloodThirstEffectState;
+
+    Tuple.Data[0].b = UnitState.IsFriendlyToLocalPlayer();
+    Tuple.Data[1].i = BloodThirstEffectState.GetTotalStacksRemaining();
+    Tuple.Data[2].i = BloodThirstEffect.GetMaxStackCount(UnitState);
+    Tuple.Data[3].s = "0x" $ default.TaipanBloodThirstColor;
+    Tuple.Data[4].s = default.TaipanBloodThirstIcon;
+    Tuple.Data[5].s = `XEXPAND.ExpandString(default.TaipanBloodThirstDesc);
+    Tuple.Data[6].s = default.TaipanBloodThirstTitle;
+
+    AbilityTag.ParseObj = none;
+
+    return ELR_NoInterrupt;
+}
+
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
+{
+    if (bUseFocusUI)
+        return false;
+    
+    return super.IsEffectCurrentlyRelevant(EffectGameState, TargetUnit);
+}
 
 simulated function int GetStackDuration(XComGameState_Unit SourceUnit)
 {
     if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
         return iStackDuration + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusDuration");
-    else
-        return iStackDuration;
+
+    return iStackDuration;
 }
 
 simulated function int GetMaxStackCount(XComGameState_Unit SourceUnit)
 {
     if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-        return iStackDuration + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCount");
-    else
-        return iStackDuration;
+        return iMaxStacks + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCount");
+
+    return iMaxStacks;
 }
 
 simulated function int GetMaxStackCountPerTurn(XComGameState_Unit SourceUnit)
 {
     if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-        return iStackDuration + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCountPerTurn");
-    else
-        return iStackDuration;
+        return iMaxStacksPerTurn + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCountPerTurn");
+
+    return iMaxStacksPerTurn;
 }
 
 function float GetPreDefaultAttackingDamageModifier_CH(
@@ -57,7 +126,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     if (XComGameState_Unit(TargetDamageable) == none)
         return 0;
     
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
     iDamagePerStack = GetDamagePerStack(UnitState, SourceWeapon);
 
