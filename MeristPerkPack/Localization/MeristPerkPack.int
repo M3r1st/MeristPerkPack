@@ -78,7 +78,11 @@ M31_ENEMY_ViperEnhPoison_DebuffText         = "The unit is poisoned. Its aim and
 [X2Effect_PA_TaipanBloodThirst]
 TaipanBloodThirstTitle = "Paint the Moon Red"
 TaipanBloodThirstDesc = "<Ability:M31_PA_TaipanBloodThirst_BuffText>"
-TaipanBloodThirstDescDefault = "Number of Paint the Moon Red stacks."
+TaipanBloodThirstDesc_NoStacks = "Number of Paint the Moon Red stacks."
+TaipanBloodThirstDesc_Stacks = "All stacks will be lost in [Y] turn(s)."
+TaipanBloodThirstDesc_Damage = "+[A] Melee Damage"
+TaipanBloodThirstDesc_OtherDamage = "+[B] Other Damage"
+TaipanBloodThirstDesc_Crit = "+[C] Critical Chance"
 
 [BitterfrostHelper]
 ChillEffectName="Chilled"

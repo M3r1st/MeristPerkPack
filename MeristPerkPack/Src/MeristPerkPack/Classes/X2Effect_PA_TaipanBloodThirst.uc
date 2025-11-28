@@ -5,7 +5,11 @@ var config string TaipanBloodThirstColor;
 var config string TaipanBloodThirstIcon;
 var localized string TaipanBloodThirstTitle;
 var localized string TaipanBloodThirstDesc;
-var localized string TaipanBloodThirstDescDefault;
+var localized string TaipanBloodThirstDesc_NoStacks;
+var localized string TaipanBloodThirstDesc_Stacks;
+var localized string TaipanBloodThirstDesc_Damage;
+var localized string TaipanBloodThirstDesc_OtherDamage;
+var localized string TaipanBloodThirstDesc_Crit;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -71,26 +75,20 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 
 simulated function int GetStackDuration(XComGameState_Unit SourceUnit)
 {
-    if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-        return iStackDuration + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusDuration");
-
-    return iStackDuration;
+    return super.GetStackDuration(SourceUnit)
+        + (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true) ? `GetConfigInt("M31_PA_TaipanBloodHunter_BonusDuration") : 0);
 }
 
 simulated function int GetMaxStackCount(XComGameState_Unit SourceUnit)
 {
-    if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-        return iMaxStacks + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCount");
-
-    return iMaxStacks;
+    return super.GetMaxStackCount(SourceUnit)
+        + (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true) ? `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCount") : 0);
 }
 
 simulated function int GetMaxStackCountPerTurn(XComGameState_Unit SourceUnit)
 {
-    if (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-        return iMaxStacksPerTurn + `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCountPerTurn");
-
-    return iMaxStacksPerTurn;
+    return super.GetMaxStackCountPerTurn(SourceUnit)
+        + (SourceUnit.HasSoldierAbility('M31_PA_TaipanBloodHunter', true) ? `GetConfigInt("M31_PA_TaipanBloodHunter_BonusMaxCountPerTurn") : 0);
 }
 
 function float GetPreDefaultAttackingDamageModifier_CH(

@@ -2747,9 +2747,11 @@ static private function string GetTaipanBloodThirstOutString(Object ParseObj, Ob
     local XCGS_Effect_BloodThirst   BloodThirstEffectState;
     local X2Effect_BloodThirst      BloodThirstEffect;
     local XComGameState_Unit        UnitState;
-    local string OutString;
-    local string NewString;
-    local int Index;
+    local XComGameState_Item        SourceWeapon;
+    local string    OutString;
+    local string    NewString;
+    local int       Index;
+    local int       Count;
 
     EffectState = XComGameState_Effect(ParseObj);
     if (EffectState != none)
@@ -2757,31 +2759,49 @@ static private function string GetTaipanBloodThirstOutString(Object ParseObj, Ob
         BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
         BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
         UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+        SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
         if (BloodThirstEffectState != none && BloodThirstEffect != none && UnitState != none)
         {
-            if (BloodThirstEffectState.GetTotalStacksRemaining() == 0)
-                return class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDescDefault;
-
-            for (Index = 0; Index < BloodThirstEffect.GetStackDuration(UnitState); Index++)
+            Count = BloodThirstEffectState.GetTotalStacksRemaining();
+            if (Count != 0)
             {
-                if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
-                {                 
-                    if (Index == 0)
+                NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Damage;
+                NewString = Repl(NewString, "[A]", Count * BloodThirstEffect.GetDamagePerStack(UnitState, SourceWeapon)) $ "<br>";
+                OutString $= NewString;
+                
+                if (UnitState.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
+                {
+                    if (`GetConfigInt("M31_PA_TaipanBloodHunter_DamageModifierPrc") > 0)
                     {
-                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
-                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]) $ "<br>";
+                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_OtherDamage;
+                        NewString = Repl(NewString, "[B]", Count * BloodThirstEffect.GetDamagePerStack(UnitState, SourceWeapon)
+                            * `GetConfigInt("M31_PA_TaipanBloodHunter_DamageModifierPrc") / 100) $ "<br>";
                         OutString $= NewString;
                     }
-                    else
+                    if (`GetConfigInt("M31_PA_TaipanBloodHunter_CritBonusPerStack") > 0)
                     {
-                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp");
-                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]);
-                        NewString = Repl(NewString, "[y]", Index + 1) $ "<br>";
+                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Crit;
+                        NewString = Repl(NewString, "[C]", Count * `GetConfigInt("M31_PA_TaipanBloodHunter_CritBonusPerStack")) $ "<br>";
                         OutString $= NewString;
                     }
                 }
+
+                for (Index = BloodThirstEffect.GetStackDuration(UnitState) - 1; Index >= 0; Index--)
+                {
+                    if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
+                    {
+                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Stacks;
+                        NewString = Repl(NewString, "[Y]", Index + 1);
+                        OutString $= NewString;
+                        break;
+                    }
+                }
+                return OutString;
             }
-            return OutString;
+            else
+            {
+                return class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_NoStacks;
+            }
         }
     }
     return "?";
