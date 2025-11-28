@@ -17,7 +17,7 @@ final function int GetUncappedHitChance(X2AbilityTemplate Template, XComGameStat
 
     AvTarget.PrimaryTarget.ObjectID = TargetUnit.ObjectID;
 
-    if (class'X2DLCInfo_MeristPerkPack'.default.bLWOTC)
+    if (Template.AbilityToHitCalc.OverrideFinalHitChanceFns.Length > 0)
     {
         Template.AbilityToHitCalc.OverrideFinalHitChanceFns.InsertItem(0, ShotBreakdownHack);
         Template.AbilityToHitCalc.GetShotBreakdown(AbilityState, AvTarget, Breakdown);
