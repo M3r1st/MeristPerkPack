@@ -342,5 +342,6 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ControlledDetonation.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_DedicatedOverwatch.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_EMPBomber.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_Rider_AutoGuard.uc" />
   </ItemGroup>
 </Project>

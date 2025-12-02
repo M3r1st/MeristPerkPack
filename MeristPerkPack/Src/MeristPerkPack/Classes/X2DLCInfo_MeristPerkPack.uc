@@ -176,19 +176,7 @@ static event OnPostTemplatesCreated()
     AddModifiersToGrenadeAbilities();
 
     GetLocalizedAbilityLists();
-
-    // ChainVolt(AbilityTemplateManager.FindAbilityTemplate('Volt'));
 }
-
-// static function ChainVolt(X2AbilityTemplate Template)
-// {
-//     if (Template != none)
-//     {
-//         Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_Fork';
-//         Template.TargetingMethod = class'X2TargetingMethod_Chain';
-//         Template.ActionFireClass = class'X2Action_Fire_Fork_Volt';
-//     }
-// }
 
 static function bool CanAddItemToInventory_CH_Improved(
     out int bCanAddItem,
@@ -716,9 +704,9 @@ static function PatchGuardForAutoGuard(X2AbilityTemplate Template)
     {
         Trigger = new class'X2AbilityTrigger_EventListener';
         Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-        Trigger.ListenerData.EventID = 'PlayerTurnBegun';
-        Trigger.ListenerData.Filter = eFilter_Player;
-        Trigger.ListenerData.EventFn = class'X2AbilitySet_Merist'.static.AbilityTriggerEventListener_AutoGuard;
+        Trigger.ListenerData.EventID = 'UnitGroupTurnBegun';
+        Trigger.ListenerData.Filter = eFilter_None;
+        Trigger.ListenerData.EventFn = class'X2Effect_Rider_AutoGuard'.static.AbilityTriggerEventListener_AutoGuard;
         Template.AbilityTriggers.AddItem(Trigger);
     }
 }

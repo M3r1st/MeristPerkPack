@@ -3721,7 +3721,7 @@ static function X2AbilityTemplate AutoGuard()
 {
     local X2AbilityTemplate Template;
 
-    Template = Passive('M31_Rider_AutoGuard', "img:///UILibrary_MeristPerkIcons.UIPerk_", false, true);
+    Template = Passive('M31_Rider_AutoGuard', "img:///UILibrary_MeristPerkIcons.UIPerk_Rider_AutoGuard", false, true);
 
     Template.PrerequisiteAbilities.AddItem('IRI_Rider_Guard');
 
