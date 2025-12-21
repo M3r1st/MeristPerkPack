@@ -1,5 +1,8 @@
 class X2Effect_MalevolentFocus extends X2Effect_Persistent;
 
+var bool bApplyOnlyOnReaction;
+var int CritBonus;
+
 function bool AllowReactionFireCrit(XComGameState_Unit UnitState, XComGameState_Unit TargetState) 
 { 
     return true;
@@ -16,16 +19,18 @@ function GetToHitModifiers(
     bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo CritInfo;
+    local X2AbilityTemplate                 AbilityTemplate;
+    local X2AbilityToHitCalc_StandardAim    StandardAim;
+    local ShotModifierInfo                  CritInfo;
 
-    if (!`GetConfigBool("M31_PA_MalevolentFocus_bOnlyForReaction") ||
-        AbilityState != none
-        && X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc) != none
-        && X2AbilityToHitCalc_StandardAim(AbilityState.GetMyTemplate().AbilityToHitCalc).bReactionFire)
+    AbilityTemplate = AbilityState.GetMyTemplate();
+    StandardAim = X2AbilityToHitCalc_StandardAim(AbilityTemplate.AbilityToHitCalc);
+
+    if (!bApplyOnlyOnReaction || StandardAim != none && StandardAim.bReactionFire)
     {
         CritInfo.ModType = eHit_Crit;
         CritInfo.Reason = FriendlyName;
-        CritInfo.Value = `GetConfigInt("M31_PA_MalevolentFocus_CritBonus");
+        CritInfo.Value = CritBonus;
         ShotModifiers.AddItem(CritInfo);
     }
 }

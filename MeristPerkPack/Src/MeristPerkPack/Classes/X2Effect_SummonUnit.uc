@@ -72,20 +72,20 @@ function name GetUnitToSpawnName(const out EffectAppliedData ApplyEffectParamete
     local XComGameStateHistory History;
     local XComGameState_Unit SourceUnit;
     local XComGameState_Item SourceWeapon;
-    local int Tier;
+    local int Tech;
 
     History = `XCOMHISTORY;
     SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     SourceWeapon = XComGameState_Item(History.GetGameStateForObjectID(ApplyEffectParameters.ItemStateObjectRef.ObjectID));
 
-    Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceWeapon.GetMyTemplate());
-    Tier = Clamp(Tier, 0, 4);
+    Tech = `GetTechLevel(SourceWeapon.GetMyTemplate());
+    Tech = Clamp(Tech, 0, 4);
     
     `assert(SourceUnit != none);
 
     if (SourceUnit.HasSoldierAbility(AltReqAbilityName, true))
     {
-        switch (Tier)
+        switch (Tech)
         {
             case 4:
                 return AltUnitToSpawnNameT3;
@@ -98,7 +98,7 @@ function name GetUnitToSpawnName(const out EffectAppliedData ApplyEffectParamete
     }
     else
     {
-        switch (Tier)
+        switch (Tech)
         {
             case 4:
                 return UnitToSpawnNameT3;

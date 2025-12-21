@@ -11,6 +11,8 @@ var int CritBonusPerTurn;
 
 var int MaxTurns;
 
+var localized string strFriendlyDesc;
+
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo AimInfo;

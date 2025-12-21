@@ -16,7 +16,7 @@ function int GetDefendingDamageModifier(
     {
         if (CurrentDamage > 0)
         {
-            if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+            if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
             {
                 return DOTDamageBonus;
             }

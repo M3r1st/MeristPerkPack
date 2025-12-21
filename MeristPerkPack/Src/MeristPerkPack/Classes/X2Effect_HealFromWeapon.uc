@@ -5,11 +5,11 @@ var name DamageTag;
 
 simulated function int GetHealAmount(const out EffectAppliedData ApplyEffectParameters)
 {
-    local XComGameState_Ability     AbilityState;
-    local XComGameState_Item        SourceWeapon;
-    local X2WeaponTemplate          WeaponTemplate;
-    local int                       Index;
-    local int                       Tier;
+    local XComGameState_Ability AbilityState;
+    local XComGameState_Item    SourceWeapon;
+    local X2WeaponTemplate      WeaponTemplate;
+    local int                   Index;
+    local int                   Tech;
 
     AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
     if (AbilityState != none)
@@ -22,9 +22,9 @@ simulated function int GetHealAmount(const out EffectAppliedData ApplyEffectPara
             {
                 if (HealAmount.Length > 0)
                 {
-                    Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(AbilityState.GetSourceWeapon().GetMyTemplate());
-                    Tier = Clamp(Tier, 0, HealAmount.Length - 1);
-                    return HealAmount[Tier];
+                    Tech = `GetTechLevel(AbilityState.GetSourceWeapon().GetMyTemplate());
+                    Tech = Clamp(Tech, 0, HealAmount.Length - 1);
+                    return HealAmount[Tech];
                 }
                 else if (DamageTag != '')
                 {

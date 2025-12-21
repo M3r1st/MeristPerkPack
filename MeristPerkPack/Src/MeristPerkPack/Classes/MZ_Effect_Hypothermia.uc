@@ -125,6 +125,7 @@ defaultproperties
     DuplicateResponse = eDupe_Refresh
     bCanTickEveryAction = true
     EffectName = MZHypothermia
+    StatusIcon = "img:///UILibrary_DLC2Images.UIPerk_freezingbreath"
 
     HyptothermiaEffectAddedEventName = HypothermiaEffectAdded
 }

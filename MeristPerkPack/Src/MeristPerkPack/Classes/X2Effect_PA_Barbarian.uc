@@ -1,5 +1,10 @@
 class X2Effect_PA_Barbarian extends X2Effect_Persistent;
 
+var int AimBonus;
+var int CritBonus;
+
+var array<name> CritCategories;
+
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
     XComGameState_Unit Attacker,
@@ -11,24 +16,23 @@ function GetToHitModifiers(
 {
     local ShotModifierInfo      AimInfo;
     local ShotModifierInfo      CritInfo;
-    local XComGameState_Item    InventoryItem;
+    local XComGameState_Item    ItemState;
     local X2WeaponTemplate      WeaponTemplate;
 
     if (bMelee)
     {
         AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;
-        AimInfo.Value = `GetConfigInt("M31_PA_Barbarian_AimBonus");
+        AimInfo.Value = AimBonus;
         ShotModifiers.AddItem(AimInfo);
 
-        InventoryItem = Attacker.GetItemInSlot(eInvSlot_PrimaryWeapon);
-
-        WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
-        if (WeaponTemplate != none && class'X2AbilitySet_PA_Muton'.default.Barbarian_RifleCategories.Find(WeaponTemplate.WeaponCat) != INDEX_NONE)
+        ItemState = Attacker.GetItemInSlot(eInvSlot_PrimaryWeapon);
+        WeaponTemplate = X2WeaponTemplate(ItemState.GetMyTemplate());
+        if (WeaponTemplate != none && CritCategories.Find(WeaponTemplate.WeaponCat) != INDEX_NONE)
         {
             CritInfo.ModType = eHit_Crit;
             CritInfo.Reason = FriendlyName;
-            CritInfo.Value = `GetConfigInt("M31_PA_Barbarian_CritBonus");
+            CritInfo.Value = CritBonus;
             ShotModifiers.AddItem(CritInfo);
         }
     }

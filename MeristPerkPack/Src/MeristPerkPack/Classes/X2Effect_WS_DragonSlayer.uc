@@ -1,5 +1,8 @@
 class X2Effect_WS_DragonSlayer extends X2Effect_Persistent;
 
+var int DamageBonusToUnflankable;
+var int DamageBonusToLarge;
+
 function float GetPostDefaultAttackingDamageModifier_CH(
     XComGameState_Effect EffectState,
     XComGameState_Unit SourceUnit,
@@ -11,9 +14,9 @@ function float GetPostDefaultAttackingDamageModifier_CH(
     XComGameState NewGameState)
 {
     local XComGameState_Unit TargetUnit;
-    local float fModifier;
+    local float Bonus;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     TargetUnit = XComGameState_Unit(Target);
@@ -22,15 +25,17 @@ function float GetPostDefaultAttackingDamageModifier_CH(
         return 0;
 
     if (!TargetUnit.CanTakeCover())
-        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonusPrc_Unflankable");
+        Bonus += DamageBonusToUnflankable;
     
     if (TargetUnit.UnitSize > 1)
-        fModifier += `GetConfigFloat("M31_PA_WS_DragonSlayer_DamageBonusPrc_Large");
+        Bonus += DamageBonusToLarge;
 
-    return CurrentDamage * fModifier / 100;
+    return CurrentDamage * Bonus / 100;
 }
 
 defaultproperties
 {
+    EffectName = M31_PA_WS_DragonSlayer
+
     bDisplayInSpecialDamageMessageUI = true
 }

@@ -1,4 +1,8 @@
-class X2Effect_WS_StupidSexySnake extends X2Effect_Persistent;
+class X2Effect_WS_StupidSexySnake extends X2Effect_PersistentAura;
+
+var int AimBonus;
+var int CritBonus;
+var int DodgeBonus;
 
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
@@ -14,15 +18,18 @@ function GetToHitModifiers(
     local ShotModifierInfo AimInfo;
     local ShotModifierInfo CritInfo;
 
-    AimInfo.ModType = eHit_Success;
-    AimInfo.Reason = FriendlyName;
-    AimInfo.Value = `GetConfigInt("M31_PA_WS_StupidSexySnake_AimBonus");
-    ShotModifiers.AddItem(AimInfo);
+    if (IsEffectCurrentlyRelevant(EffectState, Target))
+    {
+        AimInfo.ModType = eHit_Success;
+        AimInfo.Reason = FriendlyName;
+        AimInfo.Value = AimBonus;
+        ShotModifiers.AddItem(AimInfo);
 
-    CritInfo.ModType = eHit_Crit;
-    CritInfo.Reason = FriendlyName;
-    CritInfo.Value = `GetConfigInt("M31_PA_WS_StupidSexySnake_CritBonus");
-    ShotModifiers.AddItem(CritInfo);
+        CritInfo.ModType = eHit_Crit;
+        CritInfo.Reason = FriendlyName;
+        CritInfo.Value = CritBonus;
+        ShotModifiers.AddItem(CritInfo);
+    }
 }
 
 function GetToHitAsTargetModifiers(
@@ -36,14 +43,16 @@ function GetToHitAsTargetModifiers(
 {
     local ShotModifierInfo	ModInfo;
 
-    ModInfo.ModType = eHit_Graze;
-    ModInfo.Reason = FriendlyName;
-    ModInfo.Value = `GetConfigInt("M31_PA_WS_StupidSexySnake_DodgeBonus");
-    ShotModifiers.AddItem(ModInfo);
+    if (IsEffectCurrentlyRelevant(EffectState, Target))
+    {
+        ModInfo.ModType = eHit_Graze;
+        ModInfo.Reason = FriendlyName;
+        ModInfo.Value = DodgeBonus;
+        ShotModifiers.AddItem(ModInfo);
+    }
 }
 
 defaultproperties
 {
-    EffectName = M31_PA_WS_StupidSexySnake_Buff
-    DuplicateResponse = eDupe_Refresh
+    EffectName = M31_PA_WS_StupidSexySnake
 }

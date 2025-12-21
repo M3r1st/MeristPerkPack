@@ -18,7 +18,7 @@ function int GetAttackingDamageModifier(
         {
             if (!bMatchSourceWeapon || AbilityState.SourceWeapon.ObjectID == EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID)
             {
-                if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+                if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
                 {
                     return DOTDamageBonus;
                 }

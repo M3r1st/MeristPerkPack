@@ -1,5 +1,8 @@
 class X2Effect_CrystallineCornea extends X2Effect_Persistent;
 
+var int AimBonus;
+var int ExtraAimBonus;
+
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
     XComGameState_Unit Attacker,
@@ -12,17 +15,16 @@ function GetToHitModifiers(
     out array<ShotModifierInfo> ShotModifiers)
 {
     local ShotModifierInfo AimInfo;
-    local int AimBonus;
+    local int Bonus;
 
-    AimBonus = `GetConfigInt("M31_PA_CrystallineCornea_AimBonus");
-
+    Bonus = AimBonus;
     if (bMelee || bFlanking)
     {
-        AimBonus += `GetConfigInt("M31_PA_CrystallineCornea_FlankAimBonus");
-        
-        AimInfo.ModType = eHit_Success;
-        AimInfo.Reason = FriendlyName;
-        AimInfo.Value = AimBonus;
-        ShotModifiers.AddItem(AimInfo);
+        Bonus += ExtraAimBonus;
     }
+
+    AimInfo.ModType = eHit_Success;
+    AimInfo.Reason = FriendlyName;
+    AimInfo.Value = Bonus;
+    ShotModifiers.AddItem(AimInfo);
 }

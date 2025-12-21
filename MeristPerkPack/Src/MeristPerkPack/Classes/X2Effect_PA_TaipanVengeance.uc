@@ -19,10 +19,10 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
     EventMgr = `XEVENTMGR;
     EffectObj = EffectGameState;
 
-    EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', AbilityTriggerEventListener_TaipanVengeance, ELD_OnStateSubmitted,,,, EffectObj);
+    EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', EffectEventListener_TaipanVengeance, ELD_OnStateSubmitted,,,, EffectObj);
 }
 
-static function EventListenerReturn AbilityTriggerEventListener_TaipanVengeance(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+static function EventListenerReturn EffectEventListener_TaipanVengeance(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XCGS_Effect_PA_TaipanVengeance    EffectState;
     local X2Effect_PA_TaipanVengeance       Effect;
@@ -60,9 +60,9 @@ static function EventListenerReturn AbilityTriggerEventListener_TaipanVengeance(
     `LOG("Validating Ability", default.bLog, GetFuncName());
 
     bDealsDamage = AbilityTemplate.TargetEffectsDealDamage(AbilityState.GetSourceWeapon(), AbilityState);
-    if (AbilityTemplate.Hostility != eHostility_Offensive || !(Effect.bAnyHostileAction || bDealsDamage && !AbilityTemplate.bIsASuppressionEffect))
+    if (AbilityTemplate.Hostility != eHostility_Offensive || !Effect.bAnyHostileAction && !bDealsDamage || AbilityTemplate.bIsASuppressionEffect)
         return ELR_NoInterrupt;
-        
+
     if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(EffectSourceUnit.ObjectID, AbilitySourceUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex))
     {
         if (VisInfo.bVisibleGameplay)

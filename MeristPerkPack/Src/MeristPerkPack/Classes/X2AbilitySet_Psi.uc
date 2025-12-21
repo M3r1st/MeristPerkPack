@@ -18,7 +18,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
 
-    Templates.AddItem(PsiAnimations());
+    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_Psi_Animations', ""));
     
     // Templates.AddItem(Meltdown());
 
@@ -59,21 +59,6 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(SpectralUnitInit('M31_Psi_SpectralCreatureInit', "", '', ''));
 
     return Templates;
-}
-
-static function X2AbilityTemplate PsiAnimations()
-{
-    local X2AbilityTemplate         Template;
-    local X2Condition_UnitProperty  UnitPropertyCondition;
-
-    Template = class'M31_Helpers'.static.CreateAnimSetPassive('M31_Psi_Animations', "");
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeAlien = true;
-    UnitPropertyCondition.ExcludeRobotic = true;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-
-    return Template;
 }
 
 static function X2AbilityTemplate Meltdown()
@@ -171,85 +156,85 @@ static function X2AbilityTemplate SectoidPsionicReaper()
     return Template;
 }
 
-static function X2AbilityTemplate FrostChainLightning()
-{
-    local X2AbilityTemplate             Template;
-    local X2Effect_ApplyWeaponDamageExtended    DamageEffect;
-    local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
-    local X2Condition_UnitImmunities    UnitImmunityCondition;
+// static function X2AbilityTemplate FrostChainLightning()
+// {
+//     local X2AbilityTemplate             Template;
+//     local X2Effect_ApplyWeaponDamageExtended    DamageEffect;
+//     local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
+//     local X2Condition_UnitImmunities    UnitImmunityCondition;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_FrostChainLightning');
+//     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_FrostChainLightning');
 
-    Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_amplify";
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.Hostility = eHostility_Offensive;
+//     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_amplify";
+//     Template.AbilitySourceName = 'eAbilitySource_Psionic';
+//     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+//     Template.Hostility = eHostility_Offensive;
 
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+//     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+//     Template.AbilityToHitCalc = default.DeadEye;
+//     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
-    RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-    RadiusMultiTarget.bIgnoreBlockingCover = true;
-    RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-    RadiusMultiTarget.fTargetRadius = `GetConfigFloat("M31_Psi_FrostChainLightning_Radius");
-    // RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(default.VOLT_TILE_RADIUS) + 0.01;
-    // RadiusMultiTarget.AddAbilityBonusRadius('VoltDangerZone', `TILESTOMETERS(default.VOLT_DANGER_ZONE_BONUS_RADIUS) + 0.01);
-    // RadiusMultiTarget.AddAbilityBonusRadius('TemplarTerror', `TILESTOMETERS(default.VOLT_TERRORIZE_BONUS) + 0.01);
-    Template.AbilityMultiTargetStyle = RadiusMultiTarget;
+//     RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+//     RadiusMultiTarget.bIgnoreBlockingCover = true;
+//     RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+//     RadiusMultiTarget.fTargetRadius = `GetConfigFloat("M31_Psi_FrostChainLightning_Radius");
+//     // RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(default.VOLT_TILE_RADIUS) + 0.01;
+//     // RadiusMultiTarget.AddAbilityBonusRadius('VoltDangerZone', `TILESTOMETERS(default.VOLT_DANGER_ZONE_BONUS_RADIUS) + 0.01);
+//     // RadiusMultiTarget.AddAbilityBonusRadius('TemplarTerror', `TILESTOMETERS(default.VOLT_TERRORIZE_BONUS) + 0.01);
+//     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 
-    Template.TargetingMethod = class'X2TargetingMethod_AreaTopDown';
+//     Template.TargetingMethod = class'X2TargetingMethod_AreaTopDown';
 
-    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-    Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+//     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+//     Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
     
-    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+//     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+//     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
 
-    Template.AddShooterEffectExclusions();
+//     Template.AddShooterEffectExclusions();
 
-    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
-    UnitImmunityCondition.AddExcludeDamageType('Frost');
-    UnitImmunityCondition.AddExcludeDamageType('Electrical');
-    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
-    Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
-    Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
+//     UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+//     UnitImmunityCondition.AddExcludeDamageType('Frost');
+//     UnitImmunityCondition.AddExcludeDamageType('Electrical');
+//     UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
+//     Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
+//     Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
 
-    AddActionPointCost(Template, eCost_SingleConsumeAll);
-    AddCooldown(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Cooldown"));
-    AddCharges(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Charges"));
+//     AddActionPointCost(Template, eCost_SingleConsumeAll);
+//     AddCooldown(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Cooldown"));
+//     AddCharges(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Charges"));
 
-    class'BitterfrostHelper'.static.AddBitterfrostToTarget(Template);
-    class'BitterfrostHelper'.static.AddBitterfrostToMultiTarget(Template);
+//     class'BitterfrostHelper'.static.AddBitterfrostToTarget(Template);
+//     class'BitterfrostHelper'.static.AddBitterfrostToMultiTarget(Template);
 
-    DamageEffect = new class'X2Effect_ApplyWeaponDamageExtended';
-    DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.bIgnoreArmor = true;
-    DamageEffect.DamageTag = 'M31_Psi_FrostChainLightning';
-    DamageEffect.OverrideDamageTypes.AddItem('Frost');
-    DamageEffect.OverrideDamageTypes.AddItem('Electrical');
-    Template.AddTargetEffect(DamageEffect);
-    Template.AddMultiTargetEffect(DamageEffect);
+//     DamageEffect = new class'X2Effect_ApplyWeaponDamageExtended';
+//     DamageEffect.bIgnoreBaseDamage = true;
+//     DamageEffect.bIgnoreArmor = true;
+//     DamageEffect.DamageTag = 'M31_Psi_FrostChainLightning';
+//     DamageEffect.OverrideDamageTypes.AddItem('Frost');
+//     DamageEffect.OverrideDamageTypes.AddItem('Electrical');
+//     Template.AddTargetEffect(DamageEffect);
+//     Template.AddMultiTargetEffect(DamageEffect);
 
-    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
-    Template.CustomFireAnim = 'HL_M31_Psi_Volt';
-    Template.ActionFireClass = class'X2Action_Fire_Volt';
+//     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+//     Template.CustomFireAnim = 'HL_M31_Psi_Volt';
+//     Template.ActionFireClass = class'X2Action_Fire_Volt';
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+//     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+//     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+//     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-    Template.bShowActivation = true;
+//     Template.bShowActivation = true;
 
-    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
-    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
-    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+//     Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+//     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+//     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
-    Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
+//     Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
 
-    return Template;
-}
+//     return Template;
+// }
 
 static function X2AbilityTemplate NullWard()
 {
@@ -297,7 +282,7 @@ static function X2AbilityTemplate NullWard()
     ShieldEffect.ShieldPriority = `GetConfigInt("M31_Psi_NullWard_ShieldPriority");
     ShieldEffect.bGetShieldAmountFromWeapon = true;
     ShieldEffect.BuildPersistentEffect(`GetConfigInt("M31_Psi_NullWard_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
-    ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_Shield_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
+    ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, class'X2Effect_PersonalShield'.default.strFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
     ShieldEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.static.OnShieldRemoved_BuildVisualization;
     Template.AddTargetEffect(ShieldEffect);
     Template.AddMultiTargetEffect(ShieldEffect);

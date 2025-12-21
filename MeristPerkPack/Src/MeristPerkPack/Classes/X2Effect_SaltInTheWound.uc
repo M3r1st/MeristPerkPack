@@ -36,7 +36,7 @@ function int GetAttackingDamageModifier(
     return 0;
 }
 
-protected function bool ValidateEffects(XComGameState_Unit UnitState)
+simulated function bool ValidateEffects(XComGameState_Unit UnitState)
 {
     local StateObjectReference  EffectRef;
     local X2Effect_Persistent   PersistentEffect;

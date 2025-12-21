@@ -2,6 +2,8 @@ class XCGS_Effect_WS_Maelstrom extends XComGameState_Effect;
 
 var private int FinalOverflow;
 
+var localized string ModInfoReason;
+
 final function int GetFinalOverflow(X2AbilityTemplate Template, XComGameState_Ability AbilityState, XComGameState_Unit TargetUnit)
 {
     local ShotBreakdown     Breakdown;
@@ -16,7 +18,7 @@ final function int GetFinalOverflow(X2AbilityTemplate Template, XComGameState_Ab
 
     AvTarget.PrimaryTarget.ObjectID = TargetUnit.ObjectID;
 
-    if (class'X2DLCInfo_MeristPerkPack'.default.bLWOTC)
+    if (Template.AbilityToHitCalc.OverrideFinalHitChanceFns.Length > 0)
     {
         Template.AbilityToHitCalc.OverrideFinalHitChanceFns.InsertItem(1, OverrideHitChanceHack);
         Template.AbilityToHitCalc.GetShotBreakdown(AbilityState, AvTarget, Breakdown);
@@ -57,7 +59,7 @@ static final function bool OverrideHitChance(X2AbilityToHitCalc AbilityToHitCalc
     {
         ModInfo.ModType = eHit_Crit;
         ModInfo.Value   = AimOverflow;
-        ModInfo.Reason  = `GetLocalizedString("M31_PA_WS_Bolt_Maelstrom_FriendlyName");
+        ModInfo.Reason  = default.ModInfoReason;
         ShotBreakdown.Modifiers.AddItem(ModInfo);
 
         ShotBreakdown.ResultTable[eHit_Crit] += AimOverflow;

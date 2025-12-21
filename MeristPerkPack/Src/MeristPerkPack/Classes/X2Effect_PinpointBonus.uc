@@ -16,7 +16,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 
     if (AbilityState.GetMyTemplateName() == 'M31_Pinpoint')
     {
-        if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+        if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
             return 0;
 
         if (ApplyEffectParameters.AbilityResultContext.HitResult == eHit_Crit)

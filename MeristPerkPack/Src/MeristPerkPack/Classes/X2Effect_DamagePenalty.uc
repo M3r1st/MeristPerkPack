@@ -15,7 +15,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 {
     local int DamageModifier;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (bCeiling)

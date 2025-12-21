@@ -1,4 +1,4 @@
-class X2AbilitySet_PA_Harrier extends X2AbilitySet_PlayableAliens;
+class X2AbilitySet_PA_Harrier extends X2Ability_Extended;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -149,23 +149,18 @@ static function X2AbilityTemplate BlasterMaster()
 
 static function X2AbilityTemplate NoGraze()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_Persistent               PersistentEffect;
-    local X2Effect_ChangeAbilityHitContext  Effect;
+    local X2AbilityTemplate             Template;
+    local X2Effect_ChangeResultContext Effect;
     
-    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_FavidsPerkPack.UIPerk_Concentration", false, false);
+    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_FavidsPerkPack.UIPerk_Concentration", false, true);
 
-    PersistentEffect = new class'X2Effect_Persistent';
-    PersistentEffect.EffectName = name("M31_PA_NoGraze_Passive");
-    PersistentEffect.BuildPersistentEffect(1, true, false);
-    PersistentEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
-    Template.AddTargetEffect(PersistentEffect);
-
-    Effect = new class'X2Effect_ChangeAbilityHitContext';
+    Effect = new class'X2Effect_ChangeResultContext';
     Effect.bMatchSourceWeapon = true;
     Effect.ChangeHitResults[eHit_Graze] = eHit_Success;
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }

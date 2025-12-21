@@ -44,7 +44,7 @@ function int GetAttackingDamageModifier(
     if (StandardHit != none && StandardHit.bIndirectFire)
         return 0;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     DamageBonus = `GetConfigInt("M31_EnemyUnknown_DamageBonus");

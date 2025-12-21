@@ -19,11 +19,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
 {
     local XComGameState_Item        WeaponState;
     local XComGameState_Ability     AbilityState;
-    local X2AbilityCost             AbilityCost;
-    local X2AbilityCost_Ammo        AmmoCost;
-    local UnitValue     UnitValue;
-    local int           iCounter;
-    local bool          bHasAmmoCost;
+    local UnitValue                 UnitValue;
+    local int                       iCounter;
 
     SourceUnit.GetUnitValue(CounterName, UnitValue);
     iCounter = int(UnitValue.fValue);
@@ -37,21 +34,8 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     {
         if (kAbility.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
             return false;
-        
-        foreach kAbility.GetMyTemplate().AbilityCosts(AbilityCost)
-        {
-            AmmoCost = X2AbilityCost_Ammo(AbilityCost);
-            if (AmmoCost != none)
-            {
-                if (AmmoCost.iAmmo > 0 && !AmmoCost.bFreeCost)
-                {
-                    bHasAmmoCost = true;
-                    break;
-                }
-            }
-        }
 
-        if (bHasAmmoCost)
+        if (kAbility.iAmmoConsumed > 0)
         {
             WeaponState = XComGameState_Item(NewGameState.GetGameStateForObjectID(kAbility.SourceWeapon.ObjectID));
             if (WeaponState == none)

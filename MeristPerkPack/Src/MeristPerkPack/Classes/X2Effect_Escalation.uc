@@ -48,7 +48,7 @@ function int GetAttackingDamageModifier(
     if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)

@@ -60,7 +60,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     return false;
 }
 
-private function bool ValidateEffects(XComGameState_Unit UnitState)
+simulated function bool ValidateEffects(XComGameState_Unit UnitState)
 {
     local name Effect;
 

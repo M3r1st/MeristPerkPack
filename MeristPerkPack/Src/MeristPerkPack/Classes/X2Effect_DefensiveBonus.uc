@@ -1,4 +1,7 @@
-class X2Effect_WS_ReinforcedScales extends X2Effect_Persistent;
+class X2Effect_DefensiveBonus extends X2Effect_PersistentStatChange;
+
+var int CritResistance;
+var int DamageReduction;
 
 function GetToHitAsTargetModifiers(
     XComGameState_Effect EffectState,
@@ -9,11 +12,11 @@ function GetToHitAsTargetModifiers(
     bool bMelee, bool bFlanking, bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo  ModInfo;
     
     ModInfo.ModType = eHit_Crit;
     ModInfo.Reason = FriendlyName;
-    ModInfo.Value = -1 * `GetConfigInt("M31_PA_WS_ReinforcedScales_CritResistance");
+    ModInfo.Value = -1 * CritResistance;
     ShotModifiers.AddItem(ModInfo);
 }
 
@@ -27,5 +30,16 @@ function int GetDefendingDamageModifier(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     optional XComGameState NewGameState)
 {
-    return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_ReinforcedScales_DamageReduction"));
+    if (class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult))
+    {
+        if (CurrentDamage > 0)
+        {
+            return -1 * Min(CurrentDamage, DamageReduction);
+        }
+    }
+}
+
+defaultproperties
+{
+    EffectName = M31_PA_WS_ReinforcedScales
 }

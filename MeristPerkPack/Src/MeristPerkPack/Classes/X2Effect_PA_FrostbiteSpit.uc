@@ -1,7 +1,5 @@
 class X2Effect_PA_FrostbiteSpit extends X2Effect_Persistent;
 
-var bool bApplyToDOT;
-
 function bool AllowCritOverride()
 {
     return true;
@@ -55,7 +53,7 @@ function int GetAttackingDamageModifier(
     if (!class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult) || CurrentDamage == 0)
         return 0;
 
-    if (!bApplyToDOT && EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (Attacker != none)
@@ -91,7 +89,7 @@ function int GetExtraArmorPiercing(
 
 private function bool IsFrostSpit(name AbilityName)
 {
-    return class'X2AbilitySet_PlayableAliens'.default.FrostbiteSpit_AllowedAbilities.Find(AbilityName) != INDEX_NONE;
+    return class'X2AbilitySet_PA_Viper'.default.FrostbiteSpit_AllowedAbilities.Find(AbilityName) != INDEX_NONE;
 }
 
 defaultproperties

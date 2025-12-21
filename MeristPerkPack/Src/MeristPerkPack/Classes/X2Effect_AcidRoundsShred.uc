@@ -12,7 +12,7 @@ function int GetExtraShredValue(
 {
     local X2WeaponTemplate WeaponTemplate;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (AbilityState.SourceWeapon.ObjectID == 0)

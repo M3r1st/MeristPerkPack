@@ -1,5 +1,9 @@
 class X2Effect_WS_Fracture extends X2Effect_Persistent;
 
+var bool bApplyToFlanked;
+var int AimBonus;
+var int ShredBonus;
+
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
     XComGameState_Unit Attacker,
@@ -11,7 +15,6 @@ function GetToHitModifiers(
     bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local GameRulesCache_VisibilityInfo VisInfo;
     local ShotModifierInfo AimInfo;
 
     if (AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
@@ -20,14 +23,11 @@ function GetToHitModifiers(
     if (Target == none)
         return;
 
-    if (!Target.CanTakeCover()
-        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked")
-        && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo)
-        && (VisInfo.TargetCover == CT_None || Target.GetCurrentStat(eStat_AlertLevel) == 0 && Target.GetTeam() != eTeam_XCom))
+    if (!Target.CanTakeCover() || bApplyToFlanked && class'M31_Helpers'.static.IsFlanking(Attacker, Target))
     {
         AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;
-        AimInfo.Value = `GetConfigInt("M31_PA_WS_Fracture_AimBonus");
+        AimInfo.Value = AimBonus;
         ShotModifiers.AddItem(AimInfo);
     }
 }
@@ -39,7 +39,6 @@ function int GetExtraShredValue(
     XComGameState_Ability AbilityState,
     const out EffectAppliedData AppliedData)
 {
-    local GameRulesCache_VisibilityInfo VisInfo;
     local XComGameState_Unit TargetUnit;
 
     TargetUnit = XComGameState_Unit(TargetDamageable);
@@ -47,17 +46,21 @@ function int GetExtraShredValue(
     if (AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (TargetUnit == none)
         return 0;
 
-    if (!TargetUnit.CanTakeCover()
-        || `GetConfigBool("M31_PA_WS_Fracture_bAppliesAgainstFlanked") && `TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, TargetUnit.ObjectID, VisInfo) && VisInfo.TargetCover == CT_None)
+    if (!TargetUnit.CanTakeCover() || bApplyToFlanked && class'M31_Helpers'.static.IsFlanking(Attacker, TargetUnit))
     {
-        return `GetConfigInt("M31_PA_WS_Fracture_ShredBonus");
+        return ShredBonus;
     }
 
     return 0;
+}
+
+defaultproperties
+{
+    EffectName = M31_PA_WS_Fracture
 }

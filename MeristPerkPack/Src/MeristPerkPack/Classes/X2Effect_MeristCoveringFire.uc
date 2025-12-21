@@ -1,6 +1,6 @@
 class X2Effect_MeristCoveringFire extends X2Effect_CoveringFire dependson(X2Effect_MeristReserveOverwatchPoints);
 
-var private name AbilityToActivate;
+// var private name AbilityToActivate;
 
 var bool bDirectAttackOnly_AllowMultiTarget;
 var bool bDirectAttackOnly_AllowAllies;

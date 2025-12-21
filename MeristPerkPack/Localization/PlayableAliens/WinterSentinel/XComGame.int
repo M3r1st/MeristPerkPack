@@ -2,7 +2,7 @@
 LocFriendlyName="Sentinel's Hide"
 LocLongDescription="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
 LocHelpText="Reduces incoming damage by <Ability:M31_PA_WS_Hide_DamageReduction> and wound recovery time by <Ability:M31_PA_WS_Hide_PaddingHP> HP."
-LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><Bullet> Wound reduction does not work if the <Ability:ClassName> entered a bleeding out state during the mission.<br><br><font color='#909497'>\"Alright, we'll call it a draw.\"</font>"
+LocPromotionPopupText="<Bullet> Damage reduction applies after the grazing damage value is calculated.<br><Bullet> Wound recovery reduction will not apply if the <Ability:ClassName> entered a bleeding out state during the mission.<br><br><font color='#909497'>\"Alright, we'll call it a draw.\"</font>"
 
 [M31_PA_WS_Entwine X2AbilityTemplate]
 LocFriendlyName="Entwine"
@@ -21,10 +21,6 @@ LocFriendlyName="Glacial Armor"
 LocLongDescription="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
 LocHelpText="Gain +<Ability:M31_PA_WS_GlacialArmor_ArmorBonus> armor and +<Ability:M31_PA_WS_GlacialArmor_DodgeBonus> dodge against the first <Ability:M31_PA_WS_GlacialArmor_ActivationsPerTurn> instances of damage each turn."
 LocPromotionPopupText="<Bullet> Works while burning: <Ability:M31_PA_WS_GlacialArmor_bAllowWhileBurning>.<br><br><font color='#909497'>\"Not as fragile as it looks.\"</font>"
-
-[M31_PA_WS_GlacialArmor_Update X2AbilityTemplate]
-LocFriendlyName="Glacial Armor"
-LocFlyOverText="Glacial Armor"
 
 [M31_PA_WS_Dominance X2AbilityTemplate]
 LocFriendlyName="Dominance"
@@ -71,14 +67,14 @@ LocFlyOverText="Delayed Fire"
 
 [M31_PA_WS_Fracture X2AbilityTemplate]
 LocFriendlyName="Fracture"
-LocLongDescription="<Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
-LocHelpText="<Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_PA_WS_Fracture_AimBonus> aim and +<Ability:M31_PA_WS_Fracture_ShredBonus> shred against unflankable enemies."
 LocPromotionPopupText="<Bullet> Applies against flanked enemies: <Ability:M31_PA_WS_Fracture_bAppliesAgainstFlanked>."
 
 [M31_PA_WS_AlloyedCores X2AbilityTemplate]
 LocFriendlyName="Alloyed Cores"
-LocLongDescription="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
-LocHelpText="<Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks against enemies within <Ability:M31_PA_WS_AlloyedCores_Range> tiles have +<Ability:M31_PA_WS_AlloyedCores_CritBonus> crit and pierce up to <Ability:M31_PA_WS_AlloyedCores_PierceBonus> points of armor."
 LocPromotionPopupText="<Bullet> Unlike Close and Personal, the bonus does not decline with distance from the target."
 
 [M31_PA_WS_HeavyOrdnance X2AbilityTemplate]

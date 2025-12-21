@@ -115,14 +115,13 @@ static function bool IsEffectValidForTarget(XComGameState_Unit TargetUnit)
 {
     local UnitValue UnitVal;
 
-    if (TargetUnit == none)         { `LOG("1"); return false; }
-    if (TargetUnit.IsDead())        { `LOG("2"); return false; }
-    if (TargetUnit.bCaptured)       { `LOG("3"); return false; }
-    if (TargetUnit.LowestHP == 0)   { `LOG("4"); return false; }
-    if (TargetUnit.IsBleedingOut()) { `LOG("5"); return false; }
+    if (TargetUnit == none)         { return false; }
+    if (TargetUnit.IsDead())        { return false; }
+    if (TargetUnit.bCaptured)       { return false; }
+    if (TargetUnit.LowestHP == 0)   { return false; }
+    if (TargetUnit.IsBleedingOut()) { return false; }
     if (TargetUnit.GetUnitValue(default.BleedoutValueName, UnitVal) && int(UnitVal.fValue) > 0)
     {
-        `LOG("6"); 
         return false;
     }
 

@@ -38,7 +38,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 {
     local XComGameState_Unit TargetUnit;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     TargetUnit = XComGameState_Unit(Target);
@@ -55,6 +55,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 defaultproperties
 {
     EventName = M31_PA_TaipanCruelty
-    bDisplayInSpecialDamageMessageUI = true
     DuplicateResponse = eDupe_Ignore
+
+    bDisplayInSpecialDamageMessageUI = true
 }

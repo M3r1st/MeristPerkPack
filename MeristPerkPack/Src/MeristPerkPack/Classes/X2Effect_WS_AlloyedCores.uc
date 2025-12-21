@@ -1,5 +1,9 @@
 class X2Effect_WS_AlloyedCores extends X2Effect_Persistent;
 
+var int Range;
+var int CritBonus;
+var int PierceBonus;
+
 function GetToHitModifiers(
     XComGameState_Effect EffectState,
     XComGameState_Unit Attacker,
@@ -11,7 +15,7 @@ function GetToHitModifiers(
     bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo AimInfo;
+    local ShotModifierInfo CritInfo;
 
     if (AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return;
@@ -19,12 +23,12 @@ function GetToHitModifiers(
     if (Target == none)
         return;
 
-    if (Attacker.TileDistanceBetween(Target) < `GetConfigInt("M31_PA_WS_AlloyedCores_Range"))
+    if (Attacker.TileDistanceBetween(Target) < Range)
     {
-        AimInfo.ModType = eHit_Crit;
-        AimInfo.Reason = FriendlyName;
-        AimInfo.Value = `GetConfigInt("M31_PA_WS_AlloyedCores_CritBonus");
-        ShotModifiers.AddItem(AimInfo);
+        CritInfo.ModType = eHit_Crit;
+        CritInfo.Reason = FriendlyName;
+        CritInfo.Value = CritBonus;
+        ShotModifiers.AddItem(CritInfo);
     }
 }
 
@@ -42,14 +46,14 @@ function int GetExtraArmorPiercing(
     if (AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return 0;
 
-    if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (TargetUnit == none)
         return 0;
 
-    if (Attacker.TileDistanceBetween(TargetUnit) < `GetConfigInt("M31_PA_WS_AlloyedCores_Range"))
+    if (Attacker.TileDistanceBetween(TargetUnit) < Range)
     {
-        return `GetConfigInt("M31_PA_WS_AlloyedCores_PierceBonus");
+        return PierceBonus;
     }
 }

@@ -26,6 +26,7 @@ switch ($config)
     default { ThrowFailure "Unknown build configuration $config" }
 }
 
+$builder.AddToClean("MeristBuffMe")
 $builder.AddToClean("MeristEnhancedShieldEffects")
 
 # Uncomment this line to enable cooking.

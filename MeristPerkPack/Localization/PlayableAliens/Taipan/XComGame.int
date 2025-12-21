@@ -58,7 +58,7 @@ LocFlyOverText="Return Fire"
 LocFriendlyName="Nowhere to Run"
 LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <font color='#0bff9b'>Covering Fire</font>."
 LocHelpText="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot."
-LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Only input-triggered abilities are valid for <Ability:M31_FriendlyName>.<br><Bullet> <Ability:M31_FriendlyName> can be activated by non-standard flanking shots."
+LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Only input-triggered abilities can activate <Ability:M31_FriendlyName>.<br><Bullet> <Ability:M31_FriendlyName> can be activated by non-standard flanking shots."
 LocFlyOverText="Nowhere to Run"
 
 [M31_PA_TaipanWatchThemRun_Trigger X2AbilityTemplate]

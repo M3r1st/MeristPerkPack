@@ -18,7 +18,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
         TargetUnit = XComGameState_Unit(Target);
         if (TargetUnit != none)
         {
-            if (EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+            if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
                 return 0;
 
             if (class'XComGameStateContext_Ability'.static.IsHitResultHit(ApplyEffectParameters.AbilityResultContext.HitResult))

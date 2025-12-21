@@ -1,4 +1,4 @@
-class X2Effect_Sidewinder_Move extends X2Effect_Persistent;
+class X2Effect_PA_Sidewinder_Move extends X2Effect_Persistent;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -8,11 +8,9 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     TargetUnit = XComGameState_Unit(kNewTargetState);
     GroupState = TargetUnit.GetGroupMembership();
 
-    `LOG("Trying to change team for " $ TargetUnit.GetMyTemplateName(), true, 'Merist_X2Effect_Sidewinder_Move');
+    TargetUnit.SetUnitFloatValue(class'X2Effect_PA_Sidewinder'.default.OriginalGroupValueName, GroupState.ObjectID, eCleanup_BeginTactical);
 
-    TargetUnit.SetUnitFloatValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupState.ObjectID, eCleanup_BeginTactical);
-
-    GroupState = XComGameState_AIGroup(NewGameState.CreateNewStateObject(class'XComGameState_AIGroup'));	
+    GroupState = XComGameState_AIGroup(NewGameState.CreateNewStateObject(class'XComGameState_AIGroup'));
     GroupState.AddUnitToGroup(TargetUnit.ObjectID, NewGameState);
     GroupState.bSummoningSicknessCleared = true;
 }
@@ -23,16 +21,15 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     local XComGameState_AIGroup GroupState;
     local UnitValue GroupValue;
 
-
     TargetUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     GroupState = TargetUnit.GetGroupMembership();
     `assert(GroupState.m_arrMembers.Length == 1 && GroupState.m_arrMembers[0].ObjectID == TargetUnit.ObjectID);
     NewGameState.RemoveStateObject(GroupState.ObjectID);
 
-    TargetUnit.GetUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupValue);
+    TargetUnit.GetUnitValue(class'X2Effect_PA_Sidewinder'.default.OriginalGroupValueName, GroupValue);
     GroupState = XComGameState_AIGroup(NewGameState.ModifyStateObject(class'XComGameState_AIGroup', GroupValue.fValue));
     GroupState.AddUnitToGroup(TargetUnit.ObjectID, NewGameState);
-    TargetUnit.ClearUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName);
+    TargetUnit.ClearUnitValue(class'X2Effect_PA_Sidewinder'.default.OriginalGroupValueName);
 }
 
 function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<name> ActionPoints, XComGameState_Effect EffectState)
@@ -41,17 +38,17 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
     local XComGameState_AIGroup GroupState;
 
     GroupState = UnitState.GetGroupMembership();
-    UnitState.GetUnitValue(class'X2AbilitySet_PlayableAliens'.default.SidewinderOriginalGroupValueName, GroupValue);
+    UnitState.GetUnitValue(class'X2Effect_PA_Sidewinder'.default.OriginalGroupValueName, GroupValue);
 
-    if (GroupState.ObjectID != GroupValue.fValue && UnitState.IsAbleToAct())
+    if (GroupState.ObjectID != GroupValue.fValue && UnitState.IsAbleToAct() && !UnitState.IsMindControlled())
     {
         ActionPoints.Length = 0;
         ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
-    }	
+    }
 }
 
 defaultproperties
 {
-    EffectName = "M31_PA_Sidewinder_Move"
+    EffectName = M31_PA_Sidewinder_Move
     DuplicateResponse = eDupe_Ignore
 }

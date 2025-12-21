@@ -1,17 +1,59 @@
 class X2Effect_WS_GlacialArmor extends X2Effect_BonusArmor;
 
-var privatewrite name UnitValueName;
 var int ActivationsPerTurn;
+var int ArmorBonus;
+var int DodgeBonus;
+var int CritResistance;
+var int DamageReduction;
+var int DamageReductionPrc;
+var bool bAllowWhileBurning;
 
-function int GetArmorChance(XComGameState_Effect EffectState, XComGameState_Unit UnitState)
+var name CountValueName;
+
+function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-    return 100;
+    local X2EventManager        EventMgr;
+    local XComGameState_Unit    TargetState;
+    local Object                EffectObj;
+
+    EventMgr = `XEVENTMGR;
+    EffectObj = EffectGameState;
+    TargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+    EventMgr.RegisterForEvent(EffectObj, 'UnitTakeEffectDamage', EffectEventListener_GlacialArmor, ELD_Immediate,, TargetState,, EffectObj);
+}
+
+static function EventListenerReturn EffectEventListener_GlacialArmor(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
+{
+    local XComGameState_Effect      EffectState;
+    local X2Effect_WS_GlacialArmor  Effect;
+    local XComGameState_Unit        SourceUnit;
+    local UnitValue                 CountUnitValue;
+
+    EffectState = XComGameState_Effect(CallbackData);
+    SourceUnit = XComGameState_Unit(EventSource);
+    if (EffectState != none && SourceUnit != none)
+    {
+        Effect = X2Effect_WS_GlacialArmor(EffectState.GetX2Effect());
+        if (Effect != none)
+        {
+            if (Effect.IsEffectCurrentlyRelevant(EffectState, SourceUnit))
+            {
+                SourceUnit.GetUnitValue(default.CountValueName, CountUnitValue);
+                SourceUnit.SetUnitFloatValue(default.CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
+            }
+        }
+    }
+
+    return ELR_NoInterrupt;
 }
 
 function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState)
 {
-    if (ValidateEffect(UnitState))
-        return `GetConfigInt("M31_PA_WS_GlacialArmor_ArmorBonus");
+    if (IsEffectCurrentlyRelevant(EffectState, UnitState))
+    {
+        return ArmorBonus;
+    }
 
     return 0;
 }
@@ -25,14 +67,19 @@ function GetToHitAsTargetModifiers(
     bool bMelee, bool bFlanking, bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo  DodgeInfo, CritInfo;
 
-    if (ValidateEffect(Target))
+    if (IsEffectCurrentlyRelevant(EffectState, Target))
     {
-        ModInfo.ModType = eHit_Graze;
-        ModInfo.Reason = FriendlyName;
-        ModInfo.Value = `GetConfigInt("M31_PA_WS_GlacialArmor_DodgeBonus");
-        ShotModifiers.AddItem(ModInfo);
+        DodgeInfo.ModType = eHit_Graze;
+        DodgeInfo.Reason = FriendlyName;
+        DodgeInfo.Value = DodgeBonus;
+        ShotModifiers.AddItem(DodgeInfo);
+
+        CritInfo.ModType = eHit_Crit;
+        CritInfo.Reason = FriendlyName;
+        CritInfo.Value = -1 * CritResistance;
+        ShotModifiers.AddItem(CritInfo);
     }
 }
 
@@ -46,8 +93,16 @@ function int GetDefendingDamageModifier(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     optional XComGameState NewGameState)
 {
-    if (ValidateEffect(XComGameState_Unit(TargetDamageable)))
-        return -1 * Min(CurrentDamage, `GetConfigInt("M31_PA_WS_GlacialArmor_DamageReduction"));
+    if (class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult))
+    {
+        if (CurrentDamage > 0)
+        {
+            if (IsEffectCurrentlyRelevant(EffectState, XComGameState_Unit(TargetDamageable)))
+            {
+                return -1 * Min(CurrentDamage, DamageReduction);
+            }
+        }
+    }
     
     return 0;
 }
@@ -62,33 +117,38 @@ function float GetPostDefaultDefendingDamageModifier_CH(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     XComGameState NewGameState)
 {
-    
-    if (ValidateEffect(TargetUnit))
-        return -1 * Min(WeaponDamage, WeaponDamage * `GetConfigInt("M31_PA_WS_GlacialArmor_DamageReduction_Prc") / 100); 
+    if (class'XComGameStateContext_Ability'.static.IsHitResultHit(ApplyEffectParameters.AbilityResultContext.HitResult))
+    {
+        if (WeaponDamage > 0)
+        {
+            if (IsEffectCurrentlyRelevant(EffectState, TargetUnit))
+            {
+                return -1 * Min(WeaponDamage, WeaponDamage * DamageReductionPrc / 100); 
+            }
+        }
+    }
 
     return 0;
 }
 
-function bool ValidateEffect(XComGameState_Unit UnitState)
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
 {
-    if (UnitState == none)
-        return false;
-
-    return GetCurrentStackCount(UnitState) < ActivationsPerTurn
-        && (`GetConfigBool("M31_PA_WS_GlacialArmor_bAllowWhileBurning") || !UnitState.IsBurning());
+    return GetCurrentStackCount(TargetUnit) < ActivationsPerTurn && (bAllowWhileBurning || !TargetUnit.IsBurning());
 }
 
-static function int GetCurrentStackCount(XComGameState_Unit UnitState)
+function int GetCurrentStackCount(XComGameState_Unit UnitState)
 {
-    local UnitValue Counter;
-    local int CurrentCount;
-    UnitState.GetUnitValue(default.UnitValueName, Counter);
-    CurrentCount = int(Counter.fValue);
-    return CurrentCount;
+    local UnitValue CountUnitValue;
+
+    UnitState.GetUnitValue(default.CountValueName, CountUnitValue);
+
+    return int(CountUnitValue.fValue);
 }
 
 defaultproperties
 {
+    EffectName = M31_PA_WS_GlacialArmor
     DuplicateResponse = eDupe_Ignore
-    UnitValueName = M31_PA_WS_GlacialArmor_Counter
+
+    CountValueName = M31_PA_WS_GlacialArmor_Counter
 }

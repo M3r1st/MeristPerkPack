@@ -51,7 +51,7 @@ static function X2AbilityTemplate BlindSpot()
     Effect.AbilityTargetConditions.AddItem(default.MatchingWeaponCondition);
     Effect.AbilityTargetConditions.AddItem(VisCondition);
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,, Template.AbilitySourceName);
     Effect.EffectName = 'M31_CA_BlindSpot';
 
     Template.AddTargetEffect(Effect);
@@ -85,7 +85,7 @@ static function X2AbilityTemplate ChaosDriver()
     Effect.AttackingDamageMultiplierPerCharge = `GetConfigInt("M31_CA_ChaosDriver_BonusPerCharge");
     Effect.DefendingDamageMultiplierPerCharge = `GetConfigInt("M31_CA_ChaosDriver_PenaltyPerCharge");
     Effect.BuildPersistentEffect(`GetConfigInt("M31_CA_ChaosDriver_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
-    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_CA_ChaosDriver_BonusText"), Template.IconImage, true, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_CA_ChaosDriver_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     Template.AbilityCosts.AddItem(default.FreeActionCost);
@@ -208,7 +208,7 @@ static function X2AbilityTemplate KillingSpree()
     Effect.AddToHitModifier(`GetConfigInt("M31_CA_KillingSpree_CritBonus"), eHit_Crit);
     Effect.AbilityTargetConditions.AddItem(default.MatchingWeaponCondition);
     Effect.BuildPersistentEffect(`GetConfigInt("M31_CA_KillingSpree_Duration"), false, true, false, eGameRule_PlayerTurnEnd);
-    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_CA_KillingSpree_BonusText"), Template.IconImage, true, , Template.AbilitySourceName);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, `GetLocalizedString("M31_CA_KillingSpree_BonusText"), Template.IconImage,,, Template.AbilitySourceName);
     Effect.EffectName = 'M31_CA_KillingSpree_Stats';
     Template.AddTargetEffect(Effect);
 

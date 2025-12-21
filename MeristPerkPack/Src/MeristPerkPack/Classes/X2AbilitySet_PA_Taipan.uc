@@ -1,4 +1,6 @@
-class X2AbilitySet_PA_Taipan extends X2AbilitySet_PlayableAliens;
+class X2AbilitySet_PA_Taipan extends X2Ability_Extended;
+
+var array<name> TaipanWatchThemRun_IncludeAbilities;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -9,13 +11,13 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(MalevolentFocus());
     Templates.AddItem(TaipanBloodThirst());
     Templates.AddItem(TaipanAmbush());
-        Templates.AddItem(TaipanAmbushAttack());
+        Templates.AddItem(TaipanAmbushPassive());
     Templates.AddItem(TaipanAmbush2());
-        Templates.AddItem(TaipanAmbush2Trigger());
+        Templates.AddItem(TaipanAmbush2Passive());
     Templates.AddItem(TaipanReturnFire());
-        Templates.AddItem(TaipanReturnFireAttack());
+        Templates.AddItem(TaipanReturnFirePassive());
     Templates.AddItem(TaipanWatchThemRun());
-        Templates.AddItem(TaipanWatchThemRunTrigger());
+        Templates.AddItem(TaipanWatchThemRunPassive());
     Templates.AddItem(TaipanBite());
     Templates.AddItem(TaipanDeadlyBite());
         Templates.AddItem(TaipanDeadlyBiteAttack());
@@ -40,7 +42,14 @@ static function X2AbilityTemplate VeryAngryBite()
 
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
 
-    Template.bLimitTargetIcons = true;
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
+    ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_VeryAngryBite_AimBonus");
+    ToHitCalc.BuiltInCritMod = `GetConfigInt("M31_PA_VeryAngryBite_CritBonus");
+    ToHitCalc.bAllowCrit = `GetConfigBool("M31_PA_VeryAngryBite_bAllowCrit");
+    ToHitCalc.bReactionFire = `GetConfigBool("M31_PA_VeryAngryBite_bIsReactonFire");
+    Template.AbilityToHitCalc = ToHitCalc;
+
+    Template.AddShooterEffectExclusions();
 
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.iNumPoints = 1;
@@ -50,32 +59,21 @@ static function X2AbilityTemplate VeryAngryBite()
         ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.MoveActionPoint);
     Template.AbilityCosts.AddItem(ActionPointCost);
 
-    AddCooldown(Template, `GetConfigInt("M31_PA_VeryAngryBite_Cooldown"));
-
-    ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
-    ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_VeryAngryBite_AimBonus");
-    ToHitCalc.BuiltInCritMod = `GetConfigInt("M31_PA_VeryAngryBite_CritBonus");
-    ToHitCalc.bAllowCrit = `GetConfigBool("M31_PA_VeryAngryBite_bAllowCrit");
-    ToHitCalc.bReactionFire = `GetConfigBool("M31_PA_VeryAngryBite_bIsReactonFire");
-    Template.AbilityToHitCalc = ToHitCalc;
-
     Template.AbilityTargetConditions.Length = 0;
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = true;
     UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = 180;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-    AddAdjacencyCondition(Template);
 
-    Template.AddShooterEffectExclusions();
+    AddCooldown(Template, `GetConfigInt("M31_PA_VeryAngryBite_Cooldown"));
 
     Template.AddTargetEffect(CreateVeryAngryBiteDamageEffect());
     Template.AddTargetEffect(CreateVeryAngryBiteBleedingEffect());
-    
-    Template.bOverrideMeleeDeath = false;
-    Template.bShowActivation = true;
 
     SetFireAnim(Template, 'HL_M31_ViciousBite');
 
@@ -86,28 +84,28 @@ static function X2AbilityTemplate VeryAngryBite()
     return Template;
 }
 
-static function X2Effect_ApplyDamageWithRank CreateVeryAngryBiteDamageEffect()
+static function X2Effect_ApplyScalingDamage CreateVeryAngryBiteDamageEffect()
 {
-    local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
+    local X2Effect_ApplyScalingDamage DamageEffect;
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
-    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_VeryAngryBite_Damage");
-    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_DamagePerRank");
-    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_CritDamagePerRank");
+    DamageEffect = new class'X2Effect_ApplyScalingDamage';
+    DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_VeryAngryBite_Damage");
+    DamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_DamagePerRank");
+    DamageEffect.CritDamagePerRank = `GetConfigFloat("M31_PA_VeryAngryBite_CritDamagePerRank");
 
-    return PhysicalDamageEffect;
+    return DamageEffect;
 }
 
 static function X2Effect_Persistent CreateVeryAngryBiteBleedingEffect()
 {
     local X2Effect_Persistent BleedingEffect;
-    
+
     BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDuration"),
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage"),
         `GetConfigInt("M31_PA_VeryAngryBite_BleedDamage_Spread"),
         `GetConfigFloat("M31_PA_VeryAngryBite_BleedDamage_Prc"));
-    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_PA_VeryAngryBite_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding"); 
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_Bleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding");
 
     return BleedingEffect;
 }
@@ -120,6 +118,8 @@ static function X2AbilityTemplate CrystallineCornea()
     Template = Passive('M31_PA_CrystallineCornea', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_horror", false, true);
 
     Effect = new class'X2Effect_CrystallineCornea';
+    Effect.AimBonus = `GetConfigInt("M31_PA_CrystallineCornea_AimBonus");
+    Effect.ExtraAimBonus = `GetConfigInt("M31_PA_CrystallineCornea_FlankAimBonus");
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
@@ -129,12 +129,14 @@ static function X2AbilityTemplate CrystallineCornea()
 
 static function X2AbilityTemplate MalevolentFocus()
 {
-    local X2AbilityTemplate             Template;
-    local X2Effect_MalevolentFocus      Effect;
+    local X2AbilityTemplate         Template;
+    local X2Effect_MalevolentFocus  Effect;
     
     Template = Passive('M31_PA_MalevolentFocus', "img:///UILibrary_MeristPerkIcons.UIPerk_MalevolentFocus", false, true);
 
     Effect = new class'X2Effect_MalevolentFocus';
+    Effect.CritBonus = `GetConfigInt("M31_PA_MalevolentFocus_CritBonus");
+    Effect.bApplyOnlyOnReaction = `GetConfigBool("M31_PA_MalevolentFocus_bOnlyForReaction");
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Effect.BuildPersistentEffect(1, true, false);
     
@@ -145,16 +147,16 @@ static function X2AbilityTemplate MalevolentFocus()
 
 static function X2AbilityTemplate TaipanBloodThirst()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_PA_TaipanBloodThirst     Effect;
-    
+    local X2AbilityTemplate             Template;
+    local X2Effect_PA_TaipanBloodThirst Effect;
+
     Template = Passive('M31_PA_TaipanBloodThirst', "img:///UILibrary_XPACK_Common.UIPerk_bleeding", false, true);
 
     Effect = new class'X2Effect_PA_TaipanBloodThirst';
-    Effect.iDefaultDamagePerStack = `GetConfigInt("M31_PA_TaipanBloodThirst_DamagePerStack");
-    Effect.iMaxStacks = `GetConfigInt("M31_PA_TaipanBloodThirst_MaxStacks");
-    Effect.iMaxStacksPerTurn = `GetConfigInt("M31_PA_TaipanBloodThirst_MaxStacksPerTurn");
-    Effect.iStackDuration = `GetConfigInt("M31_PA_TaipanBloodThirst_StackDuration");
+    Effect.DamagePerStack = `GetConfigInt("M31_PA_TaipanBloodThirst_DamagePerStack");
+    Effect.MaxStacks = `GetConfigInt("M31_PA_TaipanBloodThirst_MaxStacks");
+    Effect.MaxStacksPerTurn = `GetConfigInt("M31_PA_TaipanBloodThirst_MaxStacksPerTurn");
+    Effect.StackDuration = `GetConfigInt("M31_PA_TaipanBloodThirst_StackDuration");
     Effect.bRefreshDuration = `GetConfigBool("M31_PA_TaipanBloodThirst_bRefreshDuration");
     Effect.bMatchSourceWeapon = `GetConfigBool("M31_PA_TaipanBloodThirst_bMatchSourceWeapon");
     Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_PA_TaipanBloodThirst_bIncreaseOnlyOnHit");
@@ -167,22 +169,6 @@ static function X2AbilityTemplate TaipanBloodThirst()
 
 static function X2AbilityTemplate TaipanAmbush()
 {
-    local X2AbilityTemplate             Template;
-    local X2Effect_PA_TaipanAmbush      Effect;
-
-    Template = Passive('M31_PA_TaipanAmbush', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol", false, true);
-
-    Effect = new class'X2Effect_PA_TaipanAmbush';
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Template.AdditionalAbilities.AddItem('M31_PA_TaipanAmbush_Attack');
-
-    return Template;
-}
-
-static function X2AbilityTemplate TaipanAmbushAttack()
-{
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
     local X2Condition_UnitProperty          UnitPropertyCondition;
@@ -190,13 +176,23 @@ static function X2AbilityTemplate TaipanAmbushAttack()
     local X2AbilityToHitCalc_StandardAim    ToHitCalc;
     local X2AbilityTarget_Single            SingleTarget;
 
-    Template = Attack('M31_PA_TaipanAmbush_Attack', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol", false, true);
+    Template = Attack('M31_PA_TaipanAmbush', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol", false, true);
     
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.BuildInterruptGameStateFn = none;
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = true;
+    Template.AbilityToHitCalc = ToHitCalc;
 
     Template.AbilityTriggers.Length = 0;
-
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.EventID = 'ObjectMoved';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -207,67 +203,55 @@ static function X2AbilityTemplate TaipanAmbushAttack()
     Template.AbilityShooterConditions.Length = 0;
     Template.AbilityTargetConditions.Length = 0;
 
-    VisibilityCondition = new class'X2Condition_Visibility';
-    VisibilityCondition.bRequireGameplayVisible = true;
-    VisibilityCondition.bDisablePeeksOnMovement = true;
-    VisibilityCondition.bAllowSquadsight = false;
-    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
-    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeSquadmates = true;
-    UnitPropertyCondition.FailOnNonUnits = true;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     // Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn'); // Allow to be usable during unit's own turn
     Template.AddShooterEffectExclusions();
-
-    AddBladestormMark(Template, 'M31_PA_TaipanAmbush_MarkTarget');
     AddSuppressedCondition(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanAmbush_Counter', `GetConfigInt("M31_PA_TaipanAmbush_ActivationsPerTurn"));
 
-    SingleTarget = new class'X2AbilityTarget_Single';
-    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
-    Template.AbilityTargetStyle = SingleTarget;
-
-    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-    ToHitCalc.bReactionFire = true;
-    Template.AbilityToHitCalc = ToHitCalc;
-    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    VisibilityCondition.bAllowSquadsight = false;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+    AddBladestormMark(Template, 'M31_PA_TaipanAmbush_MarkTarget');
 
     AddAmmoCost(Template, 1);
 
-    Template.bShowActivation = true;
-    Template.bFrameEvenWhenUnitIsHidden = true;
+    Template.AdditionalAbilities.AddItem('M31_PA_TaipanAmbush_Passive');
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+
+    return Template;
+}
+
+static function X2AbilityTemplate TaipanAmbushPassive()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_AllowReactionFireCrit    Effect;
+
+    Template = Passive('M31_PA_TaipanAmbush_Passive', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol", false, true);
+
+    Effect = new class'X2Effect_AllowReactionFireCrit';
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
 
 static function X2AbilityTemplate TaipanAmbush2()
 {
-    local X2AbilityTemplate             Template;
-    local X2Effect_PA_TaipanAmbush      Effect;
-
-    Template = Passive('M31_PA_TaipanAmbush2', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol", false, true);
-
-    Effect = new class'X2Effect_PA_TaipanAmbush';
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Template.AdditionalAbilities.AddItem('M31_PA_TaipanAmbush2_Trigger');
-
-    return Template;
-}
-
-static function X2AbilityTemplate TaipanAmbush2Trigger()
-{
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
 
-    Template = SelfTargetTrigger('M31_PA_TaipanAmbush2_Trigger', "img:///UILibrary_DLC3Images.UIPerk_spark_hunterprotocol");
+    Template = SelfTargetTrigger('M31_PA_TaipanAmbush2', "img:///UILibrary_PerkIcons.UIPerk_sentinel");
     
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.EventID = 'PlayerTurnEnded';
@@ -277,29 +261,35 @@ static function X2AbilityTemplate TaipanAmbush2Trigger()
     Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
     Template.AbilityTriggers.AddItem(Trigger);
 
-    AddSuppressedCondition(Template);
     Template.AddShooterEffectExclusions();
+    AddSuppressedCondition(Template);
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
     Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
 
-    Template.BuildVisualizationFn = Ambush_BuildVisualization;
+    Template.BuildVisualizationFn = class'X2AbilitySet_PA_Viper'.static.Ambush_BuildVisualization;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_TaipanAmbush2_Passive');
+
+    return Template;
+}
+
+static function X2AbilityTemplate TaipanAmbush2Passive()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Effect_AllowReactionFireCrit    Effect;
+
+    Template = Passive('M31_PA_TaipanAmbush2_Passive', "img:///UILibrary_PerkIcons.UIPerk_sentinel", false, true);
+
+    Effect = new class'X2Effect_AllowReactionFireCrit';
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Template.AddTargetEffect(Effect);
 
     return Template;
 }
 
 static function X2AbilityTemplate TaipanReturnFire()
-{
-    local X2AbilityTemplate Template;
-
-    Template = Passive('M31_PA_TaipanReturnFire', "img:///UILibrary_PerkIcons.UIPerk_returnfire", false, true);
-
-    Template.AdditionalAbilities.AddItem('M31_PA_TaipanReturnFire_Attack');
-
-    return Template;
-}
-
-static function X2AbilityTemplate TaipanReturnFireAttack()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
@@ -307,10 +297,22 @@ static function X2AbilityTemplate TaipanReturnFireAttack()
     local X2AbilityToHitCalc_StandardAim    ToHitCalc;
     local X2AbilityTarget_Single            SingleTarget;
 
-    Template = Attack('M31_PA_TaipanReturnFire_Attack', "img:///UILibrary_PerkIcons.UIPerk_returnfire", false, true);
+    Template = Attack('M31_PA_TaipanReturnFire', "img:///UILibrary_PerkIcons.UIPerk_returnfire", false, true);
     
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.BuildInterruptGameStateFn = none;
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
+    SingleTarget = new class'X2AbilityTarget_Single';
+    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+    Template.AbilityTargetStyle = SingleTarget;
+
+    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+    ToHitCalc.bReactionFire = true;
+    ToHitCalc.bIgnoreCoverBonus = true;
+    Template.AbilityToHitCalc = ToHitCalc;
 
     Template.AbilityTriggers.Length = 0;
 
@@ -325,35 +327,25 @@ static function X2AbilityTemplate TaipanReturnFireAttack()
     Template.AbilityShooterConditions.Length = 0;
     Template.AbilityTargetConditions.Length = 0;
 
-    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeSquadmates = true;
-    UnitPropertyCondition.FailOnNonUnits = true;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     // Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn'); // Allow to be usable during unit's own turn
     Template.AddShooterEffectExclusions();
-
     AddSuppressedCondition(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanReturnFire_Counter', `GetConfigInt("M31_PA_TaipanReturnFire_ActivationsPerTurn"));
 
-    SingleTarget = new class'X2AbilityTarget_Single';
-    SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
-    Template.AbilityTargetStyle = SingleTarget;
-
-    ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
-    ToHitCalc.bReactionFire = true;
-    ToHitCalc.bIgnoreCoverBonus = true;
-    Template.AbilityToHitCalc = ToHitCalc;
-    Template.AbilityToHitOwnerOnMissCalc = ToHitCalc;
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeSquadmates = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
     AddAmmoCost(Template, 1);
 
-    Template.bShowActivation = true;
+    Template.AdditionalAbilities.AddItem('M31_PA_TaipanReturnFire_Passive');
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
@@ -414,48 +406,113 @@ static function EventListenerReturn AbilityTriggerEventListener_TaipanReturnFire
     return ELR_NoInterrupt;
 }
 
-static function X2AbilityTemplate TaipanWatchThemRun()
+static function X2AbilityTemplate TaipanReturnFirePassive()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_PA_TaipanWatchThemRun    Effect;
+    local X2AbilityTemplate Template;
 
-    Template = Passive('M31_PA_TaipanWatchThemRun', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist", false, true);
+    Template = Passive('M31_PA_TaipanReturnFire_Passive', "img:///UILibrary_PerkIcons.UIPerk_returnfire", false, true);
 
-    Effect = new class'X2Effect_PA_TaipanWatchThemRun';
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
-
-    Template.AdditionalAbilities.AddItem('M31_PA_TaipanWatchThemRun_Trigger');
-    Template.AdditionalAbilities.AddItem('CoveringFire');
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
 
-static function X2AbilityTemplate TaipanWatchThemRunTrigger()
+static function X2AbilityTemplate TaipanWatchThemRun()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
 
-    Template = SelfTargetTrigger('M31_PA_TaipanWatchThemRun_Trigger', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist");
+    Template = SelfTargetTrigger('M31_PA_TaipanWatchThemRun', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist");
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = class'X2Effect_PA_TaipanWatchThemRun'.default.EventName;
+    Trigger.ListenerData.EventID = 'AbilityActivated';
     Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_TaipanWatchThemRun;
     Template.AbilityTriggers.AddItem(Trigger);
 
-    AddSuppressedCondition(Template);
     Template.AddShooterEffectExclusions();
+    AddSuppressedCondition(Template);
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
     Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
 
     AddUnitValueCondition(Template, 'M31_PA_TaipanWatchThemRun_Counter', `GetConfigInt("M31_PA_TaipanWatchThemRun_ActivationsPerTurn"));
 
-    Template.BuildVisualizationFn = Ambush_BuildVisualization;
+    Template.BuildVisualizationFn = class'X2AbilitySet_PA_Viper'.static.Ambush_BuildVisualization;
+
+    Template.AdditionalAbilities.AddItem('M31_PA_TaipanWatchThemRun_Passive');
+    Template.AdditionalAbilities.AddItem('CoveringFire');
 
     return Template;
+}
+
+static function EventListenerReturn AbilityTriggerEventListener_TaipanWatchThemRun(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameStateContext_Ability      AbilityContext;
+    local XComGameState_Ability             ActivatedAbilityState;
+    local XComGameState_Ability             CallbackAbilityState;
+    local XComGameState_Unit                SourceUnit;
+    local XComGameState_Unit                TargetUnit;
+    local X2AbilityTemplate                 AbilityTemplate;
+    local X2AbilityToHitCalc_StandardAim    StandardAim;
+    local GameRulesCache_VisibilityInfo     VisInfo;
+    local bool                              bShouldActivate;
+
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
+    {
+        ActivatedAbilityState = XComGameState_Ability(EventData);
+        CallbackAbilityState = XComGameState_Ability(CallbackData);
+        SourceUnit = XComGameState_Unit(EventSource);
+
+        if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
+        {
+            return ELR_NoInterrupt;
+        }
+
+        if (ActivatedAbilityState.IsAbilityInputTriggered())
+        {
+            if (ActivatedAbilityState.IsMeleeAbility() || default.TaipanWatchThemRun_IncludeAbilities.Find(ActivatedAbilityState.GetMyTemplateName()) != INDEX_NONE)
+            {
+                bShouldActivate = true;
+            }
+            else
+            {
+                TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID,, GameState.HistoryIndex - 1));
+                if (TargetUnit != none)
+                {
+                    AbilityTemplate = ActivatedAbilityState.GetMyTemplate();
+                    StandardAim = X2AbilityToHitCalc_StandardAim(AbilityTemplate.AbilityToHitCalc);
+                    if (StandardAim != none)
+                    {
+                        if (SourceUnit.CanFlank() && TargetUnit.CanTakeCover())
+                        {
+                            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, GameState.HistoryIndex - 1))
+                            {
+                                if (VisInfo.TargetCover == CT_None || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0 && TargetUnit.GetTeam() != eTeam_XCom)
+                                {
+                                    bShouldActivate = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (bShouldActivate)
+            {
+                return CallbackAbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
+            }
+        }
+    }
+
+    return ELR_NoInterrupt;
+}
+
+static function X2AbilityTemplate TaipanWatchThemRunPassive()
+{
+    return Passive('M31_PA_TaipanWatchThemRun_Passive', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist", false, true);
 }
 
 static function X2AbilityTemplate TaipanBite()
@@ -464,7 +521,7 @@ static function X2AbilityTemplate TaipanBite()
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
     local X2AbilityTarget_MovingMelee_FixedRange MeleeTarget;
     local X2Condition_UnitProperty          UnitPropertyCondition;
-    local X2Effect_ApplyDamageWithRank      PhysicalDamageEffect;
+    local X2Effect_ApplyScalingDamage       DamageEffect;
     local X2AbilityCost_ActionPoints        ActionPointCost;
 
     Template = MovingMelee('M31_PA_TaipanBite', "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite", false, false);
@@ -480,10 +537,10 @@ static function X2AbilityTemplate TaipanBite()
     MeleeTarget = new class'X2AbilityTarget_MovingMelee_FixedRange';
     MeleeTarget.iFixedRange = 1;
     Template.AbilityTargetStyle = MeleeTarget;
-    Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
     Template.AddShooterEffectExclusions();
@@ -496,20 +553,15 @@ static function X2AbilityTemplate TaipanBite()
 
     AddCooldown(Template, `GetConfigInt("M31_PA_TaipanBite_Cooldown"));
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
-    PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_TaipanBite_Damage");
-    PhysicalDamageEffect.EffectDamageValue.Rupture = `GetConfigInt("M31_PA_TaipanBite_Rupture");
-    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_TaipanBite_DamagePerRank");
-    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_TaipanBite_CritDamagePerRank");
-    Template.AddTargetEffect(PhysicalDamageEffect);
-
+    DamageEffect = new class'X2Effect_ApplyScalingDamage';
+    DamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_TaipanBite_Damage");
+    DamageEffect.EffectDamageValue.Rupture = `GetConfigInt("M31_PA_TaipanBite_Rupture");
+    DamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_TaipanBite_DamagePerRank");
+    DamageEffect.CritDamagePerRank = `GetConfigFloat("M31_PA_TaipanBite_CritDamagePerRank");
+    Template.AddTargetEffect(DamageEffect);
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
     
-    Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bSkipMoveStop = true;
-    Template.bOverrideMeleeDeath = false;
-
-    Template.bShowActivation = true;
+    SetFireAnim(Template, 'HL_M31_ViciousBite');
 
     Template.OverrideAbilityAvailabilityFn = TaipanBite_OverrideAbilityAvailability;
 
@@ -529,7 +581,6 @@ function TaipanBite_OverrideAbilityAvailability(out AvailableAction Action, XCom
 
 static function X2Effect_Persistent CreateTaipanBiteBleedingEffect()
 {
-
     local X2Effect_Persistent BleedingEffect;
     
     BleedingEffect = class'M31_Helpers'.static.CreateBleedingStatusEffect(
@@ -550,6 +601,7 @@ static function X2AbilityTemplate TaipanDeadlyBite()
 
     Template.AdditionalAbilities.AddItem('M31_PA_TaipanDeadlyBite_Attack');
     Template.AdditionalAbilities.AddItem('M31_PA_TaipanDeadlyBite_ChaserAttack');
+    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
 
     return Template;
 }
@@ -561,65 +613,76 @@ static function X2AbilityTemplate TaipanDeadlyBiteAttack()
     local X2AbilityTrigger_EventListener    Trigger;
     local X2Condition_Visibility            VisibilityCondition;
     local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Effect_Persistent               BladestormTargetEffect;
+    local X2Condition_UnitEffectsWithAbilitySource BladestormTargetCondition;
 
     Template = StandardMelee('M31_PA_TaipanDeadlyBite_Attack', "img:///UILibrary_MeristPerkIcons.UIPerk_BleedingBite", false, false);
 
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.BuildInterruptGameStateFn = none;
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_TaipanDeadlyBite_AimBonus");
     ToHitCalc.BuiltInCritMod = `GetConfigInt("M31_PA_TaipanDeadlyBite_CritBonus");
     ToHitCalc.bReactionFire = true;
     Template.AbilityToHitCalc = ToHitCalc;
-    Template.AbilityTargetStyle = default.SimpleSingleMeleeTarget;
 
     Template.AbilityTriggers.Length = 0;
 
-    AddOverwatchTrigger(Template);
+    AddOverwatchTriggers(Template);
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = 'UnitConcealmentBroken';
     Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_Lockjaw;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_BladestormConcealment;
     Trigger.ListenerData.Priority = 55;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AbilityShooterConditions.Length = 0;
     Template.AbilityTargetConditions.Length = 0;
     
-    VisibilityCondition = new class'X2Condition_Visibility';
-    VisibilityCondition.bRequireGameplayVisible = true;
-    VisibilityCondition.bRequireBasicVisibility = true;
-    VisibilityCondition.bDisablePeeksOnMovement = true;
-    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
-    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeSquadmates = true;
-    UnitPropertyCondition.ExcludeRobotic = true;
-    UnitPropertyCondition.FailOnNonUnits = true;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    AddAdjacencyCondition(Template);
-
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeConcealed = true;
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-
-    AddBladestormMark(Template, 'M31_PA_TaipanDeadlyBite_MarkTarget');
     AddSuppressedCondition(Template);
+    AddUnitValueCondition(Template, 'M31_PA_TaipanDeadlyBite_Counter', `GetConfigInt("M31_PA_TaipanDeadlyBite_ActivationsPerTurn"));
+
+    VisibilityCondition = new class'X2Condition_Visibility';
+    VisibilityCondition.bRequireGameplayVisible = true;
+    VisibilityCondition.bRequireBasicVisibility = true;
+    VisibilityCondition.bDisablePeeksOnMovement = true;
+    Template.AbilityTargetConditions.AddItem(VisibilityCondition);
+
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeSquadmates = true;
+    UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = 180;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityTargetConditions.AddItem(class'X2Ability_DefaultAbilitySet'.static.OverwatchTargetEffectsCondition());
+
+    BladestormTargetEffect = new class'X2Effect_Persistent';
+    BladestormTargetEffect.EffectName = 'M31_PA_TaipanDeadlyBite_MarkTarget';
+    BladestormTargetEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+    BladestormTargetEffect.bUseSourcePlayerState = true;
+    BladestormTargetEffect.SetupEffectOnShotContextResult(true, true);
+    Template.AddTargetEffect(BladestormTargetEffect);
+    
+    BladestormTargetCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    BladestormTargetCondition.AddExcludeEffect('M31_PA_TaipanDeadlyBite_MarkTarget', 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
 
     Template.AddTargetEffect(CreateTaipanDeadlyBiteDamageEffect());
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
 
-    Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bShowActivation = true;
-    Template.bFrameEvenWhenUnitIsHidden = true;
-
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
+    SetFireAnim(Template, 'HL_M31_ViciousBite');
 
     return Template;
 }
@@ -636,6 +699,9 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
 
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.BuildInterruptGameStateFn = none;
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_TaipanDeadlyBite_AimBonus");
@@ -650,12 +716,19 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
     Trigger.ListenerData.EventID = 'AbilityActivated';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'M31_Helpers'.static.AbilityTriggerEventListener_ChasingAttack;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_ChasingAttack;
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AbilityShooterConditions.Length = 0;
     Template.AbilityTargetConditions.Length = 0;
-    
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeConcealed = true;
+    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_ItsOwnTurn');
+    Template.AddShooterEffectExclusions();
+    AddSuppressedCondition(Template);
+    AddUnitValueCondition(Template, 'M31_PA_TaipanDeadlyBite_Counter', `GetConfigInt("M31_PA_TaipanDeadlyBite_ActivationsPerTurn"));
+
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;
     VisibilityCondition.bRequireBasicVisibility = true;
@@ -666,46 +739,30 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
     UnitPropertyCondition.ExcludeSquadmates = true;
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.RequireWithinRange = true;
+    UnitPropertyCondition.WithinRange = 180;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-    AddAdjacencyCondition(Template);
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeConcealed = true;
-    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_ItsOwnTurn');
-    Template.AddShooterEffectExclusions();
-
     if (`GetConfigBool("M31_PA_TaipanDeadlyBite_bExclusiveMark"))
-    {
         AddBladestormMark(Template, 'M31_PA_TaipanDeadlyBite_ChaserMarkTarget');
-    }
     else
-    {
         AddBladestormMark(Template, 'M31_PA_TaipanDeadlyBite_MarkTarget');
-    }
-    AddSuppressedCondition(Template);
-    AddUnitValueCondition(Template, 'M31_PA_TaipanDeadlyBite_Counter', `GetConfigInt("M31_PA_TaipanDeadlyBite_ActivationsPerTurn"));
 
     Template.AddTargetEffect(CreateTaipanDeadlyBiteDamageEffect());
     Template.AddTargetEffect(CreateTaipanBiteBleedingEffect());
 
-    Template.CustomFireAnim = 'HL_M31_ViciousBite';
-    Template.bShowActivation = true;
-    Template.bFrameEvenWhenUnitIsHidden = true;
-
-    Template.AdditionalAbilities.AddItem('M31_PA_ViperBite_Anims');
+    SetFireAnim(Template, 'HL_M31_ViciousBite');
 
     return Template;
 }
 
-static function X2Effect_ApplyDamageWithRank CreateTaipanDeadlyBiteDamageEffect()
+static function X2Effect_ApplyScalingDamage CreateTaipanDeadlyBiteDamageEffect()
 {
-    local X2Effect_ApplyDamageWithRank PhysicalDamageEffect;
+    local X2Effect_ApplyScalingDamage PhysicalDamageEffect;
 
-    PhysicalDamageEffect = new class'X2Effect_ApplyDamageWithRank';
+    PhysicalDamageEffect = new class'X2Effect_ApplyScalingDamage';
     PhysicalDamageEffect.EffectDamageValue = `GetConfigDamage("M31_PA_TaipanDeadlyBite_Damage");
-    PhysicalDamageEffect.fDamagePerRank = `GetConfigFloat("M31_PA_TaipanDeadlyBite_DamagePerRank");
-    PhysicalDamageEffect.fCritDamagePerRank = `GetConfigFloat("M31_PA_TaipanDeadlyBite_CritDamagePerRank");
+    PhysicalDamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_TaipanDeadlyBite_DamagePerRank");
+    PhysicalDamageEffect.CritDamagePerRank = `GetConfigFloat("M31_PA_TaipanDeadlyBite_CritDamagePerRank");
 
     return PhysicalDamageEffect;
 }
@@ -829,11 +886,7 @@ static function X2AbilityTemplate TaipanVengeance()
 
 static function X2AbilityTemplate TaipanBloodHunter()
 {
-    local X2AbilityTemplate Template;
-    
-    Template = Passive('M31_PA_TaipanBloodHunter', "img:///UILibrary_LW_PerkPack.LW_AbilityAdrenalNeurosympathy", false, true);
-
-    return Template;
+    return Passive('M31_PA_TaipanBloodHunter', "img:///UILibrary_LW_PerkPack.LW_AbilityAdrenalNeurosympathy", false, true);
 }
 
 static function X2AbilityTemplate TaipanStealth()
@@ -844,15 +897,15 @@ static function X2AbilityTemplate TaipanStealth()
     
     Template = SelfTargetActivated('M31_PA_TaipanStealth', "img:///UILibrary_SOHunter.UIPerk_fade", false);
 
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_Stealth');
+    Template.AddShooterEffectExclusions();
+
     Cooldown = new class'X2AbilityCooldown_Extended';
     Cooldown.iNumTurns = `GetConfigInt("M31_PA_TaipanStealth_Cooldown");
     Cooldown.bDoNotApplyOnHit = true;
     Template.AbilityCooldown = Cooldown;
 
     AddActionPointCost(Template, eCost_SingleConsumeAll);
-
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_Stealth');
-    Template.AddShooterEffectExclusions();
 
     StealthEffect = new class'X2Effect_RangerStealth';
     StealthEffect.EffectName = 'M31_PA_TaipanStealth';
@@ -874,6 +927,7 @@ static function TaipanStealth_EffectRemoved(X2Effect_Persistent PersistentEffect
     local XComGameStateHistory  History;
     local XComGameState_Ability AbilityState;
     local X2AbilityTemplate     AbilityTemplate;
+    local XComGameState_Unit    SourceUnit;
 
     History = `XCOMHISTORY;
 
@@ -885,12 +939,20 @@ static function TaipanStealth_EffectRemoved(X2Effect_Persistent PersistentEffect
             AbilityState = XComGameState_Ability(NewGameState.ModifyStateObject(AbilityState.Class, AbilityState.ObjectID));
     }
 
+    SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    if (SourceUnit == none)
+    {
+        SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+        if (SourceUnit != none)
+            SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
+    }
+
     if (AbilityState != none)
     {
         AbilityTemplate = AbilityState.GetMyTemplate();
         if (AbilityTemplate.AbilityCooldown != none)
         {
-            AbilityState.iCooldown = AbilityTemplate.AbilityCooldown.iNumTurns;
+            AbilityState.iCooldown = AbilityTemplate.AbilityCooldown.GetNumTurns(AbilityState, SourceUnit, AbilityState.GetSourceWeapon(), NewGameState);
         }
     }
 }

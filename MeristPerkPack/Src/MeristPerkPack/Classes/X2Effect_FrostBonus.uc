@@ -73,7 +73,7 @@ function int GetAttackingDamageModifier(
     if (IsDisabled(SourceUnit, TargetUnit))
         return 0;
 
-    if (!bApplyToDOT && EffectState.ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+    if (!bApplyToDOT && AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
     if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)

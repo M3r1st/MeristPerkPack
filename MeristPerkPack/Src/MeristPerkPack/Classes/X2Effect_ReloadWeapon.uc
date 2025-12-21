@@ -3,6 +3,7 @@ class X2Effect_ReloadWeapon extends X2Effect;
 var int AmmoToReload;
 var bool bSkipClipSizeCheck;
 var EInventorySlot SpecificSlot;
+var bool bReloadSourceWeapon;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
@@ -13,15 +14,24 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     TargetUnit = XComGameState_Unit(kNewTargetState);
     if (TargetUnit != none)
     {
-        if (SpecificSlot != eInvSlot_Unknown)
-        {
-            WeaponState = TargetUnit.GetItemInSlot(SpecificSlot, NewGameState);
-        }
-        else
+        if (bReloadSourceWeapon)
         {
             AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
             if (AbilityState != none)
+            {
                 WeaponState = AbilityState.GetSourceWeapon();
+            }
+        }
+        else
+        {
+            if (SpecificSlot != eInvSlot_Unknown)
+            {
+                WeaponState = TargetUnit.GetItemInSlot(SpecificSlot, NewGameState);
+            }
+            else
+            {
+                WeaponState = TargetUnit.GetItemInSlot(eInvSlot_PrimaryWeapon, NewGameState);
+            }
         }
         
         if (WeaponState != none)

@@ -105,7 +105,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
     BindAbilityEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
     BindAbilityEffect.EffectName = 'ImmediateBind';
     BindAbilityEffect.AbilityName = BindAbilityName;
-    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(BindAbilityEffect);
 
     // The shooter gets a free point that can be used bind
@@ -525,7 +525,7 @@ static function X2AbilityTemplate RushAndBind(name DataName, name BindAbilityNam
     BindAbilityEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
     BindAbilityEffect.EffectName = 'ImmediateBind';
     BindAbilityEffect.AbilityName = BindAbilityName;
-    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(BindAbilityEffect);
 
     ActionPointsEffect = new class'X2Effect_GrantActionPoints';
@@ -770,7 +770,7 @@ static function X2AbilityTemplate RushAndBindSentinel(name DataName, name BindAb
     BindAbilityEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
     BindAbilityEffect.EffectName = 'ImmediateBind';
     BindAbilityEffect.AbilityName = BindAbilityName;
-    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, , Template.AbilitySourceName);
+    BindAbilityEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(BindAbilityEffect);
 
     ActionPointsEffect = new class'X2Effect_GrantActionPoints';

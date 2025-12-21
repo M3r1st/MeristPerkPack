@@ -2,7 +2,11 @@ class X2Effect_ApplyDamage_Meltdown extends X2Effect_ApplyWeaponDamage;
 
 var name AdditionalDamageTag;
 
-function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability AbilityState, XComGameState_Unit SourceUnit, XComGameState_Item SourceWeapon, StateObjectReference TargetRef)
+function WeaponDamageValue GetBonusEffectDamageValue(
+    XComGameState_Ability AbilityState,
+    XComGameState_Unit SourceUnit,
+    XComGameState_Item SourceWeapon,
+    StateObjectReference TargetRef)
 {
     local XComGameState_Unit    TargetUnit;
     local WeaponDamageValue     BaseAdditionalDamage;

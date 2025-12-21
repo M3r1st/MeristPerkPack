@@ -1,7 +1,10 @@
 class X2Effect_Assassin extends X2Effect_Persistent;
 
-var privatewrite name CounterName;
-var privatewrite name ActivatedValueName;
+var int ActivationsPerTurn;
+var name CountValueName;
+var name ActivatedValueName;
+
+var localized string strFriendlyDesc;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -103,11 +106,25 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
     return ELR_NoInterrupt;
 }
 
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
+{
+    local UnitValue CountUnitValue;
+
+    if (CountValueName != '')
+    {
+        TargetUnit.GetUnitValue(CountValueName, CountUnitValue);
+        if (ActivationsPerTurn > 0 && CountUnitValue.fValue >= ActivationsPerTurn)
+            return true;
+    }
+
+    return false;
+}
+
 defaultproperties
 {
     EffectName = M31_Assassin
     DuplicateResponse = eDupe_Ignore
 
-    CounterName = M31_Assassin_Counter
+    CountValueName = M31_Assassin_Activations
     ActivatedValueName = M31_Assassin_Activated
 }

@@ -33,10 +33,16 @@ var config bool bUpdateTemplarShield;
 var config array<name> EMPGrenades;
 var config array<name> EMPGrenades_AdditionalEffectsToRemove;
 
+var config array<name> CBAC_AllowedTypes;
+
 var localized array<name> LocalizedAbilities;
 var localized array<name> LocalizedAbilitiesToHide;
 var localized array<string> LocalizedAbilityNames;
 var localized array<string> LocalizedRankStrings;
+
+var localized string strDefaultWeapon;
+var localized string strPerRank;
+var localized string strFreeAction;
 
 struct CanAddItemOverrideInfo
 {
@@ -89,11 +95,6 @@ static event OnPostTemplatesCreated()
     }
 
     PatchCombatPresence(AbilityTemplateManager.FindAbilityTemplate('CombatPresence'));
-
-    foreach default.AddImpairingAttack(AbilityName)
-    {
-        AddImparingAttackToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
-    }
 
     foreach default.Aim_AllowedAbilities(AbilityName)
     {
@@ -269,7 +270,6 @@ static function GetLocalizedAbilityLists()
             else
                 OutString = default.LocalizedAbilityNames[Index];
 
-                
             if (class'X2Effect_ControlledDetonation'.default.ControlledDetonation_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.ControlledDetonation_Abilities.AddItem(OutString);
 
@@ -291,7 +291,7 @@ static function GetLocalizedAbilityLists()
             if (class'X2AbilitySet_Merist'.default.TraverseFirePlus_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.TraverseFirePlus_Abilities.AddItem(OutString);
 
-            if (class'X2AbilitySet_PlayableAliens'.default.Serpentine_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
+            if (class'X2AbilitySet_PA_Viper'.default.Serpentine_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.Serpentine_Abilities.AddItem(OutString);
         }
     }
@@ -358,29 +358,6 @@ static function PatchCombatPresence(X2AbilityTemplate Template)
         Cooldown.iNumTurns = Template.AbilityCooldown.iNumTurns;
         Cooldown.AddCooldownModifier('M31_BattalionCommander', -1 * `GetConfigInt("M31_BattlePresence_CooldownReduction"));
         Template.AbilityCooldown = Cooldown;
-    }
-}
-
-static function AddImparingAttackToAbility(X2AbilityTemplate Template)
-{
-    local X2Effect_ApplyWeaponDamage DamageEffect;
-    local int i;
-
-    if (Template != none)
-    {
-        for (i = 0; i < Template.AbilityTargetEffects.Length; i++)
-        {
-            DamageEffect = X2Effect_ApplyWeaponDamage(Template.AbilityTargetEffects[i]);
-            if (DamageEffect != none)
-            {
-                break;
-            }
-        }
-        if (i != Template.AbilityTargetEffects.Length)
-        {
-            i++;
-        }
-        Template.AbilityTargetEffects.InsertItem(i, class'M31_Helpers'.static.CreateImpairingEffect());
     }
 }
 
@@ -643,25 +620,6 @@ static function AddWatchfulEyeToAbility(X2AbilityTemplate Template)
     }
 }
 
-static function X2Effect_ImmediateAbilityActivation CreateImpairingEffect()
-{
-    local X2Effect_ImmediateAbilityActivation   ImpairingAbilityEffect;
-    local X2Condition_AbilityProperty           AbilityCondition;
-
-    AbilityCondition = new class'X2Condition_AbilityProperty';
-    AbilityCondition.OwnerHasSoldierAbilities.AddItem(class'X2Ability_Impairing'.default.ImpairingAbilityName);
-
-    ImpairingAbilityEffect = new class 'X2Effect_ImmediateAbilityActivation';
-    ImpairingAbilityEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
-    ImpairingAbilityEffect.EffectName = 'ImmediateStunImpair';
-    ImpairingAbilityEffect.AbilityName = class'X2Ability_Impairing'.default.ImpairingAbilityName;
-    ImpairingAbilityEffect.bRemoveWhenTargetDies = true;
-    ImpairingAbilityEffect.VisualizationFn = class'X2Ability_Impairing'.static.ImpairingAbilityEffectTriggeredVisualization;
-    ImpairingAbilityEffect.TargetConditions.AddItem(AbilityCondition);
-
-    return ImpairingAbilityEffect;
-}
-
 static function PatchTemplarShield(X2AbilityTemplate Template)
 {
     local X2Effect_MeristTemplarShieldAnimations    AnimSetEffect;
@@ -677,7 +635,7 @@ static function PatchTemplarShield(X2AbilityTemplate Template)
                 Template.AbilityTargetEffects.Remove(i, 1);
 
                 AnimSetEffect = new class'X2Effect_MeristTemplarShieldAnimations';
-                AnimSetEffect.BuildPersistentEffect(1, false, true,, eGameRule_PlayerTurnBegin);
+                AnimSetEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
                 AnimSetEffect.AddAnimSetWithPath("IRIParryReworkAnims.Anims.AS_BallisticShield");
                 AnimSetEffect.AddAnimSetWithPath("IRIParryReworkAnims.Anims.AS_TemplarShield");
                 Template.AbilityTargetEffects.InsertItem(i, AnimSetEffect);
@@ -688,8 +646,8 @@ static function PatchTemplarShield(X2AbilityTemplate Template)
 
                 ShieldEffect = new class'X2Effect_MeristTemplarShield';
                 ShieldEffect.ShieldPriority = 100;
-                ShieldEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
-                // ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, true, , Template.AbilitySourceName);
+                ShieldEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+                // ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
                 Template.AbilityTargetEffects.InsertItem(i, ShieldEffect);
             }
         }
@@ -919,12 +877,9 @@ static function OnPreCreateTemplates()
 
 static function bool AbilityTagExpandHandler_CH(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
 {
-    local WeaponDamageValue Damage;
-    local XComGameState_Unit UnitState;
-    local int ShieldRemaining;
-    local int ShieldPriority;
-    local float fValue;
-    // local int iValue;
+    local XComGameState_Unit    UnitState;
+    local int                   ShieldRemaining;
+    local int                   ShieldPriority;
 
     UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
 
@@ -947,7 +902,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             return true;
 
         case "M31_FreeAction":
-            OutString = ColorText_Green(`GetLocalizedString(InString));
+            OutString = ColorText_Green(default.strFreeAction);
             return true;
 
         case "M31_AutoFont":
@@ -958,8 +913,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = string(GetEffectTurnsTicked(ParseObj, StrategyParseOb, GameState));
             return true;
 
-        case "M31_EffectDamageOverTime":
-            OutString = GetEffectDamageOverTimeString(ParseObj, StrategyParseOb, GameState);
+        case "M31_EffectSourceFullName":
+            OutString = GetEffectSourceFullName(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_ShieldRemaining":
@@ -971,32 +926,35 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             GetShieldEffectValues(ParseObj, StrategyParseOb, GameState, ShieldRemaining, ShieldPriority);
             OutString = string(ShieldPriority);
             return true;
-            
-        case "M31_SharpshooterAim_AimBonus":
-        case "M31_SharpshooterAim_CritBonus":
+
+        case "M31_AcidRounds_BurnDuration":
+        case "M31_AcidRounds_ShredBonus":
         case "M31_AdvancedAidProtocol_CritResistance":
         case "M31_AdvancedAidProtocol_DodgeBonus":
-        case "M31_AlphaStrike_Radius":
         case "M31_AlphaStrike_Charges":
+        case "M31_AlphaStrike_Radius":
         case "M31_Assassin_ActivationsPerTurn":
         case "M31_AssaultShot_Cooldown":
         case "M31_AssaultShot_Range":
         case "M31_Bandit_AmmoToReload":
+        case "M31_BattlePresence_CooldownReduction":
+        case "M31_BleedingRounds_BleedDuration":
+        case "M31_Bloodlet_BleedDuration":
         case "M31_BloodThirst_DamagePerStack":
         case "M31_BloodThirst_MaxStacks":
         case "M31_BloodThirst_MaxStacksPerTurn":
         case "M31_BloodThirst_StackDuration":
-        case "M31_Botnet_HackDefenseChange":
         case "M31_Botnet_Duration":
-        case "M31_BurstFire_NumShots":
+        case "M31_Botnet_HackDefenseChange":
         case "M31_BurstFire_Cooldown":
+        case "M31_BurstFire_NumShots":
         case "M31_CallForFire_Radius":
-        case "M31_BattlePresence_CooldownReduction":
         case "M31_CombatAdvance_Cooldown":
+        case "M31_ConcussiveGrenades_StunDuration":
         case "M31_Dervish_CooldownReduction":
         case "M31_DetonationShot_AmmoCost":
-        case "M31_DisarmingShot_AmmoCost":
         case "M31_DisarmingShot_AimPenalty":
+        case "M31_DisarmingShot_AmmoCost":
         case "M31_DisarmingShot_CritPenalty":
         case "M31_DisarmingShot_Duration":
         case "M31_Duskborn_AimBonus":
@@ -1004,16 +962,16 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Duskborn_Duration":
         case "M31_EnemyUnknown_AimBonus":
         case "M31_EnemyUnknown_CritBonus":
-        case "M31_EnemyUnknown_DamageBonus":
         case "M31_EnemyUnknown_CritDamageBonus":
-        case "M31_EnemyUnknown_MobilityBonus":
-        case "M31_EnemyUnknown_DodgeBonus":
+        case "M31_EnemyUnknown_DamageBonus":
         case "M31_EnemyUnknown_DefenseBonus":
-        case "M31_EnergyShield_Radius":
+        case "M31_EnemyUnknown_DodgeBonus":
+        case "M31_EnemyUnknown_MobilityBonus":
         case "M31_EnergyShield_Duration":
+        case "M31_EnergyShield_Radius":
         case "M31_EnergyShield_ShieldPriority":
-        case "M31_EnhancedLowProfile_CritBonus":
         case "M31_EnhancedLowProfile_AimBonus":
+        case "M31_EnhancedLowProfile_CritBonus":
         case "M31_Escalation_CritBonus":
         case "M31_Escalation_CritDamageBonus":
         case "M31_Escalation_CritDamageBonusFactor":
@@ -1024,46 +982,57 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Frostbane_PiercingBonusPerTier":
         case "M31_FutureWarfare_ActivationsPerTurn":
         case "M31_FutureWarfare_CooldownReduction":
-        case "M31_Maim_AmmoCost":
+        case "M31_HypothermiaRounds_Duration":
         case "M31_LowProfileNest_AimBonus":
         case "M31_LowProfileNest_CritBonus":
+        case "M31_Maim_AmmoCost":
+        case "M31_Malevolence_AcidBurning_ShredBonus":
+        case "M31_Malevolence_Bleeding_CritBonus":
+        case "M31_Malevolence_Bleeding_CritDamageBonus":
+        case "M31_Malevolence_Burning_DebuffDuration":
+        case "M31_Malevolence_Burning_DOTDamageBonus":
+        case "M31_Malevolence_Frost_AimPenalty":
+        case "M31_Malevolence_Frost_DebuffDuration":
+        case "M31_Malevolence_Frost_DefensePenalty":
+        case "M31_Malevolence_Poisoned_CritPenalty":
+        case "M31_Malevolence_Poisoned_DebuffDuration":
+        case "M31_Malevolence_Poisoned_GrazePenalty":
+        case "M31_Malevolence_Radiation_DebuffDuration":
+        case "M31_ManualOverride_CooldownReduction":
         case "M31_Meld_Duration":
         case "M31_OverchargedBlast_AmmoCost":
-        case "M31_OverchargedBlast_Shred":
         case "M31_OverchargedBlast_Rupture":
-        case "M31_Overpower_StunDuration":
+        case "M31_OverchargedBlast_Shred":
         case "M31_Overpower_Shred":
+        case "M31_Overpower_StunDuration":
         case "M31_PerfectHandling_BaseRange":
-        case "M31_Pinpoint_AimPerAction":
         case "M31_Pinpoint_AimBase":
-        case "M31_Pinpoint_CritPerAction":
+        case "M31_Pinpoint_AimPerAction":
         case "M31_Pinpoint_CritBase":
+        case "M31_Pinpoint_CritPerAction":
+        case "M31_PipeBombs_BleedDuration":
         case "M31_PriorityFocus_DamageBonus":
-        case "M31_ReflexShot_Radius":
-        case "M31_ReflexShot_ActivationsPerTurn":
         case "M31_RepositionPlus_ActivationsPerTurn":
         case "M31_SaltInTheWound_DamageBonus":
         case "M31_SawedOffRange_LastIndex":
         case "M31_SawedOffRange_NewLastIndex":
-        case "M31_SawedOffReload_BaseLimit":
         case "M31_SawedOffReload_AmmoPerUse":
-        case "M31_SawedOffReload_PumpAction_BonusLimit":
+        case "M31_SawedOffReload_BaseLimit":
         case "M31_SawedOffReload_PumpAction_BonusCharges":
-        case "M31_SawedOffSweeper_MinAmmo":
+        case "M31_SawedOffReload_PumpAction_BonusLimit":
         case "M31_SawedOffSweeper_MaxAmmo":
-        case "M31_Skykeeper_AimBonus_NoCover":
-        case "M31_Skykeeper_AimBonus_Flying":
-        case "M31_SleightOfHand_AimPerStack":
-        case "M31_SleightOfHand_CritPerStack":
-        case "M31_SleightOfHand_StackDecay":
-        case "M31_SleightOfHand_MaxStacks":
-        case "M31_SniperElite_AimBonus":
-        case "M31_SniperElite_CritBonus":
-        case "M31_ShotgunWedding_Length":
-        case "M31_ShotgunWedding_Width":
+        case "M31_SawedOffSweeper_MinAmmo":
+        case "M31_SharpshooterAim_AimBonus":
+        case "M31_SharpshooterAim_CritBonus":
         case "M31_ShotgunWedding_AmmoCost":
         case "M31_ShotgunWedding_AmmoCostPerShot":
+        case "M31_ShotgunWedding_Length":
         case "M31_ShotgunWedding_MaxNumShots":
+        case "M31_ShotgunWedding_Width":
+        case "M31_Skykeeper_AimBonus_Flying":
+        case "M31_Skykeeper_AimBonus_NoCover":
+        case "M31_SniperElite_AimBonus":
+        case "M31_SniperElite_CritBonus":
         case "M31_SolidSnake_BaseRange":
         case "M31_SolidSnake_DodgeIgnore":
         case "M31_Sparkfire_AmmoCost":
@@ -1071,135 +1040,20 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_SuperheavyOrdnance_RangeBonus":
         case "M31_TargetingAid_AimBonus":
         case "M31_TargetingAid_CritBonus":
+        case "M31_ThermalShock_AimPenalty_Immune":
+        case "M31_ThermalShock_AimPenalty":
+        case "M31_ThermalShock_DefensePenalty_Immune":
+        case "M31_ThermalShock_DefensePenalty":
+        case "M31_ThermalShock_Duration":
         case "M31_TrackingFire_CooldownReduction":
-        case "M31_TroubleShooter_HackDefenseReduction":
         case "M31_TroubleShooter_Duration":
+        case "M31_TroubleShooter_HackDefenseReduction":
         case "M31_Unload_AimPenalty":
         case "M31_Unload_MaxShots":
         case "M31_Warbringer_ChargeBonus":
         case "M31_Warbringer_RadiusBonus":
-        case "M31_ConcussiveGrenades_StunDuration":
-        case "M31_PipeBombs_BleedDuration":
-        case "M31_AcidRounds_ShredBonus":
-        case "M31_AcidRounds_BurnDuration":
-        case "M31_BleedingRounds_BleedDuration":
-        case "M31_Bloodlet_BleedDuration":
-        case "M31_ThermalShock_Duration":
-        case "M31_ThermalShock_AimPenalty":
-        case "M31_ThermalShock_AimPenalty_Immune":
-        case "M31_ThermalShock_DefensePenalty":
-        case "M31_ThermalShock_DefensePenalty_Immune":
-        case "M31_HypothermiaRounds_Duration":
-        case "M31_PA_Coil_DefenseBonus":
-        case "M31_PA_Coil_DodgeBonus":
-        case "M31_PA_Entwine_DefenseBonus":
-        case "M31_PA_Entwine_AimBonus":
-        case "M31_PA_Entwine_BindDamageBonus":
-        case "M31_PA_Rattle_MaxTargets":
-        case "M31_PA_Rattle_ActivationsPerTurn":
-        case "M31_PA_Salamander_RadiusBonus":
-        case "M31_PA_Slither_MobilityBonus":
-        case "M31_PA_Slither_DefenseBonus":
-        case "M31_PA_Slither_DodgeBonus":
-        case "M31_PA_Slither_Duration":
-        case "M31_PA_Sidewinder_Cooldown":
-        case "M31_PA_Lockjaw_Cooldown":
-        case "M31_PA_ViperBite_Rupture":
-        case "M31_PA_ViperBite_AimBonus":
-        case "M31_PA_ViperBite_CritBonus":
-        case "M31_PA_AngryBite_AimBonus":
-        case "M31_PA_AngryBite_CritBonus":
-        case "M31_PA_AngryBite_Cooldown":
-        case "M31_PA_IronskinBite_ShieldAmount":
-        case "M31_PA_IronskinBite_ShieldPriority":
-        case "M31_PA_IronskinBite_Duration":
-        case "M31_PA_RegenBite_EnhHealPerTurn":
-        case "M31_PA_RegenBite_EnhDuration":
-        case "M31_PA_MemeBite_E":
-        case "M31_Malevolence_AcidBurning_ShredBonus":
-        case "M31_Malevolence_Bleeding_CritBonus":
-        case "M31_Malevolence_Bleeding_CritDamageBonus":
-        case "M31_Malevolence_Radiation_DebuffDuration":
-        case "M31_Malevolence_Burning_DOTDamageBonus":
-        case "M31_Malevolence_Burning_DebuffDuration":
-        case "M31_Malevolence_Poisoned_CritPenalty":
-        case "M31_Malevolence_Poisoned_GrazePenalty":
-        case "M31_Malevolence_Poisoned_DebuffDuration":
-        case "M31_Malevolence_Frost_AimPenalty":
-        case "M31_Malevolence_Frost_DefensePenalty":
-        case "M31_Malevolence_Frost_DebuffDuration":
-        case "M31_PA_Serpentine_ActivationsPerTurn":
-        case "M31_PA_ViperSpit_Range":
-        case "M31_PA_Poison_MobilityPenalty":
-        case "M31_PA_Poison_AimPenalty":
-        case "M31_PA_Poison_Duration":
-        case "M31_PA_EnhancedPoison_MobilityPenalty":
-        case "M31_PA_EnhancedPoison_AimPenalty":
-        case "M31_PA_EnhancedPoison_Duration":
-        case "M31_PA_NeuroPoison_CooldownReduction":
-        case "M31_PA_HardenedShield_ShieldAmount":
-        case "M31_PA_HardenedShield_CritResistance":
-        case "M31_PA_Counterattack_Dodge":
-        case "M31_PA_Counterattack_Dodge_ReductionPerHit":
-        case "M31_PA_PersonalShield_ShieldPriority":
-        case "M31_PA_PersonalShield_Duration":
-        case "M31_PA_CripplingBlow_AimPenalty":
-        case "M31_PA_CripplingBlow_DefensePenalty":
-        case "M31_PA_CripplingBlow_DodgePenalty":
-        case "M31_PA_CripplingBlow_MobilityPenalty":
-        case "M31_PA_CripplingBlow_Duration":
-        case "M31_PA_Barbarian_AimBonus":
-        case "M31_PA_Barbarian_CritBonus":
-        case "M31_PA_MutonBullRush_AimBonus":
-        case "M31_PA_MutonBullRush_CritBonus":
-        case "M31_PA_MutonBullRush_StunDuration":
-        case "M31_PA_StayFrosty_Radius":
-        case "M31_PA_StayFrosty_ActivationsPerTurn":
-
-        case "M31_PA_HunterMark_DefenseBonus":
-        case "M31_PA_HunterMark_DefenseBonusPerTurn":
-        case "M31_PA_HunterMark_DodgeBonus":
-        case "M31_PA_HunterMark_DodgeBonusPerTurn":
-        case "M31_PA_HunterMark_AimBonus":
-        case "M31_PA_HunterMark_AimBonusPerTurn":
-        case "M31_PA_HunterMark_CritBonus":
-        case "M31_PA_HunterMark_CritBonusPerTurn":
-        case "M31_PA_HunterWatchfulEye_ActivationsPerTurn":
-        case "M31_PA_HunterDedication_DefenseBonus":
-        case "M31_PA_HunterDedication_DodgeBonus":
-        case "M31_PA_HunterDedication_MobilityBonus":
-        case "M31_PA_HunterDedication_Duration":
-
-        case "M31_PA_HarrierBullRush_AimBonus":
-        case "M31_PA_HarrierBullRush_CritBonus":
-        case "M31_PA_HarrierBullRush_StunDuration":
-        case "M31_PA_HarrierPunch_AimBonus":
-        case "M31_PA_HarrierPunch_CritBonus":
-        case "M31_PA_HarrierVileMix_DOTDamageBonus":
-        case "M31_PA_HarrierVileMix_DOTDamageBonus_Debuff":
-        case "M31_PA_HarrierVileMix_Duration":
-        case "M31_PA_HarrierPoisonGrenade_AmmoCost":
-        case "M31_PA_HarrierPoisonGrenade_CooldownReductionEOG":
-        case "M31_PA_HarrierFireGrenade_AmmoCost":
-        case "M31_PA_HarrierFireGrenade_CooldownReductionEOG":
-        case "M31_PA_HarrierRadGrenade_AmmoCost":
-        case "M31_PA_HarrierRadGrenade_CooldownReductionEOG":
-        case "M31_PA_HarrierFuseGrenade_AmmoCost":
-        case "M31_PA_HarrierFuseGrenade_CooldownReductionEOG":
-        case "M31_PA_HarrierCyclic_AimPenalty":
-
-        case "M31_PA_Poison_MobilityPenalty":
-        case "M31_PA_Poison_AimPenalty":
-        case "M31_PA_Poison_Duration":
-        case "M31_PA_EnhancedPoison_MobilityPenalty":
-        case "M31_PA_EnhancedPoison_AimPenalty":
-        case "M31_PA_EnhancedPoison_Duration":
-        case "M31_PA_GetOverHere_MinRange":
-        case "M31_PA_GetOverHere_MaxRange":
-        case "M31_PA_GetOverHereAlly_MinRange":
-        case "M31_PA_GetOverHereAlly_MaxRange":
-        case "M31_ENEMY_Lockjaw_Cooldown":
-        case "M31_ENEMY_Sidewinder_Cooldown":
+        case "M31_WatchfulEye_ActivationsPerTurn":
+        case "M31_WatchfulEye_AttacksPerTurn":
             OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
             return true;
 
@@ -1211,212 +1065,81 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = ColorText_Auto(`GetConfigInt("M31_ShotgunWedding_AmmoCost") + `GetConfigInt("M31_ShotgunWedding_AmmoCostPerShot"),, UnitState);
             return true;
 
-        case "M31_AdvancedOptics_PenaltyModifier":
         case "M31_AdvancedOptics_DefenseReduction":
+        case "M31_AdvancedOptics_PenaltyModifier":
         case "M31_ConcussiveGrenades_StunChance":
         case "M31_DeathAdder_HPToDamage":
         case "M31_DeathAdder_MaxDamageBonus":
         case "M31_Malevolence_Radiation_DamageReductionPrc":
         case "M31_OnTheMove_MobilityPenaltyPrc":
-        case "M31_Pinpoint_CritDamagePerAction":
         case "M31_Pinpoint_CritDamageBase":
-        case "M31_PA_Rattle_PanicChance":
-        case "M31_PA_Aegis_DamageReduction":
+        case "M31_Pinpoint_CritDamagePerAction":
             OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
             return true;
 
-        case "M31_PA_Coil_NoCoverModifier":
-        case "M31_PA_Coil_LowCoverModifier":
-        case "M31_PA_Coil_HighCoverModifier":
-            OutString = ColorText_Auto("x" $ TruncateFloat2(`GetConfigFloat(InString)),, UnitState);
-            return true;
-
-        case "M31_PA_RegenBite_HealPerTurn":
-            OutString = GetAltValueOutStringWithAbility(`GetConfigInt('M31_PA_RegenBite_HealPerTurn'), `GetConfigInt('M31_PA_RegenBite_EnhHealPerTurn'), 'M31_PA_EnhancedPoison', ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_RegenBite_Duration":
-            OutString = GetAltValueOutStringWithAbility(`GetConfigInt('M31_PA_RegenBite_Duration'), `GetConfigInt('M31_PA_RegenBite_EnhDuration'), 'M31_PA_EnhancedPoison', ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_HarrierPoisonGrenade_BaseRadiusModifer":
-        case "M31_PA_HarrierFireGrenade_BaseRadiusModifer":
-        case "M31_PA_HarrierRadGrenade_BaseRadiusModifer":
-        case "M31_PA_HarrierFuseGrenade_BaseRadiusModifer":
-            fValue = `GetConfigFloat(InString);
-            if (fValue >= 0)
-                OutString = "+" $ ColorText_Auto(TruncateFloat2(fValue,, false) $ "m",, UnitState);
-            else
-                OutString = "-" $ ColorText_Auto(TruncateFloat2(-1 * fValue,, false) $ "m",, UnitState);
-            return true;
-
-        case "M31_SawedOffSweeper_Width":
         case "M31_SawedOffSweeper_Length":
-        case "M31_SawedOffSweeper_WidthPerAmmo":
         case "M31_SawedOffSweeper_LengthPerAmmo":
-        case "M31_PA_PoisonSpit_Radius":
-        case "M31_PA_FrostSpit_Radius":
-        case "M31_PA_FrostBreath_Radius":
+        case "M31_SawedOffSweeper_Width":
+        case "M31_SawedOffSweeper_WidthPerAmmo":
             OutString = ColorText_Auto(TruncateFloat2(`GetConfigFloat(InString)) $ "m",, UnitState);
             return true;
 
-        case "M31_BloodThirst_bRefreshDuration":
-        case "M31_BloodThirst_bMatchSourceWeapon":
         case "M31_BloodThirst_bIncreaseOnlyOnHit":
+        case "M31_BloodThirst_bMatchSourceWeapon":
+        case "M31_BloodThirst_bRefreshDuration":
         case "M31_Frostbane_bMatchSourceWeapon":
+        case "M31_ImprovedSuppression_bApplyToRobotic":
         case "M31_OverchargedBlast_bGuaranteedCrit":
-        case "M31_ReflexShot_bReactionFire":
         case "M31_RepositionPlus_bApplyToUnflankable":
         case "M31_SawedOffSweeper_bHipfire":
-        case "M31_SleightOfHand_bMatchSourceWeapon":
-        case "M31_TrackingFire_bIsReactionFire":
         case "M31_TrackingFire_bAllowResetFromBladestorm":
+        case "M31_TrackingFire_bIsReactionFire":
         case "M31_TroubleShooter_bAllowStack":
-        case "M31_Unload_bOnlyOnHit":
         case "M31_Unload_bAllowCrit":
-        case "M31_ImprovedSuppression_bApplyToRobotic":
-        case "M31_PA_Coil_Hunker_bAllowDeepCover":
-        case "M31_PA_Lockjaw_bAllowCrit":
-        case "M31_PA_ViperBite_bAllowCrit":
-        case "M31_PA_AngryBite_bAllowCrit":
-        case "M31_PA_AngryBite_bHasCooldown":
-        case "M31_PA_AngryBite_bCooldownOnlyOnHit":
-        case "M31_PA_VeryAngryBite_bFreeAction":
-        case "M31_PA_VeryAngryBite_bAllowMovementActionPoint":
-        case "M31_PA_VeryAngryBite_bAllowCrit":
-        case "M31_PA_VeryAngryBite_bIsReactonFire":
-        case "M31_PA_ViperBite_bCanTargetVipers":
-        case "M31_PA_RegenBite_bStabilize":
-        case "M31_PA_RegenBite_bRemovePoison":
-        case "M31_PA_RegenBite_bProvidesPoisonImmunity":
-        case "M31_PA_MalevolentFocus_bOnlyForReaction":
-        case "M31_PA_Spit_bRequireVisibility":
-        case "M31_PA_PoisonSpit_bDealsDamage":
-        case "M31_PA_PoisonSpit_bAppliesPoisonToWorld":
-        case "M31_PA_FrostBreath_bDealsDamage":
-        case "M31_PA_PersonalShield_bAllowWhileDisoriented":
-        case "M31_PA_BayonetCharge_bAllowWhileDisoriented":
-        case "M31_PA_Counterattack_bOnlyOnEnemyTurn":
-        case "M31_PA_CripplingBlow_bInfiniteDuration":
-        case "M31_PA_CripplingBlow_bAllowStack":
-        case "M31_PA_StayFrosty_bReactionFire":
-        case "M31_PA_HunterDedication_bExcludeFlanking":
-        case "M31_PA_HunterDedication_bExcludeMelee":
-        case "M31_PA_Sidewinder_bOnlyOnEnemyTurn":
-        case "M31_PA_Sidewinder_bAllowWhileDisoriented":
-        case "M31_PA_Sidewinder_bAllowWhileBurning":
+        case "M31_Unload_bOnlyOnHit":
             OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
             return true;
 
         case "M31_BloodThirst_BuffText":
-            OutString = GetBloodThirstOutString(ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_SleightOfHand_BuffText":
-            OutString = GetSleightOfHandOutString(ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_PoisonSpit_Damage":
-        case "M31_PA_FrostSpit_Damage":
-        case "M31_PA_FrostBreath_Damage":
-        case "M31_PA_ViperBite_Damage":
-        case "M31_PA_VeryAngryBite_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
-            return true;
-        
-        case "M31_PA_Lockjaw_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState,,, class'X2AbilitySet_PlayableAliens'.static.CreateLockjawDamageEffect());
-            return true;
-
-        case "M31_PA_AngryBite_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState,,, class'X2AbilitySet_PlayableAliens'.static.CreateAngryBiteDamageEffect());
-            return true;
-
-        case "M31_PipeBombs_BleedDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
-            return true;
-
-        case "M31_Sparkfire_BurnDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateSparkfireBurningEffect());
+            OutString = class'X2Effect_BloodThirst'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_AcidRounds_BurnDamage":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateAcidRoundsBurningEffect());
             return true;
-
         case "M31_BleedingRounds_BleedDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateBleedingRoundsBleedingEffect(), true);
-            return true;
-        case "M31_BleedingRounds_BleedDamage_Debuff":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateBleedingRoundsBleedingEffect());
             return true;
-
         case "M31_Bloodlet_BleedDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateBloodletBleedingEffect(), true);
-            return true;
-        case "M31_Bloodlet_BleedDamage_Debuff":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateBloodletBleedingEffect());
             return true;
+        case "M31_PipeBombs_BleedDamage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreatePipeBombsBleedingEffect());
+            return true;
+        case "M31_Sparkfire_BurnDamage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_Merist'.static.CreateSparkfireBurningEffect());
+            return true;
 
-        case "M31_Shiver2_PrcChance":
         case "M31_HypothermiaRounds_PrcChance":
+        case "M31_Shiver2_PrcChance":
         case "M31_ShiverCrit2_PrcChance":
             OutString = GetOutStringWithRank(`GetConfigInt(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState, "%", true, 0, 100);
             return true;
 
-        case "M31_PA_Poison_DamagePerTurn":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreatePoisonedEffect(), true);
-            return true;
-        case "M31_PA_Poison_DamagePerTurn_Debuff":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreatePoisonedEffect());
-            return true;
-
-        case "M31_PA_EnhancedPoison_DamagePerTurn":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreateEnhancedPoisonedEffect(), true);
-            return true;
-        case "M31_PA_EnhancedPoison_DamagePerTurn_Debuff":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'M31_Helpers'.static.CreateEnhancedPoisonedEffect());
-            return true;
-
-        case "M31_PA_Lockjaw_CritDamage":
-            Damage = `GetConfigDamage("M31_PA_Lockjaw_Damage");
-            OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_ViperBite_CritDamage":
-            Damage = `GetConfigDamage("M31_PA_ViperBite_Damage");
-            OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_ViperBite_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_FrostbiteSpit_CritBonus":
-            OutString = GetOutStringWithRank(`GetConfigInt(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState, "%");
-            return true;
-
-        case "M31_PA_FrostbiteSpit_CritDamageBonus":
-            OutString = GetOutStringWithRank(`GetConfigFloat(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState);
-            return true;
-
-        case "M31_PA_PersonalShield_ShieldAmount":
         case "M31_EnergyShield_ShieldAmount":
             OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState, eInvSlot_Armor);
             return true;
 
-        case "M31_Stiletto_PierceBonus":
         case "M31_SawedOffReload_Charges":
+        case "M31_Stiletto_PierceBonus":
             OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState,, true);
             return true;
 
         case "M31_StaticGrenades_Mk1_Damage":
         case "M31_StaticGrenades_Mk2_Damage":
-        case "M31_PA_BindCrush_Damage":
             OutString = GetDamageValueOutString(ParseObj, StrategyParseOb, GameState, `GetConfigDamage(InString));
             return true;
 
-        case "M31_PA_RushAndBind_Damage":
-        case "M31_PA_WS_RushAndBind_Damage":
-            OutString = GetExtraDamageOutString(ParseObj, StrategyParseOb, GameState, 'Crush');
-            return true;
-            
         case "M31_HunkerDown_DefenseBonus":
             OutString = ColorText_Auto(class'X2Ability_DefaultAbilitySet'.default.HUNKERDOWN_DEFENSE,, UnitState);
             return true;
@@ -1426,6 +1149,15 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
     }
 
     if (GetLocalizedListOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
+    if (GetPistolOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
+    if (GetViperOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
+    if (GetMutonOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
         return true;
 
     if (GetTaipanOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
@@ -1478,6 +1210,203 @@ static function bool GetLocalizedListOutStrings(string InString, out string OutS
         case "M31_PA_Serpentine_Abilities":
             OutString = GetStringFromLocalizedList(default.Serpentine_Abilities);
             return true;        
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetPistolOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit UnitState;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    switch (InString)
+    {
+        case "M31_ClutchShot_AmmoCost":
+        case "M31_ClutchShotReset_CooldownReduction":
+        case "M31_ClutchShotReset_ActivationsPerTurn":
+        case "M31_PistolAvenger_ActivationsPerTurn":
+        case "M31_PistolDetonationShot_AmmoCost":
+        case "M31_PistolDisarmingShot_AmmoCost":
+        case "M31_PistolMaim_AmmoCost":
+        case "M31_ReflexShot_Radius":
+        case "M31_ReflexShot_ActivationsPerTurn":
+        case "M31_PistolRouletteShot_AmmoCost":
+        case "M31_SleightOfHand_AimPerStack":
+        case "M31_SleightOfHand_CritPerStack":
+        case "M31_SleightOfHand_StackDecay":
+        case "M31_SleightOfHand_MaxStacks":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_PistolRouletteShot_MinDamagePrc":
+        case "M31_PistolRouletteShot_MaxDamagePrc":
+            OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+            return true;
+
+        case "M31_ClutchShotReset_bReduceAll":
+        case "M31_PistolAvenger_bReactionFire":
+        case "M31_PistolAvenger_bIgnoreCoverBonus":
+        case "M31_ReflexShot_bReactionFire":
+        case "M31_SleightOfHand_bMatchSourceWeapon":
+            OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
+            return true;
+
+        case "M31_SleightOfHand_BuffText":
+            OutString = class'X2Effect_SleightOfHand'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetViperOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit    UnitState;
+    local WeaponDamageValue     Damage;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    switch (InString)
+    {
+        case "M31_PA_AngryBite_AimBonus":
+        case "M31_PA_AngryBite_Cooldown":
+        case "M31_PA_AngryBite_CritBonus":
+        case "M31_PA_Coil_DefenseBonus":
+        case "M31_PA_Coil_DodgeBonus":
+        case "M31_PA_Entwine_AimBonus":
+        case "M31_PA_Entwine_BindDamageBonus":
+        case "M31_PA_Entwine_DefenseBonus":
+        case "M31_PA_Entwine_DodgeBonus":
+        case "M31_PA_GetOverHere_MaxRange":
+        case "M31_PA_GetOverHere_MinRange":
+        case "M31_PA_GetOverHereAlly_MaxRange":
+        case "M31_PA_GetOverHereAlly_MinRange":
+        case "M31_PA_IronskinBite_Duration":
+        case "M31_PA_IronskinBite_ShieldAmount":
+        case "M31_PA_IronskinBite_ShieldPriority":
+        case "M31_PA_Lockjaw_Cooldown":
+        case "M31_PA_Lockjaw_StunDuration":
+        case "M31_PA_MemeBite_E":
+        case "M31_PA_NeuroPoison_CooldownReduction":
+        case "M31_PA_Rattle_ActivationsPerTurn":
+        case "M31_PA_Rattle_MaxTargets":
+        case "M31_PA_RegenBite_EnhDuration":
+        case "M31_PA_RegenBite_EnhHealPerTurn":
+        case "M31_PA_Salamander_RadiusBonus":
+        case "M31_PA_Serpentine_ActivationsPerTurn":
+        case "M31_PA_Sidewinder_Cooldown":
+        case "M31_PA_Slither_DefenseBonus":
+        case "M31_PA_Slither_DodgeBonus":
+        case "M31_PA_Slither_Duration":
+        case "M31_PA_Slither_MobilityBonus":
+        case "M31_PA_ViperBite_AimBonus":
+        case "M31_PA_ViperBite_CritBonus":
+        case "M31_PA_ViperBite_Rupture":
+        case "M31_PA_ViperSpit_Range":
+
+        case "M31_PA_Poison_AimPenalty":
+        case "M31_PA_Poison_Duration":
+        case "M31_PA_Poison_MobilityPenalty":
+
+        case "M31_PA_EnhancedPoison_AimPenalty":
+        case "M31_PA_EnhancedPoison_Duration":
+        case "M31_PA_EnhancedPoison_MobilityPenalty":
+
+        case "M31_ENEMY_Lockjaw_Cooldown":
+        case "M31_ENEMY_Sidewinder_Cooldown":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_PA_Rattle_PanicChance":
+            OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+            return true;
+
+        case "M31_PA_AngryBite_bAllowCrit":
+        case "M31_PA_AngryBite_bCooldownOnlyOnHit":
+        case "M31_PA_AngryBite_bHasCooldown":
+        case "M31_PA_FrostBreath_bDealsDamage":
+        case "M31_PA_Lockjaw_bAllowCrit":
+        case "M31_PA_MalevolentFocus_bOnlyForReaction":
+        case "M31_PA_PoisonSpit_bAppliesPoisonToWorld":
+        case "M31_PA_PoisonSpit_bDealsDamage":
+        case "M31_PA_RegenBite_bProvidesPoisonImmunity":
+        case "M31_PA_RegenBite_bRemovePoison":
+        case "M31_PA_RegenBite_bStabilize":
+        case "M31_PA_Sidewinder_bAllowWhileBurning":
+        case "M31_PA_Sidewinder_bAllowWhileDisoriented":
+        case "M31_PA_Sidewinder_bOnlyOnEnemyTurn":
+        case "M31_PA_Spit_bRequireVisibility":
+        case "M31_PA_VeryAngryBite_bAllowCrit":
+        case "M31_PA_VeryAngryBite_bAllowMovementActionPoint":
+        case "M31_PA_VeryAngryBite_bFreeAction":
+        case "M31_PA_VeryAngryBite_bIsReactonFire":
+        case "M31_PA_ViperBite_bAllowCrit":
+        case "M31_PA_ViperBite_bCanTargetVipers":
+            OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
+            return true;
+
+        case "M31_PA_FrostBreath_Radius":
+        case "M31_PA_FrostSpit_Radius":
+        case "M31_PA_PoisonSpit_Radius":
+            OutString = ColorText_Auto(TruncateFloat2(`GetConfigFloat(InString)) $ "m",, UnitState);
+            return true;
+
+        case "M31_PA_AngryBite_Damage":
+        case "M31_PA_FrostBreath_Damage":
+        case "M31_PA_FrostSpit_Damage":
+        case "M31_PA_Lockjaw_Damage":
+        case "M31_PA_PoisonSpit_Damage":
+        case "M31_PA_VeryAngryBite_Damage":
+        case "M31_PA_ViperBite_Damage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        case "M31_PA_Poison_Damage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Viper'.static.CreatePoisonedEffect());
+            return true;
+        case "M31_PA_EnhancedPoison_Damage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Viper'.static.CreateEnhancedPoisonedEffect());
+            return true;
+
+        case "M31_PA_RegenBite_HealPerTurn":
+            OutString = GetAltValueOutStringWithAbility(`GetConfigInt('M31_PA_RegenBite_HealPerTurn'), `GetConfigInt('M31_PA_RegenBite_EnhHealPerTurn'),
+                class'X2AbilitySet_PA_Viper'.default.EnhancedPoisonAbilityName, ParseObj, StrategyParseOb, GameState);
+            return true;
+        case "M31_PA_RegenBite_Duration":
+            OutString = GetAltValueOutStringWithAbility(`GetConfigInt('M31_PA_RegenBite_Duration'), `GetConfigInt('M31_PA_RegenBite_EnhDuration'),
+                class'X2AbilitySet_PA_Viper'.default.EnhancedPoisonAbilityName, ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        case "M31_PA_Lockjaw_CritDamage":
+            Damage = `GetConfigDamage("M31_PA_Lockjaw_Damage");
+            OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_Lockjaw_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
+            return true;
+        case "M31_PA_ViperBite_CritDamage":
+            Damage = `GetConfigDamage("M31_PA_ViperBite_Damage");
+            OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_ViperBite_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        case "M31_PA_FrostbiteSpit_CritBonus":
+            OutString = GetOutStringWithRank(`GetConfigInt(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState, "%");
+            return true;
+        case "M31_PA_FrostbiteSpit_CritDamageBonus":
+            OutString = GetOutStringWithRank(`GetConfigFloat(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        case "M31_PA_BindCrush_Damage":
+            OutString = GetDamageValueOutString(ParseObj, StrategyParseOb, GameState, `GetConfigDamage(InString));
+            return true;
+
+        case "M31_PA_RushAndBind_Damage":
+        case "M31_PA_WS_RushAndBind_Damage":
+            OutString = GetExtraDamageOutString(ParseObj, StrategyParseOb, GameState, 'Crush');
+            return true;
 
         default:
             return false;
@@ -1547,10 +1476,8 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
 
         case "M31_PA_VeryAngryBite_Damage":
         case "M31_PA_TaipanBite_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
-            return true;
         case "M31_PA_TaipanDeadlyBite_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState,,, class'X2AbilitySet_PA_Taipan'.static.CreateTaipanDeadlyBiteDamageEffect());
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
             return true;
             
         case "M31_PA_VeryAngryBite_CritDamage":
@@ -1566,23 +1493,115 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
             OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_TaipanDeadlyBite_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
             return true;
 
-
         case "M31_PA_VeryAngryBite_BleedDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateVeryAngryBiteBleedingEffect(), true);
-            return true;
-        case "M31_PA_VeryAngryBite_BleedDamage_Debuff":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateVeryAngryBiteBleedingEffect());
             return true;
-
         case "M31_PA_TaipanBite_BleedDamage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateTaipanBiteBleedingEffect(), true);
-            return true;
-        case "M31_PA_TaipanBite_BleedDamage_Debuff":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateTaipanBiteBleedingEffect());
             return true;
 
         case "M31_PA_TaipanBloodThirst_BuffText":
-            OutString = GetTaipanBloodThirstOutString(ParseObj, StrategyParseOb, GameState);
+            OutString = class'X2Effect_PA_TaipanBloodThirst'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetMutonOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit UnitState;
+    local float fValue;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    switch (InString)
+    {
+        case "M31_PA_HardenedShield_ShieldAmount":
+        case "M31_PA_HardenedShield_CritResistance":
+        case "M31_PA_Counterattack_Dodge":
+        case "M31_PA_Counterattack_Dodge_ReductionPerHit":
+        case "M31_PA_PersonalShield_ShieldPriority":
+        case "M31_PA_PersonalShield_Duration":
+        case "M31_PA_CripplingBlow_AimPenalty":
+        case "M31_PA_CripplingBlow_DefensePenalty":
+        case "M31_PA_CripplingBlow_DodgePenalty":
+        case "M31_PA_CripplingBlow_MobilityPenalty":
+        case "M31_PA_CripplingBlow_Duration":
+        case "M31_PA_Barbarian_AimBonus":
+        case "M31_PA_Barbarian_CritBonus":
+        case "M31_PA_MutonBullRush_AimBonus":
+        case "M31_PA_MutonBullRush_CritBonus":
+        case "M31_PA_MutonBullRush_StunDuration":
+        case "M31_PA_StayFrosty_Radius":
+        case "M31_PA_StayFrosty_ActivationsPerTurn":
+
+        case "M31_PA_HunterMark_DefenseBonus":
+        case "M31_PA_HunterMark_DefenseBonusPerTurn":
+        case "M31_PA_HunterMark_DodgeBonus":
+        case "M31_PA_HunterMark_DodgeBonusPerTurn":
+        case "M31_PA_HunterMark_AimBonus":
+        case "M31_PA_HunterMark_AimBonusPerTurn":
+        case "M31_PA_HunterMark_CritBonus":
+        case "M31_PA_HunterMark_CritBonusPerTurn":
+        case "M31_PA_HunterWatchfulEye_ActivationsPerTurn":
+        case "M31_PA_HunterDedication_DefenseBonus":
+        case "M31_PA_HunterDedication_DodgeBonus":
+        case "M31_PA_HunterDedication_MobilityBonus":
+        case "M31_PA_HunterDedication_Duration":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_PA_Aegis_DamageReduction":
+            OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+            return true;
+
+        case "M31_PA_PersonalShield_bAllowWhileDisoriented":
+        case "M31_PA_BayonetCharge_bAllowWhileDisoriented":
+        case "M31_PA_Counterattack_bOnlyOnEnemyTurn":
+        case "M31_PA_CripplingBlow_bInfiniteDuration":
+        case "M31_PA_CripplingBlow_bAllowStack":
+        case "M31_PA_StayFrosty_bReactionFire":
+        case "M31_PA_HunterDedication_bExcludeFlanking":
+        case "M31_PA_HunterDedication_bExcludeMelee":
+            OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
+            return true;
+
+        case "M31_PA_PersonalShield_ShieldAmount":
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState, eInvSlot_Armor);
+            return true;
+
+        case "M31_PA_HarrierBullRush_AimBonus":
+        case "M31_PA_HarrierBullRush_CritBonus":
+        case "M31_PA_HarrierBullRush_StunDuration":
+        case "M31_PA_HarrierPunch_AimBonus":
+        case "M31_PA_HarrierPunch_CritBonus":
+        case "M31_PA_HarrierVileMix_DOTDamageBonus":
+        case "M31_PA_HarrierVileMix_DOTDamageBonus_Debuff":
+        case "M31_PA_HarrierVileMix_Duration":
+        case "M31_PA_HarrierPoisonGrenade_AmmoCost":
+        case "M31_PA_HarrierPoisonGrenade_CooldownReductionEOG":
+        case "M31_PA_HarrierFireGrenade_AmmoCost":
+        case "M31_PA_HarrierFireGrenade_CooldownReductionEOG":
+        case "M31_PA_HarrierRadGrenade_AmmoCost":
+        case "M31_PA_HarrierRadGrenade_CooldownReductionEOG":
+        case "M31_PA_HarrierFuseGrenade_AmmoCost":
+        case "M31_PA_HarrierFuseGrenade_CooldownReductionEOG":
+        case "M31_PA_HarrierCyclic_AimPenalty":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_PA_HarrierPoisonGrenade_BaseRadiusModifer":
+        case "M31_PA_HarrierFireGrenade_BaseRadiusModifer":
+        case "M31_PA_HarrierRadGrenade_BaseRadiusModifer":
+        case "M31_PA_HarrierFuseGrenade_BaseRadiusModifer":
+            fValue = `GetConfigFloat(InString);
+            if (fValue >= 0)
+                OutString = "+" $ ColorText_Auto(TruncateFloat2(fValue,, false) $ "m",, UnitState);
+            else
+                OutString = "-" $ ColorText_Auto(TruncateFloat2(-1 * fValue,, false) $ "m",, UnitState);
             return true;
 
         default:
@@ -1604,7 +1623,7 @@ static function bool GetWinterSentinelOutStrings(string InString, out string Out
             return true;
 
         case "M31_PA_WS_Thrill_BuffText":
-            OutString = GetThrillOutString(ParseObj, StrategyParseOb, GameState);
+            OutString = class'X2Effect_WS_Thrill'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_PA_WS_AlloyedCores_Range":
@@ -1743,7 +1762,7 @@ static function bool GetWinterSentinelOutStrings(string InString, out string Out
             return true;
 
         case "M31_PA_WS_NorthernWinds_Damage":
-            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState,,, class'X2AbilitySet_PA_WinterSentinel'.static.GetNorthernWindsDamageEffect());
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_PA_WS_Dominance_bAllowWhileDisoriented":
@@ -1771,7 +1790,6 @@ static function bool GetWinterSentinelOutStrings(string InString, out string Out
 
     return false;
 }
-
 
 static function bool GetChosenArsenalOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
 {
@@ -1880,55 +1898,6 @@ static private function string GetStringFromLocalizedList(const array<string> Lo
     return OutString;
 }
 
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use: to reduce the displayed number of decimals after the dot.
-// Credit: originally created by Pavonis for LW2 rocket scatter text.
-
-static private function string TruncateFloat(float fValue)
-{
-    local string TempString;
-    local string FloatString;
-    local int i;
-    local float TestFloat;
-    local float TempFloat;
-    local int places;
-
-    TempFloat = fValue;
-    
-    places = 2;
-    
-    for (i=0; i < places; i++)
-    {
-        TempFloat *= 10.0;
-    }
-    
-    TempFloat = Round(TempFloat);
-    for (i=0; i < places; i++)
-    {
-        TempFloat /= 10.0;
-    }
-
-    TempString = string(TempFloat);
-    for (i = InStr(TempString, ".") + 1; i < Len(TempString) ; i++)
-    {
-        FloatString = Left(TempString, i);
-        TestFloat = float(FloatString);
-        if (TempFloat ~= TestFloat)
-        {
-            break;
-        }
-    }
-
-    if (Right(FloatString, 1) == ".")
-    {
-        FloatString $= "0";
-    }
-
-    return FloatString;
-}
-
-
 // Purpose: helper function for AbilityTagExpandHandler_CH().
 // Use: a version of TruncateFloat with additional arguments.
 
@@ -2022,7 +1991,7 @@ static private function string GetBoundWeaponName(Object ParseObj, Object Strate
         return ItemTemplate.GetItemAbilityDescName();
     }
     
-    return `GetLocalizedString("M31_DefaultWeapon");
+    return default.strDefaultWeapon;
 }
 
 
@@ -2128,7 +2097,6 @@ static private function XComGameState_Unit GetSourceUnitFromParseObj(Object Pars
     }
     return SourceUnit;
 }
-
 
 // Purpose: helper function for AbilityTagExpandHandler_CH().
 // Use:
@@ -2331,9 +2299,10 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     if (Array.Length == 0)
         return ColorText_Grey("?");
 
+    Index = -1;
     if (ItemTemplate != none)
     {
-        Index = GetItemTech(ItemTemplate);
+        Index = `GetTechLevel(ItemTemplate);
         if (Index != -1)
             Index = Clamp(Index, 0, Array.Length - 1);
     }
@@ -2427,6 +2396,7 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
     if (Array.Length == 0)
         return ColorText_Grey("?");
 
+    Index = -1;
     if (SourceUnit != none)
     {
         Index = SourceUnit.GetSoldierRank();
@@ -2477,23 +2447,23 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
                     if (i == 0)
                     {
                         if (i == Index)
-                            OutString = ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString, true);
+                            OutString = ColorText_Auto(Array[i],, SourceUnit) @ ColorText_Grey(RankString, true);
                         else
-                            OutString = ColorText_Grey(Array[i] $ " " $ RankString, true);
+                            OutString = ColorText_Grey(Array[i] @ RankString, true);
                     }
                     else if (i < Array.Length - 1)
                     {
                         if (i == Index)
-                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString, true);
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) @ ColorText_Grey(RankString, true);
                         else
-                            OutString = OutString $ string(Array[i]) $ " " $ RankString;
+                            OutString = OutString $ string(Array[i]) @ RankString;
                     }
                     else
                     {
                         if (i == Index)
-                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ " " $ ColorText_Grey(RankString);
+                            OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) @ ColorText_Grey(RankString);
                         else
-                            OutString = OutString $ string(Array[i]) $ " " $ RankString $ ColorText_Close();
+                            OutString = OutString $ string(Array[i]) @ RankString $ ColorText_Close();
                     }
                 }
                 else
@@ -2533,89 +2503,7 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
     return ColorText_Grey("?");
 }
 
-
-// Purpose: helper function for GetTagValueFromItemTech().
-// Use: get the template of the weapon to which the ability is bound.
-// Typical use case:
-
-static private function string GetExtraDamageOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, name Tag)
-{
-    local XComGameState_Unit    SourceUnit;
-    local X2WeaponTemplate      WeaponTemplate;
-    local WeaponDamageValue     Damage;
-    local int iDamageLow, iDamageHigh;
-    local int Index;
-    local string OutString;
-
-    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-    WeaponTemplate = X2WeaponTemplate(GetItemTemplateFromParseObj(ParseObj, StrategyParseObj, GameState));
-
-    Index = WeaponTemplate.ExtraDamage.Find('Tag', Tag);
-
-    if (Index == INDEX_NONE)
-        return ColorText_Grey("?");
-
-    Damage = WeaponTemplate.ExtraDamage[Index];
-
-    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
-    iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
-    if (iDamageLow < iDamageHigh)
-        OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-    else
-        OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-
-    return OutString;
-}
-
-
-// Purpose: helper function for GetTagValueFromItemTech().
-// Use: get the template of the weapon to which the ability is bound.
-// Typical use case:
-
-static private function string GetDamageValueOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, WeaponDamageValue Damage)
-{
-    local XComGameState_Unit SourceUnit;
-    local string OutString;
-    local int iDamageLow, iDamageHigh;
-
-    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-
-    iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
-    iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
-    if (iDamageLow < iDamageHigh)
-        OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-    else
-        OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-
-    return OutString;
-}
-
-
-// Purpose: helper function for GetTagValueFromItemTech().
-// Use: get the template of the weapon to which the ability is bound.
-// Typical use case:
-
-static private function string GetAltValueOutStringWithAbility(int Value, int AltValue, name RequiredAbility, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-    local XComGameState_Unit SourceUnit;
-    local string OutString;
-
-    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-
-    if (SourceUnit != none && SourceUnit.HasSoldierAbility(RequiredAbility, true))
-        OutString $= ColorText_Auto(AltValue,, SourceUnit) $ ColorText_Green("*");
-    else
-        OutString $= ColorText_Auto(Value,, SourceUnit);
-
-    return OutString;
-}
-
-
-// Purpose: getting the index for the item tech level
-// Use:
-// Typical use case:
-
-static function int GetItemTech(X2ItemTemplate ItemTemplate)
+static function int GetTechLevel(X2ItemTemplate ItemTemplate)
 {
     local X2WeaponTemplate      WeaponTemplate;
     local X2ArmorTemplate       ArmorTemplate;
@@ -2629,7 +2517,17 @@ static function int GetItemTech(X2ItemTemplate ItemTemplate)
         ArmorTemplate = X2ArmorTemplate(ItemTemplate);
         GremlinTemplate = X2GremlinTemplate(ItemTemplate);
 
-        if (WeaponTemplate != none)
+        if (GremlinTemplate != none)
+        {
+            switch (GremlinTemplate.WeaponTech)
+            {
+                case 'beam':            Index = 2;  break;
+                case 'magnetic':        Index = 1;  break;
+                case 'conventional':    Index = 0;  break;
+                default:                Index = -1; break;
+            }
+        }
+        else if (WeaponTemplate != none)
         {
             switch (WeaponTemplate.WeaponTech)
             {
@@ -2651,201 +2549,9 @@ static function int GetItemTech(X2ItemTemplate ItemTemplate)
                 default:                Index = -1; break;
             }
         }
-        else if (GremlinTemplate != none)
-        {
-            switch (GremlinTemplate.WeaponTech)
-            {
-                case 'beam':            Index = 2;  break;
-                case 'magnetic':        Index = 1;  break;
-                case 'conventional':    Index = 0;  break;
-                default:                Index = -1; break;
-            }
-        }
     }
     return Index;
 }
-
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetBloodThirstOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-    local XComGameState_Effect      EffectState;
-    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
-    local X2Effect_BloodThirst      BloodThirstEffect;
-    local XComGameState_Unit        UnitState;
-    local string OutString;
-    local string NewString;
-    local int Index;
-    local int iCount;
-
-    EffectState = XComGameState_Effect(ParseObj);
-    if (EffectState != none)
-    {
-        BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
-        BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
-        UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-        if (BloodThirstEffectState != none && BloodThirstEffect != none && UnitState != none)
-        {
-            iCount = BloodThirstEffectState.GetTotalStacksRemaining();
-            if (iCount == 0)
-                return `GetLocalizedString("M31_BloodThirst_BuffText_NoStacks");
-            else
-            {
-                NewString = `GetLocalizedString("M31_BloodThirst_BuffText_Stacks");
-                NewString = Repl(NewString, "[X]", iCount) $ "<br><br>";
-                OutString = NewString;
-            }
-
-            for (Index = 0; Index < BloodThirstEffect.GetStackDuration(UnitState); Index++)
-            {
-                if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
-                {                 
-                    if (Index == 0)
-                    {
-                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelpFirst");
-                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]) $ "<br>";
-                        OutString $= NewString;
-                    }
-                    else
-                    {
-                        NewString = `GetLocalizedString("M31_BloodThirst_BuffText_StacksHelp");
-                        NewString = Repl(NewString, "[X]", BloodThirstEffectState.arrStacksRemaining[Index]);
-                        NewString = Repl(NewString, "[y]", Index + 1) $ "<br>";
-                        OutString $= NewString;
-                    }
-                }
-            }
-            return OutString;
-        }
-    }
-    return "?";
-}
-
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetTaipanBloodThirstOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-    local XComGameState_Effect      EffectState;
-    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
-    local X2Effect_BloodThirst      BloodThirstEffect;
-    local XComGameState_Unit        UnitState;
-    local XComGameState_Item        SourceWeapon;
-    local string    OutString;
-    local string    NewString;
-    local int       Index;
-    local int       Count;
-
-    EffectState = XComGameState_Effect(ParseObj);
-    if (EffectState != none)
-    {
-        BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
-        BloodThirstEffect = X2Effect_BloodThirst(BloodThirstEffectState.GetX2Effect());
-        UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-        SourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
-        if (BloodThirstEffectState != none && BloodThirstEffect != none && UnitState != none)
-        {
-            Count = BloodThirstEffectState.GetTotalStacksRemaining();
-            if (Count != 0)
-            {
-                NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Damage;
-                NewString = Repl(NewString, "[A]", Count * BloodThirstEffect.GetDamagePerStack(UnitState, SourceWeapon)) $ "<br>";
-                OutString $= NewString;
-                
-                if (UnitState.HasSoldierAbility('M31_PA_TaipanBloodHunter', true))
-                {
-                    if (`GetConfigInt("M31_PA_TaipanBloodHunter_DamageModifierPrc") > 0)
-                    {
-                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_OtherDamage;
-                        NewString = Repl(NewString, "[B]", Count * BloodThirstEffect.GetDamagePerStack(UnitState, SourceWeapon)
-                            * `GetConfigInt("M31_PA_TaipanBloodHunter_DamageModifierPrc") / 100) $ "<br>";
-                        OutString $= NewString;
-                    }
-                    if (`GetConfigInt("M31_PA_TaipanBloodHunter_CritBonusPerStack") > 0)
-                    {
-                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Crit;
-                        NewString = Repl(NewString, "[C]", Count * `GetConfigInt("M31_PA_TaipanBloodHunter_CritBonusPerStack")) $ "<br>";
-                        OutString $= NewString;
-                    }
-                }
-
-                for (Index = BloodThirstEffect.GetStackDuration(UnitState) - 1; Index >= 0; Index--)
-                {
-                    if (BloodThirstEffectState.arrStacksRemaining[Index] > 0)
-                    {
-                        NewString = class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_Stacks;
-                        NewString = Repl(NewString, "[Y]", Index + 1);
-                        OutString $= NewString;
-                        break;
-                    }
-                }
-                return OutString;
-            }
-            else
-            {
-                return class'X2Effect_PA_TaipanBloodThirst'.default.TaipanBloodThirstDesc_NoStacks;
-            }
-        }
-    }
-    return "?";
-}
-
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetSleightOfHandOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-    local XComGameState_Unit UnitState;
-    local int iCount;
-    local string NewString;
-
-    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-
-    iCount = class'X2Effect_SleightOfHand'.static.GetCurrentStackCount(UnitState);
-
-    NewString = `GetLocalizedString("M31_SleightOfHand_Stacks");
-
-    NewString = Repl(NewString, "[X]", iCount * `GetConfigInt("M31_SleightOfHand_AimPerStack"));
-    NewString = Repl(NewString, "[Y]", iCount * `GetConfigInt("M31_SleightOfHand_CritPerStack"));
-    NewString = Repl(NewString, "[Z]", iCount);
-
-    return NewString;
-}
-
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetThrillOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
-{
-    local XComGameState_Unit UnitState;
-    local int iCount;
-    local string NewString;
-
-    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-
-    iCount = class'X2Effect_WS_Thrill'.static.GetCurrentStackCount(UnitState);
-
-    NewString = `GetLocalizedString("M31_PA_WS_Thrill_Stacks");
-
-    NewString = Repl(NewString, "[X]", iCount * `GetConfigInt("M31_PA_WS_ThrillOfTheHunt_AimPerStack"));
-    NewString = Repl(NewString, "[Y]", iCount * `GetConfigInt("M31_PA_WS_ThrillOfTheHunt_CritPerStack"));
-    NewString = Repl(NewString, "[Z]", iCount);
-
-    return NewString;
-}
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
 
 static private function GetShieldEffectValues(Object ParseObj, Object StrategyParseObj, XComGameState GameState, out int ShieldRemaining, out int ShieldPriority)
 {
@@ -2864,11 +2570,6 @@ static private function GetShieldEffectValues(Object ParseObj, Object StrategyPa
     }
 }
 
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
 static private function int GetEffectTurnsTicked(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameState_Effect EffectState;
@@ -2881,20 +2582,126 @@ static private function int GetEffectTurnsTicked(Object ParseObj, Object Strateg
     return -1;
 }
 
+static private function string GetEffectSourceFullName(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Effect  EffectState;
+    local XComGameState_Unit    SourceUnit;
 
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
+    EffectState = XComGameState_Effect(ParseObj);
+    if (EffectState != none)
+    {
+        SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+        if (SourceUnit != none)
+        {
+            return SourceUnit.GetFullName();
+        }
+    }
+    return "?";
+}
 
-static private function string GetEffectDamageOverTimeString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+// Strategy ability localization
+// Tactical source localization
+static private function string GetDamageOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional X2Effect Effect)
+{
+    local XComGameState_Effect          EffectState;
+    local XComGameState_Ability         AbilityState;
+    local X2AbilityTemplate             AbilityTemplate;
+    local X2Effect                      ApplyOnTickEffect, TargetEffect;
+    local X2Effect_ApplyWeaponDamage    DamageEffect;
+    local X2Effect_Persistent           PersistentEffect;
+
+    // Effect passed directly
+    // X2Effect_ApplyWeaponDamage -> GetDamageEffectOutString()
+    // X2Effect_Persistent -> PersistentEffect.ApplyOnTick -> GetDamageEffectOutString()
+    if (Effect != none)
+    {
+        DamageEffect = X2Effect_ApplyWeaponDamage(Effect);
+        PersistentEffect = X2Effect_Persistent(Effect);
+        if (DamageEffect != none)
+        {
+            return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
+        }
+        else if (PersistentEffect != none)
+        {
+            foreach PersistentEffect.ApplyOnTick(ApplyOnTickEffect)
+            {
+                DamageEffect = X2Effect_ApplyWeaponDamage(ApplyOnTickEffect);
+                if (DamageEffect != none)
+                {
+                    return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
+                }
+            }
+        }
+        return ColorText_Grey("?");
+    }
+
+    // ParseObj: XComGameState_Effect (EffectState)
+    // StrategyParseObj: none
+    if (StrategyParseObj == none)
+    {
+        AbilityState = XComGameState_Ability(ParseObj);
+        EffectState = XComGameState_Effect(ParseObj);
+        if (EffectState != none)
+        {
+            PersistentEffect = EffectState.GetX2Effect();
+            if (PersistentEffect != none)
+            {
+                foreach PersistentEffect.ApplyOnTick(ApplyOnTickEffect)
+                {
+                    DamageEffect = X2Effect_ApplyWeaponDamage(ApplyOnTickEffect);
+                    if (DamageEffect != none)
+                    {
+                        return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
+                    }
+                }
+            }
+            return ColorText_Grey("?");
+        }
+        else if (AbilityState != none)
+        {
+            AbilityTemplate = AbilityState.GetMyTemplate();
+        }
+        else
+        {
+            return ColorText_Grey("?");
+        }
+    }
+
+    if (AbilityTemplate == none)
+    {
+        AbilityTemplate = X2AbilityTemplate(ParseObj);
+    }
+
+    if (AbilityTemplate != none)
+    {
+        foreach AbilityTemplate.AbilityTargetEffects(TargetEffect)
+        {
+            DamageEffect = X2Effect_ApplyWeaponDamage(TargetEffect);
+            if (DamageEffect != none)
+            {
+                return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
+            }
+        }
+
+        foreach AbilityTemplate.AbilityMultiTargetEffects(TargetEffect)
+        {
+            DamageEffect = X2Effect_ApplyWeaponDamage(TargetEffect);
+            if (DamageEffect != none)
+            {
+                return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
+            }
+        }
+    }
+
+    return ColorText_Grey("?");
+}
+
+static private function string GetEffectDamageOnTickString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameState_Effect          EffectState;
     local X2Effect_Persistent           PersistentEffect;
     local X2Effect                      ApplyOnTickEffect;
-    local X2Effect_ApplyWeaponDamage    WeaponDamageEffect;
-    local WeaponDamageValue             Damage;
-    local int                           MinDamage, MaxDamage;
-    local string                        OutString;
+    local X2Effect_ApplyWeaponDamage    DamageEffect;
 
     EffectState = XComGameState_Effect(ParseObj);
 
@@ -2905,21 +2712,10 @@ static private function string GetEffectDamageOverTimeString(Object ParseObj, Ob
         {
             foreach PersistentEffect.ApplyOnTick(ApplyOnTickEffect)
             {
-                WeaponDamageEffect = X2Effect_ApplyWeaponDamage(ApplyOnTickEffect);
-                if (WeaponDamageEffect != none)
+                DamageEffect = X2Effect_ApplyWeaponDamage(ApplyOnTickEffect);
+                if (DamageEffect != none)
                 {
-                    Damage = WeaponDamageEffect.EffectDamageValue;
-                    MinDamage = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
-                    MaxDamage = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
-                    if (MinDamage == MaxDamage)
-                    {
-                        OutString = string(MaxDamage);
-                    }
-                    else
-                    {
-                        OutString = string(MinDamage) @ " - " @ string(MaxDamage);
-                    }
-                    return OutString;
+                    return GetDamageEffectOutString(ParseObj, StrategyParseObj, GameState, DamageEffect);
                 }
             }
         }
@@ -2928,261 +2724,174 @@ static private function string GetEffectDamageOverTimeString(Object ParseObj, Ob
     return "?";
 }
 
+static private function string GetDamageEffectOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, X2Effect Effect)
+{
+    local XComGameStateHistory          History;
+    local XComGameState_Effect          EffectState;
+    local XComGameState_Ability         AbilityState;
+    local XComGameState_Unit            SourceUnit;
+    local X2Effect_ApplyWeaponDamage    DamageEffect;
+    local X2Effect_ApplyScalingDamage   ScalingDamageEffect;
+    local WeaponDamageValue             Damage, BonusDamage;
+    local int                           Rank, MaxRank;
+    local string                        OutString;
+    local StateObjectReference          EmptyRef;
 
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
+    DamageEffect = X2Effect_ApplyWeaponDamage(Effect);
+    if (DamageEffect != none)
+    {
+        Damage = DamageEffect.EffectDamageValue;
 
-static private function string GetOutStringWithRank(int BaseValue, float PerRankValue, Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional string strExtra, optional bool bClamp, optional int iClampMin, optional int iClampMax)
+        ScalingDamageEffect = X2Effect_ApplyScalingDamage(Effect);
+        if (ScalingDamageEffect != none)
+        {
+            History = `XCOMHISTORY;
+
+            AbilityState = XComGameState_Ability(ParseObj);
+            if (StrategyParseObj != none || AbilityState != none)
+            {
+                SourceUnit = XComGameState_Unit(StrategyParseObj);
+                if (SourceUnit != none)
+                {
+                    Rank = SourceUnit.GetSoldierRank();
+                    if (SourceUnit.GetSoldierClassTemplate() != none)
+                        MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
+                }
+
+                BonusDamage = ScalingDamageEffect.GetBonusEffectDamageValue(none, SourceUnit, none, EmptyRef);
+                Damage.Damage += BonusDamage.Damage;
+                OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+                Damage.Damage -= BonusDamage.Damage;
+
+                if (ScalingDamageEffect.DamagePerRank > 0 && Rank < MaxRank)
+                {
+                    OutString $= ColorText_Grey(" (" $ GetDamageValueOutString(ParseObj, none, GameState, Damage) $ " + " $  TruncateFloat2(ScalingDamageEffect.DamagePerRank) @ default.strPerRank $ ")");
+                }
+                if (ScalingDamageEffect.DamageFromHP  > 0)
+                {
+                    OutString $= " + " $ ColorText_Auto(TruncateFloat2(ScalingDamageEffect.DamageFromHP) $ "%",, SourceUnit);
+                }
+
+                return OutString;
+            }
+            else
+            {
+                EffectState = XComGameState_Effect(ParseObj);
+                if (EffectState != none)
+                {
+                    AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+                    if (AbilityState != none)
+                    {
+                        SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+                    }
+
+                    BonusDamage = ScalingDamageEffect.GetBonusEffectDamageValue(AbilityState, SourceUnit, AbilityState.GetSourceWeapon(), EffectState.ApplyEffectParameters.TargetStateObjectRef);
+                    Damage.Damage += BonusDamage.Damage;
+                    OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+
+                    if (ScalingDamageEffect.DamageFromHP  > 0)
+                    {
+                        OutString $= " + " $ TruncateFloat2(ScalingDamageEffect.DamageFromHP) $ "%";
+                    }
+                    return OutString;
+                }
+                return ColorText_Grey("?");
+            }
+        }
+
+        return GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+    }
+
+    return ColorText_Grey("?");
+}
+
+static private function string GetDamageValueOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, WeaponDamageValue Damage)
+{
+    local int       MinDamage, MaxDamage;
+    local string    OutString;
+
+    MinDamage = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
+    MaxDamage = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
+
+    if (MinDamage < MaxDamage)
+        OutString = string(MinDamage) $ " - " $ string(MaxDamage);
+    else
+        OutString = string(MaxDamage);
+
+    if (StrategyParseObj != none)
+    {
+        OutString = ColorText_Auto(OutString,, GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState));
+    }
+
+    return OutString;
+}
+
+static private function string GetExtraDamageOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, name Tag)
+{
+    local X2WeaponTemplate  WeaponTemplate;
+    local WeaponDamageValue Damage;
+    local int               Index;
+
+    WeaponTemplate = X2WeaponTemplate(GetItemTemplateFromParseObj(ParseObj, StrategyParseObj, GameState));
+
+    Index = WeaponTemplate.ExtraDamage.Find('Tag', Tag);
+
+    if (Index != INDEX_NONE)
+    {
+        Damage = WeaponTemplate.ExtraDamage[Index];
+        return GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+    }
+
+    return ColorText_Grey("?");
+}
+
+static private function string GetAltValueOutStringWithAbility(int Value, int AltValue, name RequiredAbility, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Unit SourceUnit;
+    local string OutString;
+
+    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+
+    if (SourceUnit != none && SourceUnit.HasSoldierAbility(RequiredAbility, true))
+        OutString $= ColorText_Auto(AltValue,, SourceUnit) $ ColorText_Green("*");
+    else
+        OutString $= ColorText_Auto(Value,, SourceUnit);
+
+    return OutString;
+}
+
+static private function string GetOutStringWithRank(
+    int BaseValue, float PerRankValue,
+    Object ParseObj, Object StrategyParseObj, XComGameState GameState,
+    optional string Suffix, optional bool bClamp, optional int ClampMin, optional int ClampMax)
 {
     local XComGameState_Unit SourceUnit;
     local bool bStrategy;
     local string OutString;
-    local int iRank;
-    local int iMaxRank;
-    local int FullValue;
+    local int Rank, MaxRank, FullValue;
 
     bStrategy = StrategyParseObj != none;
     SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
 
-    if (StrategyParseObj != none)
-    {
-        bStrategy = true;
-        SourceUnit = XComGameState_Unit(StrategyParseObj);
-    }
-
     if (SourceUnit != none)
     {
-        iRank = SourceUnit.GetSoldierRank();
+        Rank = SourceUnit.GetSoldierRank();
         if (SourceUnit.GetSoldierClassTemplate() != none)
-            iMaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
+            MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
     }
 
-    FullValue = BaseValue + iRank * PerRankValue;
+    FullValue = BaseValue + Rank * PerRankValue;
 
     if (bClamp)
-        FullValue = Clamp(FullValue, iClampMin, iClampMax);
+        FullValue = Clamp(FullValue, ClampMin, ClampMax);
 
-    OutString $= ColorText_Auto(FullValue $ strExtra,, SourceUnit);
+    OutString $= ColorText_Auto(FullValue $ Suffix,, SourceUnit);
     
-    if (bStrategy && PerRankValue != 0 && iRank < iMaxRank)
-        OutString $= ColorText_Grey(" (" $ BaseValue $ strExtra $ " + " $  TruncateFloat2(PerRankValue) $ strExtra $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
+    if (bStrategy && PerRankValue != 0 && Rank < MaxRank)
+        OutString $= ColorText_Grey(" (" $ BaseValue $ Suffix $ " + " $  TruncateFloat2(PerRankValue) $ Suffix @ default.strPerRank $ ")");
     
     return OutString;
 }
-
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetDamageOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional X2Effect_Persistent EffectToProcess, optional bool bNoTarget, optional X2Effect_ApplyWeaponDamage DamageEffect)
-{
-    local XComGameState_Effect      EffectState;
-    local X2AbilityTemplate         AbilityTemplate;
-    local XComGameState_Unit        SourceUnit;
-    local XComGameState_Unit        TargetUnit;
-    local X2Effect                  Effect;
-    local bool          bStrategy;
-    local string        OutString;
-
-    bStrategy = StrategyParseObj != none;
-    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
-    AbilityTemplate = GetAbilityTemplateFromParseObj(ParseObj, StrategyParseObj, GameState);
-
-    if (!bStrategy)
-    {
-        EffectState = XComGameState_Effect(ParseObj);
-        if (EffectState != none)
-        {
-            TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-        }
-    }
-
-    if (EffectToProcess != none)
-    {
-        foreach EffectToProcess.ApplyOnTick(Effect)
-            if (ProcessDamageEffect(OutString, bStrategy, Effect, SourceUnit, (bNoTarget ? none : TargetUnit)))
-                return OutString;
-    }
-    else
-    {
-        if (DamageEffect != none)
-            if (ProcessDamageEffect(OutString, bStrategy, DamageEffect, SourceUnit, none))
-                return OutString;
-
-        foreach AbilityTemplate.AbilityTargetEffects(Effect)
-            if (ProcessDamageEffect(OutString, bStrategy, Effect, SourceUnit, TargetUnit))
-                return OutString;
-
-        foreach AbilityTemplate.AbilityMultiTargetEffects(Effect)
-            if (ProcessDamageEffect(OutString, bStrategy, Effect, SourceUnit, TargetUnit))
-                return OutString;
-    }
-    
-    return ColorText_Grey("?");
-}
-
-// Purpose: helper function for GetDamageOutString().
-// Use:
-// Typical use case: 
-
-static private function bool ProcessDamageEffect(out string OutString, bool bStrategy, X2Effect Effect, optional XComGameState_Unit SourceUnit, optional XComGameState_Unit TargetUnit)
-{
-    local WeaponDamageValue Damage;
-    local int           iRank;
-    local int           iMaxRank;
-    local int           iDamageLow;
-    local int           iDamageHigh;
-    local int           iDamageLowBase;
-    local int           iDamageHighBase;
-    local float         fDamagePrc;
-    local bool          bNeedsPlus;
-
-    local X2Effect_ApplyDamageFromHPWithRank    DamageEffectHPRank;
-    local X2Effect_ApplyDamageFromHP            DamageEffectHP;
-    local X2Effect_ApplyDamageWithRank          DamageEffectRank;
-    local X2Effect_ApplyWeaponDamage            DamageEffect;
-
-    if (SourceUnit != none)
-    {
-        iRank = SourceUnit.GetSoldierRank();
-        if (SourceUnit.GetSoldierClassTemplate() != none)
-            iMaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
-    }
-
-    DamageEffectHPRank = X2Effect_ApplyDamageFromHPWithRank(Effect);
-    DamageEffectHP = X2Effect_ApplyDamageFromHP(Effect);
-    DamageEffectRank = X2Effect_ApplyDamageWithRank(Effect);
-    DamageEffect = X2Effect_ApplyWeaponDamage(Effect);
-    if (DamageEffectHPRank != none)
-    {
-        if (bStrategy || TargetUnit == none)
-        {
-            DamageEffectHPRank.GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh, iDamageLowBase, iDamageHighBase);
-            DamageEffectHPRank.GetDamagePrc(SourceUnit, none, fDamagePrc);
-            if (iDamageLow != 0 || iDamageHigh != 0 || DamageEffectHPRank.fBaseDmgPerRank != 0)
-            {
-                bNeedsPlus = true;
-                if (iDamageLow < iDamageHigh)
-                    OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-                else
-                    OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-                
-                if (bStrategy && DamageEffectHPRank.fBaseDmgPerRank > 0 && iRank < iMaxRank)
-                {
-                    if (iDamageLowBase < iDamageHighBase)
-                        OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase
-                            $ " + " $  TruncateFloat2(DamageEffectHPRank.fBaseDmgPerRank)
-                            $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
-                    else
-                        OutString $= ColorText_Grey(" (" $ iDamageLowBase
-                            $ " + " $  TruncateFloat2(DamageEffectHPRank.fBaseDmgPerRank)
-                            $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
-                }
-            }
-            if (fDamagePrc != 0 || DamageEffectHPRank.fPrcDmgPerRank != 0)
-            {
-                if (bNeedsPlus)
-                    OutString $= " + ";
-
-                OutString $= ColorText_Auto(TruncateFloat2(fDamagePrc) $ "%",, SourceUnit);
-                if (bStrategy && DamageEffectHPRank.fPrcDmgPerRank > 0 && iRank < iMaxRank)
-                {
-                    OutString $= ColorText_Grey(" (" $ DamageEffectHPRank.fPrcDmg $ "%"
-                        $ " + " $  TruncateFloat2(DamageEffectHPRank.fPrcDmgPerRank) $ "% "
-                        $ `GetLocalizedString("M31_PerRank") $ ")");
-                }
-            }
-        }
-        else
-        {
-            DamageEffectHPRank.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
-            iDamageLow = Max(iDamageLow, DamageEffectHPRank.iMinDamage);
-            iDamageHigh = Max(iDamageHigh, DamageEffectHPRank.iMinDamage);
-            
-            if (iDamageLow < iDamageHigh)
-                OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-            else
-                OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-        }
-        return true;
-    }
-    else if (DamageEffectHP != none)
-    {
-        if (bStrategy || TargetUnit == none)
-        {
-            DamageEffectHP.GetDamageBrackets(SourceUnit, none, iDamageLow, iDamageHigh);
-            fDamagePrc = DamageEffectHP.fPrcDmg;
-            if (iDamageLow != 0 || iDamageHigh != 0)
-            {
-                bNeedsPlus = true;
-                if (iDamageLow < iDamageHigh)
-                    OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-                else
-                    OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-            }
-            if (fDamagePrc != 0)
-            {
-                if (bNeedsPlus)
-                    OutString $= " + ";
-
-                OutString $= ColorText_Auto(TruncateFloat2(fDamagePrc) $ "%",, SourceUnit);
-            }
-        }
-        else
-        {
-            DamageEffectHP.GetDamageBrackets(SourceUnit, TargetUnit, iDamageLow, iDamageHigh);
-            iDamageLow = Max(iDamageLow, DamageEffectHPRank.iMinDamage);
-            iDamageHigh = Max(iDamageHigh, DamageEffectHPRank.iMinDamage);
-            if (iDamageLow < iDamageHigh)
-                OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-            else
-                OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-        }
-        return true;
-    }
-    else if (DamageEffectRank != none)
-    {
-
-        DamageEffectRank.GetDamageBrackets(SourceUnit, iDamageLow, iDamageHigh, iDamageLowBase, iDamageHighBase);
-        if (iDamageLow != 0 || iDamageHigh != 0 || DamageEffectRank.fDamagePerRank != 0)
-        {
-            if (iDamageLow < iDamageHigh)
-                OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-            else
-                OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-            
-            if (bStrategy && DamageEffectRank.fDamagePerRank != 0 && iRank < iMaxRank)
-            {
-                if (iDamageLowBase < iDamageHighBase)
-                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " - " $ iDamageHighBase $ " + " $  TruncateFloat2(DamageEffectRank.fDamagePerRank)
-                        $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
-                else
-                    OutString $= ColorText_Grey(" (" $ iDamageLowBase $ " + " $  TruncateFloat2(DamageEffectRank.fDamagePerRank)
-                        $ " " $ `GetLocalizedString("M31_PerRank") $ ")");
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    else if (DamageEffect != none)
-    {
-        Damage = DamageEffect.EffectDamageValue;
-        iDamageLow = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
-        iDamageHigh = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
-        if (iDamageLow < iDamageHigh)
-            OutString $= ColorText_Auto(iDamageLow $ " - " $ iDamageHigh,, SourceUnit);
-        else
-            OutString $= ColorText_Auto(iDamageLow,, SourceUnit);
-        return true;
-    }
-    return false;
-}
-
 
 // Purpose: helper function for AbilityTagExpandHandler_CH().
 // Use: apply HTML hex color to a string. 

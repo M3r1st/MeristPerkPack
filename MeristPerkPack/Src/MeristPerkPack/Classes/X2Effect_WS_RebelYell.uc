@@ -45,5 +45,5 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 defaultproperties
 {
     EffectName = M31_PA_WS_RebelYell
-    DuplicateResponse = eDupe_Refresh;
+    DuplicateResponse = eDupe_Refresh
 }

@@ -197,7 +197,7 @@ static function X2AbilityTemplate SelfTargetTrigger(name DataName, string IconIm
 	if (Effect != none)
 	{
 		if (X2Effect_Persistent(Effect) != none)
-			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
 
 		Template.AddTargetEffect(Effect);
 	}
@@ -240,7 +240,7 @@ static function X2AbilityTemplate SelfTargetActivated(name DataName, string Icon
 	if (Effect != none)
 	{
 		if (X2Effect_Persistent(Effect) != none)
-			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
 
 		Template.AddTargetEffect(Effect);
 	}
@@ -307,7 +307,7 @@ static function X2AbilityTemplate Attack(name DataName, string IconImage, option
 	if (Effect != none)
 	{
 		if (X2Effect_Persistent(Effect) != none)
-			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
 
 		Template.AddTargetEffect(Effect);
 	}
@@ -437,7 +437,7 @@ static function X2AbilityTemplate TargetedDebuff(name DataName, string IconImage
 	if (Effect != none)
 	{
 		if (X2Effect_Persistent(Effect) != none)
-			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
 
 		Template.AddTargetEffect(Effect);
 	}
@@ -490,7 +490,7 @@ static function X2AbilityTemplate TargetedBuff(name DataName, string IconImage, 
 	if (Effect != none)
 	{
 		if (X2Effect_Persistent(Effect) != none)
-			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true, , Template.AbilitySourceName);
+			X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage,,, Template.AbilitySourceName);
 
 		Template.AddTargetEffect(Effect);
 	}
@@ -558,7 +558,7 @@ static function X2AbilityTemplate SquadPassive(name DataName, string IconImage, 
 static function AddSecondaryEffect(X2AbilityTemplate Template, X2Effect Effect)
 {
 	if (X2Effect_Persistent(Effect) != none)
-		X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, true, , Template.AbilitySourceName);
+		X2Effect_Persistent(Effect).SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
 	if (XMBEffect_ConditionalBonus(Effect) != none)
 		XMBEffect_ConditionalBonus(Effect).bHideWhenNotRelevant = true;
 

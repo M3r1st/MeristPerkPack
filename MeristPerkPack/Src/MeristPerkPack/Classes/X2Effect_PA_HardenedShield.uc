@@ -1,5 +1,7 @@
 class X2Effect_PA_HardenedShield extends X2Effect_Persistent;
 
+var int CritResistance;
+
 function GetToHitAsTargetModifiers(
     XComGameState_Effect EffectState,
     XComGameState_Unit Attacker,
@@ -9,19 +11,24 @@ function GetToHitAsTargetModifiers(
     bool bMelee, bool bFlanking, bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo	ModInfo;
+    local ShotModifierInfo ModInfo;
 
-    if (Target.IsUnitAffectedByEffectName('M31_PA_PersonalShield'))
+    if (IsEffectCurrentlyRelevant(EffectState, Target))
     {
         ModInfo.ModType = eHit_Crit;
-        ModInfo.Reason = `GetLocalizedString("M31_PA_HardenedShield_FriendlyName");
-        ModInfo.Value = -1 * `GetConfigInt("M31_PA_HardenedShield_CritResistance");
+        ModInfo.Reason = FriendlyName;
+        ModInfo.Value = -1 * CritResistance;
         ShotModifiers.AddItem(ModInfo);
     }
 }
 
+function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
+{
+    return TargetUnit.IsUnitAffectedByEffectName(class'X2AbilitySet_PA_Muton'.default.PersonalShieldEffectName);
+}
+
 defaultproperties
 {
+    EffectName = M31_PA_HardenedShield
     DuplicateResponse = eDupe_Ignore
-    EffectName = "M31_PA_HardenedShield"
 }

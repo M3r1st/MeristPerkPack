@@ -1,15 +1,25 @@
-class X2Effect_Entwine extends X2Effect_Persistent;
+class X2Effect_PA_Entwine extends X2Effect_Persistent;
+
+var int BindDefenseBonus;
+var int BindDodgeBonus;
+var int GrabAimBonus;
+var int BindDamageBonus;
 
 function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo  ModInfo;
+    local ShotModifierInfo  DefenseInfo, DodgeInfo;
 
     if (Target.IsUnitAffectedByEffectName(class'X2AbilityTemplateManager'.default.BoundName))
     {
-        ModInfo.ModType = eHit_Success;
-        ModInfo.Reason = FriendlyName;
-        ModInfo.Value = -1 * `GetConfigInt("M31_PA_Entwine_DefenseBonus");
-        ShotModifiers.AddItem(ModInfo);
+        DefenseInfo.ModType = eHit_Success;
+        DefenseInfo.Reason = FriendlyName;
+        DefenseInfo.Value = -1 * BindDefenseBonus;
+        ShotModifiers.AddItem(DefenseInfo);
+
+        DodgeInfo.ModType = eHit_Graze;
+        DodgeInfo.Reason = FriendlyName;
+        DodgeInfo.Value = BindDodgeBonus;
+        ShotModifiers.AddItem(DodgeInfo);
     }
 }
 
@@ -17,11 +27,11 @@ function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit 
 {
     local ShotModifierInfo  ModInfo;
 
-    if (class'X2AbilitySet_PlayableAliens'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
+    if (class'X2AbilitySet_PA_Viper'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
         ModInfo.ModType = eHit_Success;
-        ModInfo.Value = `GetConfigInt("M31_PA_Entwine_AimBonus");
         ModInfo.Reason = FriendlyName;
+        ModInfo.Value = GrabAimBonus;
         ShotModifiers.AddItem(ModInfo);
     }
 }
@@ -41,15 +51,20 @@ function int GetAttackingDamageModifier(
 
     if (TargetUnit != none)
     {
-        if (class'X2AbilitySet_PlayableAliens'.default.Bind_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE
-            || class'X2AbilitySet_PlayableAliens'.default.BindSustained_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
+        if (class'X2AbilitySet_PA_Viper'.default.Bind_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE
+            || class'X2AbilitySet_PA_Viper'.default.BindSustained_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
         {
             if (CurrentDamage > 0)
             {
-                return `GetConfigInt("M31_PA_Entwine_BindDamageBonus");
+                return BindDamageBonus;
             }
         }
     }
 
     return 0;
+}
+
+defaultproperties
+{
+    EffectName = M31_PA_Entwine
 }

@@ -1,4 +1,4 @@
-class X2Effect_PA_TaipanAmbush extends X2Effect_Persistent;
+class X2Effect_AllowReactionFireCrit extends X2Effect_Persistent;
 
 function bool AllowReactionFireCrit(XComGameState_Unit UnitState, XComGameState_Unit TargetState) 
 {

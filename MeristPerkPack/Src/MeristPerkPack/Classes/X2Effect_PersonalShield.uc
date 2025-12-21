@@ -12,6 +12,9 @@ var array<AdditionalShieldAmountInfo> AdditionalShieldAmount;
 var bool bGetShieldAmountFromWeapon;
 var bool bGetShieldAmountFromArmor;
 
+var localized string strFriendlyName;
+var localized string strFriendlyDesc;
+
 function AddAdditionalShieldAmount(name RequiredAbility, int Modifier)
 {
     local AdditionalShieldAmountInfo ShieldModifier;
@@ -65,8 +68,8 @@ simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAp
 simulated function int GetShieldAmountFromWeapon(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     local XComGameState_Item    SourceItem;
-    local int Shield;
-    local int Tier;
+    local int                   Shield;
+    local int                   Tech;
 
     SourceItem = XComGameState_Item(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.ItemStateObjectRef.ObjectID));
     if (SourceItem == none)
@@ -74,9 +77,9 @@ simulated function int GetShieldAmountFromWeapon(const out EffectAppliedData App
 
     if (SourceItem != none)
     {
-        Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceItem.GetMyTemplate());
-        Tier = Clamp(Tier, 0, ShieldAmount.Length - 1);
-        Shield = ShieldAmount[Tier];
+        Tech = `GetTechLevel(SourceItem.GetMyTemplate());
+        Tech = Clamp(Tech, 0, ShieldAmount.Length - 1);
+        Shield = ShieldAmount[Tech];
     }
 
     return Shield;
@@ -84,9 +87,9 @@ simulated function int GetShieldAmountFromWeapon(const out EffectAppliedData App
 
 simulated function int GetShieldAmountFromArmor(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit SourceUnit;
-    local int Shield;
-    local int Tier;
+    local XComGameState_Unit    SourceUnit;
+    local int                   Shield;
+    local int                   Tech;
 
     SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     if (SourceUnit == none)
@@ -94,9 +97,9 @@ simulated function int GetShieldAmountFromArmor(const out EffectAppliedData Appl
 
     if (SourceUnit != none)
     {
-        Tier = class'X2DLCInfo_MeristPerkPack'.static.GetItemTech(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
-        Tier = Clamp(Tier, 0, ShieldAmount.Length - 1);
-        Shield = ShieldAmount[Tier];
+        Tech = `GetTechLevel(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
+        Tech = Clamp(Tech, 0, ShieldAmount.Length - 1);
+        Shield = ShieldAmount[Tech];
     }
 
     return Shield;
@@ -104,5 +107,5 @@ simulated function int GetShieldAmountFromArmor(const out EffectAppliedData Appl
 
 defaultproperties
 {
-    EffectName = "M31_PersonalShield"
+    EffectName = M31_PersonalShield
 }

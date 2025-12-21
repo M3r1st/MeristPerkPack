@@ -1,61 +1,61 @@
 [M31_PA_PersonalShield X2AbilityTemplate]
 LocFriendlyName="Personal Shield"
+LocFlyOverText="Personal Shield"
 LocLongDescription="Activate to gain <Ability:M31_PA_PersonalShield_ShieldAmount> points of ablative HP for <Ability:M31_PA_PersonalShield_Duration> turn(s). Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Gain bonus ablative HP for <Ability:M31_PA_PersonalShield_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_PA_PersonalShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
-LocFlyOverText="Personal Shield"
 
 [M31_PA_Aegis X2AbilityTemplate]
 LocFriendlyName="Aegis"
+LocFlyOverText="Aegis"
 LocLongDescription="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
 LocHelpText="Personal Shield reduces incoming damage by <Ability:M31_PA_Aegis_DamageReduction>."
 ; LocPromotionPopupText=""
-LocFlyOverText="Aegis"
 
 [M31_PA_HardenedShield X2AbilityTemplate]
 LocFriendlyName="Hardened Shield"
+LocFlyOverText="Hardened Shield"
 LocLongDescription="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
 LocHelpText="Personal Shield provides <Ability:M31_PA_HardenedShield_ShieldAmount> additional points of ablative HP and reduces the chance of being critically hit by <Ability:M31_PA_HardenedShield_CritResistance>."
 ; LocPromotionPopupText=""
-LocFlyOverText="Hardened Shield"
 
 [M31_PA_Bayonet X2AbilityTemplate]
 LocFriendlyName="Bayonet"
+LocFlyOverText="Bayonet"
 LocLongDescription="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
 LocHelpText="Attack an adjacent target with your <Ability:M31_BoundWeaponName>."
 ; LocPromotionPopupText=""
-LocFlyOverText="Bayonet"
 
 [M31_PA_BayonetCharge X2AbilityTemplate]
 LocFriendlyName="Bayonet Charge"
+LocFlyOverText="Bayonet Charge"
 LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
 LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>."
 LocPromotionPopupText="<Bullet> You can activate this ability by placing the movement cursor over an enemy.<br><Bullet> The <Ability:ClassName> can perform a \"Dash\" move, using both actions to move, and still activate an attack against an adjacent enemy."
-LocFlyOverText="Bayonet Charge"
 
 [M31_PA_Counterattack X2AbilityTemplate]
 LocFriendlyName="Counterattack"
+LocFlyOverText="Counterattack"
 LocLongDescription="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
 LocHelpText="You may parry grazing melee attacks and counterattack with your <Ability:M31_BoundWeaponName>."
 LocPromotionPopupText="<Bullet> Counterattack does not activate on your own turn.<br><Bullet> Gain +<Ability:M31_PA_Counterattack_Dodge> dodge against melee attacks. The bonus is reduced by <Ability:M31_PA_Counterattack_Dodge_ReductionPerHit> each time the <Ability:ClassName> counterattacks. The bonus resets at the start of each turn."
-LocFlyOverText="Counterattack"
 
 [M31_PA_Counterattack_Attack X2AbilityTemplate]
 LocFriendlyName="Counterattack"
 
 [M31_PA_CripplingBlow X2AbilityTemplate]
-LocFriendlyName="Crippling Blow"
+LocFriendlyName="Crippling Wound"
+LocFlyOverText="Crippling Wound"
 LocLongDescription="Strike an adjacent target with your <Ability:M31_BoundWeaponName>, permanently lowering its aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Melee attack that permanently lowers target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
 LocPromotionPopupText="<Bullet> Multiple applications of the debuff will not stack."
-LocFlyOverText="Crippling Blow"
 
 [M31_PA_Bladestorm X2AbilityTemplate]
 LocFriendlyName="Centurion"
+LocFlyOverText="Centurion"
 LocLongDescription="Gain <font color='#0bff9b'>Bladestorm</font>. Additionaly, standard bayonet attack no longer ends the turn."
 LocHelpText="Standard bayonet attack no longer ends the turn."
 LocPromotionPopupText="<Bullet> Does not apply to Bayonet Charge."
-LocFlyOverText="Centurion"
 
 [M31_PA_Barbarian X2AbilityTemplate]
 LocFriendlyName="Barbarian"
@@ -77,25 +77,24 @@ LocPromotionPopupText="<Bullet> When activated, <font color='#0bff9b'>Run and Gu
 
 [M31_PA_Shieldbreaker X2AbilityTemplate]
 LocFriendlyName="Parry This"
+LocFlyOverText="Parry This"
 LocLongDescription="The soldier's melee attacks can no longer graze, be reflected, deflected, parried, or counterattacked."
 LocHelpText="The soldier's melee attacks can no longer graze, be reflected, deflected, parried, or counterattacked."
 LocPromotionPopupText="<Bullet> Melee attacks can still miss."
-LocFlyOverText="Parry This"
 
 [M31_PA_MutonBullRush X2AbilityTemplate]
 LocFriendlyName="Bull Rush (Muton)"
+LocFlyOverText="Bull Rush"
 LocLongDescription="Punch an enemy within movement range, dealing a small amount of damage and stunning them for <Ability:M31_PA_MutonBullRush_StunDuration> action(s). Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot be used against large units."
 LocHelpText="Punch an enemy within movement range, dealing a small amount of damage and stunning them for <Ability:M31_PA_MutonBullRush_StunDuration> action(s). Cannot be used against large units."
 ; LocPromotionPopupText=""
-LocFlyOverText="Bull Rush"
-
 
 [M31_PA_HunterMark X2AbilityTemplate]
 LocFriendlyName="Personal Enemy"
+LocFlyOverText="Personal Enemy"
 LocLongDescription="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonus> aim and +<Ability:M31_PA_HunterMark_CritBonus> critical chance against it. The bonus increases at the start of each turn. <Ability:M31_FreeAction>."
 LocHelpText="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it. The bonus increases at the start of each turn."
 LocPromotionPopupText="<Bullet> While the target it marked, gain additional +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it at the start of each turn.<br><Bullet> The effect lasts indefinitely, but only a single enemy can be marked at a time.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
-LocFlyOverText="Personal Enemy"
 
 [M31_PA_HunterWatchfulEye X2AbilityTemplate]
 LocFriendlyName="Very Watchful Eye"
@@ -103,33 +102,41 @@ LocLongDescription="Once per turn, take a free reaction shot when your <font col
 LocHelpText="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
 LocPromotionPopupText="<Bullet> Activates <Ability:M31_PA_HunterWatchfulEye_ActivationsPerTurn> time(s) per turn.<br><Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> The attack activates whenever the enemy moves or attacks."
 
-[M31_PA_HunterWatchfulEye_Attack X2AbilityTemplate]
+[M31_PA_HunterWatchfulEye_Passive X2AbilityTemplate]
 LocFriendlyName="Very Watchful Eye"
 LocFlyOverText="Very Watchful Eye"
+LocLongDescription="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocHelpText="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocPromotionPopupText="<Bullet> Activates <Ability:M31_PA_HunterWatchfulEye_ActivationsPerTurn> time(s) per turn.<br><Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> The attack activates whenever the enemy moves or attacks."
 
 [M31_PA_HunterDedication X2AbilityTemplate]
 LocFriendlyName="Hunter's Dedication"
+LocFlyOverText="Hunter's Dedication"
 LocLongDescription="Activate to gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for <Ability:M31_PA_HunterDedication_Duration> turn(s). <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Gain +<Ability:M31_PA_HunterDedication_DefenseBonus> defense and +<Ability:M31_PA_HunterDedication_MobilityBonus> mobility and ignore overwatch and reaction fire for <Ability:M31_PA_HunterDedication_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
-LocFlyOverText="Hunter's Dedication"
 
 [M31_PA_StayFrosty X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"
+LocFlyOverText="Stay Frosty"
 LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
 LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
 
-[M31_PA_StayFrosty_Attack X2AbilityTemplate]
+[M31_PA_StayFrosty_Passive X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"
 LocFlyOverText="Stay Frosty"
+LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
+
 
 [M31_PA_ChargeAndShoot X2AbilityTemplate]
 LocFriendlyName="Follow Up"
+LocFlyOverText="Follow Up"
 LocLongDescription="Attack any enemy within movement range with your <Ability:SecondaryWeaponName>. Follow up with a <Ability:WeaponName> shot if they are still alive. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Attack any enemy within movement range with your <Ability:SecondaryWeaponName>. Follow up with a <Ability:WeaponName> shot if they are still alive."
 LocPromotionPopupText="Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocFlyOverText="Follow Up"
 
 [M31_PA_ChargeAndShoot2 X2AbilityTemplate]
 LocFriendlyName="Follow Up"

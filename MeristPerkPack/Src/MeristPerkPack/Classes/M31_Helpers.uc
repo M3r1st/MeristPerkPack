@@ -38,7 +38,7 @@ static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName,
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.MergeVisualizationFn = FollowUpShot_MergeVisualization;
+    Template.MergeVisualizationFn = class'X2Effect_PassiveWeaponEffect'.static.FollowUpShot_MergeVisualization;
 
     Template.BuildInterruptGameStateFn = none;
 
@@ -77,325 +77,46 @@ static function X2Effect_PersistentStatChange CreateRoboticDisorientedStatusEffe
     return PersistentStatChangeEffect;
 }
 
-static function X2Effect_ImmediateAbilityActivation CreateImpairingEffect()
+static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, optional int Damage, optional int DamageSpread, optional int DamageFromHP)
 {
-    local X2Effect_ImmediateAbilityActivation   ImpairingAbilityEffect;
-    local X2Condition_AbilityProperty           AbilityCondition;
+    local X2Effect_Persistent           BleedingEffect;
+    local X2Effect_ApplyScalingDamage   DamageEffect;
 
-    AbilityCondition = new class'X2Condition_AbilityProperty';
-    AbilityCondition.OwnerHasSoldierAbilities.AddItem(class'X2Ability_Impairing'.default.ImpairingAbilityName);
+    BleedingEffect = class'X2StatusEffects'.static.CreateBleedingStatusEffect(NumTurns, 0);
+    BleedingEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, `GetLocalizedString("M31_Bleeding_DebuffText"), "img:///UILibrary_XPACK_Common.UIPerk_bleeding");
 
-    ImpairingAbilityEffect = new class 'X2Effect_ImmediateAbilityActivation';
-    ImpairingAbilityEffect.BuildPersistentEffect(1, false, true, , eGameRule_PlayerTurnBegin);
-    ImpairingAbilityEffect.EffectName = 'ImmediateStunImpair';
-    ImpairingAbilityEffect.AbilityName = class'X2Ability_Impairing'.default.ImpairingAbilityName;
-    ImpairingAbilityEffect.bRemoveWhenTargetDies = true;
-    ImpairingAbilityEffect.VisualizationFn = class'X2Ability_Impairing'.static.ImpairingAbilityEffectTriggeredVisualization;
-    ImpairingAbilityEffect.TargetConditions.AddItem(AbilityCondition);
-
-    return ImpairingAbilityEffect;
-}
-
-static function X2Effect_PersistentStatChange CreatePoisonedEffect()
-{
-    local X2Effect_PersistentStatChange     PersistentStatChangeEffect;
-    local X2Effect_ApplyDamageFromHPWithRank DamageEffect;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-    local X2Condition_UnitEffectsOnSource   EffectCondition;
-
-    PersistentStatChangeEffect = new class'X2Effect_PersistentStatChange';
-    PersistentStatChangeEffect.EffectName = class'X2StatusEffects'.default.PoisonedName;
-    PersistentStatChangeEffect.DuplicateResponse = eDupe_Refresh;
-    PersistentStatChangeEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_Poison_Duration"), false, false, false, eGameRule_PlayerTurnBegin);
-    PersistentStatChangeEffect.SetDisplayInfo(
-        ePerkBuff_Penalty, class'X2StatusEffects'.default.PoisonedFriendlyName, `GetLocalizedString("M31_PA_ViperPoison_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_poisoned");
-    PersistentStatChangeEffect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_PA_Poison_MobilityPenalty"));
-    PersistentStatChangeEffect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_PA_Poison_AimPenalty"));
-    PersistentStatChangeEffect.VisualizationFn = class'X2StatusEffects'.static.PoisonedVisualization;
-    PersistentStatChangeEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.PoisonedVisualizationTicked;
-    PersistentStatChangeEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.PoisonedVisualizationRemoved;
-    PersistentStatChangeEffect.DamageTypes.AddItem('Poison');
-    PersistentStatChangeEffect.bRemoveWhenTargetDies = true;
-    PersistentStatChangeEffect.bCanTickEveryAction = true;
-    PersistentStatChangeEffect.EffectAppliedEventName = 'PoisonedEffectAdded';
-
-    if (class'X2StatusEffects'.default.PoisonEnteredParticle_Name != "")
-    {
-        PersistentStatChangeEffect.VFXTemplateName = class'X2StatusEffects'.default.PoisonEnteredParticle_Name;
-        PersistentStatChangeEffect.VFXSocket = class'X2StatusEffects'.default.PoisonEnteredSocket_Name;
-        PersistentStatChangeEffect.VFXSocketsArrayName = class'X2StatusEffects'.default.PoisonEnteredSocketsArray_Name;
-    }
-    PersistentStatChangeEffect.PersistentPerkName = class'X2StatusEffects'.default.PoisonEnteredPerk_Name;
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeFriendlyToSource = false;
-    UnitPropertyCondition.ExcludeRobotic = true;
-    PersistentStatChangeEffect.TargetConditions.AddItem(UnitPropertyCondition);
-
-    DamageEffect = new class'X2Effect_ApplyDamageFromHPWithRank';
-    DamageEffect.EffectDamageValue.Damage = `GetConfigInt("M31_PA_Poison_DamagePerTurn");
-    DamageEffect.EffectDamageValue.Spread = `GetConfigInt("M31_PA_Poison_DamagePerTurn_Spread");
-    DamageEffect.fPrcDmg = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc");
-    DamageEffect.fPrcDmgPerRank = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_PerRank");
-    DamageEffect.fBaseDmgPerRank = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_PerRank");
-    DamageEffect.fPrcDamage_RulerMultiplier = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_RulerMult");
-    DamageEffect.fPrcDamage_ChosenMultiplier = `GetConfigFloat("M31_PA_Poison_DamagePerTurn_Prc_ChosenMult");
-    DamageEffect.bCeiling = true;
-    DamageEffect.EffectDamageValue.DamageType = 'Poison';
-
-    DamageEffect.DamageTypes.AddItem('Poison');
-    DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.bAllowFreeKill = false;
-    DamageEffect.bIgnoreArmor = true;
-    DamageEffect.bBypassShields = class'X2StatusEffects'.default.POISONED_IGNORES_SHIELDS;
-    PersistentStatChangeEffect.ApplyOnTick.AddItem(DamageEffect);
-
-    EffectCondition = new class'X2Condition_UnitEffectsOnSource';
-    EffectCondition.AddExcludeEffect('M31_PA_EnhancedPoison_Valid', 'AA_AbilityUnavailable');
-    PersistentStatChangeEffect.TargetConditions.AddItem(EffectCondition);
-
-    PersistentStatChangeEffect.EffectRank = 1;
-
-    return PersistentStatChangeEffect;
-}
-
-static function X2Effect_PersistentStatChange CreateEnhancedPoisonedEffect()
-{
-    local X2Effect_PersistentStatChange     PersistentStatChangeEffect;
-    local X2Effect_ApplyDamageFromHPWithRank DamageEffect;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-    local X2Condition_UnitEffectsOnSource   EffectCondition;
-
-    PersistentStatChangeEffect = new class'X2Effect_PersistentStatChange';
-    PersistentStatChangeEffect.EffectName = class'X2StatusEffects'.default.PoisonedName;
-    PersistentStatChangeEffect.DuplicateResponse = eDupe_Refresh;
-    PersistentStatChangeEffect.BuildPersistentEffect(`GetConfigInt("M31_PA_EnhancedPoison_Duration"), false, false, false, eGameRule_PlayerTurnBegin);
-    PersistentStatChangeEffect.SetDisplayInfo(
-        ePerkBuff_Penalty, class'X2StatusEffects'.default.PoisonedFriendlyName, `GetLocalizedString("M31_PA_ViperEnhancedPoison_DebuffText"), "img:///UILibrary_PerkIcons.UIPerk_poisoned");
-    PersistentStatChangeEffect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_PA_EnhancedPoison_MobilityPenalty"));
-    PersistentStatChangeEffect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_PA_EnhancedPoison_AimPenalty"));
-    PersistentStatChangeEffect.VisualizationFn = class'X2StatusEffects'.static.PoisonedVisualization;
-    PersistentStatChangeEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.PoisonedVisualizationTicked;
-    PersistentStatChangeEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.PoisonedVisualizationRemoved;
-    PersistentStatChangeEffect.DamageTypes.AddItem('Poison');
-    PersistentStatChangeEffect.bRemoveWhenTargetDies = true;
-    PersistentStatChangeEffect.bCanTickEveryAction = true;
-    PersistentStatChangeEffect.EffectAppliedEventName = 'PoisonedEffectAdded';
-
-    if (class'X2StatusEffects'.default.PoisonEnteredParticle_Name != "")
-    {
-        PersistentStatChangeEffect.VFXTemplateName = class'X2StatusEffects'.default.PoisonEnteredParticle_Name;
-        PersistentStatChangeEffect.VFXSocket = class'X2StatusEffects'.default.PoisonEnteredSocket_Name;
-        PersistentStatChangeEffect.VFXSocketsArrayName = class'X2StatusEffects'.default.PoisonEnteredSocketsArray_Name;
-    }
-    PersistentStatChangeEffect.PersistentPerkName = class'X2StatusEffects'.default.PoisonEnteredPerk_Name;
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeFriendlyToSource = false;
-    UnitPropertyCondition.ExcludeRobotic = true;
-    PersistentStatChangeEffect.TargetConditions.AddItem(UnitPropertyCondition);
-
-    DamageEffect = new class'X2Effect_ApplyDamageFromHPWithRank';
-    DamageEffect.EffectDamageValue.Damage = `GetConfigInt("M31_PA_EnhancedPoison_DamagePerTurn");
-    DamageEffect.EffectDamageValue.Spread = `GetConfigInt("M31_PA_EnhancedPoison_DamagePerTurn_Spread");
-    DamageEffect.fPrcDmg = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc");
-    DamageEffect.fPrcDmgPerRank = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_PerRank");
-    DamageEffect.fBaseDmgPerRank = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_PerRank");
-    DamageEffect.fPrcDamage_RulerMultiplier = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_RulerMult");
-    DamageEffect.fPrcDamage_ChosenMultiplier = `GetConfigFloat("M31_PA_EnhancedPoison_DamagePerTurn_Prc_ChosenMult");
-    DamageEffect.bCeiling = true;
-    DamageEffect.EffectDamageValue.DamageType = 'Poison';
-
-    DamageEffect.DamageTypes.AddItem('Poison');
-    DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.bAllowFreeKill = false;
-    DamageEffect.bIgnoreArmor = true;
-    DamageEffect.bBypassShields = class'X2StatusEffects'.default.POISONED_IGNORES_SHIELDS; // Issue #89
-    PersistentStatChangeEffect.ApplyOnTick.AddItem(DamageEffect);
-
-    EffectCondition = new class'X2Condition_UnitEffectsOnSource';
-    EffectCondition.AddRequireEffect('M31_PA_EnhancedPoison_Valid', 'AA_MissingRequiredEffect');
-    PersistentStatChangeEffect.TargetConditions.AddItem(EffectCondition);
-
-    PersistentStatChangeEffect.EffectRank = 2;
-
-    return PersistentStatChangeEffect;
-}
-
-static function AddEnhancedPoisonEffectToTarget(out X2AbilityTemplate Template)
-{
-    Template.AddTargetEffect(CreateEnhancedPoisonedEffect());
-    Template.AddTargetEffect(CreatePoisonedEffect());
-    Template.AddTargetEffect(CreateNeuroPoisonEffect());
-}
-
-static function AddEnhancedPoisonEffectToMultiTarget(out X2AbilityTemplate Template)
-{
-    Template.AddMultiTargetEffect(CreateEnhancedPoisonedEffect());
-    Template.AddMultiTargetEffect(CreatePoisonedEffect());
-    Template.AddMultiTargetEffect(CreateNeuroPoisonEffect());
-}
-
-static function X2Effect_Persistent CreateNeuroPoisonEffect()
-{
-    local X2Effect_Persistent DisorientedEffect;
-    local X2Condition_AbilityProperty AbilityCondition;
-
-    AbilityCondition = new class'X2Condition_AbilityProperty';
-    AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_PA_NeuroPoison');
-
-    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(, , false);
-    DisorientedEffect.DamageTypes.AddItem('Poison');
-    DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
-
-    return DisorientedEffect;
-}
-
-static function AddBlindingPoisonEffectToTarget(out X2AbilityTemplate Template)
-{
-    local X2Condition_UnitEffectsOnSource   EffectCondition, EffectConditionEnhanced;
-    local X2Effect_Blind                    BlindEffect, BlindEffectEnhanced;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeFriendlyToSource = false;
-    UnitPropertyCondition.ExcludeRobotic = true;
-
-    BlindEffect = class'BitterfrostHelper'.static.CreateBlindEffect(`GetConfigInt("M31_PA_EnhancedPoison_Duration"));
-    BlindEffect.DamageTypes.AddItem('Poison');
-    EffectCondition = new class'X2Condition_UnitEffectsOnSource';
-    EffectCondition.AddRequireEffect('M31_PA_BlindingPoison_Valid', 'AA_MissingRequiredEffect');
-    EffectCondition.AddRequireEffect('M31_PA_EnhancedPoison_Valid', 'AA_MissingRequiredEffect');
-    BlindEffect.TargetConditions.AddItem(EffectCondition);
-    BlindEffect.TargetConditions.AddItem(UnitPropertyCondition);
-    Template.AddTargetEffect(BlindEffect);
-
-    BlindEffectEnhanced = class'BitterfrostHelper'.static.CreateBlindEffect(`GetConfigInt("M31_PA_Poison_Duration"));
-    BlindEffectEnhanced.DamageTypes.AddItem('Poison');
-    EffectConditionEnhanced = new class'X2Condition_UnitEffectsOnSource';
-    EffectConditionEnhanced.AddRequireEffect('M31_PA_BlindingPoison_Valid', 'AA_MissingRequiredEffect');
-    EffectConditionEnhanced.AddExcludeEffect('M31_PA_EnhancedPoison_Valid', 'AA_AbilityUnavailable');
-    BlindEffectEnhanced.TargetConditions.AddItem(EffectConditionEnhanced);
-    BlindEffectEnhanced.TargetConditions.AddItem(UnitPropertyCondition);
-    Template.AddTargetEffect(BlindEffectEnhanced);
-}
-
-static function AddBlindingPoisonEffectToMultiTarget(out X2AbilityTemplate Template)
-{
-    local X2Condition_UnitEffectsOnSource   EffectCondition, EffectConditionEnhanced;
-    local X2Effect_Blind                    BlindEffect, BlindEffectEnhanced;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeFriendlyToSource = false;
-    UnitPropertyCondition.ExcludeRobotic = true;
-
-    BlindEffect = class'BitterfrostHelper'.static.CreateBlindEffect(`GetConfigInt("M31_PA_EnhancedPoison_Duration"));
-    BlindEffect.DamageTypes.AddItem('Poison');
-    EffectCondition = new class'X2Condition_UnitEffectsOnSource';
-    EffectCondition.AddRequireEffect('M31_PA_BlindingPoison_Valid', 'AA_MissingRequiredEffect');
-    EffectCondition.AddRequireEffect('M31_PA_EnhancedPoison_Valid', 'AA_MissingRequiredEffect');
-    BlindEffect.TargetConditions.AddItem(EffectCondition);
-    BlindEffect.TargetConditions.AddItem(UnitPropertyCondition);
-    Template.AddMultiTargetEffect(BlindEffect);
-
-    BlindEffectEnhanced = class'BitterfrostHelper'.static.CreateBlindEffect(`GetConfigInt("M31_PA_Poison_Duration"));
-    BlindEffectEnhanced.DamageTypes.AddItem('Poison');
-    EffectConditionEnhanced = new class'X2Condition_UnitEffectsOnSource';
-    EffectConditionEnhanced.AddRequireEffect('M31_PA_BlindingPoison_Valid', 'AA_MissingRequiredEffect');
-    EffectConditionEnhanced.AddExcludeEffect('M31_PA_EnhancedPoison_Valid', 'AA_AbilityUnavailable');
-    BlindEffectEnhanced.TargetConditions.AddItem(EffectConditionEnhanced);
-    BlindEffectEnhanced.TargetConditions.AddItem(UnitPropertyCondition);
-    Template.AddMultiTargetEffect(BlindEffectEnhanced);
-}
-
-static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, int BleedDamage, optional int BleedDamageSpread, optional float BleedDamagePrc)
-{
-    local X2Effect_Persistent PersistentEffect;
-    local X2Effect_ApplyDamageFromHP DamageEffect;
-    local X2Condition_UnitProperty UnitPropCondition;
-
-    PersistentEffect = new class'X2Effect_Persistent';
-    PersistentEffect.EffectName = class'X2StatusEffects'.default.BleedingName;
-    PersistentEffect.DuplicateResponse = eDupe_Refresh;
-    PersistentEffect.BuildPersistentEffect(NumTurns, , false, , eGameRule_PlayerTurnBegin);
-    PersistentEffect.SetDisplayInfo(ePerkBuff_Penalty, class'X2StatusEffects'.default.BleedingFriendlyName, class'X2StatusEffects'.default.BleedingFriendlyDesc, "img:///UILibrary_XPACK_Common.UIPerk_bleeding");
-    PersistentEffect.VisualizationFn = class'X2StatusEffects'.static.BleedingVisualization;
-    PersistentEffect.EffectSyncVisualizationFn = class'X2StatusEffects'.static.BleedingSyncVisualization;
-    PersistentEffect.EffectTickedVisualizationFn = class'X2StatusEffects'.static.BleedingVisualizationTicked;
-    PersistentEffect.EffectRemovedVisualizationFn = class'X2StatusEffects'.static.BleedingVisualizationRemoved;
-    PersistentEffect.DamageTypes.AddItem('Bleeding');
-    PersistentEffect.bRemoveWhenTargetDies = true;
-    PersistentEffect.bCanTickEveryAction = true;
-    PersistentEffect.bEffectForcesBleedout = true;
-
-    PersistentEffect.PersistentPerkName = class'X2StatusEffects'.default.BleedingPerk_Name;
-
-    UnitPropCondition = new class'X2Condition_UnitProperty';
-    UnitPropCondition.ExcludeFriendlyToSource = false;
-    UnitPropCondition.ExcludeRobotic = true;
-    PersistentEffect.TargetConditions.AddItem(UnitPropCondition);
-
-    DamageEffect = new class'X2Effect_ApplyDamageFromHP';
-    DamageEffect.EffectDamageValue.Damage = BleedDamage;
-    DamageEffect.EffectDamageValue.Spread = BleedDamageSpread;
-    DamageEffect.fPrcDmg = BleedDamagePrc;
-    DamageEffect.fPrcDamage_ChosenMultiplier = 0.5;
-    DamageEffect.fPrcDamage_RulerMultiplier = 0.5;
-    DamageEffect.bCeiling = true;
+    BleedingEffect.ApplyOnTick.Length = 0;
+    DamageEffect = new class'X2Effect_ApplyScalingDamage';
+    DamageEffect.EffectDamageValue.Damage = Damage;
+    DamageEffect.EffectDamageValue.Spread = DamageSpread;
+    DamageEffect.DamageFromHP = DamageFromHP;
     DamageEffect.EffectDamageValue.DamageType = 'Bleeding';
-
-    DamageEffect.DamageTypes.AddItem('Bleeding');
     DamageEffect.bIgnoreBaseDamage = true;
+    DamageEffect.DamageTypes.AddItem('Bleeding');
     DamageEffect.bAllowFreeKill = false;
     DamageEffect.bIgnoreArmor = true;
-    
     DamageEffect.bBypassShields = class'X2StatusEffects'.default.BLEEDING_IGNORES_SHIELDS;
-    PersistentEffect.ApplyOnTick.AddItem(DamageEffect);
+    BleedingEffect.ApplyOnTick.AddItem(DamageEffect);
 
-    return PersistentEffect;
-}
-
-static function X2Effect_Immobilize CreateMaimedStatusEffect(optional int NumTurns = 1, optional name AbilitySourceName = 'eAbilitySource_Standard')
-{
-    local X2Effect_Immobilize ImmobilizeEffect;
-
-    ImmobilizeEffect = new class'X2Effect_Immobilize';
-    ImmobilizeEffect.EffectName = 'Maim_Immobilize';
-    ImmobilizeEffect.DuplicateResponse = eDupe_Refresh;
-    ImmobilizeEffect.BuildPersistentEffect(NumTurns, false, false, , eGameRule_PlayerTurnEnd);
-    ImmobilizeEffect.SetDisplayInfo(ePerkBuff_Penalty, `GetLocalizedString("M31_Maimed_FriendlyName"), `GetLocalizedString("M31_Maimed_DebuffText"),
-            "img:///UILibrary_XPerkIconPack.UIPerk_move_blossom", true, , AbilitySourceName);
-    ImmobilizeEffect.AddPersistentStatChange(eStat_Mobility, 0.0f, MODOP_PostMultiplication);
-    ImmobilizeEffect.VisualizationFn = class'XMBAbility'.static.EffectFlyOver_Visualization;
-
-    return ImmobilizeEffect;
+    return BleedingEffect;
 }
 
 static function X2AbilityTemplate CreateAnimSetPassive(name TemplateName, string AnimSetPath)
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_AdditionalAnimSets       AnimSetEffect;
+    local X2AbilityTemplate             Template;
+    // local X2Condition_UnitProperty      UnitPropertyCondition;
+    local X2Effect_AdditionalAnimSets   AnimSetEffect;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, TemplateName);
+    Template = class'X2Ability_Extended'.static.Passive(TemplateName, "", false, false, true);
 
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.bDisplayInUITooltip = false;
     Template.bDisplayInUITacticalText = false;
     Template.bDontDisplayInAbilitySummary = true;
-    Template.Hostility = eHostility_Neutral;
-    Template.bUniqueSource = true;
 
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SelfTarget;
-    Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
-    
     AnimSetEffect = new class'X2Effect_AdditionalAnimSets';
     AnimSetEffect.AddAnimSetWithPath(AnimSetPath);
-    AnimSetEffect.BuildPersistentEffect(1, true, false, false);
+    AnimSetEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(AnimSetEffect);
-
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 
     return Template;
 }
@@ -519,29 +240,7 @@ static function AddConditionalAbilityEffect(out X2AbilityTemplate Template, arra
     Template.AddTargetEffect(Effect);
 }
 
-static function EventListenerReturn KillMailListener_Self(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameState_Unit                SourceUnit;
-    local XComGameState_Ability             AbilityState;
-    local XComGameStateContext_Ability      AbilityContext;
-
-    SourceUnit = XComGameState_Unit(EventSource);
-    AbilityState = XComGameState_Ability(CallbackData);
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
-    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
-    {
-        if (AbilityState.OwnerStateObject.ObjectID == SourceUnit.ObjectID)
-        {
-            return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
-        }
-    }
-
-    return ELR_NoInterrupt;
-}
-
-// Helpers_LW.uc
-static final function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitState)
+static function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitState)
 {
     local XComGameState_BattleData BattleState;
 
@@ -549,165 +248,33 @@ static final function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitSt
     return BattleState.InterruptingGroupRef == UnitState.GetGroupMembership().GetReference();
 }
 
-// Iridar's Perk Pack
-
-final static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2Action VisualizationTree)
+static function bool IsFlanking(XComGameState_Unit Attacker, XComGameState_Unit Target, optional int HistoryIndex = -1)
 {
-    local XComGameStateVisualizationMgr     VisMgr;
-    local array<X2Action>                   FindActions;
-    local X2Action                          FindAction;
-    local X2Action                          FireAction;
-    local X2Action_MarkerTreeInsertBegin    MarkerStart;
-    local X2Action_MarkerTreeInsertEnd      MarkerEnd;
-    local X2Action                          WaitAction;
-    local X2Action                          ChildAction;
-    local X2Action_MarkerNamed              MarkerAction;
-    local array<X2Action>                   MarkerActions;
-    local array<X2Action>                   DamageUnitActions;
-    local array<X2Action>                   DamageTerrainActions;
-    local XComGameStateContext_Ability      AbilityContext;
-    local VisualizationActionMetadata       ActionMetadata;
-    local bool                              bFoundHistoryIndex;
+    local GameRulesCache_VisibilityInfo VisInfo;
 
-    VisMgr = `XCOMVISUALIZATIONMGR;
-    AbilityContext = XComGameStateContext_Ability(BuildTree.StateChangeContext);
-    
-    //  Find all Fire Actions in the triggering ability's Vis Tree performed by the unit that used the FollowUpShot.
-    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_Fire', FindActions,, AbilityContext.InputContext.SourceObject.ObjectID);
-    
-    // Find all Damage Unit / Damage Terrain actions in the triggering ability visualization tree that are playing on the primary target of the follow up shot.
-    // Damage Terrain actions play the damage flyover for damageable non-unit objects, like Alien Relay.
-    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToUnit', DamageUnitActions,, AbilityContext.InputContext.PrimaryTarget.ObjectID);
-    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_ApplyWeaponDamageToTerrain', DamageTerrainActions,, AbilityContext.InputContext.PrimaryTarget.ObjectID);
-
-    // If there are several Fire Actions in the triggering ability tree (e.g. Faceoff), we need to find the right Fire Action that fires at the same target this instance of Follow Up Shot was fired at.
-    // This info is not stored in the Fire Action itself, so we find the needed Fire Action by looking at its children Damage Unit / Damage Terrain actions,
-    // as well as the visualization index recorded in FollowUpShot's context by its ability trigger.
-    foreach FindActions(FireAction)
+    if (Attacker.CanFlank() && Target.CanTakeCover())
     {
-        if (FireAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
+        if (HistoryIndex != -1)
         {
-            foreach FireAction.ChildActions(ChildAction)
+            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo, HistoryIndex))
             {
-                if (DamageTerrainActions.Find(ChildAction) != INDEX_NONE)
+                if (VisInfo.TargetCover == CT_None || Target.GetCurrentStat(eStat_AlertLevel) == 0 && Target.GetTeam() != eTeam_XCom)
                 {
-                    bFoundHistoryIndex = true;
-                    break;
-                }
-                if (DamageUnitActions.Find(ChildAction) != INDEX_NONE)
-                {
-                    bFoundHistoryIndex = true;
-                    break;
+                    return true;
                 }
             }
         }
-
-        if (bFoundHistoryIndex)
-                break;
-    }
-
-    // If we didn't find the correct Fire Action, we call the failsafe Merge Vis Function,
-    // which will make both Singe's Target Effects apply seperately after the triggering ability's visualization finishes.
-    if (!bFoundHistoryIndex)
-    {
-        `LOG("WARNING ::" @ GetFuncName() @ "Failed to find the correct Fire Action, using a failsafe.",, 'MeristPerkPack');
-        AbilityContext.SuperMergeIntoVisualizationTree(BuildTree, VisualizationTree);
-        return;
-    }
-
-    // Find the start and end of the FollowUpShot's Vis Tree
-    MarkerStart = X2Action_MarkerTreeInsertBegin(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertBegin'));
-    MarkerEnd = X2Action_MarkerTreeInsertEnd(VisMgr.GetNodeOfType(BuildTree, class'X2Action_MarkerTreeInsertEnd'));
-
-    // Will need these later to tie the shoelaces.
-    VisMgr.GetNodesOfType(VisualizationTree, class'X2Action_MarkerNamed', MarkerActions);
-
-    //  Add a Wait For Effect Action after the triggering ability's Fire Action. This will allow Singe's Effects to visualize the moment the triggering ability connects with the target.
-    ActionMetaData = FireAction.Metadata;
-    WaitAction = class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetaData, AbilityContext, false, FireAction);
-
-    //  Insert the Singe's Vis Tree right after the Wait For Effect Action
-    VisMgr.ConnectAction(MarkerStart, VisualizationTree, false, WaitAction);
-
-    // Main part of Merge Vis is done, now we just tidy up the ending part. 
-    // As I understood from MrNice, this is necessary to make sure Vis will look fine if Fire Action ends before Singe finishes visualizing
-    // Cycle through Marker Actions we got earlier and find the 'Join' Marker that comes after the Triggering Shot's Fire Action.
-    foreach MarkerActions(FindAction)
-    {
-        MarkerAction = X2Action_MarkerNamed(FindAction);
-
-        if (MarkerAction.MarkerName == 'Join' && MarkerAction.StateChangeContext.AssociatedState.HistoryIndex == AbilityContext.DesiredVisualizationBlockIndex)
+        else
         {
-            //  TBH can't imagine circumstances where MarkerEnd wouldn't exist, but okay
-            if (MarkerEnd != none)
+            if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo))
             {
-                //  "tie the shoelaces". Vis Tree won't move forward until both Singe Vis Tree and Triggering Shot's Fire action are fully visualized.
-                VisMgr.ConnectAction(MarkerEnd, VisualizationTree,,, MarkerAction.ParentActions);
-                VisMgr.ConnectAction(MarkerAction, BuildTree,, MarkerEnd);
-            }
-            else
-            {
-                VisMgr.GetAllLeafNodes(BuildTree, FindActions);
-                VisMgr.ConnectAction(MarkerAction, BuildTree,,, FindActions);
-            }
-            break;
-        }
-    }
-}
-
-static function EventListenerReturn AbilityTriggerEventListener_Multitasking(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameStateContext_Ability  AbilityContext;
-    local XComGameState_Ability         AbilityState;
-
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-    AbilityState = XComGameState_Ability(CallbackData);
-
-    if (AbilityContext.InputContext.PrimaryTarget.ObjectID != AbilityContext.InputContext.SourceObject.ObjectID)
-        return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
-
-    return ELR_NoInterrupt;
-}
-
-static function EventListenerReturn AbilityTriggerEventListener_ChasingAttack(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameStateContext_Ability  AbilityContext;
-    local XComGameState_Ability         AbilityState;
-    local XComGameState_Ability         CallbackAbilityState;
-    local XComGameState_Unit            SourceUnit;
-    local XComGameState_Unit            Attacker;
-    local XComGameState_Unit            TargetUnit;
-    local X2AbilityTemplate             AbilityTemplate;
-    local bool bDealsDamage;
-    
-    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
-    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
-    {
-        AbilityState = XComGameState_Ability(EventData);
-        CallbackAbilityState = XComGameState_Ability(CallbackData);
-        Attacker = XComGameState_Unit(EventSource);
-        SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(CallbackAbilityState.OwnerStateObject.ObjectID));
-        TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-        if (AbilityState != none && CallbackAbilityState != none && Attacker != none && SourceUnit != none && TargetUnit != none)
-        {
-            if (AbilityState.IsAbilityInputTriggered())
-            {
-                if (SourceUnit.IsEnemyUnit(TargetUnit) && SourceUnit.IsFriendlyUnit(Attacker) && SourceUnit.ObjectID != Attacker.ObjectID)
+                if (VisInfo.TargetCover == CT_None || Target.GetCurrentStat(eStat_AlertLevel) == 0 && Target.GetTeam() != eTeam_XCom)
                 {
-                    AbilityTemplate = AbilityState.GetMyTemplate();
-                    bDealsDamage = AbilityTemplate.TargetEffectsDealDamage(AbilityState.GetSourceWeapon(), AbilityState);
-                    if (AbilityTemplate.Hostility == eHostility_Offensive && bDealsDamage)
-                    {
-                        if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit, SourceUnit) == 'AA_Success')
-                            CallbackAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false);
-                    }
-
+                    return true;
                 }
             }
-
         }
     }
 
-    return ELR_NoInterrupt;
+    return false;
 }

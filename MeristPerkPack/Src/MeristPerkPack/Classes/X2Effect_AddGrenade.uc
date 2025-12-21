@@ -52,7 +52,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     AddUtilityItem(NewUnit, ItemTemplate, NewGameState, NewEffectState);
 }
 
-static function X2Effect_AddGrenade AddGrenadeEffect(name ItemName, optional bool bCanUpgrade = true, optional bool bSkipWeight = true)
+static function X2Effect_AddGrenade CreateAddGrenadeEffect(name ItemName, optional bool bCanUpgrade = true, optional bool bSkipWeight = true)
 {
     local X2Effect_AddGrenade Effect;
 
