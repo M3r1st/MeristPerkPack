@@ -1,6 +1,6 @@
 class M31_Helpers extends X2Ability;
 
-static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName, string IconImage, optional X2Effect Effect = none)
+static function X2AbilityTemplate CreateWeaponEffectAttack(name DataName, string IconImage, optional X2Effect Effect = none)
 {
     local X2AbilityTemplate     Template;
 
@@ -38,7 +38,7 @@ static function X2AbilityTemplate CreatePassiveWeaponEffectAttack(name DataName,
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.MergeVisualizationFn = class'X2Effect_PassiveWeaponEffect'.static.FollowUpShot_MergeVisualization;
+    Template.MergeVisualizationFn = class'X2Effect_WeaponEffect'.static.FollowUpShot_MergeVisualization;
 
     Template.BuildInterruptGameStateFn = none;
 
@@ -77,7 +77,7 @@ static function X2Effect_PersistentStatChange CreateRoboticDisorientedStatusEffe
     return PersistentStatChangeEffect;
 }
 
-static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, optional int Damage, optional int DamageSpread, optional int DamageFromHP)
+static function X2Effect_Persistent CreateBleedingStatusEffect(int NumTurns, optional int Damage, optional int DamageSpread, optional float DamageFromHP)
 {
     local X2Effect_Persistent           BleedingEffect;
     local X2Effect_ApplyScalingDamage   DamageEffect;
@@ -269,6 +269,84 @@ static function bool IsFlanking(XComGameState_Unit Attacker, XComGameState_Unit 
             if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(Attacker.ObjectID, Target.ObjectID, VisInfo))
             {
                 if (VisInfo.TargetCover == CT_None || Target.GetCurrentStat(eStat_AlertLevel) == 0 && Target.GetTeam() != eTeam_XCom)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+static function bool AbilityDealsDamage(XComGameState_Ability kAbility, optional XComGameState_Unit SourceUnit, optional XComGameState_Unit TargetUnit, optional bool bMultiTarget)
+{
+    local X2AbilityTemplate     AbilityTemplate;
+    local XComGameState_Item    SourceWeapon;
+    local X2GrenadeTemplate     GrenadeTemplate;
+    local array<X2Effect>       MultiTargetEffects;
+    local X2Effect              Effect;
+    local bool                  bCheckConditions;
+
+    AbilityTemplate = kAbility.GetMyTemplate();
+    SourceWeapon = kAbility.GetSourceWeapon();
+    bCheckConditions = SourceUnit != none && TargetUnit != none;
+
+    if (bMultiTarget)
+    {
+        if (AbilityTemplate.bUseLaunchedGrenadeEffects)
+        {
+            if (SourceWeapon != none)
+            {
+                GrenadeTemplate = X2GrenadeTemplate(SourceWeapon.GetLoadedAmmoTemplate(kAbility));
+                MultiTargetEffects = GrenadeTemplate.LaunchedGrenadeEffects;
+            }
+        }
+        else if (AbilityTemplate.bUseThrownGrenadeEffects)
+        {
+            if (SourceWeapon != none)
+            {
+                GrenadeTemplate = X2GrenadeTemplate(SourceWeapon.GetMyTemplate());
+                MultiTargetEffects = GrenadeTemplate.ThrownGrenadeEffects;
+            }
+        }
+        else
+        {
+            MultiTargetEffects = AbilityTemplate.AbilityMultiTargetEffects;
+        }
+
+        foreach MultiTargetEffects(Effect)
+        {
+            if (Effect.bAppliesDamage)
+            {
+                if (bCheckConditions)
+                {
+                    if (Effect.TargetIsValidForAbility(TargetUnit, SourceUnit, kAbility))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    else
+    {
+        foreach AbilityTemplate.AbilityTargetEffects(Effect)
+        {
+            if (Effect.bAppliesDamage)
+            {
+                if (bCheckConditions)
+                {
+                    if (Effect.TargetIsValidForAbility(TargetUnit, SourceUnit, kAbility))
+                    {
+                        return true;
+                    }
+                }
+                else
                 {
                     return true;
                 }

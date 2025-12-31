@@ -9,6 +9,7 @@ var int DamageReductionPrc;
 var bool bAllowWhileBurning;
 
 var name CountValueName;
+var name UnShreddedValueName;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -20,27 +21,52 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
     EffectObj = EffectGameState;
     TargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    EventMgr.RegisterForEvent(EffectObj, 'UnitTakeEffectDamage', EffectEventListener_GlacialArmor, ELD_Immediate,, TargetState,, EffectObj);
+    EventMgr.RegisterForEvent(EffectObj, 'UnitTakeEffectDamage', EffectEventListener_GlacialArmor, ELD_Immediate, 10, TargetState,, EffectObj);
 }
 
 static function EventListenerReturn EffectEventListener_GlacialArmor(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
 {
     local XComGameState_Effect      EffectState;
     local X2Effect_WS_GlacialArmor  Effect;
-    local XComGameState_Unit        SourceUnit;
+    local XComGameState_Unit        NewSourceState, OldSourceState;
     local UnitValue                 CountUnitValue;
+    local DamageResult              LastDamageResult;
+    local int                       iUnshred;
 
     EffectState = XComGameState_Effect(CallbackData);
-    SourceUnit = XComGameState_Unit(EventSource);
-    if (EffectState != none && SourceUnit != none)
+    OldSourceState = XComGameState_Unit(EventSource);
+    OldSourceState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(OldSourceState.ObjectID));
+    if (OldSourceState != none)
+    {
+        NewSourceState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(OldSourceState.ObjectID));
+        if (NewSourceState == none)
+        {
+            NewSourceState = XComGameState_Unit(NewGameState.ModifyStateObject(OldSourceState.Class, OldSourceState.ObjectID));
+        }
+    }
+    if (EffectState != none && NewSourceState != none)
     {
         Effect = X2Effect_WS_GlacialArmor(EffectState.GetX2Effect());
         if (Effect != none)
         {
-            if (Effect.IsEffectCurrentlyRelevant(EffectState, SourceUnit))
+            // if (Effect.IsEffectCurrentlyRelevant(EffectState, OldSourceState))
+            if (Effect.GetCurrentStackCount(NewSourceState) < Effect.ActivationsPerTurn && (Effect.bAllowWhileBurning || !OldSourceState.IsBurning()))
             {
-                SourceUnit.GetUnitValue(default.CountValueName, CountUnitValue);
-                SourceUnit.SetUnitFloatValue(default.CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
+                if (NewSourceState.DamageResults.Length > 0)
+                {
+                    LastDamageResult = NewSourceState.DamageResults[NewSourceState.DamageResults.Length - 1];
+                    NewSourceState.GetUnitValue(Effect.UnShreddedValueName, CountUnitValue);
+                    iUnshred = Min(LastDamageResult.Shred, Effect.ArmorBonus - CountUnitValue.fValue);
+                    iUnshred = Min(iUnshred, NewSourceState.Shredded);
+                    if (iUnshred > 0)
+                    {
+                        NewSourceState.DamageResults[NewSourceState.DamageResults.Length - 1].Shred -= iUnshred;
+                        NewSourceState.Shredded -= iUnshred;
+                        NewSourceState.SetUnitFloatValue(Effect.UnShreddedValueName, CountUnitValue.fValue + iUnshred, eCleanup_BeginTurn);
+                    }
+                }
+                NewSourceState.GetUnitValue(Effect.CountValueName, CountUnitValue);
+                NewSourceState.SetUnitFloatValue(Effect.CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
             }
         }
     }
@@ -50,9 +76,11 @@ static function EventListenerReturn EffectEventListener_GlacialArmor(Object Even
 
 function int GetArmorMitigation(XComGameState_Effect EffectState, XComGameState_Unit UnitState)
 {
+    local UnitValue CountUnitValue;
+
     if (IsEffectCurrentlyRelevant(EffectState, UnitState))
     {
-        return ArmorBonus;
+        return Max(0, ArmorBonus - CountUnitValue.fValue);
     }
 
     return 0;
@@ -140,9 +168,9 @@ function int GetCurrentStackCount(XComGameState_Unit UnitState)
 {
     local UnitValue CountUnitValue;
 
-    UnitState.GetUnitValue(default.CountValueName, CountUnitValue);
+    UnitState.GetUnitValue(CountValueName, CountUnitValue);
 
-    return int(CountUnitValue.fValue);
+    return CountUnitValue.fValue;
 }
 
 defaultproperties
@@ -151,4 +179,5 @@ defaultproperties
     DuplicateResponse = eDupe_Ignore
 
     CountValueName = M31_PA_WS_GlacialArmor_Counter
+    UnShreddedValueName = M31_PA_WS_GlacialArmor_UnShredded
 }

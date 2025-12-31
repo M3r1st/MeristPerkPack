@@ -1,101 +1,104 @@
 class X2Effect_Assassin extends X2Effect_Persistent;
 
-var int ActivationsPerTurn;
+var bool bAllowMultiTarget;
+var bool bMatchSourceWeapon;
 var name CountValueName;
-var name ActivatedValueName;
+var int ActivationsPerTurn;
+var bool bShowFlyover;
 
 var localized string strFriendlyDesc;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
-    local X2EventManager        EventMgr;
-    local Object                EffectObj;
+    local X2EventManager EventMgr;
+    local XComGameState_Unit TargetUnit;
+    local Object EffectObj;
 
     EventMgr = `XEVENTMGR;
+
     EffectObj = EffectGameState;
+    TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    EventMgr.RegisterForEvent(EffectObj, 'RetainConcealmentOnActivation', OnRetainConcealmentOnActivation, ELD_Immediate,,,, EffectObj);
+    EventMgr.RegisterForEvent(EffectObj, 'AbilityActivated', EffectEventListener_Assassin, ELD_OnStateSubmitted, 15, TargetUnit,, EffectObj);
 }
 
-static function EventListenerReturn OnRetainConcealmentOnActivation(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+static function EventListenerReturn EffectEventListener_Assassin(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComLWTuple                   Tuple;
-    local bool                          bRetainConcealmentOnActivation;
+    local XComGameStateHistory          History;
     local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Unit            SourceUnit, TargetUnit;
+    local XComGameState_Ability         AbilityState;
     local XComGameState_Effect          EffectState;
-    local XComGameState_Unit            UnitState;
-    local UnitValue                     UnitValue;
+    local X2Effect_Assassin             Effect;
     local XComGameState                 NewGameState;
+    local UnitValue                     CountUnitValue;
+    local int                           Index;
+    local bool                          bShouldApply;
 
-    Tuple = XComLWTuple(EventData);
-
-    `assert(Tuple != none);
-    `assert(Tuple.Id == 'RetainConcealmentOnActivation');
-
-    bRetainConcealmentOnActivation = Tuple.Data[0].b;
-
-    if (!bRetainConcealmentOnActivation)
-    {
-        AbilityContext = XComGameStateContext_Ability(EventSource);
-        EffectState = XComGameState_Effect(CallbackData);
-        if (AbilityContext != none && EffectState != none
-            && EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID == AbilityContext.InputContext.SourceObject.ObjectID)
-        {
-            UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));
-            if (UnitState != none)
-            {
-                if (UnitState.GetUnitValue(default.ActivatedValueName, UnitValue) && int(UnitValue.fValue) == 1)
-                {
-                    bRetainConcealmentOnActivation = true;
-                    Tuple.Data[0].b = bRetainConcealmentOnActivation;
-
-                    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-                    UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.GetReference().ObjectID));
-                    UnitState.ClearUnitValue(default.ActivatedValueName);
-                    `TACTICALRULES.SubmitGameState(NewGameState);
-                }
-            }
-        }
-    }
-
-    return ELR_NoInterrupt;
-}
-
-static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameState_Ability             AbilityState;
-    local XComGameState_Ability             KillingAbilityState;
-    local XComGameStateContext_Ability      AbilityContext;
-    local XComGameState_Unit                SourceUnit;
-    local XComGameState_Unit                TargetUnit;
-    local GameRulesCache_VisibilityInfo     VisInfo;
+    History = `XCOMHISTORY;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
         SourceUnit = XComGameState_Unit(EventSource);
-        TargetUnit = XComGameState_Unit(EventData);
-        AbilityState = XComGameState_Ability(CallbackData);
-        KillingAbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
+        AbilityState = XComGameState_Ability(EventData);
+        EffectState = XComGameState_Effect(CallbackData);
 
-        if (SourceUnit != none && TargetUnit != none && AbilityState != none && KillingAbilityState != none)
+        if (SourceUnit != none && AbilityState != none && EffectState != none)
         {
-            if (AbilityState.SourceWeapon.ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
+            Effect = X2Effect_Assassin(EffectState.GetX2Effect());
+
+            if (Effect != none)
             {
-                if (`TACTICALRULES.VisibilityMgr.GetVisibilityInfo(SourceUnit.ObjectID, TargetUnit.ObjectID, VisInfo, AbilityContext.AssociatedState.HistoryIndex))
+                if (!Effect.bMatchSourceWeapon || AbilityState.SourceWeapon.ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
                 {
-                    if (!TargetUnit.CanTakeCover() || VisInfo.TargetCover == CT_None || TargetUnit.GetCurrentStat(eStat_AlertLevel) == 0 && TargetUnit.GetTeam() != eTeam_XCom)
+                    if (Effect.IsEffectCurrentlyRelevant(EffectState, SourceUnit))
                     {
-                        if (AbilityState.CanActivateAbility(SourceUnit) == 'AA_Success')
+                        if (!SourceUnit.IsConcealed())
                         {
-                            if (!SourceUnit.IsConcealed() || !KillingAbilityState.RetainConcealmentOnActivation(AbilityContext))
+                            TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+                            if (TargetUnit != none)
                             {
-                                if (SourceUnit.IsConcealed())
+                                if (TargetUnit.IsDead() && WasTargetAliveAndFlanked(SourceUnit, TargetUnit, GameState.HistoryIndex - 1))
                                 {
-                                    SourceUnit.BreakConcealment();
+                                    bShouldApply = true;
                                 }
-                                return AbilityState.AbilityTriggerEventListener_Self(EventData, EventSource, GameState, EventID, CallbackData);
+                            }
+                            if (!bShouldApply && Effect.bAllowMultiTarget)
+                            {
+                                for (Index = 0; Index < AbilityContext.InputContext.MultiTargets.Length; Index++)
+                                {
+                                    TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[Index].ObjectID));
+                                    if (TargetUnit != none)
+                                    {
+                                        if (TargetUnit.IsDead() && WasTargetAliveAndFlanked(SourceUnit, TargetUnit, GameState.HistoryIndex - 1))
+                                        {
+                                            bShouldApply = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (bShouldApply)
+                            {
+                                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+                                SourceUnit.EnterConcealmentNewGameState(NewGameState);
+                                SourceUnit.m_bSpotted = false;
+
+                                if (Effect.CountValueName != '')
+                                {
+                                    SourceUnit.GetUnitValue(Effect.CountValueName, CountUnitValue);
+                                    SourceUnit.SetUnitFloatValue(Effect.CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
+                                }
+
+                                if (Effect.bShowFlyover)
+                                {
+                                    NewGameState.ModifyStateObject(class'XComGameState_Ability', EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID);
+                                    XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EffectState.TriggerAbilityFlyoverVisualizationFn;
+                                }
+
+                                `TACTICALRULES.SubmitGameState(NewGameState);
                             }
                         }
                     }
@@ -103,7 +106,30 @@ static function EventListenerReturn AbilityTriggerEventListener_Assassin(Object 
             }
         }
     }
+
     return ELR_NoInterrupt;
+}
+
+static function bool WasTargetAliveAndFlanked(XComGameState_Unit SourceUnit, XComGameState_Unit TargetUnit, int HistoryIndex)
+{
+    local XComGameState_Unit OldTargetState;
+
+    if (TargetUnit != none)
+    {
+        OldTargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(TargetUnit.ObjectID,, HistoryIndex));
+        if (OldTargetState != none)
+        {
+            if (OldTargetState.IsAlive())
+            {
+                if (!TargetUnit.CanTakeCover() || class'M31_Helpers'.static.IsFlanking(SourceUnit, TargetUnit, HistoryIndex))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
@@ -114,10 +140,10 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
     {
         TargetUnit.GetUnitValue(CountValueName, CountUnitValue);
         if (ActivationsPerTurn > 0 && CountUnitValue.fValue >= ActivationsPerTurn)
-            return true;
+            return false;
     }
 
-    return false;
+    return true;
 }
 
 defaultproperties
@@ -126,5 +152,4 @@ defaultproperties
     DuplicateResponse = eDupe_Ignore
 
     CountValueName = M31_Assassin_Activations
-    ActivatedValueName = M31_Assassin_Activated
 }

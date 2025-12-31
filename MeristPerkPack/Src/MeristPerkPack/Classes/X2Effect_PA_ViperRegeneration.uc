@@ -23,11 +23,6 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     History = `XCOMHISTORY;
 
-    if (EffectSourceHasBonusEffects(ApplyEffectParameters))
-    {
-        NewEffectState.iTurnsRemaining += BonusDuration;
-    }
-
     OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     if (OldTargetState != none)
     {
@@ -46,6 +41,19 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     }
 
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+}
+
+function int GetStartingNumTurns(const out EffectAppliedData ApplyEffectParameters)
+{
+    local int NumTurns;
+
+    NumTurns = super.GetStartingNumTurns(ApplyEffectParameters);
+    if (EffectSourceHasBonusEffects(ApplyEffectParameters))
+    {
+        NumTurns += BonusDuration;
+    }
+
+    return NumTurns;
 }
 
 simulated function bool EffectSourceHasBonusEffects(const out EffectAppliedData ApplyEffectParameters)

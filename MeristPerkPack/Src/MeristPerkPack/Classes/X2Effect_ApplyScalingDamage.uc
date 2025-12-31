@@ -10,7 +10,7 @@ function WeaponDamageValue GetBonusEffectDamageValue(XComGameState_Ability Abili
     local WeaponDamageValue     Damage;
     local int                   Rank, MaxHP;
 
-    Damage = EffectDamageValue;
+    Damage = super.GetBonusEffectDamageValue(AbilityState, SourceUnit, SourceWeapon, TargetRef);
 
     if (SourceUnit != none)
         Rank = SourceUnit.GetSoldierRank();

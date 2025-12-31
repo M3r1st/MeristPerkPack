@@ -75,7 +75,6 @@ static function X2AbilityTemplate SelfTargetActivated(name TemplateName, string 
 
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
-
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
@@ -535,8 +534,46 @@ static function EventListenerReturn AbilityTriggerEventListener_BladestormConcea
 
     if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
     {
-        // AbilityTriggerAgainstSingleTarget() returns `true` if it successfully activated the ability
         CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false);
+    }
+
+    return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn AbilityTriggerEventListener_BuffMe(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameStateHistory          History;
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Ability         CallbackAbilityState;
+    local XComGameState_Unit            TargetUnit;
+    local int                           VisualizeIndex;
+
+    History = `XCOMHISTORY;
+
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
+    {
+        CallbackAbilityState = XComGameState_Ability(CallbackData);
+        TargetUnit = XComGameState_Unit(EventSource);
+
+        VisualizeIndex = GameState.HistoryIndex;
+
+        if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
+        {
+            CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+        }
+
+        if (CallbackAbilityState.OwnerStateObject.ObjectID == TargetUnit.ObjectID)
+        {
+            foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnit,,, GameState.HistoryIndex)
+            {
+                if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
+                {
+                    CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+                }
+            }
+        }
     }
 
     return ELR_NoInterrupt;

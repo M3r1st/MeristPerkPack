@@ -57,13 +57,12 @@ M31_DisarmingShot_DebuffText                = "The unit is disarmed. Its aim and
 M31_ThermalShock_DebuffText                 = "The unit is affected by Thermal Shock and suffering aim and defense penalties."
 
 M31_Botnet_BonusText                        = "The unit's standard shots reduce the targets' hack defense."
-M31_Duskborn_BonusText                      = "Duskborn is still active."
 
 M31_Poisoned_DebuffText                     = "The unit suffers movement and aim penalties and takes <Ability:M31_EffectDamageOnTick> damage at the start of each turn."
 M31_Bleeding_DebuffText                     = "The unit takes <Ability:M31_EffectDamageOnTick> damage at the start of each turn."
 
 [X2Effect_Assassin]
-strFriendlyDesc                     = "<Ability:M31_FriendlyName> is unavailable."
+strFriendlyDesc                     = ""
 
 [X2Effect_Immobilize]
 strFriendlyName                     = "Maimed"

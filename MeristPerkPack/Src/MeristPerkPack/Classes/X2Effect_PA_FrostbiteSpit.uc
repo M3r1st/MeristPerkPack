@@ -1,5 +1,10 @@
 class X2Effect_PA_FrostbiteSpit extends X2Effect_Persistent;
 
+var int CritBonus;
+var int CritBonusPerRank;
+var float CritDamageBonus;
+var float CritDamageBonusPerRank;
+
 function bool AllowCritOverride()
 {
     return true;
@@ -18,7 +23,7 @@ function GetToHitModifiers(
 {
     local ShotModifierInfo CritInfo;
     local int Rank;
-    local int CritBonus;
+    local int Bonus;
 
     if (Attacker != none)
     {
@@ -27,14 +32,12 @@ function GetToHitModifiers(
 
     if (AbilityState != none && IsFrostSpit(AbilityState.GetMyTemplateName()))
     {
-        CritBonus = `GetConfigInt("M31_PA_FrostbiteSpit_CritBonus") + `GetConfigInt("M31_PA_FrostbiteSpit_CritBonusPerRank") * Rank;
-        if (CritBonus != 0)
-        {
-            CritInfo.ModType = eHit_Crit;
-            CritInfo.Reason = FriendlyName;
-            CritInfo.Value = CritBonus;
-            ShotModifiers.AddItem(CritInfo);
-        }
+        Bonus = CritBonus + CritBonusPerRank * Rank;
+
+        CritInfo.ModType = eHit_Crit;
+        CritInfo.Reason = FriendlyName;
+        CritInfo.Value = Bonus;
+        ShotModifiers.AddItem(CritInfo);
     }
 }
 
@@ -48,7 +51,7 @@ function int GetAttackingDamageModifier(
     optional XComGameState NewGameState)
 {
     local int Rank;
-    local float DamageBonus;
+    local int DamageBonus;
 
     if (!class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult) || CurrentDamage == 0)
         return 0;
@@ -56,20 +59,27 @@ function int GetAttackingDamageModifier(
     if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
 
-    if (Attacker != none)
+    if (class'XComGameStateContext_Ability'.static.IsHitResultHit(AppliedData.AbilityResultContext.HitResult))
     {
-        Rank = Attacker.GetSoldierRank();
-    }
-
-    if (AbilityState != none && IsFrostSpit(AbilityState.GetMyTemplateName()))
-    {
-        if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+        if (CurrentDamage > 0)
         {
-            DamageBonus = `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonus") + `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonusPerRank") * Rank;
+            if (Attacker != none)
+            {
+                Rank = Attacker.GetSoldierRank();
+            }
+
+            if (AbilityState != none && IsFrostSpit(AbilityState.GetMyTemplateName()))
+            {
+                if (AppliedData.AbilityResultContext.HitResult == eHit_Crit)
+                {
+                    DamageBonus = CritDamageBonus + CritDamageBonusPerRank * Rank;
+                    return DamageBonus;
+                }
+            }
         }
     }
 
-    return DamageBonus;
+    return 0;
 }
 
 function int GetExtraArmorPiercing(
@@ -87,7 +97,7 @@ function int GetExtraArmorPiercing(
     return 0;
 }
 
-private function bool IsFrostSpit(name AbilityName)
+static function bool IsFrostSpit(name AbilityName)
 {
     return class'X2AbilitySet_PA_Viper'.default.FrostbiteSpit_AllowedAbilities.Find(AbilityName) != INDEX_NONE;
 }
@@ -95,5 +105,5 @@ private function bool IsFrostSpit(name AbilityName)
 defaultproperties
 {
     DuplicateResponse = eDupe_Ignore
-    bDisplayInSpecialDamageMessageUI = true
+    bDisplayInSpecialDamageMessageUI = false
 }

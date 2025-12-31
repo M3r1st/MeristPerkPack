@@ -16,6 +16,8 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     local XComGameState_Unit SourceUnit;
     local UnitValue UnitVal;
 
+    super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+
     SourceUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     if (SourceUnit == none)
     {

@@ -28,7 +28,7 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
         {
             foreach RequiredAbilities(AbilityName)
             {
-                if (SourceUnit.FindAbility(AbilityName, SourceWeaponRef).ObjectID > 0)
+                if (SourceUnit.FindAbility(AbilityName, SourceWeaponRef).ObjectID == 0)
                 {
                     return 'AA_AbilityUnavailable';
                 }

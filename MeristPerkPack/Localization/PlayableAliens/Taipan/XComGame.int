@@ -36,6 +36,7 @@ LocFlyOverText="Ambush Predator"
 
 [M31_PA_TaipanAmbush2 X2AbilityTemplate]
 LocFriendlyName="Ambush Predator"
+LocFlyOverText="Ambush Predator"
 LocLongDescription="Automatically enter overwatch at the end of each turn. Additionally, the <Ability:ClassName>'s reaction fire can crit."
 LocHelpText="Automatically enter overwatch at the end of each turn. The <Ability:ClassName>'s reaction fire can crit."
 LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired."
@@ -46,6 +47,7 @@ LocFlyOverText="Ambush Predator"
 
 [M31_PA_TaipanReturnFire X2AbilityTemplate]
 LocFriendlyName="Return Fire"
+LocFlyOverText="Return Fire"
 LocLongDescription="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
 LocHelpText="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed.<br><Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Can only activate once per turn.<br><Bullet> Can be activated by melee and area of effect attacks.<br><Bullet> Will not activate when targeted by overwatch fire."
@@ -56,10 +58,10 @@ LocFlyOverText="Return Fire"
 
 [M31_PA_TaipanWatchThemRun X2AbilityTemplate]
 LocFriendlyName="Nowhere to Run"
+LocFlyOverText="Nowhere to Run"
 LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <font color='#0bff9b'>Covering Fire</font>."
 LocHelpText="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot."
 LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Only input-triggered abilities can activate <Ability:M31_FriendlyName>.<br><Bullet> <Ability:M31_FriendlyName> can be activated by non-standard flanking shots."
-LocFlyOverText="Nowhere to Run"
 
 [M31_PA_TaipanWatchThemRun_Trigger X2AbilityTemplate]
 LocFriendlyName="Nowhere to Run"
@@ -67,10 +69,10 @@ LocFlyOverText="Nowhere to Run"
 
 [M31_PA_TaipanBite X2AbilityTemplate]
 LocFriendlyName="Vicious Bite"
+LocFlyOverText="Vicious Bite"
 LocLongDescription="Bite any enemy within blue movement range. Costs a single action and doesn't end the turn. Can be used with movement-only actions. Has a <Ability:M31_SelfCooldown> turn cooldown. Cannot target robots and environmental objects."
 LocHelpText="Bite any enemy within blue movement range."
 LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_TaipanBite_Damage> points of damage and inflicts bleeding, causing the target to take <Ability:M31_PA_VeryAngryBite_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_PA_TaipanBite_BleedDuration> turn(s).<br><Bullet> Can crit for +<Ability:M31_PA_TaipanBite_CritDamage> damage.<br><Bullet> <Ability:M31_FriendlyName> has innate +<Ability:M31_PA_TaipanBite_AimBonus> aim and +<Ability:M31_PA_TaipanBite_CritBonus> critical chance.<br><Bullet> Cannot target robots and environmental objects."
-LocFlyOverText="Vicious Bite"
 
 [M31_PA_TaipanDeadlyBite X2AbilityTemplate]
 LocFriendlyName="Deadly Bite"

@@ -88,12 +88,12 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
 
 function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
 {
-    if (TargetUnit.IsAbleToAct() || TargetUnit.IsMindControlled())
+    if (!TargetUnit.IsAbleToAct() || TargetUnit.IsMindControlled())
     {
         return false;
     }
 
-    if (FindUsableSidewinderAbility(TargetUnit) != none)
+    if (FindUsableSidewinderAbility(TargetUnit) == none)
     {
         return false;
     }

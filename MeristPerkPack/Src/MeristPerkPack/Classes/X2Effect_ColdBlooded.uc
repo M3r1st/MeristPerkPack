@@ -1,62 +1,51 @@
-class X2Effect_ColdBlooded extends X2Effect_Persistent;
+class X2Effect_ColdBlooded extends X2Effect_RefundActionPoints;
 
-var int ActivationsPerTurn;
-var array<name> AllowedAbilities;
 var array<name> AllowedEffects;
 var bool bIncludeDefaultEffects;
-var bool bMatchSourceWeapon;
-var name CounterName;
-var name EventName;
 
-function RegisterForEvents(XComGameState_Effect EffectGameState)
+static function EventListenerReturn OnAbilityActivated(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameState_Unit        UnitState;
-    local Object                    EffectObj;
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Unit            OldTargetState;
+    local XComGameState_Effect          EffectState;
+    local X2Effect_ColdBlooded          Effect;
+    
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 
-    EffectObj = EffectGameState;
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-    `XEVENTMGR.RegisterForEvent(EffectObj, EventName, EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, 45, UnitState);
-}
-
-function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
-{
-    local XComGameState_Ability     AbilityState;
-    local XComGameState_Unit        TargetUnit;
-    local UnitValue                 UnitValue;
-    local int                       iCounter;
-
-    if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
-        return false;
-
-    if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
-        return false;
-
-    SourceUnit.GetUnitValue(CounterName, UnitValue);
-    iCounter = int(UnitValue.fValue);
-
-    if (iCounter >= ActivationsPerTurn)
-        return false;
-
-    AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-
-    if (AbilityState != none)
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
-        if (bMatchSourceWeapon && kAbility.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
-            return false;
-
-        if (AllowedAbilities.Find(kAbility.GetMyTemplateName()) != -1)
+        EffectState = XComGameState_Effect(CallbackData);
+        if (EffectState != none)
         {
-            TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-            // TargetUnit = XComGameState_Unit(
-            //     `XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID,, AbilityContext.AssociatedState.HistoryIndex - 1));
-            if (TargetUnit != none && ValidateEffects(TargetUnit))
+            Effect = X2Effect_ColdBlooded(EffectState.GetX2Effect());
+            if (Effect != none)
             {
-                SourceUnit.SetUnitFloatValue(CounterName, iCounter + 1.0, eCleanup_BeginTurn);
-                SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
-                `XEVENTMGR.TriggerEvent(EventName, AbilityState, SourceUnit, NewGameState);
+                OldTargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID,, GameState.HistoryIndex - 1));
+                if (OldTargetState != none && Effect.ValidateEffects(OldTargetState))
+                {
+                    return class'X2Effect_RefundActionPoints'.static.OnAbilityActivated(EventData, EventSource, GameState, EventID, CallbackData);
+                }
             }
         }
     }
+}
+
+function bool PostAbilityCostPaid(
+    XComGameState_Effect EffectState,
+    XComGameStateContext_Ability AbilityContext,
+    XComGameState_Ability kAbility,
+    XComGameState_Unit SourceUnit,
+    XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
+{
+    local XComGameState_Unit OldTargetState;
+
+    OldTargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+
+    if (OldTargetState != none && ValidateEffects(OldTargetState))
+    {
+        return super.PostAbilityCostPaid(EffectState, AbilityContext, kAbility, SourceUnit, AffectWeapon, NewGameState, PreCostActionPoints, PreCostReservePoints);;
+    }
+
     return false;
 }
 
@@ -89,10 +78,13 @@ simulated function bool ValidateEffects(XComGameState_Unit UnitState)
 
 defaultproperties
 {
-    DuplicateResponse = eDupe_Ignore
     EffectName = M31_ColdBlooded
-    CounterName = M31_ColdBlooded
-    EventName = M31_ColdBlooded
-    bIncludeDefaultEffects = true
+
+    CountValueName = M31_ColdBlooded_Counter
+    FlyoverEventName = M31_ColdBlooded_Flyover
+
+    bRefundAll = false
+
     bMatchSourceWeapon = true
+    bIncludeDefaultEffects = true
 }

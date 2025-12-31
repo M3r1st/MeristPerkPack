@@ -276,7 +276,7 @@ static function X2AbilityTemplate PistolDisarmingShot()
 {
     local X2AbilityTemplate Template;
 
-    Template = Attack('M31_PistolDisarmingShot', "img:///UILibrary_MeristPerkIcons.UIPerk_DisarmingShot", false, false);
+    Template = Attack('M31_PistolDisarmingShot', "img:///UILibrary_MZChimeraIcons.Ability_DisablingShot", false, false);
     
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
 

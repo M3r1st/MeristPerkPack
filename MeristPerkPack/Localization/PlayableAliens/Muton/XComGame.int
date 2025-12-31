@@ -46,8 +46,8 @@ LocFriendlyName="Counterattack"
 [M31_PA_CripplingBlow X2AbilityTemplate]
 LocFriendlyName="Crippling Wound"
 LocFlyOverText="Crippling Wound"
-LocLongDescription="Strike an adjacent target with your <Ability:M31_BoundWeaponName>, permanently lowering its aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Melee attack that permanently lowers target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
+LocLongDescription="Special melee attack against any enemy within movement range. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocHelpText="Special melee attack against any enemy within movement range. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
 LocPromotionPopupText="<Bullet> Multiple applications of the debuff will not stack."
 
 [M31_PA_Bladestorm X2AbilityTemplate]

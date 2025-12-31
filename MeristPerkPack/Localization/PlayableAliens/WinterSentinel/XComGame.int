@@ -116,13 +116,18 @@ LocFlyOverText="Chilling Mist"
 
 [M31_PA_WS_StupidSexySnake X2AbilityTemplate]
 LocFriendlyName="Enchanting Presence"
+LocFlyOverText="Enchanting Presence"
 LocLongDescription="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
 LocHelpText="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
 LocPromotionPopupText="<Bullet> The effect updates when the units finish their movement.<br><Bullet> The effect applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs."
 
-[M31_PA_WS_StupidSexySnake_Update X2AbilityTemplate]
+[M31_PA_WS_StupidSexySnake_Passive X2AbilityTemplate]
 LocFriendlyName="Enchanting Presence"
 LocFlyOverText="Enchanting Presence"
+LocLongDescription="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
+LocHelpText="Visible biological and cybernetic allies within a <Ability:M31_PA_WS_StupidSexySnake_Radius> tile radius gain +<Ability:M31_PA_WS_StupidSexySnake_AimBonus> aim, +<Ability:M31_PA_WS_StupidSexySnake_CritBonus> crit and +<Ability:M31_PA_WS_StupidSexySnake_DodgeBonus> dodge. Passive."
+LocPromotionPopupText="<Bullet> The effect updates when the units finish their movement.<br><Bullet> The effect applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs."
+
 
 [M31_PA_WS_RebelYell X2AbilityTemplate]
 LocFriendlyName="Rebel Yell"

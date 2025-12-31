@@ -665,16 +665,16 @@ static function X2AbilityTemplate WinterSoldier()
 
 static function X2AbilityTemplate ChillingMist()
 {
-    local X2AbilityTemplate             Template;
-    local X2Effect_PassiveWeaponEffect  PassiveWeaponEffect;
+    local X2AbilityTemplate     Template;
+    local X2Effect_WeaponEffect WeaponEffect;
 
     Template = Passive('M31_PA_WS_ChillingMist', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath", false, true);
         
-    PassiveWeaponEffect = new class'X2Effect_PassiveWeaponEffect';
-    PassiveWeaponEffect.EffectName = 'M31_PA_WS_ChillingMist';
-    PassiveWeaponEffect.AttackName = 'M31_PA_WS_ChillingMist_Attack';
-    PassiveWeaponEffect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(PassiveWeaponEffect);
+    WeaponEffect = new class'X2Effect_WeaponEffect';
+    WeaponEffect.EffectName = 'M31_PA_WS_ChillingMist';
+    WeaponEffect.AttackName = 'M31_PA_WS_ChillingMist_Attack';
+    WeaponEffect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(WeaponEffect);
 
     Template.AdditionalAbilities.AddItem('M31_PA_WS_ChillingMist_Attack');
 
@@ -685,7 +685,7 @@ static function X2AbilityTemplate ChillingMistAttack()
 {
     local X2AbilityTemplate Template;
 
-    Template = class'M31_Helpers'.static.CreatePassiveWeaponEffectAttack(
+    Template = class'M31_Helpers'.static.CreateWeaponEffectAttack(
         'M31_PA_WS_ChillingMist_Attack',
         "img:///UILibrary_DLC2Images.UIPerk_freezingbreath",
         GetChillingMistHypothermiaEffect()
@@ -712,6 +712,7 @@ static function X2AbilityTemplate StupidSexySnake()
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
     local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_UnitEffectsWithAbilitySource EffectCondition;
     local X2Effect_WS_StupidSexySnake       Effect;
 
     Template = SelfTargetTrigger('M31_PA_WS_StupidSexySnake', "img:///KetarosPkg_Abilities.UIPerk_holdtheline");
@@ -723,7 +724,7 @@ static function X2AbilityTemplate StupidSexySnake()
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = 'M31_BuffMe';
     Trigger.ListenerData.Filter = eFilter_None;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_OriginalTarget;
+    Trigger.ListenerData.EventFn = AbilityTriggerEventListener_BuffMe;
     Trigger.ListenerData.Priority = 50;
     Template.AbilityTriggers.AddItem(Trigger);
 
@@ -734,13 +735,17 @@ static function X2AbilityTemplate StupidSexySnake()
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
+    EffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+    EffectCondition.AddExcludeEffect(class'X2Effect_WS_StupidSexySnake'.default.EffectName, 'AA_DuplicateEffectIgnored');
+    Template.AbilityTargetConditions.AddItem(EffectCondition);
+
     Effect = new class'X2Effect_WS_StupidSexySnake';
     Effect.AimBonus = `GetConfigInt("M31_PA_WS_StupidSexySnake_AimBonus");
     Effect.CritBonus = `GetConfigInt("M31_PA_WS_StupidSexySnake_CritBonus");
     Effect.DodgeBonus = `GetConfigInt("M31_PA_WS_StupidSexySnake_DodgeBonus");
     Effect.Radius = `GetConfigFloat("M31_PA_WS_StupidSexySnake_Radius");
     Effect.bIncludeOwner = false;
-    Effect.BuildPersistentEffect(1, true, true);
+    Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, class'X2Effect_WS_StupidSexySnake'.default.strFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
@@ -990,6 +995,7 @@ static function X2AbilityTemplate NorthernWinds()
     DamageEffect.EffectDamageValue.DamageType = 'Frost';
     DamageEffect.bIgnoreArmor = true;
     DamageEffect.DamageTypes.AddItem('Frost');
+    Template.AddMultiTargetEffect(DamageEffect);
     Template.AddMultiTargetEffect(new class'X2Effect_RevealSourceUnit');
 
     Template.bSkipExitCoverWhenFiring = true;
@@ -2037,7 +2043,7 @@ static function X2AbilityTemplate BoltLeadTheTargetAttack(
     `CREATE_X2ABILITY_TEMPLATE(Template, GetLTTAttackName(TemplateName));
 
     Template.IconImage = IconImage;
-    Template.AbilitySourceName = 'eAbilitySource_Perk'; 
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Offensive;
 

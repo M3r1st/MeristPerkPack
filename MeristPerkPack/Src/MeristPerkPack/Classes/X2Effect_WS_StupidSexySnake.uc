@@ -18,7 +18,7 @@ function GetToHitModifiers(
     local ShotModifierInfo AimInfo;
     local ShotModifierInfo CritInfo;
 
-    if (IsEffectCurrentlyRelevant(EffectState, Target))
+    if (IsEffectCurrentlyRelevant(EffectState, Attacker))
     {
         AimInfo.ModType = eHit_Success;
         AimInfo.Reason = FriendlyName;

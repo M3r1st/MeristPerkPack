@@ -27,14 +27,17 @@ static function X2Effect_PA_ViperBlind CreateViperBlindEffect(int NumTurns, floa
     return Effect;
 }
 
-simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+function int GetStartingNumTurns(const out EffectAppliedData ApplyEffectParameters)
 {
+    local int NumTurns;
+
+    NumTurns = super.GetStartingNumTurns(ApplyEffectParameters);
     if (EffectSourceHasBonusEffects(ApplyEffectParameters))
     {
-        NewEffectState.iTurnsRemaining += BonusDuration;
+        NumTurns += BonusDuration;
     }
 
-    super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+    return NumTurns;
 }
 
 simulated function bool EffectSourceHasBonusEffects(const out EffectAppliedData ApplyEffectParameters)

@@ -20,7 +20,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Ambush());
     /*>>*/Templates.AddItem(AmbushPassive());
     Templates.AddItem(Coil('M31_PA_Coil'));
-    /*>>*/Templates.AddItem(Coil('M31_PA_Coil_Hunker'));
+    /*>>*/Templates.AddItem(Coil('M31_PA_Coil_Hunker', true));
     Templates.AddItem(Entwine());
     Templates.AddItem(Lockjaw());
     /*>>*/Templates.AddItem(LockjawPassive());
@@ -140,7 +140,7 @@ static function X2AbilityTemplate AmbushPassive()
     return Passive('M31_PA_Ambush_Passive', "img:///UILibrary_LW_PerkPack.LW_AbilityRapidReaction", false, true);
 }
 
-static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown)
+static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown = false)
 {
     local X2AbilityTemplate             Template;
     local X2Condition_UnitEffects       EffectsCondition;
@@ -149,7 +149,7 @@ static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown)
     local X2Effect_PA_Coil              CoilEffect;
     local X2Effect_PA_CoilDefense       HunkerDownEffect;
     
-    Template = SelfTargetActivated('M31_PA_Coil', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
+    Template = SelfTargetActivated(DataName, "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
 
     Template.Hostility = eHostility_Defensive;
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
@@ -181,7 +181,7 @@ static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown)
     }
     else
     {
-        Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY + 1;
+        Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY - 1;
 
         Template.AddShooterEffectExclusions();
 
@@ -200,6 +200,7 @@ static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown)
 
     Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HunkerDownAbility_BuildVisualization;
 
+    Template.bShowActivation = false;
     Template.bSkipFireAction = false;
 
     return Template;
@@ -210,7 +211,7 @@ static function X2AbilityTemplate Entwine()
     local X2AbilityTemplate     Template;
     local X2Effect_PA_Entwine   Effect;
 
-    Template = Passive('M31_PA_Entwine', "img:///UILibrary_PerkIcons.UIPerk_viper_bind", false, true);
+    Template = Passive('M31_PA_Entwine', "img:///UILibrary_MZChimeraIcons.Ability_TightSqueeze", false, true);
     
     Effect = new class'X2Effect_PA_Entwine';
     Effect.BindDefenseBonus = `GetConfigInt("M31_PA_Entwine_DefenseBonus");
@@ -292,7 +293,7 @@ static function X2AbilityTemplate Lockjaw()
 
     Template.AddTargetEffect(CreateLockjawStunEffect());
     Template.AddTargetEffect(CreateLockjawDamageEffect());
-    AddViperPoisonEffects(Template);
+    AddViperPoisonEffects(Template, true);
 
     SetFireAnim(Template, 'HL_M31_ViciousBite');
 
@@ -644,7 +645,7 @@ static function X2AbilityTemplate ViperBite()
     DamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_ViperBite_DamagePerRank");
     DamageEffect.CritDamagePerRank = `GetConfigFloat("M31_PA_ViperBite_CritDamagePerRank");
     Template.AddTargetEffect(DamageEffect);
-    AddViperPoisonEffects(Template);
+    AddViperPoisonEffects(Template, true);
 
     SetFireAnim(Template, 'HL_M31_ViciousBite');
 
@@ -985,7 +986,7 @@ static function X2AbilityTemplate WrongAcidBitePanic()
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.MergeVisualizationFn = class'X2Effect_PassiveWeaponEffect'.static.FollowUpShot_MergeVisualization;
+    Template.MergeVisualizationFn = class'X2Effect_WeaponEffect'.static.FollowUpShot_MergeVisualization;
     Template.BuildInterruptGameStateFn = none;
     Template.bCrossClassEligible = false;
 
@@ -1146,7 +1147,7 @@ static function X2AbilityTemplate PoisonSpit()
         Template.AddMultiTargetEffect(DamageEffect);
     }
 
-    AddViperPoisonEffects(Template);
+    AddViperPoisonEffects(Template,, true);
 
     if (`GetConfigBool("M31_PA_PoisonSpit_bAppliesPoisonToWorld"))
     {
@@ -1207,6 +1208,10 @@ static function X2AbilityTemplate FrostbiteSpit()
     
     Effect = new class'X2Effect_PA_FrostbiteSpit';
     Effect.EffectName = 'M31_PA_FrostbiteSpit';
+    Effect.CritBonus = `GetConfigInt("M31_PA_FrostbiteSpit_CritBonus");
+    Effect.CritBonusPerRank = `GetConfigInt("M31_PA_FrostbiteSpit_CritBonusPerRank");
+    Effect.CritDamageBonus = `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonus");
+    Effect.CritDamageBonusPerRank = `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonusPerRank");
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);
@@ -1248,7 +1253,7 @@ static function X2AbilityTemplate FrostBreath()
     return Template;
 }
 
-static function X2AbilityTemplate CreateViperSpitAbility(name DataName, string IconImage, int fTargetRadius = 2.5)
+static function X2AbilityTemplate CreateViperSpitAbility(name DataName, string IconImage, float fTargetRadius = 2.5)
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityMultiTarget_Cylinder     CylinderMultiTarget;
@@ -1310,7 +1315,7 @@ static function X2AbilityTemplate CreateViperSpitAbility(name DataName, string I
     return Template;
 }
 
-static function AddViperPoisonEffects(out X2AbilityTemplate Template)
+static function AddViperPoisonEffects(out X2AbilityTemplate Template, optional bool bSingleTarget = true, optional bool bMultiTarget)
 {
     local X2Effect_PersistentStatChange EnhancedPoisonedEffect;
     local X2Effect_PersistentStatChange PoisonedEffect;
@@ -1322,14 +1327,14 @@ static function AddViperPoisonEffects(out X2AbilityTemplate Template)
     NeuroPoisonEffect = CreateNeuroPoisonEffect();
     BlindingPoisonEffect = CreateBlindingPoisonEffect();
 
-    if (Template.AbilityTargetEffects.Length > 0)
+    if (bSingleTarget)
     {
         Template.AddTargetEffect(EnhancedPoisonedEffect);
         Template.AddTargetEffect(PoisonedEffect);
         Template.AddTargetEffect(NeuroPoisonEffect);
         Template.AddTargetEffect(BlindingPoisonEffect);
     }
-    if (Template.AbilityMultiTargetEffects.Length > 0)
+    if (bMultiTarget)
     {
         Template.AddMultiTargetEffect(EnhancedPoisonedEffect);
         Template.AddMultiTargetEffect(PoisonedEffect);

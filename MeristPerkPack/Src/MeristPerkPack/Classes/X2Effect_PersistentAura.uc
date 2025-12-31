@@ -13,7 +13,7 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
     local XComGameState_Unit SourceUnit;
 
     SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-    
+
     if (SourceUnit == none || SourceUnit.IsDead() || TargetUnit == none || TargetUnit.IsDead())
     {
         return false;
@@ -29,7 +29,7 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
         {
             return false;
         }
-        if (!bIncludeHostile && SourceUnit.IsFriendlyUnit(TargetUnit))
+        if (!bIncludeHostile && SourceUnit.IsEnemyUnit(TargetUnit))
         {
             return false;
         }

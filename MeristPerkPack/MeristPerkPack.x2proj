@@ -235,7 +235,7 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_NullWard.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_NXGetOverThere.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_OnTheMove.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_PassiveWeaponEffect.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_WeaponEffect.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Aegis.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Barbarian.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Coil.uc" />

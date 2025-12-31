@@ -29,6 +29,7 @@ var config array<name> SuppressingFire_AllowedAbilities;
 var config array<name> ImprovedSuppression_AllowedAbilities;
 var config array<name> TroubleShooter_AllowedAbilities;
 var config bool bUpdateTemplarShield;
+var config bool bHideOtherBindAbilities;
 
 var config array<name> EMPGrenades;
 var config array<name> EMPGrenades_AdditionalEffectsToRemove;
@@ -172,6 +173,11 @@ static event OnPostTemplatesCreated()
     }
 
     PatchGuardForAutoGuard(AbilityTemplateManager.FindAbilityTemplate('IRI_Rider_Guard'));
+
+    if (default.bHideOtherBindAbilities)
+    {
+        HideOtherBindAbilities();
+    }
 
     AddEffectsToGrenades();
     AddModifiersToGrenadeAbilities();
@@ -669,6 +675,54 @@ static function PatchGuardForAutoGuard(X2AbilityTemplate Template)
     }
 }
 
+static private function HideOtherBindAbilities()
+{
+    local X2AbilityTemplateManager      AbilityMgr;
+    local X2AbilityTemplate             AbilityTemplate;
+    local X2Condition_SoldierAbilities  AbilityCondition;
+    local array<name>                   AbilityNames;
+    local name                          AbilityName;
+
+    AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+
+    AbilityCondition = new class'X2Condition_SoldierAbilities';
+    AbilityCondition.ExcludedAbilities.AddItem('M31_PA_GetOverHere');
+    AbilityCondition.ExcludedAbilities.AddItem('M31_PA_RushAndBind');
+    AbilityCondition.ExcludedAbilities.AddItem('M31_PA_WS_RushAndBind');
+
+    AbilityNames.AddItem('Bind');
+    AbilityNames.AddItem('EndBind');
+    AbilityNames.AddItem('PA_EndBind');
+
+    foreach AbilityNames(AbilityName)
+    {
+        AbilityTemplate = AbilityMgr.FindAbilityTemplate(AbilityName);
+        if (AbilityTemplate != none)
+        {
+            AbilityTemplate.AbilityShooterConditions.AddItem(AbilityCondition);
+        }
+    }
+
+    AbilityCondition = new class'X2Condition_SoldierAbilities';
+    AbilityCondition.ExcludedAbilities.AddItem('GetOverHere');
+    AbilityCondition.ExcludedAbilities.AddItem('MZ_FDAdderRushAndBind');
+
+    AbilityNames.Length = 0;
+    AbilityNames.AddItem('M31_PA_EndBind');
+    AbilityNames.AddItem('M31_PA_Bind');
+    AbilityNames.AddItem('M31_PA_Bind_Crush');
+    AbilityNames.AddItem('M31_PA_Bind_Crush_Input');
+
+    foreach AbilityNames(AbilityName)
+    {
+        AbilityTemplate = AbilityMgr.FindAbilityTemplate(AbilityName);
+        if (AbilityTemplate != none)
+        {
+            AbilityTemplate.AbilityShooterConditions.AddItem(AbilityCondition);
+        }
+    }
+}
+
 static function AddEffectsToGrenades()
 {
     local X2ItemTemplateManager         ItemManager;
@@ -847,10 +901,13 @@ static function AddModifiersToGrenadeAbilities()
     foreach default.GrenadeAbilities(AbilityName)
     {
         AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityName);
-        RadiusMultiTarget = X2AbilityMultiTarget_Radius(AbilityTemplate.AbilityMultiTargetStyle);
-        if (RadiusMultiTarget != none)
+        if (AbilityTemplate != none)
         {
-            RadiusMultiTarget.AddAbilityBonusRadius('M31_Warbringer', `GetConfigFloat("M31_Warbringer_RadiusBonus"));
+            RadiusMultiTarget = X2AbilityMultiTarget_Radius(AbilityTemplate.AbilityMultiTargetStyle);
+            if (RadiusMultiTarget != none)
+            {
+                RadiusMultiTarget.AddAbilityBonusRadius('M31_Warbringer', `GetConfigFloat("M31_Warbringer_RadiusBonus"));
+            }
         }
     }
 }
@@ -911,6 +968,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 
         case "M31_EffectTurnsTicked":
             OutString = string(GetEffectTurnsTicked(ParseObj, StrategyParseOb, GameState));
+            return true;
+
+        case "M31_EffectDamageOnTick":
+            OutString = GetEffectDamageOnTickString(ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_EffectSourceFullName":
@@ -1022,6 +1083,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_SawedOffReload_PumpAction_BonusLimit":
         case "M31_SawedOffSweeper_MaxAmmo":
         case "M31_SawedOffSweeper_MinAmmo":
+        case "M31_Shadowstrike_AimBonus":
+        case "M31_Shadowstrike_CritBonus":
         case "M31_SharpshooterAim_AimBonus":
         case "M31_SharpshooterAim_CritBonus":
         case "M31_ShotgunWedding_AmmoCost":
@@ -1097,6 +1160,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_TroubleShooter_bAllowStack":
         case "M31_Unload_bAllowCrit":
         case "M31_Unload_bOnlyOnHit":
+        case "M31_WatchfulEye_bUniqueTarget":
             OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
             return true;
 
@@ -1476,10 +1540,12 @@ static function bool GetTaipanOutStrings(string InString, out string OutString, 
 
         case "M31_PA_VeryAngryBite_Damage":
         case "M31_PA_TaipanBite_Damage":
-        case "M31_PA_TaipanDeadlyBite_Damage":
             OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState);
             return true;
-            
+        case "M31_PA_TaipanDeadlyBite_Damage":
+            OutString = GetDamageOutString(ParseObj, StrategyParseOb, GameState, class'X2AbilitySet_PA_Taipan'.static.CreateTaipanDeadlyBiteDamageEffect());
+            return true;
+
         case "M31_PA_VeryAngryBite_CritDamage":
             Damage = `GetConfigDamage("M31_PA_VeryAngryBite_Damage");
             OutString = GetOutStringWithRank(Damage.Crit, `GetConfigFloat("M31_PA_VeryAngryBite_CritDamagePerRank"), ParseObj, StrategyParseOb, GameState);
@@ -2065,11 +2131,6 @@ static private function string GetFriendlyName(Object ParseObj, Object StrategyP
     return ColorText_Grey("?");
 }
 
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case:
-
 static private function XComGameState_Unit GetSourceUnitFromParseObj(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameState_Effect      EffectState;
@@ -2095,12 +2156,9 @@ static private function XComGameState_Unit GetSourceUnitFromParseObj(Object Pars
             SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
         }
     }
+
     return SourceUnit;
 }
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case:
 
 static private function X2ItemTemplate GetItemTemplateFromParseObj(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
@@ -2135,35 +2193,21 @@ static private function X2ItemTemplate GetItemTemplateFromParseObj(Object ParseO
 }
 
 
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case:
-
 static private function X2AbilityTemplate GetAbilityTemplateFromParseObj(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameState_Effect      EffectState;
     local XComGameState_Ability     AbilityState;
     local X2AbilityTemplate         AbilityTemplate;
 
-    if (StrategyParseObj != none)
-    {
-        AbilityTemplate = X2AbilityTemplate(ParseObj);
-    }
-    else
-    {
-        EffectState = XComGameState_Effect(ParseObj);
-        AbilityState = XComGameState_Ability(ParseObj);
+    EffectState = XComGameState_Effect(ParseObj);
+    AbilityState = XComGameState_Ability(ParseObj);
+    AbilityTemplate = X2AbilityTemplate(ParseObj);
 
-        if (EffectState != none)
-        {
-            AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-        }
+    if (EffectState != none)
+        AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 
-        if (AbilityState != none)
-        {
-            AbilityTemplate = AbilityState.GetMyTemplate();
-        }
-    }
+    if (AbilityState != none)
+        AbilityTemplate = AbilityState.GetMyTemplate();
 
     return AbilityTemplate;
 }
@@ -2218,10 +2262,6 @@ static private function string GetWinterSentinelBallistaBonusString(string InStr
 
     return OutString;
 }
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case:
 
 static private function string GetSelfCooldown(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
@@ -2732,7 +2772,7 @@ static private function string GetDamageEffectOutString(Object ParseObj, Object 
     local XComGameState_Unit            SourceUnit;
     local X2Effect_ApplyWeaponDamage    DamageEffect;
     local X2Effect_ApplyScalingDamage   ScalingDamageEffect;
-    local WeaponDamageValue             Damage, BonusDamage;
+    local WeaponDamageValue             Damage;
     local int                           Rank, MaxRank;
     local string                        OutString;
     local StateObjectReference          EmptyRef;
@@ -2740,66 +2780,92 @@ static private function string GetDamageEffectOutString(Object ParseObj, Object 
     DamageEffect = X2Effect_ApplyWeaponDamage(Effect);
     if (DamageEffect != none)
     {
-        Damage = DamageEffect.EffectDamageValue;
-
         ScalingDamageEffect = X2Effect_ApplyScalingDamage(Effect);
         if (ScalingDamageEffect != none)
         {
             History = `XCOMHISTORY;
 
-            AbilityState = XComGameState_Ability(ParseObj);
-            if (StrategyParseObj != none || AbilityState != none)
+            if (StrategyParseObj == none)
             {
-                SourceUnit = XComGameState_Unit(StrategyParseObj);
-                if (SourceUnit != none)
-                {
-                    Rank = SourceUnit.GetSoldierRank();
-                    if (SourceUnit.GetSoldierClassTemplate() != none)
-                        MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
-                }
-
-                BonusDamage = ScalingDamageEffect.GetBonusEffectDamageValue(none, SourceUnit, none, EmptyRef);
-                Damage.Damage += BonusDamage.Damage;
-                OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
-                Damage.Damage -= BonusDamage.Damage;
-
-                if (ScalingDamageEffect.DamagePerRank > 0 && Rank < MaxRank)
-                {
-                    OutString $= ColorText_Grey(" (" $ GetDamageValueOutString(ParseObj, none, GameState, Damage) $ " + " $  TruncateFloat2(ScalingDamageEffect.DamagePerRank) @ default.strPerRank $ ")");
-                }
-                if (ScalingDamageEffect.DamageFromHP  > 0)
-                {
-                    OutString $= " + " $ ColorText_Auto(TruncateFloat2(ScalingDamageEffect.DamageFromHP) $ "%",, SourceUnit);
-                }
-
-                return OutString;
-            }
-            else
-            {
+                // Option 1: EffectState in ParseObj
+                // Option 2: AbilityState in ParseObj
+                // Option 3: AbilityTemplate in ParseObj (Armory)
                 EffectState = XComGameState_Effect(ParseObj);
+                AbilityState = XComGameState_Ability(ParseObj);
+                // AbilityTemplate = X2AbilityTemplate(ParseObj);
                 if (EffectState != none)
                 {
                     AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-                    if (AbilityState != none)
-                    {
-                        SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
-                    }
+                    SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
-                    BonusDamage = ScalingDamageEffect.GetBonusEffectDamageValue(AbilityState, SourceUnit, AbilityState.GetSourceWeapon(), EffectState.ApplyEffectParameters.TargetStateObjectRef);
-                    Damage.Damage += BonusDamage.Damage;
-                    OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
-
-                    if (ScalingDamageEffect.DamageFromHP  > 0)
+                    // Not a clean solution, but we need a way to differentiate between a debuff on the target and the passive effect on the source
+                    if (EffectState.GetX2Effect().BuffCategory != ePerkBuff_Passive)
                     {
-                        OutString $= " + " $ TruncateFloat2(ScalingDamageEffect.DamageFromHP) $ "%";
+                        // This is an actual debuff
+                        // Return the calculated damage value
+                        Damage = ScalingDamageEffect.GetBonusEffectDamageValue(AbilityState, SourceUnit, AbilityState.GetSourceWeapon(), EffectState.ApplyEffectParameters.TargetStateObjectRef);
+                        OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+                        return OutString;
                     }
-                    return OutString;
                 }
-                return ColorText_Grey("?");
+                else if (AbilityState != none)
+                {
+                    SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+                    // AbilityTemplate = AbilityState.GetMyTemplate();
+                }
             }
-        }
+            else
+            {
+                // Option 1: UnitState in StrategyParseObj, AbilityTemplate in ParseObj
+                SourceUnit = XComGameState_Unit(StrategyParseObj);
+                // AbilityTemplate = X2AbilityTemplate(ParseObj);
+            }
 
-        return GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+            if (SourceUnit != none)
+            {
+                // Get the unit's current and max rank
+                Rank = SourceUnit.GetSoldierRank();
+                if (SourceUnit.GetSoldierClassTemplate() != none)
+                {
+                    MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
+                }
+            }
+            // Get the full damage value with no target
+            Damage = ScalingDamageEffect.GetBonusEffectDamageValue(none, SourceUnit, none, EmptyRef);
+            // Is there a flat damage value?
+            if (Damage.Damage > 0 || SourceUnit != none && ScalingDamageEffect.DamagePerRank > 0)
+            {
+                // This value includes additional damage from rank
+                OutString = GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+                // Damage scales with rank
+                if (SourceUnit != none && ScalingDamageEffect.DamagePerRank > 0)
+                {
+                    // Only show in strategy and only if the rank is below max
+                    if (StrategyParseObj != none && Rank < MaxRank)
+                    {
+                        Damage = DamageEffect.EffectDamageValue;
+                        OutString $= ColorText_Grey(
+                            " (" $ GetDamageValueOutString(ParseObj, none, GameState, Damage)
+                            $ " + " $  TruncateFloat2(ScalingDamageEffect.DamagePerRank,, false) @ default.strPerRank $ ")");
+                    }
+                }
+            }
+            // Damage scales with the target's HP
+            if (ScalingDamageEffect.DamageFromHP  > 0)
+            {
+                if (OutString != "")
+                {
+                    OutString $= " + ";
+                }
+                OutString $= ColorText_Auto(TruncateFloat2(ScalingDamageEffect.DamageFromHP) $ "%",, SourceUnit);
+            }
+            return OutString;
+        }
+        else
+        {
+            Damage = DamageEffect.EffectDamageValue;
+            return GetDamageValueOutString(ParseObj, StrategyParseObj, GameState, Damage);
+        }
     }
 
     return ColorText_Grey("?");
@@ -2848,16 +2914,20 @@ static private function string GetExtraDamageOutString(Object ParseObj, Object S
 static private function string GetAltValueOutStringWithAbility(int Value, int AltValue, name RequiredAbility, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameState_Unit SourceUnit;
-    local string OutString;
 
-    SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+    if (Value != AltValue)
+    {
+        if (StrategyParseObj == none)
+        {
+            SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+            if (SourceUnit != none && SourceUnit.HasSoldierAbility(RequiredAbility, true))
+            {
+                return ColorText_Auto(AltValue,, SourceUnit) $ ColorText_Green("*");
+            }
+        }
+    }
 
-    if (SourceUnit != none && SourceUnit.HasSoldierAbility(RequiredAbility, true))
-        OutString $= ColorText_Auto(AltValue,, SourceUnit) $ ColorText_Green("*");
-    else
-        OutString $= ColorText_Auto(Value,, SourceUnit);
-
-    return OutString;
+    return ColorText_Auto(Value,, SourceUnit);
 }
 
 static private function string GetOutStringWithRank(
@@ -2873,22 +2943,30 @@ static private function string GetOutStringWithRank(
     bStrategy = StrategyParseObj != none;
     SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
 
-    if (SourceUnit != none)
+    if (SourceUnit == none)
     {
-        Rank = SourceUnit.GetSoldierRank();
-        if (SourceUnit.GetSoldierClassTemplate() != none)
-            MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
+        return ColorText_Grey("?");
+    }
+
+    Rank = SourceUnit.GetSoldierRank();
+    if (SourceUnit.GetSoldierClassTemplate() != none)
+    {
+        MaxRank = SourceUnit.GetSoldierClassTemplate().GetMaxConfiguredRank();
     }
 
     FullValue = BaseValue + Rank * PerRankValue;
 
     if (bClamp)
+    {
         FullValue = Clamp(FullValue, ClampMin, ClampMax);
+    }
 
     OutString $= ColorText_Auto(FullValue $ Suffix,, SourceUnit);
     
     if (bStrategy && PerRankValue != 0 && Rank < MaxRank)
+    {
         OutString $= ColorText_Grey(" (" $ BaseValue $ Suffix $ " + " $  TruncateFloat2(PerRankValue) $ Suffix @ default.strPerRank $ ")");
+    }
     
     return OutString;
 }

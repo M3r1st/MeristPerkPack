@@ -36,16 +36,19 @@ static function EventListenerReturn EffectEventListener_Coil(Object EventData, O
 
         if (SourceUnit != none && AbilityState != none && EffectState != none)
         {
-            if (AbilityState.IsAbilityInputTriggered() && AbilityState.GetMyTemplate().Hostility != eHostility_Movement)
+            if (AbilityState.ObjectID != EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID)
             {
-                if (!class'X2Effect_RefundActionPoints'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                if (AbilityState.IsAbilityInputTriggered() && AbilityState.GetMyTemplate().Hostility != eHostility_Movement)
                 {
-                    if (!EffectState.bRemoved)
+                    if (!class'X2Effect_RefundActionPoints'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
                     {
-                        RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(EffectState);
-                        NewGameState = `XCOMHISTORY.CreateNewGameState(true, RemoveContext);
-                        EffectState.RemoveEffect(NewGameState, GameState);
-                        `TACTICALRULES.SubmitGameState(NewGameState);
+                        if (!EffectState.bRemoved)
+                        {
+                            RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(EffectState);
+                            NewGameState = `XCOMHISTORY.CreateNewGameState(true, RemoveContext);
+                            EffectState.RemoveEffect(NewGameState, GameState);
+                            `TACTICALRULES.SubmitGameState(NewGameState);
+                        }
                     }
                 }
             }
@@ -63,5 +66,5 @@ function ModifyTurnStartActionPoints(XComGameState_Unit UnitState, out array<nam
 defaultproperties
 {
     EffectName = DLC_3Overdrive
-    DuplicateResponse = eDupe_Allow
+    DuplicateResponse = eDupe_Refresh
 }

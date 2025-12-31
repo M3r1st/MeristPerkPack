@@ -1,67 +1,118 @@
-class X2Effect_TraverseFire extends X2Effect_Persistent;
+class X2Effect_TraverseFire extends X2Effect_RefundActionPoints;
 
-var array<name> AllowedAbilities;
-var bool bMatchSourceWeapon;
-var name PointType;
-var int ActivationsPerTurn;
-
-var name CounterName;
-var name EventName;
-
-function RegisterForEvents(XComGameState_Effect EffectGameState)
+static function EventListenerReturn OnAbilityActivated(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameState_Unit        UnitState;
-    local Object                    EffectObj;
+    local XComGameStateContext_Ability  AbilityContext;
+    local XComGameState_Unit            SourceUnit;
+    local XComGameState_Ability         AbilityState;
+    local XComGameState_Effect          EffectState;
+    local X2Effect_RefundActionPoints   Effect;
+    local XComGameState                 NewGameState;
+    local UnitValue                     CountUnitValue;
 
-    EffectObj = EffectGameState;
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-    `XEVENTMGR.RegisterForEvent(EffectObj, EventName, EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted, 40, UnitState);
-}
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
 
-function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
-{
-    local XComGameState_Ability     AbilityState;
-    local UnitValue                 UnitValue;
-    local int                       iCounter;
-
-    if (SourceUnit.IsUnitAffectedByEffectName(class'X2Effect_Serial'.default.EffectName))
-        return false;
-
-    if (class'M31_Helpers'.static.IsUnitInterruptingEnemyTurn(SourceUnit))
-        return false;
-
-    SourceUnit.GetUnitValue(CounterName, UnitValue);
-    iCounter = int(UnitValue.fValue);
-
-    if (ActivationsPerTurn > 0 && iCounter >= ActivationsPerTurn)
-        return false;
-
-    AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
-
-    if (AbilityState != none)
+    if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
-        if ((!bMatchSourceWeapon || kAbility.SourceWeapon.ObjectID == EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID)
-            && AllowedAbilities.Find(kAbility.GetMyTemplateName()) != INDEX_NONE)
+        SourceUnit = XComGameState_Unit(EventSource);
+        AbilityState = XComGameState_Ability(EventData);
+        EffectState = XComGameState_Effect(CallbackData);
+
+        if (SourceUnit != none && AbilityState != none && EffectState != none)
         {
-            SourceUnit.SetUnitFloatValue(CounterName, iCounter + 1.0, eCleanup_BeginTurn);
-            if (PointType != '')
-                SourceUnit.ActionPoints.AddItem(PointType);
-            else
-                SourceUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.RunAndGunActionPoint);
-            
-            `XEVENTMGR.TriggerEvent(EventName, AbilityState, SourceUnit, NewGameState);
-        }
-        else
-        {
-            if (kAbility.IsAbilityInputTriggered())
+            Effect = X2Effect_RefundActionPoints(EffectState.GetX2Effect());
+
+            if (Effect != none)
             {
-                if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || !ValidateAbilityCost(kAbility, SourceUnit))
+                if (Effect.IsEffectCurrentlyRelevant(EffectState, SourceUnit))
                 {
-                    SourceUnit.SetUnitFloatValue(CounterName, ActivationsPerTurn, eCleanup_BeginTurn);
+                    if (Effect.IsAbilityRelevant(AbilityState, SourceUnit, EffectState))
+                    {
+                        if (!WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                        {
+                            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+                            SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
+
+                            if (Effect.CountValueName != '')
+                            {
+                                SourceUnit.GetUnitValue(Effect.CountValueName, CountUnitValue);
+                                SourceUnit.SetUnitFloatValue(Effect.CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
+                            }
+
+                            if (Effect.bShowFlyover)
+                            {
+                                NewGameState.ModifyStateObject(class'XComGameState_Ability', EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID);
+                                XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = EffectState.TriggerAbilityFlyoverVisualizationFn;
+                            }
+
+                            SourceUnit.ActionPoints.AddItem(Effect.GetActionPointType());
+
+                            `TACTICALRULES.SubmitGameState(NewGameState);
+                        }
+                    }
+                    else
+                    {
+                        if (AbilityState.IsAbilityInputTriggered())
+                        {
+                            if (AbilityState.GetMyTemplate().Hostility == eHostility_Offensive || !WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                            {
+                                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+                                SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
+                                SourceUnit.SetUnitFloatValue(Effect.CountValueName, Effect.ActivationsPerTurn + 1, eCleanup_BeginTurn);
+                                `TACTICALRULES.SubmitGameState(NewGameState);
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
+    return ELR_NoInterrupt;
+}
+
+function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStateContext_Ability AbilityContext, XComGameState_Ability kAbility, XComGameState_Unit SourceUnit, XComGameState_Item AffectWeapon, XComGameState NewGameState, const array<name> PreCostActionPoints, const array<name> PreCostReservePoints)
+{
+    local XComGameState_Ability EffectAbilityState;
+    local UnitValue             CountUnitValue;
+
+    if (bRefundAll)
+    {
+        if (IsEffectCurrentlyRelevant(EffectState, SourceUnit))
+        {
+            if (IsAbilityRelevant(kAbility, SourceUnit, EffectState))
+            {
+                if (!WasAbilityFree(kAbility, SourceUnit))
+                {
+                    if (CountValueName != '')
+                    {
+                        SourceUnit.GetUnitValue(CountValueName, CountUnitValue);
+                        SourceUnit.SetUnitFloatValue(CountValueName, CountUnitValue.fValue + 1, eCleanup_BeginTurn);
+                    }
+
+                    if (bShowFlyover && FlyoverEventName != '')
+                    {
+                        EffectAbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
+                        `XEVENTMGR.TriggerEvent(FlyoverEventName, EffectAbilityState, SourceUnit, NewGameState);
+                    }
+
+                    SourceUnit.ActionPoints = PreCostActionPoints;
+                    return true;
+                }
+            }
+            else
+            {
+                if (kAbility.IsAbilityInputTriggered())
+                {
+                    if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || !WasAbilityFree(kAbility, SourceUnit))
+                    {
+                        SourceUnit.SetUnitFloatValue(CountValueName, ActivationsPerTurn + 1, eCleanup_BeginTurn);
+                    }
+                }
+            }
+        }
+    }
+
     return false;
 }
 
@@ -84,9 +135,13 @@ static function bool ValidateAbilityCost(XComGameState_Ability AbilityState, XCo
 
 defaultproperties
 {
-    DuplicateResponse = eDupe_Ignore
     EffectName = M31_TraverseFire
-    CounterName = M31_TraverseFire
-    EventName = M31_TraverseFire
+    DuplicateResponse = eDupe_Ignore
+
+    CountValueName = M31_TraverseFire_Activations
+    FlyoverEventName = M31_TraverseFire_Flyover
+
+    bRefundAll = false
+
     bMatchSourceWeapon = true
 }
