@@ -718,7 +718,7 @@ static function X2AbilityTemplate StupidSexySnake()
     Template = SelfTargetTrigger('M31_PA_WS_StupidSexySnake', "img:///KetarosPkg_Abilities.UIPerk_holdtheline");
 
     Template.BuildVisualizationFn = none;
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityTargetStyle = default.SingleTargetWithSelf;
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;

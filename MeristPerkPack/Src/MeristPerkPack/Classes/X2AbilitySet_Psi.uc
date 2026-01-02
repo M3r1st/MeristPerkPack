@@ -618,7 +618,7 @@ static function X2AbilityTemplate Cryotherapy()
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityTargetStyle = default.SingleTargetWithSelf;
 
     PassiveRadius = new class'X2AbilityPassiveAOE_WeaponRadius';
     PassiveRadius.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_Psi_Cryotherapy_Range"));
