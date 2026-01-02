@@ -23,6 +23,7 @@ LocFlyOverText="Alpha Strike"
 LocLongDescription="Spend two actions to give all allies within <Ability:M31_AlphaStrike_Radius> tiles an extra action. Usable <Ability:M31_SelfCharges> time(s) per mission. Has a <Ability:M31_SelfCooldown> turn cooldown."
 LocHelpText="Activate to grant an extra action to all allies within <Ability:M31_AlphaStrike_Radius> tiles."
 LocPromotionPopupText="<Bullet> This ability does not provide the bonus to stunned or panicked allies.<br><Bullet> Doesn't give the action point to the caster."
+LocPromotionPopupText="<Bullet> This ability does not provide the bonus to stunned or panicked allies.<br><Bullet> Doesn't give the action point to the <Ability:ClassName>."
 
 [M31_Assassin X2AbilityTemplate]
 LocFriendlyName="Assassin"
