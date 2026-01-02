@@ -1037,6 +1037,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Escalation_CritDamageBonus":
         case "M31_Escalation_CritDamageBonusFactor":
         case "M31_Escalation_Duration":
+        case "M31_ForwardOperator_ActivationsPerTurn":
         case "M31_Frostbane_CritBonus":
         case "M31_Frostbane_CritBonusPerTier":
         case "M31_Frostbane_PiercingBonus":
