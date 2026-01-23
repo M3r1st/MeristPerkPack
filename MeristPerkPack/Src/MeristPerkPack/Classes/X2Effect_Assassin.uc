@@ -51,7 +51,7 @@ static function EventListenerReturn EffectEventListener_Assassin(Object EventDat
 
             if (Effect != none)
             {
-                if (!Effect.bMatchSourceWeapon || AbilityState.SourceWeapon.ObjectID == AbilityContext.InputContext.ItemObject.ObjectID)
+                if (!Effect.bMatchSourceWeapon || AbilityState.SourceWeapon.ObjectID == EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID)
                 {
                     if (Effect.IsEffectCurrentlyRelevant(EffectState, SourceUnit))
                     {

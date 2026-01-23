@@ -1,10 +1,5 @@
 class X2AbilitySet_PA_Viper extends X2Ability_Extended config(GameData_SoldierSkills);
 
-var config array<name> ViperSpit_Abilities;
-var config array<name> GetOverHere_Abilities;
-var config array<name> Bind_Abilities;
-var config array<name> BindSustained_Abilities;
-var config array<name> ViperBite_Abilities;
 var config array<name> FrostbiteSpit_AllowedAbilities;
 var config array<name> Salamander_AllowedGrenades;
 var config array<name> Serpentine_AllowedAbilities;
@@ -60,7 +55,7 @@ static function X2AbilityTemplate Ambush()
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
 
-    Template = SelfTargetTrigger('M31_PA_Ambush', "img:///UILibrary_LW_PerkPack.LW_AbilityRapidReaction");
+    Template = SelfTargetTrigger('M31_PA_Ambush', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_bullet_x2");
     
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -137,7 +132,7 @@ static simulated function Ambush_BuildVisualization(XComGameState VisualizeGameS
 
 static function X2AbilityTemplate AmbushPassive()
 {
-    return Passive('M31_PA_Ambush_Passive', "img:///UILibrary_LW_PerkPack.LW_AbilityRapidReaction", false, true);
+    return Passive('M31_PA_Ambush_Passive', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_bullet_x2", false, true);
 }
 
 static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown = false)
@@ -167,6 +162,7 @@ static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown 
 
     if (bHunkerDown)
     {
+        Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_takecover";
         Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY;
         Template.AbilitySourceName = 'eAbilitySource_Standard';
 
@@ -178,6 +174,8 @@ static function X2AbilityTemplate Coil(name DataName, optional bool bHunkerDown 
         ActionPointCost.bConsumeAllPoints = true;
         ActionPointCost.AllowedTypes.AddItem(class'X2CharacterTemplateManager'.default.DeepCoverActionPoint);
         Template.AbilityCosts.AddItem(ActionPointCost);
+
+        Template.OverrideAbilities.AddItem('HunkerDown');
     }
     else
     {
@@ -585,10 +583,11 @@ static function X2AbilityTemplate Slither()
 {
     local X2AbilityTemplate             Template;
     local X2Effect_PersistentStatChange SlitherEffect;
-    
+
     Template = SelfTargetActivated('M31_PA_Slither', "img:///UILibrary_PlayableAdvent.Viper_Slither", false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Free, eHostility_Defensive);
+    Template.Hostility = eHostility_Defensive;
 
     Template.AddShooterEffectExclusions();
 
@@ -616,7 +615,7 @@ static function X2AbilityTemplate ViperBite()
 
     Template = MovingMelee('M31_PA_ViperBite', "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Offensive);
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_ViperBite_AimBonus");
@@ -714,7 +713,6 @@ static function X2AbilityTemplate CreateFriendlyViperBiteAbility(name DataName, 
 static function X2AbilityTemplate IronskinBite()
 {
     local X2AbilityTemplate         Template;
-    local X2Effect_RemoveEffects    RemoveEffect;
     local X2Effect_PersonalShield   Effect;
 
     Template = CreateFriendlyViperBiteAbility('M31_PA_IronskinBite', "img:///UILibrary_MeristPerkIcons.UIPerk_ShieldBite");
@@ -722,11 +720,6 @@ static function X2AbilityTemplate IronskinBite()
     AddCooldown(Template, `GetConfigInt("M31_PA_IronskinBite_Cooldown"));
     AddCharges(Template, `GetConfigInt("M31_PA_IronskinBite_Charges"));
     AddActionPointCost(Template, eCost_Single);
-
-    RemoveEffect = new class'X2Effect_RemoveEffects';
-    RemoveEffect.EffectNamesToRemove.AddItem('M31_PA_IronskinBite_Buff');
-    RemoveEffect.bDoNotVisualize = true;
-    Template.AddTargetEffect(RemoveEffect);
 
     Effect = new class'X2Effect_PersonalShield';
     Effect.EffectName = 'M31_PA_IronskinBite_Buff';
@@ -1204,7 +1197,7 @@ static function X2AbilityTemplate FrostbiteSpit()
     local X2AbilityTemplate         Template;
     local X2Effect_PA_FrostbiteSpit Effect;
 
-    Template = Passive('M31_PA_FrostbiteSpit', "img:///UILibrary_SODragoon.UIPerk_overkill", false, true);
+    Template = Passive('M31_PA_FrostbiteSpit', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_overkill", false, false);
     
     Effect = new class'X2Effect_PA_FrostbiteSpit';
     Effect.EffectName = 'M31_PA_FrostbiteSpit';
@@ -1213,7 +1206,7 @@ static function X2AbilityTemplate FrostbiteSpit()
     Effect.CritDamageBonus = `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonus");
     Effect.CritDamageBonusPerRank = `GetConfigFloat("M31_PA_FrostbiteSpit_CritDamageBonusPerRank");
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     Template.PrerequisiteAbilities.AddItem('M31_PA_FrostSpit');
@@ -1228,7 +1221,7 @@ static function X2AbilityTemplate FrostBreath()
 
     Template = CreateViperSpitAbility('M31_PA_FrostBreath', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath", `GetConfigFloat("M31_PA_FrostBreath_Radius"));
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY + 1;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Offensive);
 
     AddCooldown(Template, `GetConfigInt("M31_PA_FrostBreath_Cooldown"));
     AddCharges(Template, `GetConfigInt("M31_PA_FrostBreath_Charges"));
@@ -1263,11 +1256,25 @@ static function X2AbilityTemplate CreateViperSpitAbility(name DataName, string I
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
 
     Template.IconImage = IconImage;
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Offensive);
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.AbilitySourceName = 'eAbilitySource_Perk';
     Template.Hostility = eHostility_Offensive;
 
+    StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+    StandardAim.bGuaranteedHit = true;
+    StandardAim.bAllowCrit = false;
+    Template.AbilityToHitCalc = StandardAim;
+
+    CursorTarget = new class'X2AbilityTarget_Cursor';
+    // CursorTarget.bRestrictToWeaponRange = true;
+    CursorTarget.bRestrictToSquadsightRange = `GetConfigBool("M31_PA_Spit_bRequireVisibility");
+    CursorTarget.FixedAbilityRange = `TILESTOMETERS(`GetConfigInt("M31_PA_ViperSpit_Range"));
+    Template.AbilityTargetStyle = CursorTarget;
+    if (`GetConfigBool("M31_PA_Spit_bRequireVisibility"))
+        Template.TargetingMethod = class'X2TargetingMethod_ViperSpit_New';
+    else
+        Template.TargetingMethod = class'X2TargetingMethod_ViperSpit';
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     CylinderMultiTarget = new class'X2AbilityMultiTarget_Cylinder';
@@ -1277,40 +1284,19 @@ static function X2AbilityTemplate CreateViperSpitAbility(name DataName, string I
     CylinderMultiTarget.bUseOnlyGroundTiles = true;
     Template.AbilityMultiTargetStyle = CylinderMultiTarget;
 
-    Template.TargetingMethod = class'X2TargetingMethod_ViperSpit';
-
-    Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
-
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
     Template.AddShooterEffectExclusions();
 
-    CursorTarget = new class'X2AbilityTarget_Cursor';
-    // CursorTarget.bRestrictToWeaponRange = true;
-    CursorTarget.bRestrictToSquadsightRange = `GetConfigBool("M31_PA_Spit_bRequireVisibility");
-    CursorTarget.FixedAbilityRange = `TILESTOMETERS(`GetConfigInt("M31_PA_ViperSpit_Range"));
-    Template.AbilityTargetStyle = CursorTarget;
-
-    StandardAim = new class'X2AbilityToHitCalc_StandardAim';
-    StandardAim.bGuaranteedHit = true;
-    StandardAim.bAllowCrit = false;
-    Template.AbilityToHitCalc = StandardAim;
-
-    Template.CinescriptCameraType = "_PoisonSpit";
+    Template.AbilityTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-    
-    Template.bDisplayInUITooltip = false;
-    Template.bDisplayInUITacticalText = false;
-    Template.bDontDisplayInAbilitySummary = false;
-    Template.bUseAmmoAsChargesForHUD = false;
 
-    Template.bCrossClassEligible = false;
+    Template.CinescriptCameraType = "_PoisonSpit";
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
-    Template.bFrameEvenWhenUnitIsHidden = true;
 
     return Template;
 }

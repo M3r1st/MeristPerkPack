@@ -40,7 +40,7 @@ static function X2AbilityTemplate VeryAngryBite()
 
     Template = StandardMelee('M31_PA_VeryAngryBite', "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, (`GetConfigBool("M31_PA_VeryAngryBite_bFreeAction") ? eCost_Free : eCost_Single), eHostility_Offensive);
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_VeryAngryBite_AimBonus");
@@ -139,7 +139,7 @@ static function X2AbilityTemplate MalevolentFocus()
     Effect.bApplyOnlyOnReaction = `GetConfigBool("M31_PA_MalevolentFocus_bOnlyForReaction");
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Effect.BuildPersistentEffect(1, true, false);
-    
+
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -422,7 +422,7 @@ static function X2AbilityTemplate TaipanWatchThemRun()
     local X2AbilityTemplate                 Template;
     local X2AbilityTrigger_EventListener    Trigger;
 
-    Template = SelfTargetTrigger('M31_PA_TaipanWatchThemRun', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist");
+    Template = SelfTargetTrigger('M31_PA_TaipanWatchThemRun', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_bullet");
 
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
@@ -512,7 +512,7 @@ static function EventListenerReturn AbilityTriggerEventListener_TaipanWatchThemR
 
 static function X2AbilityTemplate TaipanWatchThemRunPassive()
 {
-    return Passive('M31_PA_TaipanWatchThemRun_Passive', "img:///UILibrary_FavidsPerkPack.UIPerk_Opportunist", false, true);
+    return Passive('M31_PA_TaipanWatchThemRun_Passive', "img:///UILibrary_XPerkIconPack.UIPerk_overwatch_bullet", false, true);
 }
 
 static function X2AbilityTemplate TaipanBite()
@@ -526,7 +526,7 @@ static function X2AbilityTemplate TaipanBite()
 
     Template = MovingMelee('M31_PA_TaipanBite', "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Offensive);
 
     StandardMelee = new class'X2AbilityToHitCalc_StandardMelee';
     StandardMelee.BuiltInHitMod = `GetConfigInt("M31_PA_TaipanBite_AimBonus");
@@ -861,8 +861,8 @@ static function X2AbilityTemplate TaipanVengeance()
     local X2AbilityTemplate             Template;
     local X2Effect_PA_TaipanVengeance   Effect;
     local X2Effect_DedicatedOverwatch   OverwatchEffect;
-    
-    Template = Passive('M31_PA_TaipanVengeance', "img:///UILibrary_MW.UIPerk_triangulation", false, true);
+
+    Template = Passive('M31_PA_TaipanVengeance', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_meditation", false, true);
 
     Effect = new class'X2Effect_PA_TaipanVengeance';
     Effect.AimBonus = `GetConfigInt("M31_PA_TaipanVengeance_AimBonus");
@@ -886,7 +886,7 @@ static function X2AbilityTemplate TaipanVengeance()
 
 static function X2AbilityTemplate TaipanBloodHunter()
 {
-    return Passive('M31_PA_TaipanBloodHunter', "img:///UILibrary_LW_PerkPack.LW_AbilityAdrenalNeurosympathy", false, true);
+    return Passive('M31_PA_TaipanBloodHunter', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityAdrenalNeurosympathy", false, true);
 }
 
 static function X2AbilityTemplate TaipanStealth()
@@ -895,7 +895,7 @@ static function X2AbilityTemplate TaipanStealth()
     local X2AbilityCooldown_Extended    Cooldown;
     local X2Effect_RangerStealth        StealthEffect;
     
-    Template = SelfTargetActivated('M31_PA_TaipanStealth', "img:///UILibrary_SOHunter.UIPerk_fade", false);
+    Template = SelfTargetActivated('M31_PA_TaipanStealth', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_fade", false);
 
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_Stealth');
     Template.AddShooterEffectExclusions();

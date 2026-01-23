@@ -30,9 +30,9 @@ static function X2AbilityTemplate HarrierBullRush()
     local X2AbilityToHitCalc_StandardMelee  StandardMelee;
     local array<name>                       SkipExclusions;
 
-    Template = MovingMelee('M31_PA_HarrierBullRush', "img:///UILibrary_SOCombatEngineer.UIPerk_bullrush", false, false);
+    Template = MovingMelee('M31_PA_HarrierBullRush', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_bullrush", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_SingleConsumeAll, eHostility_Offensive);
 
     AddActionPointCost(Template, eCost_SingleConsumeAll);
     AddCooldown(Template, `GetConfigInt("M31_PA_HarrierBullRush_Cooldown"));
@@ -67,7 +67,7 @@ static function X2AbilityTemplate HarrierPunch()
 
     Template = MovingMelee('M31_PA_HarrierPunch', "img:///UILibrary_PerkIcons.UIPerk_muton_punch", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_Single, eHostility_Offensive);
 
     AddActionPointCost(Template, eCost_Single);
     
@@ -100,7 +100,7 @@ static function X2AbilityTemplate EndOfGeneva()
 {
     local X2AbilityTemplate Template;
     
-    Template = Passive('M31_PA_HarrierEndOfGeneva', "img:///UILibrary_LW_PerkPack.LW_AbilityCloseEncounters", false, true);
+    Template = Passive('M31_PA_HarrierEndOfGeneva', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityCloseEncounters", false, true);
 
     return Template;
 }
@@ -152,7 +152,7 @@ static function X2AbilityTemplate NoGraze()
     local X2AbilityTemplate             Template;
     local X2Effect_ChangeResultContext Effect;
     
-    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_FavidsPerkPack.UIPerk_Concentration", false, true);
+    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_Concentration", false, true, false);
 
     Effect = new class'X2Effect_ChangeResultContext';
     Effect.bMatchSourceWeapon = true;
@@ -398,7 +398,7 @@ static function X2AbilityTemplate HarrierCyclic(name DataName, optional name Pos
     local X2AbilityTrigger_EventListener    Trigger;
     local X2AbilityToHitCalc_StandardAim    StandardAim;
     
-    Template = CreateHarrierGrenadeAbility(DataName, "img:///UILibrary_LW_PerkPack.LW_AbilityCyclicFire");
+    Template = CreateHarrierGrenadeAbility(DataName, "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityCyclicFire");
 
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.STANDARD_SHOT_PRIORITY + 6;
 

@@ -44,14 +44,12 @@ static function X2DataTemplate PersonalShield()
 {
     local X2AbilityTemplate         Template;
     local array<name>               SkipExclusions;
-    local X2Effect_RemoveEffects    RemoveEffect;
     local X2Effect_PersonalShield   Effect;
 
     Template = SelfTargetActivated('M31_PA_PersonalShield', "img:///UILibrary_MZChimeraIcons.Ability_Phalanx", false);
 
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Defensive);
     Template.Hostility = eHostility_Defensive;
-
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
 
     if (`GetConfigBool("M31_PA_PersonalShield_bAllowWhileDisoriented"))
     {
@@ -61,11 +59,6 @@ static function X2DataTemplate PersonalShield()
 
     AddCooldown(Template, `GetConfigInt("M31_PA_PersonalShield_Cooldown"));
     AddActionPointCost(Template, eCost_Single);
-
-    RemoveEffect = new class'X2Effect_RemoveEffects';
-    RemoveEffect.EffectNamesToRemove.AddItem(default.PersonalShieldEffectName);
-    RemoveEffect.bDoNotVisualize = true;
-    Template.AddTargetEffect(RemoveEffect);
 
     Effect = new class'X2Effect_PersonalShield';
     Effect.EffectName = default.PersonalShieldEffectName;
@@ -122,7 +115,7 @@ static function X2AbilityTemplate Aegis()
     local X2AbilityTemplate Template;
     local X2Effect_PA_Aegis Effect;
 
-    Template = Passive('M31_PA_Aegis', "img:///UILibrary_SODragoon.UIPerk_aegis", false, true);
+    Template = Passive('M31_PA_Aegis', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_aegis", false, true);
 
     Effect = new class'X2Effect_PA_Aegis';
     Effect.DamageReduction = `GetConfigInt("M31_PA_Aegis_DamageReduction");
@@ -161,8 +154,7 @@ static function X2AbilityTemplate BayonetAttack()
 
     Template = StandardMelee('M31_PA_Bayonet', "img:///UILibrary_PerkIcons.UIPerk_muton_bayonet", false, true);
 
-    Template.AbilitySourceName = 'eAbilitySource_Standard';
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_SingleConsumeAll, eHostility_Offensive);
 
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
@@ -189,7 +181,7 @@ static function X2AbilityTemplate BayonetCharge()
     Template = MovingMelee('M31_PA_BayonetCharge', "img:///UILibrary_LWAlienPack.LWCenturion_AbilityBayonetCharge32", false, true);
 
     Template.AbilitySourceName = 'eAbilitySource_Standard';
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_SingleConsumeAll, eHostility_Offensive);
 
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     if (`GetConfigBool("M31_PA_BayonetCharge_bAllowWhileDisoriented"))
@@ -266,7 +258,7 @@ static function X2AbilityTemplate CripplingBlow()
 
     Template = MovingMelee('M31_PA_CripplingBlow', "img:///UILibrary_XPerkIconPack.UIPerk_knife_crit", false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_SingleConsumeAll, eHostility_Offensive);
 
     SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
@@ -387,7 +379,7 @@ static function X2AbilityTemplate MutonBullRush()
     local X2Effect_Stunned                  StunnedEffect;
     local X2Effect_ApplyWeaponDamage        DamageEffect;
 
-    Template = MovingMelee('M31_PA_MutonBullRush', "img:///UILibrary_SOCombatEngineer.UIPerk_bullrush", false, false);
+    Template = MovingMelee('M31_PA_MutonBullRush', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_bullrush", false, false);
 
     Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
 
@@ -427,7 +419,7 @@ static function X2AbilityTemplate HunterMark()
     local X2Effect_PA_HunterMark    Effect;
     local X2Condition_UnitEffectsWithAbilitySource EffectCondition;
 
-    Template = SelfTargetActivated('M31_PA_HunterMark', "img:///UILibrary_SOHunter.UIPerk_thisonesmine", false);
+    Template = SelfTargetActivated('M31_PA_HunterMark', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_thisonesmine", false);
 
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
@@ -468,7 +460,7 @@ static function X2AbilityTemplate HunterWatchfulEye()
     local X2Condition_Visibility            VisibilityCondition;
     local X2Condition_UnitEffectsWithAbilitySource  TargetEffectCondition;
 
-    Template = Attack('M31_PA_HunterWatchfulEye', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, true);
+    Template = Attack('M31_PA_HunterWatchfulEye', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_watchfuleye", false, true);
 
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.BuildInterruptGameStateFn = none;
@@ -524,7 +516,7 @@ static function X2AbilityTemplate HunterWatchfulEyePassive()
 {
     local X2AbilityTemplate Template;
 
-    Template = Passive('M31_PA_HunterWatchfulEye_Passive', "img:///UILibrary_SOHunter.UIPerk_watchfuleye", false, true);
+    Template = Passive('M31_PA_HunterWatchfulEye_Passive', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_watchfuleye", false, true);
 
     Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
@@ -536,7 +528,7 @@ static function X2AbilityTemplate HunterDedication()
     local X2AbilityTemplate             Template;
     local X2Effect_PA_HunterDedication  Effect;
 
-    Template = SelfTargetActivated('M31_PA_HunterDedication', "img:///UILibrary_FavidsPerkPack.Perk_Ph_Dedication", false);
+    Template = SelfTargetActivated('M31_PA_HunterDedication', "img:///UILibrary_MeristOtherPerkIcons.Perk_Ph_Dedication", false);
 
     Template.AddShooterEffectExclusions();
 
@@ -636,7 +628,7 @@ static function X2AbilityTemplate ChargeAndShoot()
 
     Template = MovingMelee('M31_PA_ChargeAndShoot', "", false, true);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Melee, eCost_SingleConsumeAll, eHostility_Offensive);
 
     CostCondition = new class'X2Condition_CanAffordCost';
     CostCondition.AbilityName = 'M31_PA_ChargeAndShoot2';
@@ -688,22 +680,7 @@ static function X2AbilityTemplate ChargeAndShoot2()
 
 function bool ChargeAndShootDamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
 {
-    local XComGameState_Unit    AbilityOwner;
-    local StateObjectReference  ChainShot2Ref;
-    local XComGameState_Ability ChainShot2Ability;
-    local XComGameStateHistory  History;
-
-    AbilityState.NormalDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
-
-    History = `XCOMHISTORY;
-    AbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
-    ChainShot2Ref = AbilityOwner.FindAbility('M31_PA_ChargeAndShoot2');
-    ChainShot2Ability = XComGameState_Ability(History.GetGameStateForObjectID(ChainShot2Ref.ObjectID));
-    if (ChainShot2Ability != none)
-    {
-        ChainShot2Ability.NormalDamagePreview(TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
-    }
-    return true;
+    return ChainShot_DamagePreview_Static('M31_PA_ChargeAndShoot2', AbilityState, TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
 }
 
 defaultproperties

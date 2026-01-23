@@ -17,7 +17,6 @@
   <ItemGroup>
     <Folder Include="Config\" />
     <Folder Include="Config\Base\" />
-    <Folder Include="Config\Compatibility\" />
     <Folder Include="Content\" />
     <Folder Include="Localization\" />
     <Folder Include="Localization\ChosenArsenal\" />
@@ -42,6 +41,8 @@
     <Folder Include="Src\MeristPerkPack\Classes\" />
     <Folder Include="Src\MeristPerkPack_XModBase\" />
     <Folder Include="Src\MeristPerkPack_XModBase\Classes\" />
+    <Folder Include="Src\WallClimbOverride\" />
+    <Folder Include="Src\WallClimbOverride\Classes\" />
     <Folder Include="Src\XModBase_Core_3_0_0\" />
     <Folder Include="Src\XModBase_Core_3_0_0\Classes\" />
     <Folder Include="Src\XModBase_Interfaces\" />
@@ -51,6 +52,7 @@
     <Content Include="PublishedFileId.ID" />
     <Content Include="Config\XComAbilityToSlotReassignment.ini" />
     <Content Include="Config\XComExtendedGrenadeTweaks.ini" />
+    <Content Include="Config\XComGameData_SoldierSkills.ini" />
     <Content Include="Config\XComLW_Overhaul.ini" />
     <Content Include="Config\XComLW_SoldierSkills.ini" />
     <Content Include="Config\XComMZBitterfrost.ini" />
@@ -67,18 +69,17 @@
     <Content Include="Config\Base\XComGameData_CharacterStats.ini" />
     <Content Include="Config\Base\XComGameData_SoldierSkills.ini" />
     <Content Include="Config\Base\XComGameData_WeaponData.ini" />
-    <Content Include="Config\Compatibility\XComGameData_SoldierSkills.ini" />
     <Content Include="Content\M31_PA_Mutons.upk" />
     <Content Include="Content\M31_PA_Vipers.upk" />
     <Content Include="Content\M31_Perks_HoloTargeting.upk" />
     <Content Include="Content\M31_Perks_Vipers.upk" />
+    <Content Include="Content\M31_UI_3D.upk" />
     <Content Include="Content\UILibrary_MeristPerkIcons.upk" />
     <Content Include="Localization\MeristPerkPack.int" />
     <Content Include="Localization\XComGame.int" />
     <Content Include="Localization\ChosenArsenal\XComGame.int" />
     <Content Include="Localization\Enemies\XComGame.int" />
     <Content Include="Localization\Pistol\XComGame.int" />
-    <Content Include="Localization\PlayableAliens\Harrier\MeristPerkPack.int" />
     <Content Include="Localization\PlayableAliens\Harrier\XComGame.int" />
     <Content Include="Localization\PlayableAliens\Muton\XComGame.int" />
     <Content Include="Localization\PlayableAliens\Taipan\MeristPerkPack.int" />
@@ -131,6 +132,8 @@
     <Content Include="Src\MeristPerkPack\Classes\X2AbilitySet_Templar.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2AbilitySet_ViperBindAndPull.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2AbilityTarget_MovingMelee_FixedRange.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2AbilityTarget_RushAndBind.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2AbilityTarget_TeleportAlly.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2AbilityToHitCalc_MultiStandardAim.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2AbilityToHitCalc_PercentChanceWithRank.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2AbilityToHitCalc_Weight.uc" />
@@ -142,6 +145,8 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Action_TemplarShield_ApplyWeaponDamageToUnit.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Action_WaitForFinishAnim.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Character_MeristCharacters.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Condition_BindableTile.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Condition_BindRange.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_CanAffordCost.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_CanBeHealed.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_DisarmWeapon.uc" />
@@ -158,7 +163,6 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_TargetHasOneOfTheEffects.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_TooHeavyToPull.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_TooHeavyToPull_Sentinel.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Condition_UnblockedNeighborTileNew.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_Undead.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_UnitInventoryExpanded.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_UnitSize.uc" />
@@ -189,6 +193,7 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ChangeResultContextAsTarget.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ChangeUnitValue.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ChaosDriver.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ChasingFire.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ClutchShotCrit.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ColdBlooded.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_CollectBountyBonus.uc" />
@@ -209,7 +214,6 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Escalation.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Fear.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_FrostBonus.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_GetOverHereNew.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Heal.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_HealFromWeapon.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_HealOnMissionEnd.uc" />
@@ -225,8 +229,6 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MarkForDeath.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristCoveringFire.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristForwardOperator.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristLayeredArmor.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristLayeredArmorV2.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristReserveOverwatchPoints.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristTemplarShield.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_MeristTemplarShieldAnimations.uc" />
@@ -235,7 +237,6 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_NullWard.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_NXGetOverThere.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_OnTheMove.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_WeaponEffect.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Aegis.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Barbarian.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_PA_Coil.uc" />
@@ -283,8 +284,9 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_TraverseFire.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_VileMix.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_VileMixSource.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ViperBindSustainedExtended.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ViperBindSustained_Extended.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_WatchfulEye.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_WeaponEffect.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_WOTC_APA_Class_AddAbilitiesToTarget.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_WS_AlloyedCores.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_WS_ApplyBoltDamage.uc" />
@@ -299,13 +301,14 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_WS_Thrill.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2EventListener_GlobalListeners.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Item_MeristWeapons.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2NXMeleePawn.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2PathingPawn_RushAndBind.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2StatusEffects_Radiation.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_AreaTopDown.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_Chain.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_Fuse_New.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_LWRocketLauncher_NoScatter.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_MeleePathWithRadius.uc" />
-    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_NXWrath.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_MeleePath_RushAndBind.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_TeleportAlly.uc" />
     <Content Include="Src\MeristPerkPack\Classes\XCGS_Effect_BloodThirst.uc" />
     <Content Include="Src\MeristPerkPack\Classes\XCGS_Effect_HackBreakdown.uc" />
     <Content Include="Src\MeristPerkPack\Classes\XCGS_Effect_PA_TaipanVengeance.uc" />
@@ -347,6 +350,7 @@
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_Distance.uc" />
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_UnitValue.uc" />
     <Content Include="Src\MeristPerkPack_XModBase\Classes\XMBValue_Visibility.uc" />
+    <Content Include="Src\WallClimbOverride\Classes\X2Action_MoveClimbWall_Override.uc" />
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBAbilityCost_ActionPoints.uc" />
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBAbilityMultiTarget_Radius.uc" />
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBAbilityTag.uc" />
@@ -356,5 +360,8 @@
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBTargetingMethod_Grenade.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBEffectInterface.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBOverrideInterface.uc" />
+    <Content Include="Content\UILibrary_MeristOtherPerkIcons.upk" />
+    <Content Include="Content\UILibrary_XPerkIconPack.upk" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_ViperSpit_New.uc" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
 [M31_Aim X2AbilityTemplate]
 LocFriendlyName="Aim"
 LocFlyOverText="Hunker Down - Aim"
-LocLongDescription="Hunker Down now confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance to the first shot on the following turn."
-LocHelpText="Hunker Down now confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance to the first shot on the following turn."
-LocPromotionPopupText="<Bullet> The bonus granted by aim can apply to any weapon shot.<br><Bullet> Also affects Entrench, Shield Wall, Coil, and Defensive Coil."
+LocLongDescription="<font color='#0bff9b'>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance to the first shot on the following turn."
+LocHelpText="<font color='#0bff9b'>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance for the first shot on the following turn."
+LocPromotionPopupText="<Bullet> The bonus applies to any weapon shot.<br><Bullet> Affects <Ability:M31_Aim_Abilities>."
 
 [M31_AdvancedAidProtocol X2AbilityTemplate]
 LocFriendlyName="Advanced Aid Protocol"
@@ -15,12 +15,12 @@ LocHelpText="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'
 LocFriendlyName="Advanced Optics"
 LocLongDescription="Attacks against holotargeted units no longer suffer a range penalty and ignore the target's base defense. Additionally, reaction fire against holotargeted units can crit."
 LocHelpText="Attacks against holotargeted units no longer suffer a range penalty and ignore the target's base defense. Additionally, reaction fire against holotargeted units can crit."
-LocPromotionPopupText="<Bullet> Both the Holotargeter and the Holo Targeting ability are valid for this bonus."
+LocPromotionPopupText="<Bullet> Both the holotargeter and the Holo Targeting ability are valid for this bonus."
 
 [M31_AlphaStrike X2AbilityTemplate]
 LocFriendlyName="Alpha Strike"
 LocFlyOverText="Alpha Strike"
-LocLongDescription="Spend two actions to give all allies within <Ability:M31_AlphaStrike_Radius> tiles an extra action. Usable <Ability:M31_SelfCharges> time(s) per mission. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Spend two actions to give all allies within <Ability:M31_AlphaStrike_Radius> tiles an extra action. Usable <Ability:M31_SelfCharges> time(s) per mission. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Activate to grant an extra action to all allies within <Ability:M31_AlphaStrike_Radius> tiles."
 LocPromotionPopupText="<Bullet> This ability does not provide the bonus to stunned or panicked allies.<br><Bullet> Doesn't give the action point to the <Ability:ClassName>."
 
@@ -34,15 +34,15 @@ LocPromotionPopupText="<Bullet> The <Ability:ClassName> will enter concealment e
 [M31_AssaultShot X2AbilityTemplate]
 LocFriendlyName="Assault Shot"
 LocFlyOverText="Assault Shot"
-LocLongDescription="Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. <Ability:M31_FreeAction>, but cannot crit. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. <Ability:M31_FreeAction>, but cannot crit. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. <Ability:M31_FreeAction>, but cannot crit."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Cannot target environmental objects."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Cannot target environmental objects."
 
 [M31_Bandit X2AbilityTemplate]
 LocFriendlyName="Bandit"
-LocFlyOverText="Bandit: +<Ability:M31_Bandit_AmmoToReload> ammo"
-LocLongDescription="Once per turn, restore <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
-LocHelpText="Once per turn, restore <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
+LocFlyOverText="Bandit"
+LocLongDescription="Once per turn, recover <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
+LocHelpText="Once per turn, recover <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
 
 [M31_BattalionCommander X2AbilityTemplate]
 LocFriendlyName="Battle Presence"
@@ -72,14 +72,14 @@ LocHelpText="Once per turn, gain a movement-only action after throwing or launch
 [M31_Botnet X2AbilityTemplate]
 LocFriendlyName="Botnet"
 LocFlyOverText="Botnet"
-LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s). Has a <Ability:M31_SelfCooldown> turn cooldown. <Ability:M31_FreeAction>."
+LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown. <Ability:M31_FreeAction>."
 LocHelpText="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s)."
-LocPromotionPopupText="<Bullet> Lasts for <Ability:M31_Botnet_Duration> turn(s).<br><Bullet> Your squad's standard shots permanently reduce target's hack defense by <Ability:M31_Botnet_HackDefenseChange>.<br><Bullet> Hack defense reduction can stack.<br><Bullet> Botnet has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up, Pistol Shot and Snap Shot."
+LocPromotionPopupText="<Bullet> Lasts for <Ability:M31_Botnet_Duration> turn(s).<br><Bullet> Your squad's standard shots permanently reduce target's hack defense by <Ability:M31_Botnet_HackDefenseChange>.<br><Bullet> Hack defense reduction can stack.<br><Bullet> Botnet has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up, Pistol Shot and Snap Shot."
 
 [M31_BurstFire X2AbilityTemplate]
 LocFriendlyName="Burst Fire"
 LocFlyOverText="Burst Fire"
-LocLongDescription="Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst at the target with your <Ability:M31_BoundWeaponName>. Costs <Ability:M31_BurstFire_NumShots> ammo. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst at the target with your <Ability:M31_BoundWeaponName>. Costs <Ability:M31_BurstFire_NumShots> ammo. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst at the target with your <Ability:M31_BoundWeaponName>. Costs <Ability:M31_BurstFire_NumShots> ammo."
 ; LocPromotionPopupText=""
 
@@ -88,7 +88,14 @@ LocFriendlyName="Call for Fire"
 LocFlyOverText="Call for Fire"
 LocLongDescription="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
 LocHelpText="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
-LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Affected by <font color='#0bff9b'>By My Command</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Affected by <font color='#0bff9b'>By My Command</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+
+[M31_ChasingCoveringFire X2AbilityTemplate]
+LocFriendlyName="Fire Support"
+LocFlyOverText="Fire Support"
+LocLongDescription="Your overwatch can now activate to follow up your allies' attacks."
+LocHelpText="Your overwatch can now activate to follow up your allies' attacks."
+LocPromotionPopupText="<Bullet> Overwatch will activate only against the primary target of the attack. If the attack has no primary target, Overwatch will not activate.<br><Bullet> Can only activate once per turn against each target."
 
 [M31_ColdBlooded X2AbilityTemplate]
 LocFriendlyName="Cold Blooded"
@@ -100,9 +107,9 @@ LocPromotionPopupText="<Bullet> Action will not be given if your standard shot i
 [M31_CombatAdvance X2AbilityTemplate]
 LocFriendlyName="Combat Advance"
 LocFlyOverText="Combat Advance"
-LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Costs a single action and doesn't end the turn. Grants a movement-only action point on use."
-LocPromotionPopupText="<Bullet> Requires a single action.<br><Bullet> Doesn't end the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Requires a single action.<br><Bullet> Doesn't end the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_ConcussiveGrenades X2AbilityTemplate]
 LocFriendlyName="Concussive Grenades"
@@ -119,16 +126,16 @@ LocPromotionPopupText="<Bullet> Applies to grenades and rocket launcher rockets.
 
 [M31_CovertParkour X2AbilityTemplate]
 LocFriendlyName="Infiltrator"
-LocLongDescription="Gain <font color='#0bff9b'>Covert</font> and <font color='#0bff9b'>Parkour</font>, gaining reduced detection radius and the ability to climb walls."
-LocHelpText="Gain <font color='#0bff9b'>Covert</font> and <font color='#0bff9b'>Parkour</font>, gaining reduced detection radius and the ability to climb walls."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Covert</font> reduces the <Ability:ClassName>'s detection radius by <font color='#ffd700'><Ability:COVERT_DETECTION_RANGE_REDUCTION>%</font>.<br><Bullet> <font color='#0bff9b'>Parkour</font> allows the <Ability:ClassName> to climb walls."
+LocLongDescription="Allows the <Ability:ClassName> to climb walls and reduces detection radius by <Ability:M31_CovertParkour_DetectionReduction>."
+LocHelpText="Allows the <Ability:ClassName> to climb walls and reduces detection radius by <Ability:M31_CovertParkour_DetectionReduction>."
+LocPromotionPopupText=""
 
 [M31_DeathAdder X2AbilityTemplate]
 LocFriendlyName="Death Adder"
 LocFlyOverText="Death Adder"
-LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that deals <Ability:M31_DeathAdder_HPToDamage> of the target's missing HP as bonus damage and shatters sustaining effects. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that deals <Ability:M31_DeathAdder_HPToDamage> of the target's missing HP as bonus damage and shatters sustaining effects. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that deals <Ability:M31_DeathAdder_HPToDamage> of the target's missing HP as bonus damage and shatters sustaining effects."
-LocPromotionPopupText="<Bullet> Bonus damage cannot exceed <Ability:M31_DeathAdder_MaxDamageBonus> of the attack's base damage.<br><Bullet> The bonus is applied before other damage modifiers.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Bonus damage cannot exceed <Ability:M31_DeathAdder_MaxDamageBonus> of the attack's base damage.<br><Bullet> The bonus is applied before other damage modifiers.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_DeathAdder_Bonus X2AbilityTemplate]
 LocFriendlyName="Death Adder"
@@ -152,14 +159,14 @@ LocFlyOverText="Dervish"
 [M31_DisarmingShot X2AbilityTemplate]
 LocFriendlyName="Disarming Shot"
 LocFlyOverText="Disarming Shot"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing."
 LocPromotionPopupText="<Bullet> Can be used with Snap Shot.<br><Bullet> Requires <Ability:M31_DisarmingShot_AmmoCost> ammo.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
 
 [M31_DisarmingShot_SnapShot X2AbilityTemplate]
 LocFriendlyName="Disarming Shot (Snap Shot)"
 LocFlyOverText="Disarming Shot (Snap Shot)"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing."
 
 [M31_Duskborn X2AbilityTemplate]
@@ -178,7 +185,7 @@ LocHelpText="Duskborn is still active."
 LocFriendlyName="EMP Bomber"
 LocLongDescription="Gain a free EMP grenade. Additionally, your EMP grenades and bombs no longer destroy timed loot and corpses."
 LocHelpText="Your EMP grenades and bombs no longer destroy timed loot and corpses."
-LocPromotionPopupText="<Bullet> Will grant an advanced grenade once the respective project is researched."
+LocPromotionPopupText="<Bullet> Will grant an advanced grenade once the respective project is complete."
 
 [M31_EnemyUnknown X2AbilityTemplate]
 LocFriendlyName="Enemy Unknown"
@@ -196,7 +203,7 @@ LocHelpText="If no enemy can see you at the start of your turn, gain +<Ability:M
 [M31_EnergyShield X2AbilityTemplate]
 LocFriendlyName="Energy Shield"
 LocFlyOverText="Energy Shield"
-LocLongDescription="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius> tile radius for <Ability:M31_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius> tile radius for <Ability:M31_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius> tile radius for <Ability:M31_EnergyShield_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_EnergyShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
 
@@ -214,9 +221,9 @@ LocFlyOverText="Entrenched"
 [M31_Escalation X2AbilityTemplate]
 LocFriendlyName="Escalation"
 LocFlyOverText="Escalation"
-LocLongDescription="Activate this ability to gain Escalation for <Ability:M31_Escalation_Duration> turn(s). While Escalation is active, <Ability:M31_BoundWeaponName> gains +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Activate this ability to gain Escalation for <Ability:M31_Escalation_Duration> turn(s). While Escalation is active, <Ability:M31_BoundWeaponName> gains +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above 100."
-LocPromotionPopupText="<Bullet> Escalation has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Activate this ability to gain Escalation for <Ability:M31_Escalation_Duration> turn(s). While Escalation is active, <Ability:M31_BoundWeaponName> gains +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above <Ability:M31_Escalation_CritDamageBonusMinCrit>. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Activate this ability to gain Escalation for <Ability:M31_Escalation_Duration> turn(s). While Escalation is active, <Ability:M31_BoundWeaponName> gains +<Ability:M31_Escalation_CritBonus> critical chance for every crit and +<Ability:M31_Escalation_CritDamageBonus> critical damage for every <Ability:M31_Escalation_CritDamageBonusFactor> critical chance above <Ability:M31_Escalation_CritDamageBonusMinCrit>."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_EyeOnTarget X2AbilityTemplate]
 LocFriendlyName="Eye on Target"
@@ -253,9 +260,9 @@ LocFlyOverText="Future Warfare"
 [M31_GenevaSuggestion X2AbilityTemplate]
 LocFriendlyName="Geneva Suggestion"
 LocFlyOverText="Geneva Suggestion"
-LocLongDescription="Grants a free Incendiary, Acid, and Gas grenades."
-LocHelpText="Grants a free Incendiary, Acid, and Gas grenades."
-LocPromotionPopupText="<Bullet> Will grant advanced grenades once the respective projects are researched."
+LocLongDescription="Grants a free incendiary, acid, and gas grenades."
+LocHelpText="Grants a free incendiary, acid, and gas grenades."
+LocPromotionPopupText="<Bullet> Will grant advanced grenades once the respective projects are complete."
 
 [M31_ImprovedSuppression X2AbilityTemplate]
 LocFriendlyName="Improved Suppression"
@@ -279,22 +286,22 @@ LocHelpText="Makes partial cover count as full and confers +<Ability:M31_LowProf
 [M31_Maim X2AbilityTemplate]
 LocFriendlyName="Maim"
 LocFlyOverText="Maim"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn."
 LocPromotionPopupText="<Bullet> Can be used with Snap Shot.<br><Bullet> Requires <Ability:M31_Maim_AmmoCost> ammo.<br><Bullet> Useful to isolate a high-value target during an ambush.<br><Bullet> Certain enemies cannot be immobilized."
 
 [M31_Maim_SnapShot X2AbilityTemplate]
 LocFriendlyName="Maim (Snap Shot)"
 LocFlyOverText="Maim (Snap Shot)"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn."
 
 [M31_ManualOverride X2AbilityTemplate]
 LocFriendlyName="Manual Override"
 LocFlyOverText="Manual Override"
-LocLongDescription="Activate to reduce all cooldowns by <Ability:M31_ManualOverride_CooldownReduction>. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Activate to reduce all cooldowns by <Ability:M31_ManualOverride_CooldownReduction>. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocPromotionPopupText="<Bullet> Costs a single action and doesn't end the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Activate to reduce all cooldowns by <Ability:M31_ManualOverride_CooldownReduction>. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Activate to reduce all cooldowns by <Ability:M31_ManualOverride_CooldownReduction>. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocPromotionPopupText="<Bullet> Costs a single action and doesn't end the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_Malevolence X2AbilityTemplate]
 LocFriendlyName="Malevolence"
@@ -313,9 +320,9 @@ LocPromotionPopupText="<Bullet> Applies to <Ability:M31_MarauderElite_Abilities>
 
 [M31_Meld X2AbilityTemplate]
 LocFriendlyName="Meld"
-LocLongDescription="Immediately enter concealment that lasts until the end of your next turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Immediately enter concealment that lasts until the end of your next turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocPromotionPopupText="<Bullet> Cannot be used when flanked by nearby enemies.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
+LocLongDescription="Immediately enter concealment that lasts until the end of your next turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Immediately enter concealment that lasts until the end of your next turn. <Ability:M31_FreeAction>. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocPromotionPopupText="<Bullet> Cannot be used when flanked by nearby enemies.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
 LocFlyOverText="Meld"
 
 [M31_Minelayer2 X2AbilityTemplate]
@@ -328,7 +335,7 @@ LocHelpText="Grants <font color='#ffd700'>2</font> free proximity mines."
 [M31_NeurotoxicShot X2AbilityTemplate]
 LocFriendlyName="Neurotoxic Shot"
 LocFlyOverText="Neurotoxic Shot"
-LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that applies poison and disorients the target. Cannot be used against units immune to poison. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that applies poison and disorients the target. Cannot be used against units immune to poison. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that applies poison and disorients the target. Cannot be used against units immune to poison."
 LocPromotionPopupText="<Bullet> The shot deals standard damage, but cannot be used against units immune to poison.<br>"
 
@@ -341,14 +348,14 @@ LocPromotionPopupText="<Bullet> Mobility penalty is multiplicate with other mobi
 [M31_OverchargedBlast X2AbilityTemplate]
 LocFriendlyName="Overcharged Blast"
 LocFlyOverText="Overcharged Blast"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that has +<Ability:M31_OverchargedBlast_Shred> shred and +<Ability:M31_OverchargedBlast_Rupture> rupture. Guaranteed to crit on hit. Requires <Ability:M31_OverchargedBlast_AmmoCost> ammo and has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that has +<Ability:M31_OverchargedBlast_Shred> shred and +<Ability:M31_OverchargedBlast_Rupture> rupture. Guaranteed to crit on hit. Requires <Ability:M31_OverchargedBlast_AmmoCost> ammo and has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special shot that has +<Ability:M31_OverchargedBlast_Shred> shred and +<Ability:M31_OverchargedBlast_Rupture> rupture. Guaranteed to crit on hit."
 LocPromotionPopupText="<Bullet> Rupture from multiple attacks doesn't stack. Higher rupture value overwrites the lower one.<br><Bullet> The rupture of the attack is equal to the sum of the rupture from the weapon, ammo and ability."
 
 [M31_Overpower X2AbilityTemplate]
 LocFriendlyName="Overpower"
 LocFlyOverText="Overpower"
-LocLongDescription="Special melee attack against any enemy within movement range. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Special melee attack against any enemy within movement range. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special melee attack against any enemy within movement range. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units."
 LocPromotionPopupText="<Bullet> Shred is applied as a separate damage instance and is not affected by armor piercing and damage modifiers."
 
@@ -367,9 +374,9 @@ LocPromotionPopupText="<Bullet> Negates the aim penalty when shooting at targets
 [M31_Pinpoint X2AbilityTemplate]
 LocFriendlyName="Pinpoint"
 LocFlyOverText="Pinpoint"
-LocLongDescription="Consume all available action points to take a special shot, gaining additional aim, critical chance, and critical damage for each standard and non-movement action consumed. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Consume all available action points to take a special shot, gaining additional aim, critical chance, and critical damage for each standard and non-movement action consumed. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special shot that has increased aim, critical chance and critical damage for each action point consumed."
-LocPromotionPopupText="<Bullet> Pinpoint gains +<Ability:M31_Pinpoint_AimPerAction> aim and +<Ability:M31_Pinpoint_CritPerAction> critical chance per action consumed.<br><Bullet> Pinpoint's critical damage is increased by <Ability:M31_Pinpoint_CritDamageBase> + <Ability:M31_Pinpoint_CritDamagePerAction> per action consumed.<br><Bullet> Pinpoint has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Pinpoint gains +<Ability:M31_Pinpoint_AimPerAction> aim and +<Ability:M31_Pinpoint_CritPerAction> critical chance per action consumed.<br><Bullet> Pinpoint's critical damage is increased by <Ability:M31_Pinpoint_CritDamageBase> + <Ability:M31_Pinpoint_CritDamagePerAction> per action consumed.<br><Bullet> Pinpoint has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_Pinpoint_Bonus X2AbilityTemplate]
 LocFriendlyName="Pinpoint"
@@ -381,8 +388,8 @@ LocHelpText="Your damaging grenades inflict bleeding, dealing <Ability:M31_PipeB
 
 [M31_PriorityFocus X2AbilityTemplate]
 LocFriendlyName="Priority Focus"
-LocLongDescription="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> additional damage against holotargeted units."
-LocHelpText="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> additional damage against holotargeted units."
+LocLongDescription="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted units."
+LocHelpText="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted units."
 LocPromotionPopupText="<Bullet> Applies to all ranged attacks.<br><Bullet> Both the Holotargeter and the Holo Targeting ability are valid for this bonus."
 
 [M31_RapidDumping X2AbilityTemplate]
@@ -428,9 +435,9 @@ LocPromotionPopupText="<Bullet> Costs a single action.<br><Bullet> Doesn't end t
 [M31_SawedOffSweeper X2AbilityTemplate]
 LocFriendlyName="Buckshot"
 LocFlyOverText="Buckshot"
-LocLongDescription="Take a cone-based shot with your <Ability:M31_BoundWeaponName>. Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>, gaining bonus length and width for each additional ammo consumed. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a cone-based shot with your <Ability:M31_BoundWeaponName>. Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>, gaining bonus length and width for each additional ammo consumed. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Cone-based <Ability:M31_BoundWeaponName> shot. Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>, gaining bonus length and width for each additional ammo consumed."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>.<br><Bullet> The cone is <Ability:M31_SawedOffSweeper_Length> long and <Ability:M31_SawedOffSweeper_Width> wide.<br><Bullet> The length is increased by <Ability:M31_SawedOffSweeper_LengthPerAmmo> and the width is increased by <Ability:M31_SawedOffSweeper_WidthPerAmmo> for each additional ammo consumed.<br><Bullet> Affected by <font color='#0bff9b'>Hipfire</font>: <Ability:M31_SawedOffSweeper_bHipfire>.<br><Bullet> Allies in the area of effect can take damage.<br><Bullet> The spread pattern is blocked by heavy cover."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>.<br><Bullet> The cone is <Ability:M31_SawedOffSweeper_Length> long and <Ability:M31_SawedOffSweeper_Width> wide.<br><Bullet> The length is increased by <Ability:M31_SawedOffSweeper_LengthPerAmmo> and the width is increased by <Ability:M31_SawedOffSweeper_WidthPerAmmo> for each additional ammo consumed.<br><Bullet> Affected by <font color='#0bff9b'>Hipfire</font>: <Ability:M31_SawedOffSweeper_bHipfire>.<br><Bullet> Allies in the area of effect can take damage.<br><Bullet> The spread pattern is blocked by heavy cover."
 
 [M31_ShadowstepAid X2AbilityTemplate]
 LocFriendlyName="Shadowstep Aid"
@@ -449,14 +456,14 @@ LocPromotionPopupText="<Bullet> The bonus applies to all attacks as long as the 
 LocFriendlyName="Shock Grenadier"
 LocLongDescription="Gain a Grenade-only slot and a free EMP grenade. Additionally, grenades no longer have a cooldown."
 LocHelpText="Grenades no longer have a cooldown."
-LocPromotionPopupText="<Bullet> Will grant an EMP bomb once the respective project is researched."
+LocPromotionPopupText="<Bullet> Will grant an EMP bomb once the respective project is complete."
 
 [M31_ShotgunWedding X2AbilityTemplate]
 LocFriendlyName="Shotgun Wedding"
 LocFlyOverText="Shotgun Wedding"
-LocLongDescription="Fire up to <Ability:M31_ShotgunWedding_MaxNumShots> short-range cone-based attacks against visible enemies in the cone. Each attack can hit multiple targets. Has a <Ability:M31_SelfCooldown> turn cooldown."
-LocHelpText="Fire up to <Ability:M31_ShotgunWedding_MaxNumShots> short-range cone-based attacks against visible enemies in the cone."
-LocPromotionPopupText="<Bullet> Allies in the area of effect can take damage.<br><Bullet> Requires <Ability:M31_ShotgunWedding_ActivationAmmoCost> ammo to activate. Consumes <Ability:M31_ShotgunWedding_AmmoCost> upon activation and <Ability:M31_ShotgunWedding_AmmoCostPerShot> for each shot.<br><Bullet> The initial cone and the attack cone are <Ability:M31_ShotgunWedding_Length> tiles long and <Ability:M31_ShotgunWedding_Width> tiles wide. Attack cone is centered on the primary target the attack is performed against.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Can only be used with a shotgun."
+LocLongDescription="Fire up to <Ability:M31_ShotgunWedding_MaxNumShots> short-range cone-based attacks against visible enemies in the cone. Each attack can hit multiple targets. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Fire up to <Ability:M31_ShotgunWedding_MaxNumShots> short-range cone-based attacks against visible enemies in the cone. Each attack can hit multiple targets."
+LocPromotionPopupText="<Bullet> Allies in the area of effect can take damage.<br><Bullet> Requires <Ability:M31_ShotgunWedding_ActivationAmmoCost> ammo to activate. Consumes <Ability:M31_ShotgunWedding_AmmoCost> upon activation and <Ability:M31_ShotgunWedding_AmmoCostPerShot> for each shot.<br><Bullet> The initial cone and the attack cone are <Ability:M31_ShotgunWedding_Length> tiles long and <Ability:M31_ShotgunWedding_Width> tiles wide. Attack cone is centered on the primary target the attack is performed against.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Can only be used with a shotgun."
 
 [M31_ShotgunWedding_Attack X2AbilityTemplate]
 LocFriendlyName="Shotgun Wedding"
@@ -478,7 +485,7 @@ LocPromotionPopupText="<Bullet> Flying enemies are always considered unflankable
 LocFriendlyName="Smoke Grenadier"
 LocLongDescription="Gain a Grenade-only slot and a free smoke grenade. Additionally, grenades no longer have a cooldown."
 LocHelpText="Grenades no longer have a cooldown."
-LocPromotionPopupText="<Bullet> Will grant a smoke bomb once the respective project is researched."
+LocPromotionPopupText="<Bullet> Will grant a smoke bomb once the respective project is complete."
 
 [M31_SniperElite X2AbilityTemplate]
 LocFriendlyName="Sniper Elite"
@@ -502,7 +509,7 @@ LocPromotionPopupText="<Bullet> Negates the aim penalty when shooting at targets
 [M31_Sparkfire X2AbilityTemplate]
 LocFriendlyName="Sparkfire"
 LocFlyOverText="Sparkfire"
-LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that sets the target on fire, dealing <Ability:M31_Sparkfire_BurnDamage> damage per turn, and detonates carried explosives. Requires <Ability:M31_Sparkfire_AmmoCost> ammo and has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a special shot with your <Ability:M31_BoundWeaponName> that sets the target on fire, dealing <Ability:M31_Sparkfire_BurnDamage> damage per turn, and detonates carried explosives. Requires <Ability:M31_Sparkfire_AmmoCost> ammo and has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that sets the target on fire, dealing <Ability:M31_Sparkfire_BurnDamage> damage per turn, and detonates carried explosives. Requires <Ability:M31_Sparkfire_AmmoCost> ammo."
 ; LocPromotionPopupText=""
 
@@ -535,9 +542,9 @@ LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Resupply Ammo</font>: Thro
 [M31_SuppressingFire X2AbilityTemplate]
 LocFriendlyName="Suppressing Fire"
 LocFlyOverText="Suppressing Fire"
-LocLongDescription="Take a shot with your <Ability:M31_BoundWeaponName>. If the target is still alive, suppress them. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Take a shot with your <Ability:M31_BoundWeaponName>. If the target is still alive, suppress them. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Take a shot with your <Ability:M31_BoundWeaponName>. If the target is still alive, suppress them."
-LocPromotionPopupText="<Bullet> Suppressing Fire requires <font color='#ffd700'>3</font> ammo to use, but the shot consumes only <font color='#ffd700'>1</font>.<br><Bullet> Suppressing Fire has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Suppressing Fire requires <font color='#ffd700'>3</font> ammo to use, but the shot consumes only <font color='#ffd700'>1</font>.<br><Bullet> Suppressing Fire has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_SuppressingFire_Trigger X2AbilityTemplate]
 LocFriendlyName="Suppressing Fire"
@@ -558,7 +565,7 @@ LocHelpText="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'
 [M31_TrackingFire X2AbilityTemplate]
 LocFriendlyName="Tracking Fire"
 LocFlyOverText="Tracking Fire"
-LocLongDescription="Take a shot at the target. <Ability:M31_FreeAction>. Counts as reaction fire. Has a <Ability:M31_SelfCooldown> turn cooldown. The cooldown is reduced by <Ability:M31_TrackingFire_CooldownReduction> after each melee attack."
+LocLongDescription="Take a shot at the target. <Ability:M31_FreeAction>. Counts as reaction fire. Has a <Ability:M31_SelfCooldown>-turn cooldown. The cooldown is reduced by <Ability:M31_TrackingFire_CooldownReduction> after each melee attack."
 LocHelpText="Take a shot at the target. <Ability:M31_FreeAction>. Counts as reaction fire. The cooldown is reduced by <Ability:M31_TrackingFire_CooldownReduction> after each melee attack."
 LocPromotionPopupText="<Bullet> Can be used while the soldier has at least one standard, Run and Gun or movement-only action.<br><Bullet> Cooldown can be reset by Bladestorm and other reaction attacks: <Ability:M31_TrackingFire_bAllowResetFromBladestorm>."
 
@@ -603,9 +610,9 @@ LocPromotionPopupText="<Bullet> Standard shot abilities also include Standard Sn
 [M31_Unload X2AbilityTemplate]
 LocFriendlyName="Unload"
 LocFlyOverText="Unload"
-LocLongDescription="Fire your <Ability:M31_BoundWeaponName> at the target until you run out of ammo or hit <Ability:M31_Unload_MaxShots> shots. Each shot has a -<Ability:M31_Unload_AimPenalty> aim penalty. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Fire your <Ability:M31_BoundWeaponName> at the target until you run out of ammo or hit <Ability:M31_Unload_MaxShots> shots. Each shot has a -<Ability:M31_Unload_AimPenalty> aim penalty. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Fire your <Ability:M31_BoundWeaponName> at the target until you run out of ammo or hit <Ability:M31_Unload_MaxShots> shots. Each shot has a -<Ability:M31_Unload_AimPenalty> aim penalty."
-LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> shots can crit: <Ability:M31_Unload_bAllowCrit>.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> shots can crit: <Ability:M31_Unload_bAllowCrit>.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_Unload X2AbilityTemplate]
 LocFriendlyName="Unload"
@@ -661,8 +668,8 @@ LocFlyOverText="Bloodlet"
 
 [M31_ThermalShock X2AbilityTemplate]
 LocFriendlyName="Thermal Shock"
-LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks cause Thermal Shock, reducing the target's aim by <Ability:M31_ThermalShock_AimPenalty> and defense by <Ability:M31_ThermalShock_DefensePenalty> for <Ability:M31_ThermalShock_Duration> turn(s). Penalties are doubled against enemies immune to frost."
-LocHelpText="Your <Ability:M31_BoundWeaponName> attacks cause Thermal Shock, reducing the target's aim by <Ability:M31_ThermalShock_AimPenalty> and defense by <Ability:M31_ThermalShock_DefensePenalty> for <Ability:M31_ThermalShock_Duration> turn(s). Penalties are doubled against enemies immune to frost."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks reduce the target's aim by <Ability:M31_ThermalShock_AimPenalty> and defense by <Ability:M31_ThermalShock_DefensePenalty> for <Ability:M31_ThermalShock_Duration> turn(s). Penalties are doubled against enemies immune to frost."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks reduce the target's aim by <Ability:M31_ThermalShock_AimPenalty> and defense by <Ability:M31_ThermalShock_DefensePenalty> for <Ability:M31_ThermalShock_Duration> turn(s). Penalties are doubled against enemies immune to frost."
 LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks.<br><Bullet> Multiple applications of the debuff will not stack."
 
 [M31_ThermalShock_Attack X2AbilityTemplate]

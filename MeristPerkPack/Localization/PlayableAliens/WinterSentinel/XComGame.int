@@ -34,7 +34,7 @@ LocFlyOverText="Dominance"
 
 [M31_PA_WS_RagingSerpent X2AbilityTemplate]
 LocFriendlyName="Raging Serpent"
-LocLongDescription="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Make a special melee attack against any non-large enemy within movement range. Deals a moderate amount of damage and stuns the target for <Ability:M31_PA_WS_RagingSerpent_StunDuration> actions."
 LocPromotionPopupText="<Bullet> Has +<Ability:M31_PA_WS_RagingSerpent_AimBonus> aim and +<Ability:M31_PA_WS_RagingSerpent_CritBonus> crit.<br><Bullet> Deals <Ability:M31_PA_WS_RagingSerpent_Damage> points of damage.<br><Bullet> Can be used while disoriented: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileDisoriented><br><Bullet> Can be used while burning: <Ability:M31_PA_WS_RagingSerpent_bAllowWhileBurning>."
 LocFlyOverText="Raging Serpent"
@@ -131,7 +131,7 @@ LocPromotionPopupText="<Bullet> The effect updates when the units finish their m
 
 [M31_PA_WS_RebelYell X2AbilityTemplate]
 LocFriendlyName="Rebel Yell"
-LocLongDescription="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> turn(s). Costs a single action and doesn't end the turn. Has an <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> turn(s). Costs a single action and doesn't end the turn. Has an <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Grant +<Ability:M31_PA_WS_RebelYell_AimBonus_Alt> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus_Alt> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus_Alt> mobility to allied vipers and yourself. Most other biological and cybernetic allies will gain +<Ability:M31_PA_WS_RebelYell_AimBonus> aim, +<Ability:M31_PA_WS_RebelYell_WillBonus> will and +<Ability:M31_PA_WS_RebelYell_MobilityBonus> mobility instead. Lasts for <Ability:M31_PA_WS_RebelYell_Duration> turn(s). Costs a single action and doesn't end the turn."
 LocPromotionPopupText="<Bullet> Has a <Ability:M31_PA_WS_RebelYell_Radius> tile radius.<br><Bullet> The bonus applies to biological as well as cybernetic allies, but not to fully robotic units like SPARKs.<br><Bullet> Applies to panicking allies: <Ability:M31_PA_WS_RebelYell_bAppliesToPanicked>. Clears panic: <Ability:M31_PA_WS_RebelYell_bClearsPanic>.<br><Bullet> Applies to mind controlled allies: <Ability:M31_PA_WS_RebelYell_bAppliesToMindControlled>. Clears mind control: <Ability:M31_PA_WS_RebelYell_bClearsMindControl>.<br><Bullet> Applies to stunned allies: <Ability:M31_PA_WS_RebelYell_bAppliesToStunned>. Clears stun: <Ability:M31_PA_WS_RebelYell_bClearsStun>.<br><br><font color='#909497'>\"Fuses burn and wheels will turn, the ones who lie will never learn...\"</font>"
 LocFlyOverText="Rebel Yell"
@@ -148,7 +148,7 @@ LocFlyOverText="Northern Winds"
 
 [M31_PA_WS_MetabolicBoost X2AbilityTemplate]
 LocFriendlyName="Metabolic Boost"
-LocLongDescription="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation. Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocLongDescription="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Coil tightly, gaining +<Ability:M31_PA_WS_MetabolicBoost_DodgeBonus> dodge until start of the next turn. Restores <Ability:M31_PA_WS_MetabolicBoost_Heal> HP and removes environmental ailments and disorientation."
 LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Metabolic Boost</font> removes the same environmental effects a Medikit does.<br><Bullet> Dodge bonus applies even when the <Ability:ClassName> is out of cover."
 

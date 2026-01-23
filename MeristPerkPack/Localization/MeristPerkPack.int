@@ -20,6 +20,15 @@ strFreeAction               = "Free action"
 +LocalizedAbilitiesToHide   = "M31_DisarmingShot_SnapShot"
 +LocalizedAbilitiesToHide   = "M31_Maim_SnapShot"
 
++LocalizedAbilitiesToHide   = "ShadowOps_Entrench"
++LocalizedAbilitiesToHide   = "Entrench"
++LocalizedAbilitiesToHide   = "HunkerDownNoAnim"
++LocalizedAbilitiesToHide   = "Exv_HunkerDown"
++LocalizedAbilitiesToHide   = "M31_Entrench_Trigger"
++LocalizedAbilitiesToHide   = "M31_ENEMY_CoilHunker_Trigger"
++LocalizedAbilitiesToHide   = "M31_ENEMY_AdvancedCoilHunker_Trigger"
++LocalizedAbilitiesToHide   = "M31_ENEMY_CoilHunkerDamaged_Trigger"
+
 [Help]
 
 M31_CoveringFire_FlyoverText                = ": Covering Fire"
@@ -52,6 +61,9 @@ M31_Malevolence_Radiation_DebuffText        = "The unit's damage is reduced by <
 M31_Malevolence_Burning_DebuffText          = "The unit takes <Ability:M31_Malevolence_Burning_DOTDamageBonus> additional damage from damage-over-time effects."
 M31_Malevolence_Poisoned_DebuffText         = "The unit's critical chance is reduced by <Ability:M31_Malevolence_Poisoned_CritPenalty> and graze chance increased by <Ability:M31_Malevolence_Poisoned_GrazePenalty>."
 M31_Malevolence_Frost_DebuffText            = "The unit's aim and defense are reduced."
+
+M31_PA_HarrierVileMix_FriendlyName          = "Vile Mix"
+M31_PA_HarrierVileMix_DebuffText            = "This units takes <Ability:M31_PA_HarrierVileMix_DOTDamageBonus_Debuff> additional damage from damage-over-time effects."
 
 M31_DisarmingShot_DebuffText                = "The unit is disarmed. Its aim and critical chance are reduced."
 M31_ThermalShock_DebuffText                 = "The unit is affected by Thermal Shock and suffering aim and defense penalties."

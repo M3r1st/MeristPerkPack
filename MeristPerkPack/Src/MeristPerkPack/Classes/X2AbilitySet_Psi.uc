@@ -28,6 +28,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(NullWard());
     Templates.AddItem(ShadowPhase());
     Templates.AddItem(ShadowPhaseFortress());
+    Templates.AddItem(TeleportAlly());
 
     Templates.AddItem(Compulsion());
     Templates.AddItem(GreatestChampion());
@@ -242,11 +243,10 @@ static function X2AbilityTemplate NullWard()
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
     local X2Effect_PersonalShield           ShieldEffect;
-    local X2Effect_RemoveEffects            RemoveEffect;
 
     Template = SelfTargetActivated('M31_Psi_NullWard', "img:///UILibrary_PerkIcons.UIPerk_aethershift", false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Defensive);
 
     Template.Hostility = eHostility_Defensive;
 
@@ -269,12 +269,6 @@ static function X2AbilityTemplate NullWard()
     RadiusMultiTarget.bIgnoreBlockingCover = true;
     RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-    
-    RemoveEffect = new class'X2Effect_RemoveEffects';
-    RemoveEffect.EffectNamesToRemove.AddItem('M31_Psi_NullWard');
-    RemoveEffect.bDoNotVisualize = true;
-    Template.AddTargetEffect(RemoveEffect);
-    Template.AddMultiTargetEffect(RemoveEffect);
 
     ShieldEffect = new class'X2Effect_PersonalShield';
     ShieldEffect.EffectName = 'M31_Psi_NullWard';
@@ -355,6 +349,63 @@ static function X2AbilityTemplate ShadowPhaseFortress()
 
     Template.AdditionalAbilities.AddItem('M31_ShadowPhase');
     Template.AdditionalAbilities.AddItem('Fortress');
+
+    return Template;
+}
+
+static function X2AbilityTemplate TeleportAlly()
+{
+    local X2AbilityTemplate             Template;
+    local X2AbilityTarget_TeleportAlly  TeleportAllyTarget;
+    local X2Condition_UnitProperty      UnitPropertyCondition;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_TeleportAlly');
+
+    Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_teleportally";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.DisplayTargetHitChance = false;
+
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_Single, eHostility_Neutral);
+
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityToHitCalc = default.DeadEye;
+    TeleportAllyTarget = new class'X2AbilityTarget_TeleportAlly';
+    TeleportAllyTarget.Range = `TILESTOMETERS(`GetConfigInt("M31_Psi_TeleportAlly_Range"));
+    TeleportAllyTarget.bRequireVisibility = `GetConfigBool("M31_Psi_TeleportAlly_bRequireVisibility");
+    Template.AbilityTargetStyle = TeleportAllyTarget;
+    Template.TargetingMethod = class'X2TargetingMethod_TeleportAlly';
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
+
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeAlive = false;
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = false;
+    UnitPropertyCondition.ExcludeHostileToSource = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.ExcludeLargeUnits = true;
+    UnitPropertyCondition.ExcludeTurret = true;
+    UnitPropertyCondition.RequireSquadmates = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+
+    AddActionPointCost(Template, eCost_Single);
+    AddCooldown(Template, `GetConfigInt("M31_Psi_TeleportAlly_Cooldown"));
+
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+    Template.ModifyNewContextFn = class'X2Ability_ChosenWarlock'.static.TeleportAlly_ModifyActivatedAbilityContext;
+    Template.BuildNewGameStateFn = class'X2Ability_ChosenWarlock'.static.TeleportAlly_BuildGameState;
+    Template.BuildVisualizationFn = class'X2Ability_ChosenWarlock'.static.TeleportAlly_BuildVisualization;
+
+    Template.bShowActivation = true;
+    Template.bFrameEvenWhenUnitIsHidden = true;
+    Template.CinescriptCameraType = "ChosenWarlock_TeleportAlly";
 
     return Template;
 }

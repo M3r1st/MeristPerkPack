@@ -67,6 +67,7 @@ struct TextColorByClass
 var config array<TextColorByClass> SpecialColors;
 var config string DefaultSpecialColor;
 
+var privatewrite config array<string> Aim_Abilities;
 var privatewrite config array<string> ControlledDetonation_Abilities;
 var privatewrite config array<string> RapidDumping_Abilities;
 var privatewrite config array<string> FutureWarfare_Abilities;
@@ -276,6 +277,9 @@ static function GetLocalizedAbilityLists()
             else
                 OutString = default.LocalizedAbilityNames[Index];
 
+            if (default.Aim_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
+                default.Aim_Abilities.AddItem(OutString);
+
             if (class'X2Effect_ControlledDetonation'.default.ControlledDetonation_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.ControlledDetonation_Abilities.AddItem(OutString);
 
@@ -301,6 +305,7 @@ static function GetLocalizedAbilityLists()
                 default.Serpentine_Abilities.AddItem(OutString);
         }
     }
+    default.Aim_Abilities.Sort(SortAbilities);
     default.ControlledDetonation_Abilities.Sort(SortAbilities);
     default.RapidDumping_Abilities.Sort(SortAbilities);
     default.FutureWarfare_Abilities.Sort(SortAbilities);
@@ -1010,6 +1015,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_BurstFire_Cooldown":
         case "M31_BurstFire_NumShots":
         case "M31_CallForFire_Radius":
+        case "M31_ChasingCoveringFire_ActivationsPerTargetPerTurn":
         case "M31_CombatAdvance_Cooldown":
         case "M31_ConcussiveGrenades_StunDuration":
         case "M31_Dervish_CooldownReduction":
@@ -1036,6 +1042,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Escalation_CritBonus":
         case "M31_Escalation_CritDamageBonus":
         case "M31_Escalation_CritDamageBonusFactor":
+        case "M31_Escalation_CritDamageBonusMinCrit":
         case "M31_Escalation_Duration":
         case "M31_ForwardOperator_ActivationsPerTurn":
         case "M31_Frostbane_CritBonus":
@@ -1132,6 +1139,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_AdvancedOptics_DefenseReduction":
         case "M31_AdvancedOptics_PenaltyModifier":
         case "M31_ConcussiveGrenades_StunChance":
+        case "M31_CovertParkour_DetectionReduction":
         case "M31_DeathAdder_HPToDamage":
         case "M31_DeathAdder_MaxDamageBonus":
         case "M31_Malevolence_Radiation_DamageReductionPrc":
@@ -1244,6 +1252,10 @@ static function bool GetLocalizedListOutStrings(string InString, out string OutS
 {
     switch (InString)
     {
+        case "M31_Aim_Abilities":
+            OutString = GetStringFromLocalizedList(default.Aim_Abilities);
+            return true;
+
         case "M31_ControlledDetonation_Abilities":
             OutString = GetStringFromLocalizedList(default.ControlledDetonation_Abilities);
             return true;
@@ -1905,6 +1917,7 @@ static function bool GetPsiOutStrings(string InString, out string OutString, Obj
         case "M31_Psi_NullWard_Radius":
         case "M31_Psi_NullWard_ShieldPriority":
         case "M31_Psi_NullWard_Duration":
+        case "M31_Psi_TeleportAlly_Range":
         case "M31_Psi_GreatestChampion_CooldownReduction":
         case "M31_Psi_GreatestChampion_DefensePenalty":
         case "M31_Psi_Blend_Duration":
@@ -1927,6 +1940,7 @@ static function bool GetPsiOutStrings(string InString, out string OutString, Obj
             return true;
 
         case "M31_Psi_Meltdown_bApplyRadiation":
+        case "M31_Psi_TeleportAlly_bRequireVisibility":
         case "M31_Psi_Blend_bRemoveWhenSourceImpaired":
         case "M31_Psi_Stealth_bRemoveWhenSourceImpaired":
         case "M31_Psi_Cryotherapy_bSharedCooldown":

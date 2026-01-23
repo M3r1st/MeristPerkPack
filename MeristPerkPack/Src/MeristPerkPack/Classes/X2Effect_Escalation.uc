@@ -3,6 +3,7 @@ class X2Effect_Escalation extends X2Effect_Persistent;
 var int CritBonus;
 var int CritDamageBonus;
 var int CritDamageBonusFactor;
+var int CritDamageBonusMinCrit;
 var bool bMatchSourceWeapon;
 
 function GetToHitModifiers(
@@ -61,7 +62,7 @@ function int GetAttackingDamageModifier(
                 return 0;
 
             CritChance = HackBreakdown.GetUncappedHitChance(AbilityTemplate, AbilityState, XComGameState_Unit(TargetDamageable), eHit_Crit);
-            CritChance = Max(0, CritChance - 100);
+            CritChance = Max(0, CritChance - CritDamageBonusMinCrit);
             if (NewGameState != none)
             {
                 HackBreakdown = XCGS_Effect_HackBreakdown(NewGameState.ModifyStateObject(HackBreakdown.Class, HackBreakdown.ObjectID));

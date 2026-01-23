@@ -1,4 +1,4 @@
-class X2Effect_EnhancedEnergyShield extends X2Effect_PersonalShield config(GameData_SoldierSkills);
+class X2Effect_EnhancedEnergyShield extends X2Effect_PersonalShield dependson(X2AbilityCooldown_Extended) config(GameData_SoldierSkills);
 
 struct AdditionalShieldAmountFromConfigInfo
 {
@@ -7,6 +7,7 @@ struct AdditionalShieldAmountFromConfigInfo
 };
 
 var config array<AdditionalShieldAmountFromConfigInfo> AdditionalShieldAmountFromConfig;
+var config array<CooldownModifierInfo> EnergyShield_CooldownModifiers;
 var privatewrite name EnergyShield_ShieldRemovedEventName;
 
 simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)

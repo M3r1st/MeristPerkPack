@@ -318,9 +318,9 @@ static function X2AbilityTemplate RagingSerpent()
     local X2Effect_Knockback                KnockbackEffect;
     local array<name>                       SkipExclusions;
 
-    Template = MovingMelee('M31_PA_WS_RagingSerpent', "img:///UILibrary_SOCombatEngineer.UIPerk_bullrush", false, false);
+    Template = MovingMelee('M31_PA_WS_RagingSerpent', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_bullrush", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_SingleConsumeAll, eHostility_Offensive);
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_WS_RagingSerpent_AimBonus");
@@ -561,7 +561,7 @@ static function X2AbilityTemplate Fracture()
     local X2AbilityTemplate                 Template;
     local X2Effect_WS_Fracture              Effect;
 
-    Template = Passive('M31_PA_WS_Fracture', "img:///UILibrary_SOCombatEngineer.UIPerk_fracture", false, true);
+    Template = Passive('M31_PA_WS_Fracture', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_fracture", false, true);
     
     Effect = new class'X2Effect_WS_Fracture';
     Effect.AimBonus = `GetConfigInt("M31_PA_WS_Fracture_AimBonus");
@@ -769,7 +769,7 @@ static function X2AbilityTemplate RebelYell()
 
     Template = SelfTargetActivated('M31_PA_WS_RebelYell', "img:///UILibrary_LWAlienPack.LWCenturion_AbilityWarCry64");
     
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Neutral);
     
     RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
     RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_PA_WS_RebelYell_Radius"));
@@ -823,8 +823,10 @@ static function X2AbilityTemplate RebelYell()
     Template.AddTargetEffect(Effect);
     Template.AddMultiTargetEffect(Effect);
 
-    Template.bShowActivation = false;
     Template.bSkipFireAction = false;
+    Template.bShowActivation = false;
+
+    Template.CustomFireAnim = 'HL_M31_Yell';
 
     Template.BuildVisualizationFn = RebelYell_BuildVisualization;
 
@@ -838,46 +840,58 @@ static function X2AbilityTemplate RebelYell()
 
 function RebelYell_BuildVisualization(XComGameState VisualizeGameState)
 {
-    local XComGameStateHistory              History;
-    local XComGameStateContext_Ability      Context;
-    local StateObjectReference              InteractingUnitRef;
-    local VisualizationActionMetadata       EmptyTrack, BuildTrack, TargetTrack;
-    local X2Action_PlayAnimation            PlayAnimationAction;
-    local X2Action_PlaySoundAndFlyOver      SoundAndFlyover, SoundAndFlyoverTarget;
-    local XComGameState_Ability             Ability;
-    local XComGameState_Effect              EffectState;
-    local XComGameState_Unit                UnitState;
-    
+    local XComGameStateHistory          History;
+    local XComGameStateContext_Ability  Context;
+
+    local StateObjectReference          SourceUnitRef;
+    local StateObjectReference          TargetUnitRef;
+    local X2AbilityTemplate             AbilityTemplate;
+
+    local VisualizationActionMetadata   EmptyTrack;
+    local VisualizationActionMetadata   SourceTrack;
+    local VisualizationActionMetadata   TargetTrack;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyOver;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyoverTarget;
+    local X2Action_PlayAnimation        PlayAnimationAction;
+
+    local bool                          bGoodAbility;
+    local EWidgetColor                  FlyoverColor;
+    local int                           Index;
+
     History = `XCOMHISTORY;
     Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-    Ability = XComGameState_Ability(History.GetGameStateForObjectID(Context.InputContext.AbilityRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1));
-    InteractingUnitRef = Context.InputContext.SourceObject;
-    BuildTrack = EmptyTrack;
-    BuildTrack.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-    BuildTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
-    BuildTrack.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
-    SoundAndFlyover = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(BuildTrack, Context, false, BuildTrack.LastActionAdded));
-    SoundAndFlyover.SetSoundAndFlyOverParameters(none, Ability.GetMyTemplate().LocFlyOverText, 'None', eColor_Xcom);
+    AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
 
-    PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(BuildTrack, context, false, BuildTrack.LastActionAdded));
-    PlayAnimationAction.Params.AnimName = 'HL_M31_Yell';
+    SourceUnitRef = Context.InputContext.SourceObject;
+
+    SourceTrack = EmptyTrack;
+    SourceTrack.StateObject_OldState = History.GetGameStateForObjectID(SourceUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+    SourceTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(SourceUnitRef.ObjectID);
+    SourceTrack.VisualizeActor = History.GetVisualizer(SourceUnitRef.ObjectID);
+
+    bGoodAbility = XComGameState_Unit(SourceTrack.StateObject_NewState).IsFriendlyToLocalPlayer();
+    FlyoverColor = bGoodAbility ? eColor_Xcom : eColor_Bad;
+
+    SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    SoundAndFlyOver.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', FlyoverColor, AbilityTemplate.IconImage);
+
+    PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(SourceTrack, Context, false, SourceTrack.LastActionAdded));
+    PlayAnimationAction.Params.AnimName = AbilityTemplate.CustomFireAnim;
     PlayAnimationAction.bFinishAnimationWait = true;
 
-    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+    for (Index = 0; Index < Context.InputContext.MultiTargets.Length; Index++)
     {
-        if (EffectState.GetX2Effect().EffectName == class'X2Effect_WS_RebelYell'.default.EffectName)
+        TargetUnitRef = Context.InputContext.MultiTargets[Index];
+        if (TargetUnitRef.ObjectID != 0 && TargetUnitRef.ObjectID != SourceUnitRef.ObjectID)
         {
             TargetTrack = EmptyTrack;
-            UnitState = XComGameState_Unit(VisualizeGameState.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-            if ((UnitState != none) && (EffectState.StatChanges.Length > 0))
-            {
-                TargetTrack.StateObject_NewState = UnitState;
-                TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(UnitState.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-                TargetTrack.VisualizeActor = UnitState.GetVisualizer();
-                SoundandFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, Context, false, TargetTrack.LastActionAdded));
-                SoundandFlyoverTarget.SetSoundAndFlyOverParameters(none, Ability.GetMyTemplate().LocFlyOverText, 'None', eColor_Xcom);
-            }
+            TargetTrack.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+            TargetTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
+            TargetTrack.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
+
+            SoundAndFlyoverTarget = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(TargetTrack, Context, false, TargetTrack.LastActionAdded));
+            SoundAndFlyoverTarget.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, 'None', FlyoverColor, AbilityTemplate.IconImage);
         }
     }
 }
@@ -892,7 +906,7 @@ static function X2AbilityTemplate MetabolicBoost()
 
     Template = SelfTargetActivated('M31_PA_WS_MetabolicBoost', "img:///UILibrary_PerkIcons.UIPerk_one_for_all");
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY - 1;
     Template.Hostility = eHostility_Defensive;
 
     DodgeEffect = new class'X2Effect_ToHitModifier';
@@ -1940,7 +1954,6 @@ static function X2AbilityTemplate BoltLeadTheTarget(
     local X2AbilityTemplate                 Template;
     local X2Condition_Visibility            VisibilityCondition;
     local X2Condition_AbilityProperty       AbilityCondition;
-    local X2AbilityCost_Ammo                AmmoCost;
     local X2AbilityCost_ActionPoints        ActionPointCost;
     local X2Effect_ReserveActionPoints      ReservePointsEffect;
     local X2Effect_WS_LTTMark               MarkEffect;
@@ -1958,6 +1971,7 @@ static function X2AbilityTemplate BoltLeadTheTarget(
 
     Template.ShotHUDPriority = GetBoltHUDPriority(TemplateName);
 
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     Template.AddShooterEffectExclusions();
@@ -1977,8 +1991,6 @@ static function X2AbilityTemplate BoltLeadTheTarget(
 
     Template.AddShooterEffectExclusions();
 
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
-
     MarkEffect = new class'X2Effect_WS_LTTMark';
     MarkEffect.EffectName = GetLTTMarkName(TemplateName);
     MarkEffect.AbilityToTrigger = GetLTTAttackName(TemplateName);
@@ -1986,11 +1998,7 @@ static function X2AbilityTemplate BoltLeadTheTarget(
     MarkEffect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, true,, Template.AbilitySourceName);
     Template.AddTargetEffect(MarkEffect);
 
-    AmmoCost = new class'X2AbilityCost_Ammo';
-    AmmoCost.iAmmo = 1;
-    AmmoCost.bFreeCost = true;
-    Template.AbilityCosts.AddItem(AmmoCost);
-
+    AddAmmoCost(Template, 1, true);
     AddBoltCharges(Template, TemplateName);
 
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
@@ -2117,24 +2125,11 @@ static function X2AbilityTemplate BoltLeadTheTargetAttack(
 
 static function AddBoltCharges(out X2AbilityTemplate Template, const name DefaultAbilityName)
 {
-    local X2AbilityCharges Charges;
+    local X2AbilityCharges      Charges;
     local X2AbilityCost_Charges ChargeCost;
-    local array<name> SharedAbilities;
-    local bool bFreeCost;
 
     if (`GetConfigInt(DefaultAbilityName $ "_Charges") > 0)
     {
-        if (Template.DataName != DefaultAbilityName)
-            SharedAbilities.AddItem(DefaultAbilityName);
-        
-        if (Template.DataName != GetLTTName(DefaultAbilityName))
-            SharedAbilities.AddItem(GetLTTName(DefaultAbilityName));
-        else
-            bFreeCost = true;
-
-        if (Template.DataName != GetLTTAttackName(DefaultAbilityName))
-            SharedAbilities.AddItem(GetLTTAttackName(DefaultAbilityName));
-
         Charges = new class 'X2AbilityCharges';
         Charges.InitialCharges = `GetConfigInt(DefaultAbilityName $ "_Charges");
         Charges.AddBonusCharge(default.HeavyOrdnanceAbilityName, `GetConfigInt("M31_PA_WS_HeavyOrdnance_BonusCharges"));
@@ -2142,8 +2137,22 @@ static function AddBoltCharges(out X2AbilityTemplate Template, const name Defaul
 
         ChargeCost = new class'X2AbilityCost_Charges';
         ChargeCost.NumCharges = 1;
-        ChargeCost.bFreeCost = bFreeCost;
-        ChargeCost.SharedAbilityCharges = SharedAbilities;
+        if (Template.DataName == GetLTTAttackName(DefaultAbilityName))
+        {
+            ChargeCost.SharedAbilityCharges.AddItem(DefaultAbilityName);
+            ChargeCost.SharedAbilityCharges.AddItem(GetLTTName(DefaultAbilityName));
+        }
+        else if (Template.DataName == GetLTTName(DefaultAbilityName))
+        {
+            ChargeCost.SharedAbilityCharges.AddItem(DefaultAbilityName);
+            ChargeCost.SharedAbilityCharges.AddItem(GetLTTAttackName(DefaultAbilityName));
+            ChargeCost.bFreeCost = true;
+        }
+        else
+        {
+            ChargeCost.SharedAbilityCharges.AddItem(GetLTTName(DefaultAbilityName));
+            ChargeCost.SharedAbilityCharges.AddItem(GetLTTAttackName(DefaultAbilityName));
+        }
         Template.AbilityCosts.AddItem(ChargeCost);
     }
 }
@@ -2220,7 +2229,6 @@ static function SetBoltRadiusMultiTarget(out X2AbilityTemplate Template, name De
     Template.ModifyNewContextFn = class'X2AbilitySet_PA_Harrier'.static.HarrierShot_ModifyActivatedAbilityContext;
 }
 
-
 static function X2Condition_ValidWeapon GetBallistaCondition()
 {
     local X2Condition_ValidWeapon Condition;
@@ -2275,7 +2283,7 @@ defaultproperties
     BoltPsiIcon = "img:///UILibrary_PerkIcons.UIPerk_psychic"
 
     BoltPoisonName = M31_PA_WS_Bolt_Poison
-    BoltPoisonIcon = "img:///UILibrary_FavidsPerkPack.UIPerk_SaltInTheWound"
+    BoltPoisonIcon = "img:///UILibrary_XPerkIconPack.UIPerk_poison_shot"
 
     BoltRadName = M31_PA_WS_Bolt_Rad
     BoltRadIcon = "img:///KetarosPkg_Abilities.UIPerk_radiation"

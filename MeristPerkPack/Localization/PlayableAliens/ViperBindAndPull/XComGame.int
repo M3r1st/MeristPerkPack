@@ -5,7 +5,7 @@ LocFlyOverText="Tongue Grab"
 LocMissMessage="Grab Failed!"
 LocLongDescription="Grab a target with your tongue and pull them to melee range for the bind. Has a minimum range of <Ability:M31_PA_GetOverHere_MinRange> tiles and a maximum range of <Ability:M31_PA_GetOverHere_MaxRange> tiles. Certain enemies, like Custodians, cannot be pulled."
 LocHelpText="Grab a target with your tongue and pull them to melee range. Only humanoid targets can be pulled."
-LocPromotionPopupText="<Bullet> Bind deals <Ability:M31_PA_BindCrush_Damage> damage. Damage increases the longer the unit is bound.<br><Bullet> Cannot be used while <Ability:ClassName> is suppressed.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown."
+LocPromotionPopupText="<Bullet> Bind deals <Ability:M31_PA_BindCrush_Damage> damage. Damage increases the longer the unit is bound.<br><Bullet> Cannot be used while <Ability:ClassName> is suppressed.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_PA_GetOverHereAlly X2AbilityTemplate]
 LocFriendlyName="Tongue Pull"
@@ -13,7 +13,7 @@ LocFlyOverText="Tongue Pull"
 LocMissMessage="How did that happen?"
 LocLongDescription="Grab an ally with your tongue and pull them to melee range. Has a minimum range of <Ability:M31_PA_GetOverHereAlly_MinRange> tiles and a maximum range of <Ability:M31_PA_GetOverHereAlly_MaxRange> tiles."
 LocHelpText="Grab an ally with your tongue and pull them to melee range. Only humanoid targets can be pulled."
-LocPromotionPopupText="<Bullet> Cannot be used while <Ability:ClassName> is suppressed.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Does not break concealment."
+LocPromotionPopupText="<Bullet> Cannot be used while <Ability:ClassName> is suppressed.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Does not break concealment."
 
 [M31_PA_EndBind X2AbilityTemplate]
 LocFriendlyName="Release Bind"
@@ -27,7 +27,7 @@ LocFlyOverText="Bind"
 LocMissMessage="Bind Failed!"
 LocLongDescription="The <Ability:ClassName> can bind and crush an adjacent humanoid enemy. Certain enemies, like Custodians, cannot be bound."
 LocHelpText="Bind and crush an adjacent humanoid enemy."
-LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_BindCrush_Damage> damage. Damage increases the longer the unit is bound.<br><Bullet> Has a <Ability:M31_SelfCooldown> turn cooldown.<br><Bullet> Does not break concealment."
+LocPromotionPopupText="<Bullet> Deals <Ability:M31_PA_BindCrush_Damage> damage. Damage increases the longer the unit is bound.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Does not break concealment."
 
 [M31_PA_Bind_Crush X2AbilityTemplate]
 LocFlyOverText="Bind Sustained"

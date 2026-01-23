@@ -77,6 +77,10 @@ simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectPa
     return 0;
 }
 
+function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
+{
+    return true;
+}
 
 defaultproperties
 {

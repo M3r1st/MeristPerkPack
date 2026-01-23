@@ -105,8 +105,6 @@ static function X2AbilityTemplate ViperBite(name DataName)
 
     Template = MovingMelee(DataName, "img:///UILibrary_MZChimeraIcons.Ability_ViciousBite", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY;
-
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
     ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_ENEMY_ViperBite_AimBonus");
     ToHitCalc.BuiltInCritMod = `GetConfigInt("M31_ENEMY_ViperBite_CritBonus");
@@ -361,11 +359,16 @@ static function X2AbilityTemplate PoisonSpit(name DataName, bool bDealsDamage)
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
 
     Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_viper_poisonspit";
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_Single, eHostility_Offensive);
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.AbilitySourceName = 'eAbilitySource_Standard'; 
     Template.Hostility = eHostility_Offensive;
 
+    Template.AbilityToHitCalc = default.DeadEye;
+    CursorTarget = new class'X2AbilityTarget_Cursor';
+    CursorTarget.bRestrictToWeaponRange = true;
+    Template.AbilityTargetStyle = CursorTarget;
+    Template.TargetingMethod = class'X2TargetingMethod_ViperSpit';
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     CylinderMultiTarget = new class'X2AbilityMultiTarget_Cylinder';
@@ -374,35 +377,10 @@ static function X2AbilityTemplate PoisonSpit(name DataName, bool bDealsDamage)
     CylinderMultiTarget.bUseOnlyGroundTiles = true;
     Template.AbilityMultiTargetStyle = CylinderMultiTarget;
 
-    Template.TargetingMethod = class'X2TargetingMethod_ViperSpit';
-
-    Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
-
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
     Template.AddShooterEffectExclusions();
 
-    CursorTarget = new class'X2AbilityTarget_Cursor';
-    CursorTarget.bRestrictToWeaponRange = true;
-    Template.AbilityTargetStyle = CursorTarget;
-
-    Template.AbilityToHitCalc = default.DeadEye;
-
-    Template.CinescriptCameraType = "_PoisonSpit";
-
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-    
-    Template.bDisplayInUITooltip = false;
-    Template.bDisplayInUITacticalText = false;
-    Template.bDontDisplayInAbilitySummary = false;
-    Template.bUseAmmoAsChargesForHUD = false;
-
-    Template.bCrossClassEligible = false;
-
-    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
-    Template.bFrameEvenWhenUnitIsHidden = true;
+    Template.AbilityTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
 
     UnitImmunityCondition = new class'X2Condition_UnitImmunities';
     UnitImmunityCondition.AddExcludeDamageType('Poison');
@@ -431,7 +409,15 @@ static function X2AbilityTemplate PoisonSpit(name DataName, bool bDealsDamage)
     AddViperPoisonEffects(Template);
     Template.AddMultiTargetEffect(new class'X2Effect_ApplyPoisonToWorld');
 
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
     Template.CustomFireAnim = 'HL_PoisonSpit';
+    Template.CinescriptCameraType = "_PoisonSpit";
+    Template.bFrameEvenWhenUnitIsHidden = true;
+
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
     return Template;
 }
@@ -636,8 +622,6 @@ static function X2AbilityTemplate CoilHunker_Base(name DataName)
     local X2Effect_PA_CoilDefense   HunkerDownEffect;
     
     Template = SelfTargetTrigger(DataName, "img:///UILibrary_PerkIcons.UIPerk_takecover");
-
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.HUNKER_DOWN_PRIORITY + 1;
 
     Template.Hostility = eHostility_Defensive;
     Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;

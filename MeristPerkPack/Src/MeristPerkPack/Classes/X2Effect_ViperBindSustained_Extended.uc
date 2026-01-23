@@ -1,4 +1,4 @@
-class X2Effect_ViperBindSustainedExtended extends X2Effect_ViperBindSustained;
+class X2Effect_ViperBindSustained_Extended extends X2Effect_ViperBindSustained;
 
 var int iTurnsForFirstIncrease;
 var bool bUseExponentialDamageIncrease;
@@ -15,13 +15,16 @@ function float GetPreDefaultDefendingDamageModifier_CH(
     XComGameState NewGameState)
 {
     // This effect scales the damage based upon the number of full turns the unit has been bound by the viper
-    if( (AbilityState.GetMyTemplateName() == SustainedAbilityName) && (EffectState.FullTurnsTicked > iTurnsForFirstIncrease))
+    if (class'X2AbilitySet_ViperBindAndPull'.default.BindCrush_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
-        if (bUseGeometricDamageIncrease)
-            return CurrentDamage * (EffectState.FullTurnsTicked - iTurnsForFirstIncrease) - CurrentDamage;
-        
-        if (bUseExponentialDamageIncrease)
-            return CurrentDamage * (2 ** (EffectState.FullTurnsTicked - iTurnsForFirstIncrease)) - CurrentDamage;
+        if ((EffectState.FullTurnsTicked > iTurnsForFirstIncrease))
+        {
+            if (bUseGeometricDamageIncrease)
+                return CurrentDamage * (EffectState.FullTurnsTicked - iTurnsForFirstIncrease) - CurrentDamage;
+            
+            if (bUseExponentialDamageIncrease)
+                return CurrentDamage * (2 ** (EffectState.FullTurnsTicked - iTurnsForFirstIncrease)) - CurrentDamage;
+        }
     }
 
     return 0;

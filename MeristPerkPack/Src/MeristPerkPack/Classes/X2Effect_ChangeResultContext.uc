@@ -44,7 +44,7 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
     if (AbilityContext == none || AbilityState == none || EffectState == none)
         return ELR_NoInterrupt;
 
-    if (AbilityContext.InputContext.SourceObject.ObjectID == EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)
+    if (AbilityContext.InputContext.SourceObject.ObjectID != EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID)
         return ELR_NoInterrupt;
 
     Attacker = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.SourceObject.ObjectID));

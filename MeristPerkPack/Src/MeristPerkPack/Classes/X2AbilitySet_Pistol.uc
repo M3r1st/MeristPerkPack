@@ -27,9 +27,9 @@ static function X2AbilityTemplate ClutchShot()
     local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardAim    StandardAim;
 
-    Template = Attack('M31_ClutchShot', "img:///UILibrary_LW_PerkPack.LW_AbilityClutchShot", false, false);
-    
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_LIEUTENANT_PRIORITY;
+    Template = Attack('M31_ClutchShot', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityClutchShot", false, false);
+
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
 
     StandardAim = new class'X2AbilityToHitCalc_StandardAim';
     StandardAim.bGuaranteedHit = true;
@@ -221,7 +221,7 @@ static function X2AbilityTemplate PistolDetonationShot()
 
     Template = Attack('M31_PistolDetonationShot', "img:///UILibrary_MZChimeraIcons.Ability_TargetGrenade", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
 
     AddPistolActionPointCost(Template);
 
@@ -277,8 +277,8 @@ static function X2AbilityTemplate PistolDisarmingShot()
     local X2AbilityTemplate Template;
 
     Template = Attack('M31_PistolDisarmingShot', "img:///UILibrary_MZChimeraIcons.Ability_DisablingShot", false, false);
-    
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
 
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 
@@ -305,7 +305,7 @@ static function X2AbilityTemplate PistolMaim()
 
     Template = Attack('M31_PistolMaim', "img:///UILibrary_XPerkIconPack.UIPerk_shot_blossom", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
 
     AddPistolActionPointCost(Template);
 
@@ -401,9 +401,9 @@ static function X2AbilityTemplate PistolRouletteShot()
 {
     local X2AbilityTemplate Template;
 
-    Template = Attack('M31_PistolRouletteShot', "", false, false);
+    Template = Attack('M31_PistolRouletteShot', "img:///UILibrary_PerkIcons.UIPerk_adventmec_minigun", false, false);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
 
     AddPistolActionPointCost(Template);
 
@@ -442,7 +442,7 @@ static function X2AbilityTemplate PistolRouletteShotDamage()
     local X2AbilityTemplate     Template;
     local X2Effect_Roulette     Effect;
     
-    Template = Passive('M31_PistolRouletteShot_Damage', "", false, true);
+    Template = Passive('M31_PistolRouletteShot_Damage', "img:///UILibrary_PerkIcons.UIPerk_adventmec_minigun", false, true);
 
     Effect = new class'X2Effect_Roulette';
     Effect.AllowedAbilities.AddItem('M31_PistolRouletteShot');
@@ -481,8 +481,8 @@ static function X2AbilityTemplate Undertaker()
 
     Template = Attack('M31_Undertaker', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_betweentheeyes", false, true);
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
-    
+    SetAbilityShotHUDPriority(Template, ePriorityType_Pistol, eCost_SingleConsumeAll, eHostility_Offensive);
+
     AddActionPointCost(Template, eCost_Free);
     AddAmmoCost(Template, 1);
     AddCooldown(Template, `GetConfigInt("M31_Undertaker_Cooldown"));

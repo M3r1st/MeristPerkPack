@@ -25,9 +25,9 @@ function GetToHitAsTargetModifiers(XComGameState_Effect EffectState, XComGameSta
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-    local ShotModifierInfo  ModInfo;
+    local ShotModifierInfo ModInfo;
 
-    if (class'X2AbilitySet_PA_Viper'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
+    if (class'X2AbilitySet_ViperBindAndPull'.default.GetOverHere_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
         ModInfo.ModType = eHit_Success;
         ModInfo.Reason = FriendlyName;
@@ -51,8 +51,8 @@ function int GetAttackingDamageModifier(
 
     if (TargetUnit != none)
     {
-        if (class'X2AbilitySet_PA_Viper'.default.Bind_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE
-            || class'X2AbilitySet_PA_Viper'.default.BindSustained_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
+        if (class'X2AbilitySet_ViperBindAndPull'.default.Bind_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE
+            || class'X2AbilitySet_ViperBindAndPull'.default.BindCrush_Abilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
         {
             if (CurrentDamage > 0)
             {

@@ -35,6 +35,40 @@ static function array<X2DataTemplate> CreateTemplates()
     return Templates;
 }
 
+static function DamagePreviewFnSelector(out delegate<X2AbilityTemplate.DamagePreviewDelegate> ReturnFn, name AbilityName)
+{
+    switch (AbilityName)
+    {
+        case 'M31_PA_GetOverHere':
+            ReturnFn = GetOverHere_DamagePreview;
+            break;
+        case 'M31_PA_RushAndBind':
+            ReturnFn = RushAndBind_DamagePreview;
+            break;
+        case 'M31_PA_WS_RushAndBind':
+            ReturnFn = RushAndBindWS_DamagePreview;
+            break;
+        default: 
+            ReturnFn = none;
+    }
+}
+
+static function bool GetOverHere_DamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    return ChainShot_DamagePreview_Static('M31_PA_Bind', AbilityState, TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+}
+
+static function bool RushAndBind_DamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    return ChainShot_DamagePreview_Static('M31_PA_RushAndBind_Bind', AbilityState, TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+}
+
+static function bool RushAndBindWS_DamagePreview(XComGameState_Ability AbilityState, StateObjectReference TargetRef, out WeaponDamageValue MinDamagePreview, out WeaponDamageValue MaxDamagePreview, out int AllowsShield)
+{
+    return ChainShot_DamagePreview_Static('M31_PA_WS_RushAndBind_Bind', AbilityState, TargetRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
+}
+
+
 static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityName)
 {
     local X2AbilityTemplate                 Template;
@@ -62,7 +96,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
     Template.AddShooterEffectExclusions();
     AddSuppressedCondition(Template);
     // There must be a free tile around the source unit
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_UnblockedNeighborTile');
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_BindableTile');
 
     // The target cannot be bound, carried, unconcious or frozen
     // The target must be humanoid
@@ -121,6 +155,8 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
 
     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.MeleeLostSpawnIncreasePerUse;
 
+    DamagePreviewFnSelector(Template.DamagePreviewFn, DataName);
+
     return Template;
 }
 
@@ -149,7 +185,7 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     Template.AddShooterEffectExclusions();
     AddSuppressedCondition(Template);
     // There must be a free tile around the source unit
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_UnblockedNeighborTile');
+    Template.AbilityShooterConditions.AddItem(new class'X2Condition_BindableTile');
 
     // The target cannot be bound, carried, unconcious or frozen
     // The target must be humanoid
@@ -256,10 +292,9 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
 {
     local X2AbilityTemplate                     Template;
     local X2AbilityCost_ActionPoints            ActionPointCost;
-    local X2Condition_Visibility                TargetVisibilityCondition;
+    // local X2Condition_Visibility                TargetVisibilityCondition;
     local X2Effect_Persistent                   BoundEffect;
-    local X2Effect_ViperBindSustainedExtended   SustainedEffect;
-    // local X2Effect_GrantActionPoints            ActionPointsEffect;
+    local X2Effect_ViperBindSustained_Extended  SustainedEffect;
     local X2Effect_ApplyWeaponDamage            DamageEffect;
     local X2Effect_ApplyDirectionalWorldDamage  EnvironmentDamageEffect;
 
@@ -290,18 +325,18 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    TargetVisibilityCondition = new class'X2Condition_Visibility';
-    TargetVisibilityCondition.bRequireGameplayVisible = true;
-    TargetVisibilityCondition.bCannotPeek = true;
-    TargetVisibilityCondition.bRequireNotMatchCoverType = true;
-    TargetVisibilityCondition.TargetCover = CT_Standing;
-    Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+    // TargetVisibilityCondition = new class'X2Condition_Visibility';
+    // TargetVisibilityCondition.bRequireGameplayVisible = true;
+    // TargetVisibilityCondition.bCannotPeek = true;
+    // TargetVisibilityCondition.bRequireNotMatchCoverType = true;
+    // TargetVisibilityCondition.TargetCover = CT_Standing;
+    // Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_BindRange');
     AddDefaultBindConditions(Template);
-    AddAdjacencyCondition(Template);
 
     // Add to the target the sustained bind effect
-    SustainedEffect = new class'X2Effect_ViperBindSustainedExtended';
+    SustainedEffect = new class'X2Effect_ViperBindSustained_Extended';
     SustainedEffect.SustainedAbilityName = CrushAbilityName;
     SustainedEffect.FragileAmount = `GetConfigInt("M31_PA_Bind_FragileAmount");
     SustainedEffect.bUseGeometricDamageIncrease = false;
@@ -483,16 +518,18 @@ static function X2AbilityTemplate RushAndBind(name DataName, name BindAbilityNam
     Template.ShotHUDPriority = default.RushAndBind_HUDPriority;
 
     Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = new class'X2AbilityTarget_MovingMelee';
-    Template.TargetingMethod = class'X2TargetingMethod_MeleePath';
+    Template.AbilityTargetStyle = new class'X2AbilityTarget_RushAndBind';
+    Template.TargetingMethod = class'X2TargetingMethod_MeleePath_RushAndBind';
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_EndOfMove');
+    // Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_EndOfMove');
+    Template.MeleePuckMeshPath = "M31_UI_3D.CursorSet.S_MovePuck_Bind";
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
     Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_BindableTile');
     AddDefaultBindConditions(Template, bSentinel);
 
     AddCooldown(Template, (bSentinel ? `GetConfigInt("M31_PA_WS_RushAndBind_Cooldown") : `GetConfigInt("M31_PA_RushAndBind_Cooldown")));
@@ -511,12 +548,13 @@ static function X2AbilityTemplate RushAndBind(name DataName, name BindAbilityNam
     Template.AddTargetEffect(BindAbilityEffect);
 
     Template.bSkipFireAction = true;
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
     Template.BuildNewGameStateFn = TypicalMoveEndAbility_BuildGameState;
     Template.BuildInterruptGameStateFn = TypicalMoveEndAbility_BuildInterruptGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 
-    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+    DamagePreviewFnSelector(Template.DamagePreviewFn, DataName);
 
     return Template;
 }
@@ -526,11 +564,10 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
     local X2AbilityTemplate                     Template;
     local X2AbilityCost_ActionPoints            ActionPointCost;
     local X2Effect_Persistent                   BoundEffect;
-    local X2Effect_ViperBindSustainedExtended   SustainedEffect;
-    // local X2Effect_GrantActionPoints            ActionPointsEffect;
+    local X2Effect_ViperBindSustained_Extended  SustainedEffect;
     local X2Effect_ApplyWeaponDamage            DamageEffect;
     local X2Effect_ApplyDirectionalWorldDamage  EnvironmentDamageEffect;
-    local X2Condition_Visibility                TargetVisibilityCondition;
+    // local X2Condition_Visibility                TargetVisibilityCondition;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
 
@@ -554,18 +591,18 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
 
-    TargetVisibilityCondition = new class'X2Condition_Visibility';
-    TargetVisibilityCondition.bRequireGameplayVisible = true;
-    TargetVisibilityCondition.bCannotPeek = true;
-    TargetVisibilityCondition.bRequireNotMatchCoverType = true;
-    TargetVisibilityCondition.TargetCover = CT_Standing;
-    Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+    // TargetVisibilityCondition = new class'X2Condition_Visibility';
+    // TargetVisibilityCondition.bRequireGameplayVisible = true;
+    // TargetVisibilityCondition.bCannotPeek = true;
+    // TargetVisibilityCondition.bRequireNotMatchCoverType = true;
+    // TargetVisibilityCondition.TargetCover = CT_Standing;
+    // Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
+    Template.AbilityTargetConditions.AddItem(new class'X2Condition_BindRange');
     AddDefaultBindConditions(Template, bSentinel);
-    AddAdjacencyCondition(Template);
 
     // Add to the target the sustained bind effect
-    SustainedEffect = new class'X2Effect_ViperBindSustainedExtended';
+    SustainedEffect = new class'X2Effect_ViperBindSustained_Extended';
     SustainedEffect.SustainedAbilityName = CrushAbilityName;
     SustainedEffect.FragileAmount = (bSentinel ? `GetConfigInt("M31_PA_WS_RushAndBind_FragileAmount") : `GetConfigInt("M31_PA_RushAndBind_FragileAmount"));
     SustainedEffect.bUseGeometricDamageIncrease = false;
