@@ -41,9 +41,8 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
     local XCGS_Effect_EnergyShieldExtended  ShieldEffectState;
     local X2Effect_EnergyShieldExtended     ShieldEffect;
     local XComGameState                     NewGameState;
-    local int ShieldDamageRemaining;
-    local bool bShouldSubmitState;
-    local int Index, x;
+    local int   ShieldDamageRemaining;
+    local int   Index, x;
     
     UnitState = XComGameState_Unit(EventSource);
     OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitState.ObjectID,, GameState.HistoryIndex - 1));
@@ -51,10 +50,9 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
 
     `LOG("Total damage to shields: " $ ShieldDamageRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
+    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
     for (Index = LinkedShieldEffects.Length - 1; Index >= 0 && ShieldDamageRemaining > 0; Index--)
     {
-        bShouldSubmitState = true;
-        NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
         ShieldEffectState = XCGS_Effect_EnergyShieldExtended(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldExtended', LinkedShieldEffects[Index].EffectID));
         
         x = Min(ShieldDamageRemaining, ShieldEffectState.ShieldRemaining);
@@ -69,10 +67,14 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
         if (ShieldEffect.ShieldsTakeDamageFn != none)
             ShieldEffect.ShieldsTakeDamageFn(ShieldEffect, ShieldEffectState, NewGameState, UnitState, x);
     }
-    if (bShouldSubmitState)
+    if (NewGameState.GetNumGameStateObjects() > 0)
     {
         LogShields(NewGameState);
         `TACTICALRULES.SubmitGameState(NewGameState);
+    }
+    else
+    {
+        `XCOMHISTORY.CleanupPendingGameState(NewGameState);
     }
     return ELR_NoInterrupt;
 }
