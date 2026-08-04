@@ -62,7 +62,9 @@ static function EventListenerReturn EffectEventListener_ChasingFire(Object Event
             Effect = X2Effect_ChasingFire(EffectState.GetX2Effect());
             CoveringUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
             AttackingUnit = XComGameState_Unit(EventSource);
-            TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+            TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+            if (TargetUnit == none)
+                TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
             EventAbilityState = XComGameState_Ability(EventData);
 
             if (Effect != none && CoveringUnit != none && AttackingUnit != none && TargetUnit != none && EventAbilityState != none)

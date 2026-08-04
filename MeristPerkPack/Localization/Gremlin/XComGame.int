@@ -1,0 +1,83 @@
+[M31_AdvancedAidProtocol X2AbilityTemplate]
+LocFriendlyName="Advanced Aid Protocol"
+LocLongDescription="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being critically hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
+LocHelpText="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being critically hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
+
+[M31_TargetingAid X2AbilityTemplate]
+LocFriendlyName="Targeting Aid"
+LocLongDescription="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
+LocHelpText="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
+
+[M31_ShadowstepAid X2AbilityTemplate]
+LocFriendlyName="Shadowstep Aid"
+LocLongDescription="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also grant temporary Shadowstep and a movement-only action."
+LocHelpText="<Ability:M31_FontAbility>Aid Protocol</font> and <Ability:M31_FontAbility>Stronghold Protocol</font> also grant temporary Shadowstep and a movement-only action."
+
+[M31_RapidDumping X2AbilityTemplate]
+LocFriendlyName="Rapid Dumping"
+LocFlyOverText="Rapid Dumping"
+LocLongDescription="Offensive protocols no longer end the turn."
+LocHelpText="Offensive protocols no longer end the turn."
+LocPromotionPopupText="<Bullet> Applies to <Ability:M31_OffensiveProtocols>."
+
+[M31_FutureWarfare X2AbilityTemplate]
+LocFriendlyName="Future Warfare"
+LocFlyOverText="Future Warfare"
+LocLongDescription="Whenever the <Ability:ClassName> uses an offensive protocol, reduce the cooldown of all offensive protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
+LocHelpText="Whenever the <Ability:ClassName> uses an offensive protocol, reduce the cooldown of all offensive protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
+LocPromotionPopupText="<Bullet> Applies to <Ability:M31_OffensiveProtocols>.<br><Bullet> Reduces the cooldown of the ability that activated the effect."
+
+[M31_FutureWarfare_Passive X2AbilityTemplate]
+LocFriendlyName="Future Warfare"
+LocFlyOverText="Future Warfare"
+LocLongDescription="Whenever the <Ability:ClassName> uses an offensive protocol, reduce the cooldown of all offensive protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
+LocHelpText="Whenever the <Ability:ClassName> uses an offensive protocol, reduce the cooldown of all offensive protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
+LocPromotionPopupText="<Bullet> Applies to <Ability:M31_OffensiveProtocols>.<br><Bullet> Reduces the cooldown of the ability that activated the effect."
+
+[M31_Botnet X2AbilityTemplate]
+LocFriendlyName="Botnet"
+LocFlyOverText="Botnet"
+LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown. <Ability:M31_FreeAction>."
+LocHelpText="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> Lasts for <Ability:M31_Botnet_Duration> turn(s).<br><Bullet> Your squad's standard shots permanently reduce target's hack defense by <Ability:M31_Botnet_HackDefenseChange>.<br><Bullet> Hack defense reduction can stack.<br><Bullet> Botnet has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up, Pistol Shot and Snap Shot."
+
+[M31_SP_ChainingJolt X2AbilityTemplate]
+LocFriendlyName="Chaining Jolt"
+LocFlyOverText="Chaining Jolt"
+LocLongDescription=". Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+; M31_SP_ChainingJolt_Radius
+; M31_SP_ChainingJolt_MaxTargets
+
+[M31_SP_HighVoltage X2AbilityTemplate]
+LocFriendlyName="High Voltage"
+LocLongDescription="<Ability:M31_FontAbility>Chaining Jolt</font> and <Ability:M31_FontAbility>Voltaic Arc</font> by <Ability:M31_SP_HighVoltage_BonusRadius>."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+
+[M31_SP_Capacitors X2AbilityTemplate]
+LocFriendlyName=""
+LocLongDescription="<Ability:M31_FontAbility>Chaining Jolt</font> and <Ability:M31_FontAbility>Voltaic Arc</font> by <Ability:M31_SP_Capacitors_BonusNumTargets>."
+LocHelpText=""
+LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+
+[M31_SP_VoltaicArc X2AbilityTemplate]
+LocFriendlyName="Voltaic Arc"
+LocFlyOverText="Voltaic Arc"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_SP_VoltaicArc_Passive X2AbilityTemplate]
+LocFriendlyName="Voltaic Arc"
+LocFlyOverText="Voltaic Arc"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+
+
+
+
+

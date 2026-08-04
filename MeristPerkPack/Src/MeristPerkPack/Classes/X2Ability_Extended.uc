@@ -569,13 +569,49 @@ static function EventListenerReturn AbilityTriggerEventListener_BuffMe(Object Ev
 
         VisualizeIndex = GameState.HistoryIndex;
 
-        if (CallbackAbilityState.OwnerStateObject.ObjectID == TargetUnit.ObjectID)
+        if (CallbackAbilityState.OwnerStateObject.ObjectID != TargetUnit.ObjectID)
+        {
+            if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
+            {
+                CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+            }
+        }
+        else
         {
             foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnit,,, GameState.HistoryIndex)
             {
                 if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
                 {
                     CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+                }
+            }
+        }
+    }
+
+    return ELR_NoInterrupt;
+}
+
+static function EventListenerReturn CoveringFireAttackListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+{
+    local XComGameState_Ability         CallbackAbilityState;
+    local XComGameState_Unit            SourceUnit, TargetUnit;
+    local XComGameStateContext_Ability  AbilityContext;
+    local X2AbilityTemplate             AbilityTemplate;
+
+    CallbackAbilityState = XComGameState_Ability(CallbackData);
+    AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
+    if (AbilityContext != none && AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt && CallbackAbilityState != none)
+    {
+        SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(CallbackAbilityState.OwnerStateObject.ObjectID));
+        if (SourceUnit != none && SourceUnit.HasSoldierAbility('CoveringFire', true))
+        {
+            TargetUnit = XComGameState_Unit(EventSource);
+            AbilityTemplate = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate(AbilityContext.InputContext.AbilityTemplateName);
+            if (AbilityTemplate != none && AbilityTemplate.Hostility == eHostility_Offensive)
+            {
+                if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
+                {
+                    CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false);
                 }
             }
         }

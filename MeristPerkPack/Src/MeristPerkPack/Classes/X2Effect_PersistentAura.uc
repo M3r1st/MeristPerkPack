@@ -1,4 +1,4 @@
-class X2Effect_PersistentAura extends X2Effect_Persistent;
+class X2Effect_PersistentAura extends X2Effect_Persistent abstract;
 
 var float Radius;
 var bool bIncludeOwner;
@@ -44,7 +44,9 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 
 defaultproperties
 {
-    DuplicateResponse = eDupe_Allow
+    GameStateEffectClass = class'XCGS_Effect_PersistentAura'
+
+    DuplicateResponse = eDupe_Allow // Do not change
 
     bIncludeFriendly = true
     bIncludeHostile = false

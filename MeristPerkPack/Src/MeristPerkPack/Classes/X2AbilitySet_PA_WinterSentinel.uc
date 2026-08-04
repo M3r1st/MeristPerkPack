@@ -975,6 +975,7 @@ static function X2AbilityTemplate NorthernWinds()
     RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_PA_WS_NorthernWinds_Radius"));
     RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
     RadiusMultiTarget.bIgnoreBlockingCover = true;
+    RadiusMultiTarget.NumTargetsRequired = 1;
     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 
     EventListener = new class'X2AbilityTrigger_EventListener';
@@ -999,7 +1000,9 @@ static function X2AbilityTemplate NorthernWinds()
     Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
 
     if (`GetConfigBool("M31_PA_WS_NorthernWinds_bRequireVisibility"))
+    {
         Template.AbilityMultiTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    }
 
     class'BitterfrostHelper'.static.AddBitterfrostToMultiTarget(Template);
 
@@ -1010,10 +1013,11 @@ static function X2AbilityTemplate NorthernWinds()
     DamageEffect.bIgnoreArmor = true;
     DamageEffect.DamageTypes.AddItem('Frost');
     Template.AddMultiTargetEffect(DamageEffect);
-    Template.AddMultiTargetEffect(new class'X2Effect_RevealSourceUnit');
+    // Template.AddMultiTargetEffect(new class'X2Effect_RevealSourceUnit');
 
-    Template.bSkipExitCoverWhenFiring = true;
-    Template.ActionFireClass = class'X2Action_Fire_Wave_NoTarget';
+    Template.ConcealmentRule = eConceal_Never;
+
+    Template.BuildVisualizationFn = NorthernWinds_BuildVisualization;
 
     Template.AdditionalAbilities.AddItem('M31_PA_WS_NorthernWinds_Passive');
 
@@ -1025,6 +1029,113 @@ static function X2AbilityTemplate NorthernWindsPassive()
     return Passive('M31_PA_WS_NorthernWinds_Passive', "img:///UILibrary_MeristPerkIcons.UIPerk_WS_NorthernWinds", false, true);
 }
 
+
+static simulated function NorthernWinds_BuildVisualization(XComGameState VisualizeGameState)
+{
+    local XComGameStateHistory              History;
+    local XComGameStateContext_Ability      Context;
+    local X2AbilityTemplate                 AbilityTemplate;
+    local StateObjectReference              TargetUnitRef;
+    local VisualizationActionMetadata       EmptyTrack;
+    local VisualizationActionMetadata       ActionMetadata;
+    local X2VisualizerInterface             TargetVisualizerInterface;
+    local XComGameState_EnvironmentDamage   EnvironmentDamageEvent;
+    local XComGameState_WorldEffectTileData WorldDataUpdate;
+    local XComGameState_InteractiveObject   InteractiveObject;
+    local int                               i, j;
+
+    History = `XCOMHISTORY;
+
+    Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+
+    AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+    //****************************************************************************************
+    // Configure the visualization track for the source
+    //****************************************************************************************
+
+    //****************************************************************************************
+    // Configure the visualization track for the targets
+    //****************************************************************************************
+    for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+    {
+        TargetUnitRef = Context.InputContext.MultiTargets[i];
+
+        ActionMetadata = EmptyTrack;
+        ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(TargetUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+        ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(TargetUnitRef.ObjectID);
+        ActionMetadata.VisualizeActor = History.GetVisualizer(TargetUnitRef.ObjectID);
+
+        class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+
+        for (j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j)
+        {
+            Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+        }
+
+        TargetVisualizerInterface = X2VisualizerInterface(ActionMetadata.VisualizeActor);
+        if (TargetVisualizerInterface != none)
+        {
+            // Allow the visualizer to do any custom processing based on the new game state. For example, units will create a death action when they reach 0 HP.
+            TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, ActionMetadata);
+        }
+    }
+
+    //****************************************************************************************
+    // Configure the visualization tracks for the environment
+    //****************************************************************************************
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_EnvironmentDamage', EnvironmentDamageEvent)
+    {
+        ActionMetadata = EmptyTrack;
+        ActionMetadata.VisualizeActor = none;
+        ActionMetadata.StateObject_NewState = EnvironmentDamageEvent;
+        ActionMetadata.StateObject_OldState = EnvironmentDamageEvent;
+
+        //Wait until signaled by the shooter that the projectiles are hitting
+        class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+
+        for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i)
+        {
+            AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, 'AA_Success');	
+        }
+
+    }
+
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
+    {
+        ActionMetadata = EmptyTrack;
+        ActionMetadata.VisualizeActor = none;
+        ActionMetadata.StateObject_NewState = WorldDataUpdate;
+        ActionMetadata.StateObject_OldState = WorldDataUpdate;
+
+        //Wait until signaled by the shooter that the projectiles are hitting
+        class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+
+        for( i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; ++i )
+        {
+            AbilityTemplate.AbilityMultiTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, 'AA_Success');	
+        }
+
+    }
+
+    //****************************************************************************************
+    // Configure the visualization tracks for interactive objects
+    //****************************************************************************************
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_InteractiveObject', InteractiveObject)
+    {
+        // Add any doors that need to listen for notification
+        if (InteractiveObject.IsDoor() && InteractiveObject.HasDestroyAnim() && InteractiveObject.InteractionCount % 2 != 0) // Is this a closed door?
+        {
+            ActionMetadata = EmptyTrack;
+            // Don't necessarily have a previous state, so just use the one we know about
+            ActionMetadata.StateObject_OldState = InteractiveObject;
+            ActionMetadata.StateObject_NewState = InteractiveObject;
+            ActionMetadata.VisualizeActor = History.GetVisualizer(InteractiveObject.ObjectID);
+            class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+            class'X2Action_BreakInteractActor'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded);
+       }
+    }
+}
 
 static function X2AbilityTemplate BallistaPassive()
 {
@@ -1049,15 +1160,15 @@ static function X2AbilityTemplate BoltToHitBonus()
     Effect = new class'X2Effect_WS_BoltToHitBonus';
     Effect.BuildPersistentEffect(1, true, false);
 
-    Effect.AddToHitBonus(default.BoltCritName, 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus"));
-    Effect.AddToHitBonus(default.BoltCritName, 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus_Ballista", true));
-    Effect.AddToHitBonus(GetLTTAttackName(default.BoltCritName), 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus"));
-    Effect.AddToHitBonus(GetLTTAttackName(default.BoltCritName), 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus_Ballista", true));
-
-    Effect.AddToHitBonus(default.BoltRuptureName, 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus"));
-    Effect.AddToHitBonus(default.BoltRuptureName, 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus_Ballista", true));
-    Effect.AddToHitBonus(GetLTTAttackName(default.BoltRuptureName), 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus"));
-    Effect.AddToHitBonus(GetLTTAttackName(default.BoltRuptureName), 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus_Ballista", true));
+    Effect.AddBonus(default.BoltCritName, 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus"));
+    Effect.AddBonus(GetLTTAttackName(default.BoltCritName), 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus"));
+    Effect.AddBonus(default.BoltRuptureName, 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus"));
+    Effect.AddBonus(GetLTTAttackName(default.BoltRuptureName), 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus"));
+    
+    Effect.AddBallistaBonus(default.BoltCritName, 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus_Ballista"));
+    Effect.AddBallistaBonus(GetLTTAttackName(default.BoltCritName), 0, `GetConfigInt("M31_PA_WS_Bolt_Crit_CritBonus_Ballista"));
+    Effect.AddBallistaBonus(default.BoltRuptureName, 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus_Ballista"));
+    Effect.AddBallistaBonus(GetLTTAttackName(default.BoltRuptureName), 0, `GetConfigInt("M31_PA_WS_Bolt_Rupture_CritBonus_Ballista"));
 
     Template.AddTargetEffect(Effect);
 
@@ -1999,7 +2110,7 @@ static function X2AbilityTemplate BoltLeadTheTarget(
     Template.AddTargetEffect(MarkEffect);
 
     AddAmmoCost(Template, 1, true);
-    AddBoltCharges(Template, TemplateName);
+    AddBoltCharges(Template, TemplateName, true);
 
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.bAddWeaponTypicalCost = true;
@@ -2021,6 +2132,8 @@ static function X2AbilityTemplate BoltLeadTheTarget(
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+    Template.AbilityConfirmSound = "Unreal2DSounds_OverWatch";
 
     Template.bDisplayInUITooltip = false;
     Template.bDisplayInUITacticalText = false;
@@ -2123,10 +2236,10 @@ static function X2AbilityTemplate BoltLeadTheTargetAttack(
     return Template;
 }
 
-static function AddBoltCharges(out X2AbilityTemplate Template, const name DefaultAbilityName)
+static function AddBoltCharges(out X2AbilityTemplate Template, const name DefaultAbilityName, bool bFreeCost = false)
 {
-    local X2AbilityCharges      Charges;
-    local X2AbilityCost_Charges ChargeCost;
+    local X2AbilityCharges Charges;
+    local X2AbilityCost_Charges_Extended ChargeCost;
 
     if (`GetConfigInt(DefaultAbilityName $ "_Charges") > 0)
     {
@@ -2135,24 +2248,12 @@ static function AddBoltCharges(out X2AbilityTemplate Template, const name Defaul
         Charges.AddBonusCharge(default.HeavyOrdnanceAbilityName, `GetConfigInt("M31_PA_WS_HeavyOrdnance_BonusCharges"));
         Template.AbilityCharges = Charges;
 
-        ChargeCost = new class'X2AbilityCost_Charges';
+        ChargeCost = new class'X2AbilityCost_Charges_Extended';
         ChargeCost.NumCharges = 1;
-        if (Template.DataName == GetLTTAttackName(DefaultAbilityName))
-        {
-            ChargeCost.SharedAbilityCharges.AddItem(DefaultAbilityName);
-            ChargeCost.SharedAbilityCharges.AddItem(GetLTTName(DefaultAbilityName));
-        }
-        else if (Template.DataName == GetLTTName(DefaultAbilityName))
-        {
-            ChargeCost.SharedAbilityCharges.AddItem(DefaultAbilityName);
-            ChargeCost.SharedAbilityCharges.AddItem(GetLTTAttackName(DefaultAbilityName));
-            ChargeCost.bFreeCost = true;
-        }
-        else
-        {
-            ChargeCost.SharedAbilityCharges.AddItem(GetLTTName(DefaultAbilityName));
-            ChargeCost.SharedAbilityCharges.AddItem(GetLTTAttackName(DefaultAbilityName));
-        }
+        ChargeCost.SharedAbilityCharges.AddItem(DefaultAbilityName);
+        ChargeCost.SharedAbilityCharges.AddItem(GetLTTName(DefaultAbilityName));
+        ChargeCost.SharedAbilityCharges.AddItem(GetLTTAttackName(DefaultAbilityName));
+        ChargeCost.bFreeCost = bFreeCost;
         Template.AbilityCosts.AddItem(ChargeCost);
     }
 }

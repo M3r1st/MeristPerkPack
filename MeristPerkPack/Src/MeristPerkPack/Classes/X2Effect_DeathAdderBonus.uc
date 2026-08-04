@@ -2,7 +2,7 @@ class X2Effect_DeathAdderBonus extends X2Effect_Persistent;
 
 var int DamageFromHP;
 var int MaxDamageBonus;
-var name AbilityName;
+var array<name> AllowedAbilities;
 
 function float GetPreDefaultAttackingDamageModifier_CH(
     XComGameState_Effect EffectState,
@@ -18,7 +18,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     local int   MaxHP, CurrentHP;
     local int   ExtraDamage;
 
-    if (AbilityState.GetMyTemplateName() == AbilityName)
+    if (AllowedAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
         TargetUnit = XComGameState_Unit(Target);
         if (TargetUnit != none)
@@ -28,11 +28,17 @@ function float GetPreDefaultAttackingDamageModifier_CH(
 
             if (class'XComGameStateContext_Ability'.static.IsHitResultHit(ApplyEffectParameters.AbilityResultContext.HitResult))
             {
-                MaxHP = TargetUnit.GetMaxStat(eStat_HP);
-                CurrentHP = TargetUnit.GetCurrentStat(eStat_HP);
-                ExtraDamage = (MaxHP - CurrentHP) * DamageFromHP / 100;
-                ExtraDamage = Min(ExtraDamage, CurrentDamage * MaxDamageBonus / 100);
-                return ExtraDamage;
+                if (CurrentDamage > 0)
+                {
+                    MaxHP = TargetUnit.GetMaxStat(eStat_HP);
+                    CurrentHP = TargetUnit.GetCurrentStat(eStat_HP);
+                    ExtraDamage = (MaxHP - CurrentHP) * DamageFromHP / 100;
+                    if (MaxDamageBonus > 0)
+                    {
+                        ExtraDamage = Min(ExtraDamage, CurrentDamage * MaxDamageBonus / 100);
+                    }
+                    return ExtraDamage;
+                }
             }
         }
     }

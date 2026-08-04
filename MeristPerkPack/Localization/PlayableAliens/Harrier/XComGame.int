@@ -35,7 +35,7 @@ LocPromotionPopupText="<Bullet> The debuff will increase the damage from damage-
 LocFriendlyName="Blaster Master"
 LocLongDescription="Grenades no longer have a cooldown. Gain a free Muton Plasma Grenade."
 LocHelpText="Grenades no longer have a cooldown."
-LocPromotionPopupText="<Bullet> Muton Plasma Grenade has <font color='#ffd700'>3 - 8</font> damage, <font color='#ffd700'>2</font> shred, <font color='#ffd700'>4m</font> radius, and <font color='#ffd700'>10</font> environmental damage."
+LocPromotionPopupText="<Bullet> Muton Plasma Grenade has <Ability:M31_FontGold>3 - 8</font> damage, <Ability:M31_FontGold>2</font> shred, <Ability:M31_FontGold>4m</font> radius, and <Ability:M31_FontGold>10</font> environmental damage."
 
 [M31_PA_NoGraze X2AbilityTemplate]
 LocFriendlyName="Undodgeable"
@@ -83,7 +83,7 @@ LocFriendlyName="Cyclic Airburst"
 LocFlyOverText="Cyclic Airburst"
 LocLongDescription="Fire three bursts of Harrier Grenades at a target in a single attack. Requires both actions and all shots have a -<Ability:M31_PA_HarrierCyclic_AimPenalty> aim penalty. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Fire three bursts of Harrier Grenades at a target in a single attack. Requires both actions and all shots have a -<Ability:M31_PA_HarrierCyclic_AimPenalty> aim penalty."
-LocPromotionPopupText="<Bullet> Requires <font color='#ffd700'>3</font> ammo.<br><Bullet> Harrier Grenades can miss, but ignore cover. Deal damage to all units in a radius around the target.<br><Bullet> Harrier Grenades are guaranteed to hit all additional targets as long as they hit the primary target."
+LocPromotionPopupText="<Bullet> Requires <Ability:M31_FontGold>3</font> ammo.<br><Bullet> Harrier Grenades can miss, but ignore cover. Deal damage to all units in a radius around the target.<br><Bullet> Harrier Grenades are guaranteed to hit all additional targets as long as they hit the primary target."
 
 [M31_PA_HarrierCyclic2 X2AbilityTemplate]
 LocFriendlyName="Cyclic Airburst"

@@ -4,12 +4,16 @@
 //  PURPOSE: A version of X2Action_Fire_Arc that uses Dijkstra's
 //           algorithm to notify additional targets
 //---------------------------------------------------------------------------------------
-class X2Action_Fire_Fork extends X2Action_Fire;
+class X2Action_Fire_Fork extends X2Action_Fire config(GameData);
 
-var string ParticleSystemName;
-var name StartingSocket;
-var name TargetSocket;
-var float ChainDelay;
+var config string ParticleSystemName;
+var config name StartingSocket;
+var config name TargetSocket;
+var config float ChainDelay;
+
+var config name AnimName;
+var config bool bUseCustomFireAnim;
+var config bool bUseCustomSelfFireAnim;
 
 struct TargetNode
 {
@@ -47,8 +51,6 @@ var bool StartChain;
 var int CurrentDepth, NodeIndex;
 
 var AnimNodeSequence PlayingSequence;
-
-var name AnimName;
 
 function Init()
 {
@@ -251,8 +253,20 @@ simulated state Executing
 Begin:
     UnitPawn.EnableRMA(true, true);
     UnitPawn.EnableRMAInteractPhysics(true);
-    
-    AnimParams.AnimName = AnimName;
+
+    if (bUseCustomFireAnim && AbilityTemplate.CustomFireAnim != '')
+    {
+        AnimParams.AnimName = AbilityTemplate.CustomFireAnim;
+    }
+    else if (bUseCustomSelfFireAnim && AbilityTemplate.CustomSelfFireAnim != '')
+    {
+        AnimParams.AnimName = AbilityTemplate.CustomSelfFireAnim;
+    }
+    else
+    {
+        AnimParams.AnimName = AnimName;
+    }
+
     if (bComingFromEndMove)
     {
         AnimParams.DesiredEndingAtoms.Add(1);
@@ -275,7 +289,7 @@ Begin:
     if (AbilityContext.InputContext.MultiTargets.Length != 0)
     {
         CurrentDepth = 0;
-        while (TargetsNotified < TargetsHit && CurrentDepth < 30)
+        while (TargetsNotified < TargetsHit && CurrentDepth < 60)
         {
             CurrentDepth++;
             Sleep(ChainDelay);
@@ -297,9 +311,4 @@ Begin:
 defaultproperties
 {
     bNotifyMultiTargetsAtOnce = false
-
-    ParticleSystemName = "FX_Templar_Volt.P_Volt_Tether"
-    StartingSocket = R_Hand
-    TargetSocket = FX_CHEST
-    ChainDelay = 0.25
 }

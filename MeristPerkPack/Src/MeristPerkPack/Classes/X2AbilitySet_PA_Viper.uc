@@ -24,7 +24,6 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Salamander());
     Templates.AddItem(Sidewinder());
     /*>>*/Templates.AddItem(SidewinderMove());
-    /*>>*/Templates.AddItem(SidewinderAddMovementAction());
     Templates.AddItem(Slither());
     Templates.AddItem(ViperBite());
     Templates.AddItem(IronskinBite());
@@ -458,10 +457,6 @@ static function X2AbilityTemplate Sidewinder()
     Template.AddTargetEffect(Effect);
 
     Template.AdditionalAbilities.AddItem('M31_PA_Sidewinder_Move');
-    if (!`GetConfigBool("M31_PA_Sidewinder_bOnlyOnEnemyTurn"))
-    {
-        Template.AdditionalAbilities.AddItem('M31_PA_Sidewinder_AddMovementAction');
-    }
 
     return Template;
 }
@@ -473,6 +468,7 @@ static function X2AbilityTemplate SidewinderMove()
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local array<name>                       SkipExclusions;
     local X2Effect_PA_Sidewinder_Move       InterruptTurnEffect;
+    local X2Effect_GrantActionPoints        ActionPointEffect;
     
     Template = SelfTargetTrigger('M31_PA_Sidewinder_Move', "img:///UILibrary_MeristPerkIcons.UIPerk_Sidewinder");
 
@@ -489,7 +485,6 @@ static function X2AbilityTemplate SidewinderMove()
     UnitPropertyCondition.ExcludePanicked = true;
     UnitPropertyCondition.ExcludeUnableToAct = true;
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
 
     if (`GetConfigBool("M31_PA_Sidewinder_bAllowWhileDisoriented"))
         SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
@@ -497,9 +492,27 @@ static function X2AbilityTemplate SidewinderMove()
         SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
     Template.AddShooterEffectExclusions(SkipExclusions);
 
-    InterruptTurnEffect = new class'X2Effect_PA_Sidewinder_Move';
-    InterruptTurnEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-    Template.AddTargetEffect(InterruptTurnEffect);
+    if (`GetConfigBool("M31_PA_Sidewinder_bOnlyOnEnemyTurn"))
+    {
+        Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+
+        InterruptTurnEffect = new class'X2Effect_PA_Sidewinder_Move';
+        InterruptTurnEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        Template.AddTargetEffect(InterruptTurnEffect);
+    }
+    else
+    {
+        InterruptTurnEffect = new class'X2Effect_PA_Sidewinder_Move';
+        InterruptTurnEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        InterruptTurnEffect.TargetConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
+        Template.AddTargetEffect(InterruptTurnEffect);
+
+        ActionPointEffect = new class'X2Effect_GrantActionPoints';
+        ActionPointEffect.NumActionPoints = 1;
+        ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.MoveActionPoint;
+        ActionPointEffect.TargetConditions.AddItem(new class'X2Condition_ItsOwnTurn');
+        Template.AddTargetEffect(ActionPointEffect);
+    }
 
     class'X2Effect_PA_Sidewinder'.static.AddSidewinderCooldown(Template, `GetConfigInt("M31_PA_Sidewinder_Cooldown"));
 
@@ -534,49 +547,6 @@ static function EventListenerReturn AbilityTriggerEventListener_SidewinderMove(O
     }
 
     return ELR_NoInterrupt;
-}
-
-static function X2AbilityTemplate SidewinderAddMovementAction()
-{
-    local X2AbilityTemplate                 Template;
-    local X2AbilityTrigger_EventListener    Trigger;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-    local array<name>                       SkipExclusions;
-    local X2Effect_GrantActionPoints        ActionPointEffect;
-    
-    Template = SelfTargetTrigger('M31_PA_Sidewinder_AddMovementAction', "img:///UILibrary_MeristPerkIcons.UIPerk_Sidewinder");
-
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = class'X2Effect_PA_Sidewinder'.default.EventName;
-    Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.Priority = 55;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_Self;
-    Template.AbilityTriggers.AddItem(Trigger);
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeStunned = true;
-    UnitPropertyCondition.ExcludePanicked = true;
-    UnitPropertyCondition.ExcludeUnableToAct = true;
-    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_ItsOwnTurn');
-
-    if (`GetConfigBool("M31_PA_Sidewinder_bAllowWhileDisoriented"))
-        SkipExclusions.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
-    if (`GetConfigBool("M31_PA_Sidewinder_bAllowWhileBurning"))
-        SkipExclusions.AddItem(class'X2StatusEffects'.default.BurningName);
-    Template.AddShooterEffectExclusions(SkipExclusions);
-
-    ActionPointEffect = new class'X2Effect_GrantActionPoints';
-    ActionPointEffect.NumActionPoints = 1;
-    ActionPointEffect.PointType = class'X2CharacterTemplateManager'.default.MoveActionPoint;
-    Template.AddTargetEffect(ActionPointEffect);
-
-    class'X2Effect_PA_Sidewinder'.static.AddSidewinderCooldown(Template, `GetConfigInt("M31_PA_Sidewinder_Cooldown"));
-
-    Template.bShowActivation = true;
-
-    return Template;
 }
 
 static function X2AbilityTemplate Slither()

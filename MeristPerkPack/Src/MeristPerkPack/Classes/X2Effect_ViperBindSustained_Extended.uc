@@ -1,8 +1,38 @@
-class X2Effect_ViperBindSustained_Extended extends X2Effect_ViperBindSustained;
+class X2Effect_ViperBindSustained_Extended extends X2Effect_ViperBindSustained config(GameData_SoldierSkills);
 
 var int iTurnsForFirstIncrease;
 var bool bUseExponentialDamageIncrease;
 var bool bUseGeometricDamageIncrease;
+
+var config array<name> ClearBindSourceEvents;
+var config array<name> ClearBindTargetEvents;
+
+function RegisterForEvents(XComGameState_Effect EffectGameState)
+{
+    local XComGameStateHistory  History;
+    local X2EventManager        EventMgr;
+    local XComGameState_Unit    SourceUnit, TargetUnit;
+    local Object                EffectObj;
+    local int                   i;
+
+    super.RegisterForEvents(EffectGameState);
+
+    History = `XCOMHISTORY;
+    EventMgr = `XEVENTMGR;
+
+    EffectObj = EffectGameState;
+    SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+    TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+
+    for (i = 0; i < default.ClearBindSourceEvents.Length; ++i )
+    {
+        EventMgr.RegisterForEvent(EffectObj, RegisterAdditionalEventsLikeImpair[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, SourceUnit);
+    }
+    for (i = 0; i < default.ClearBindTargetEvents.Length; ++i )
+    {
+        EventMgr.RegisterForEvent(EffectObj, RegisterAdditionalEventsLikeImpair[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, TargetUnit);
+    }
+}
 
 function float GetPreDefaultDefendingDamageModifier_CH(
     XComGameState_Effect EffectState,

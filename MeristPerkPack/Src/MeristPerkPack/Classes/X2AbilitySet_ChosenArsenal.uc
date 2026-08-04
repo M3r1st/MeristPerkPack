@@ -66,6 +66,7 @@ static function X2AbilityTemplate ChaosDriver()
     local X2AbilityTemplate             Template;
     local X2Effect_ChaosDriver          Effect;
     local X2AbilityCharges              Charges;
+    local X2AbilityCost_Charges_Extended ChargeCost;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_CA_ChaosDriver');
 
@@ -98,7 +99,9 @@ static function X2AbilityTemplate ChaosDriver()
     Charges.InitialCharges = `GetConfigInt("M31_CA_ChaosDriver_InitialCharges");
     Template.AbilityCharges = Charges;
 
-    Template.AbilityCosts.AddItem(new class'X2AbilityCost_Charges_All');
+    ChargeCost = new class'X2AbilityCost_Charges_Extended';
+    ChargeCost.bConsumeAllCharges = true;
+    Template.AbilityCosts.AddItem(ChargeCost);
 
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
     Template.ActivationSpeech = 'InTheZone';

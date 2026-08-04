@@ -57,7 +57,9 @@ static function EventListenerReturn EffectEventListener_Assassin(Object EventDat
                     {
                         if (!SourceUnit.IsConcealed())
                         {
-                            TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+                            TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
+                            if (TargetUnit == none)
+                                TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
                             if (TargetUnit != none)
                             {
                                 if (TargetUnit.IsDead() && WasTargetAliveAndFlanked(SourceUnit, TargetUnit, GameState.HistoryIndex - 1))
@@ -69,7 +71,9 @@ static function EventListenerReturn EffectEventListener_Assassin(Object EventDat
                             {
                                 for (Index = 0; Index < AbilityContext.InputContext.MultiTargets.Length; Index++)
                                 {
-                                    TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[Index].ObjectID));
+                                    TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[Index].ObjectID));
+                                    if (TargetUnit == none)
+                                        TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[Index].ObjectID));
                                     if (TargetUnit != none)
                                     {
                                         if (TargetUnit.IsDead() && WasTargetAliveAndFlanked(SourceUnit, TargetUnit, GameState.HistoryIndex - 1))

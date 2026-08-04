@@ -46,14 +46,14 @@ LocFriendlyName="Counterattack"
 [M31_PA_CripplingBlow X2AbilityTemplate]
 LocFriendlyName="Crippling Wound"
 LocFlyOverText="Crippling Wound"
-LocLongDescription="Special melee attack against any enemy within movement range. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Special melee attack against any enemy within movement range. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
+LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Permanently lowers the target's aim by <Ability:M31_PA_CripplingBlow_AimPenalty>, dodge by <Ability:M31_PA_CripplingBlow_DodgePenalty>, and mobility by <Ability:M31_PA_CripplingBlow_MobilityPenalty>."
 LocPromotionPopupText="<Bullet> Multiple applications of the debuff will not stack."
 
 [M31_PA_Bladestorm X2AbilityTemplate]
 LocFriendlyName="Centurion"
 LocFlyOverText="Centurion"
-LocLongDescription="Gain <font color='#0bff9b'>Bladestorm</font>. Additionaly, standard bayonet attack no longer ends the turn."
+LocLongDescription="Gain <Ability:M31_FontAbility>Bladestorm</font>. Additionaly, standard bayonet attack no longer ends the turn."
 LocHelpText="Standard bayonet attack no longer ends the turn."
 LocPromotionPopupText="<Bullet> Does not apply to Bayonet Charge."
 
@@ -65,15 +65,15 @@ LocPromotionPopupText="<Bullet> Applies to all melee attacks."
 
 [M31_PA_ExcessiveForce X2AbilityTemplate]
 LocFriendlyName="Excessive Force"
-LocLongDescription="Gain <font color='#0bff9b'>Marauder</font> when a rifle is equipped as the primary weapon, or <font color='#0bff9b'>Traverse Fire</font> when a cannon is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Marauder</font> when a rifle is equipped as the primary weapon, or <font color='#0bff9b'>Traverse Fire</font> when a cannon is equipped as the primary weapon."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Marauder</font> makes standard shots non-turn-ending, allowing for shooting then moving or shooting twice on a turn.<br><Bullet> <font color='#0bff9b'>Traverse Fire</font> grants a non-movement action after taking a standard shot with as the first action."
+LocLongDescription="Gain <Ability:M31_FontAbility>Marauder</font> when a rifle is equipped as the primary weapon, or <Ability:M31_FontAbility>Traverse Fire</font> when a cannon is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Marauder</font> when a rifle is equipped as the primary weapon, or <Ability:M31_FontAbility>Traverse Fire</font> when a cannon is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> <Ability:M31_FontAbility>Marauder</font> makes standard shots non-turn-ending, allowing for shooting then moving or shooting twice on a turn.<br><Bullet> <Ability:M31_FontAbility>Traverse Fire</font> grants a non-movement action after taking a standard shot with as the first action."
 
 [M31_PA_ChargeIn X2AbilityTemplate]
 LocFriendlyName="Charge In"
-LocLongDescription="Gain <font color='#0bff9b'>Run and Gun</font>. Additionally, gain <font color='#0bff9b'>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Run and Gun</font>. Additionally, gain <font color='#0bff9b'>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
-LocPromotionPopupText="<Bullet> When activated, <font color='#0bff9b'>Run and Gun</font> grants an additional non-movement action.<br><Bullet> <font color='#0bff9b'>Extra Conditioning</font> reduces the cooldown of <font color='#0bff9b'>Run and Gun</font>."
+LocLongDescription="Gain <Ability:M31_FontAbility>Run and Gun</font>. Additionally, gain <Ability:M31_FontAbility>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Run and Gun</font>. Additionally, gain <Ability:M31_FontAbility>Extra Conditioning</font> when a rifle is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> When activated, <Ability:M31_FontAbility>Run and Gun</font> grants an additional non-movement action.<br><Bullet> <Ability:M31_FontAbility>Extra Conditioning</font> reduces the cooldown of <Ability:M31_FontAbility>Run and Gun</font>."
 
 [M31_PA_Shieldbreaker X2AbilityTemplate]
 LocFriendlyName="Parry This"
@@ -92,21 +92,21 @@ LocHelpText="Punch an enemy within movement range, dealing a small amount of dam
 [M31_PA_HunterMark X2AbilityTemplate]
 LocFriendlyName="Personal Enemy"
 LocFlyOverText="Personal Enemy"
-LocLongDescription="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonus> aim and +<Ability:M31_PA_HunterMark_CritBonus> critical chance against it. The bonus increases at the start of each turn. <Ability:M31_FreeAction>."
-LocHelpText="Mark the target as your <font color='#ffd700'>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it. The bonus increases at the start of each turn."
+LocLongDescription="Mark the target as your <Ability:M31_FontGold>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonus> aim and +<Ability:M31_PA_HunterMark_CritBonus> critical chance against it. The bonus increases at the start of each turn. <Ability:M31_FreeAction>."
+LocHelpText="Mark the target as your <Ability:M31_FontGold>Personal Enemy</font>, gaining +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it. The bonus increases at the start of each turn."
 LocPromotionPopupText="<Bullet> While the target it marked, gain additional +<Ability:M31_PA_HunterMark_AimBonusPerTurn> aim and +<Ability:M31_PA_HunterMark_CritBonusPerTurn> critical chance against it at the start of each turn.<br><Bullet> The effect lasts indefinitely, but only a single enemy can be marked at a time.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> <Ability:M31_FreeAction>."
 
 [M31_PA_HunterWatchfulEye X2AbilityTemplate]
 LocFriendlyName="Very Watchful Eye"
-LocLongDescription="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
-LocHelpText="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocLongDescription="Once per turn, take a free reaction shot when your <Ability:M31_FontGold>Personal Enemy</font> moves or attacks."
+LocHelpText="Once per turn, take a free reaction shot when your <Ability:M31_FontGold>Personal Enemy</font> moves or attacks."
 LocPromotionPopupText="<Bullet> Activates <Ability:M31_PA_HunterWatchfulEye_ActivationsPerTurn> time(s) per turn.<br><Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> The attack activates whenever the enemy moves or attacks."
 
 [M31_PA_HunterWatchfulEye_Passive X2AbilityTemplate]
 LocFriendlyName="Very Watchful Eye"
 LocFlyOverText="Very Watchful Eye"
-LocLongDescription="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
-LocHelpText="Once per turn, take a free reaction shot when your <font color='#ffd700'>Personal Enemy</font> moves or attacks."
+LocLongDescription="Once per turn, take a free reaction shot when your <Ability:M31_FontGold>Personal Enemy</font> moves or attacks."
+LocHelpText="Once per turn, take a free reaction shot when your <Ability:M31_FontGold>Personal Enemy</font> moves or attacks."
 LocPromotionPopupText="<Bullet> Activates <Ability:M31_PA_HunterWatchfulEye_ActivationsPerTurn> time(s) per turn.<br><Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> The attack activates whenever the enemy moves or attacks."
 
 [M31_PA_HunterDedication X2AbilityTemplate]
@@ -119,15 +119,15 @@ LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<
 [M31_PA_StayFrosty X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"
 LocFlyOverText="Stay Frosty"
-LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
-LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius>-tile radius."
+LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius>-tile radius."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
 
 [M31_PA_StayFrosty_Passive X2AbilityTemplate]
 LocFriendlyName="Stay Frosty"
 LocFlyOverText="Stay Frosty"
-LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
-LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius> tile radius."
+LocLongDescription="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius>-tile radius."
+LocHelpText="Once per turn, take a free reaction <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_PA_StayFrosty_Radius>-tile radius."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_PA_StayFrosty_bReactionFire>."
 
 

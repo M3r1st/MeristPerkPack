@@ -15,7 +15,9 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
     SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(kAbility.OwnerStateObject.ObjectID));
 
     if (SourceUnit == none)
+    {
         return 'AA_NotAUnit';
+    }
 
     if (bMatchSourceWeapon)
     {

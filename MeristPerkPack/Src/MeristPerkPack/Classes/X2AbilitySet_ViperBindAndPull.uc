@@ -346,9 +346,7 @@ static function X2AbilityTemplate Bind(name DataName, name CrushAbilityName, opt
     SustainedEffect.bRemoveWhenTargetDies = true;
     SustainedEffect.EffectRemovedSourceVisualizationFn = class'X2Ability_Viper'.static.BindEndSource_BuildVisualization;
     SustainedEffect.EffectRemovedVisualizationFn = class'X2Ability_Viper'.static.BindEndTarget_BuildVisualization;
-    SustainedEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
-    SustainedEffect.RegisterAdditionalEventsLikeImpair.AddItem('AffectedByStasis');
-    SustainedEffect.RegisterAdditionalEventsLikeImpair.AddItem('StunStrikeActivated');
+    SustainedEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);;
     SustainedEffect.bBringRemoveVisualizationForward = true;
 
     // Since this will also be a sustained ability, only put the bound status on the target for one round
@@ -613,8 +611,6 @@ static function X2AbilityTemplate RushAndBindBind(name DataName, name CrushAbili
     SustainedEffect.EffectRemovedSourceVisualizationFn = class'X2Ability_FrostLegionVisualization'.static.BindEndSource_BuildVisualization;
     SustainedEffect.EffectRemovedVisualizationFn = class'X2Ability_FrostLegionVisualization'.static.BindEndTarget_BuildVisualization;
     SustainedEffect.BuildPersistentEffect(1, true, true, false, eGameRule_PlayerTurnBegin);
-    SustainedEffect.RegisterAdditionalEventsLikeImpair.AddItem('AffectedByStasis');
-    SustainedEffect.RegisterAdditionalEventsLikeImpair.AddItem('StunStrikeActivated');
     SustainedEffect.bBringRemoveVisualizationForward = true;
 
     // Since this will also be a sustained ability, only put the bound status on the target for one round

@@ -28,14 +28,14 @@ LocFlyOverText="Paint the Moon Red"
 LocFriendlyName="Ambush Predator"
 LocLongDescription="Once per turn, take a free reaction shot against any enemy that moves in your line of sight. Additionally, the <Ability:ClassName>'s reaction fire can crit."
 LocHelpText="Once per turn, take a free reaction shot against any enemy that moves in your line of sight. The <Ability:ClassName>'s reaction fire can crit."
-LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Will not activate when the enemy attacks, even if <font color='#0bff9b'>Covering Fire</font>."
+LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Will not activate when the enemy attacks, even if <Ability:M31_FontAbility>Covering Fire</font>."
 
 [M31_PA_TaipanAmbush_Passive X2AbilityTemplate]
 LocFriendlyName="Ambush Predator"
 LocFlyOverText="Ambush Predator"
 LocLongDescription="Once per turn, take a free reaction shot against any enemy that moves in your line of sight. Additionally, the <Ability:ClassName>'s reaction fire can crit."
 LocHelpText="Once per turn, take a free reaction shot against any enemy that moves in your line of sight. The <Ability:ClassName>'s reaction fire can crit."
-LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Will not activate when the enemy attacks, even if <font color='#0bff9b'>Covering Fire</font>."
+LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Will not activate when the enemy attacks, even if <Ability:M31_FontAbility>Covering Fire</font>."
 
 [M31_PA_TaipanAmbush2 X2AbilityTemplate]
 LocFriendlyName="Ambush Predator"
@@ -54,28 +54,28 @@ LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, st
 [M31_PA_TaipanReturnFire X2AbilityTemplate]
 LocFriendlyName="Return Fire"
 LocFlyOverText="Return Fire"
-LocLongDescription="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
-LocHelpText="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
+LocLongDescription="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <Ability:M31_FontGold>their bondmate</font>. Ignores cover bonus."
+LocHelpText="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <Ability:M31_FontGold>their bondmate</font>. Ignores cover bonus."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed.<br><Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Can only activate once per turn.<br><Bullet> Can be activated by melee and area of effect attacks.<br><Bullet> Will not activate when targeted by overwatch fire."
 
 [M31_PA_TaipanReturnFire_Passive X2AbilityTemplate]
 LocFriendlyName="Return Fire"
 LocFlyOverText="Return Fire"
-LocLongDescription="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
-LocHelpText="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <font color='#ffd700'>their bondmate</font>. Ignores cover bonus."
+LocLongDescription="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <Ability:M31_FontGold>their bondmate</font>. Ignores cover bonus."
+LocHelpText="Once per turn, take a reaction shot against any enemy that attacks the <Ability:ClassName> or <Ability:M31_FontGold>their bondmate</font>. Ignores cover bonus."
 LocPromotionPopupText="<Bullet> Will not activate while the <Ability:ClassName> is concealed.<br><Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Can only activate once per turn.<br><Bullet> Can be activated by melee and area of effect attacks.<br><Bullet> Will not activate when targeted by overwatch fire."
 
 [M31_PA_TaipanWatchThemRun X2AbilityTemplate]
 LocFriendlyName="Nowhere to Run"
 LocFlyOverText="Nowhere to Run"
-LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <font color='#0bff9b'>Covering Fire</font>."
+LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <Ability:M31_FontAbility>Covering Fire</font>."
 LocHelpText="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot."
 LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Only input-triggered abilities can activate <Ability:M31_FriendlyName>.<br><Bullet> <Ability:M31_FriendlyName> can be activated by non-standard flanking shots."
 
 [M31_PA_TaipanWatchThemRun_Passive X2AbilityTemplate]
 LocFriendlyName="Nowhere to Run"
 LocFlyOverText="Nowhere to Run"
-LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <font color='#0bff9b'>Covering Fire</font>."
+LocLongDescription="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot. Additionally, gain <Ability:M31_FontAbility>Covering Fire</font>."
 LocHelpText="Once per turn, enter overwatch after performing a melee attack or taking a flanking shot."
 LocPromotionPopupText="<Bullet> Will not activate if the unit is disoriented, stunned, panicking, on fire or otherwise impaired.<br><Bullet> Only input-triggered abilities can activate <Ability:M31_FriendlyName>.<br><Bullet> <Ability:M31_FriendlyName> can be activated by non-standard flanking shots."
 
@@ -119,9 +119,9 @@ LocPromotionPopupText="<Bullet> The bonus lasts indefinitely and can stack.<br><
 
 [M31_PA_TaipanBloodHunter X2AbilityTemplate]
 LocFriendlyName="Blood Hunter"
-LocLongDescription="Increases the duration of <font color='#0bff9b'>Paint the Moon Red</font> by <Ability:M31_PA_TaipanBloodHunter_BonusDuration> turn(s). Additionally, gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack."
-LocHelpText="Gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack of <font color='#0bff9b'>Paint the Moon Red</font>. <font color='#0bff9b'>Paint the Moon Red</font> lasts for <Ability:M31_PA_TaipanBloodHunter_BonusDuration> additional turn(s)."
-LocPromotionPopupText="<Bullet> Gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack of <font color='#0bff9b'>Paint the Moon Red</font>.<br><Bullet> <font color='#0bff9b'>Paint the Moon Red</font> lasts for <Ability:M31_PA_TaipanBloodHunter_BonusDuration> additional turn(s)."
+LocLongDescription="Increases the duration of <Ability:M31_FontAbility>Paint the Moon Red</font> by <Ability:M31_PA_TaipanBloodHunter_BonusDuration> turn(s). Additionally, gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack."
+LocHelpText="Gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack of <Ability:M31_FontAbility>Paint the Moon Red</font>. <Ability:M31_FontAbility>Paint the Moon Red</font> lasts for <Ability:M31_PA_TaipanBloodHunter_BonusDuration> additional turn(s)."
+LocPromotionPopupText="<Bullet> Gain +<Ability:M31_PA_TaipanBloodHunter_CritBonusPerStack> critical chance for all attacks for each stack of <Ability:M31_FontAbility>Paint the Moon Red</font>.<br><Bullet> <Ability:M31_FontAbility>Paint the Moon Red</font> lasts for <Ability:M31_PA_TaipanBloodHunter_BonusDuration> additional turn(s)."
 
 [M31_PA_TaipanStealth X2AbilityTemplate]
 LocFriendlyName="Chameleon"

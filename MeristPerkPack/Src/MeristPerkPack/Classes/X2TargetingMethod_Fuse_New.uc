@@ -9,8 +9,8 @@ function Update(float DeltaTime)
     local TTile SnapTile;
 
     NewTargetLocation = GetTargetedActor().Location;
-    SnapTile = `XWORLD.GetTileCoordinatesFromPosition( NewTargetLocation );
-    `XWORLD.GetFloorPositionForTile( SnapTile, NewTargetLocation );
+    SnapTile = `XWORLD.GetTileCoordinatesFromPosition(NewTargetLocation);
+    `XWORLD.GetFloorPositionForTile(SnapTile, NewTargetLocation);
 
     if (NewTargetLocation != CachedTargetLocation)
     {

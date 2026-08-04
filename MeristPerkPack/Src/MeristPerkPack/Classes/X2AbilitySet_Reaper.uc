@@ -6,9 +6,10 @@ static function array<X2DataTemplate> CreateTemplates()
 
     // Templates.AddItem(Aim());
     // Templates.AddItem(Tricks());
-    
+
     return Templates;
 }
+
 // weak_EasyTarget
 // static function X2AbilityTemplate Aim()
 // {

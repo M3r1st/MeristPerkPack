@@ -1,15 +1,9 @@
 [M31_Aim X2AbilityTemplate]
 LocFriendlyName="Aim"
 LocFlyOverText="Hunker Down - Aim"
-LocLongDescription="<font color='#0bff9b'>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance to the first shot on the following turn."
-LocHelpText="<font color='#0bff9b'>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance for the first shot on the following turn."
+LocLongDescription="<Ability:M31_FontAbility>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance to the first shot on the following turn."
+LocHelpText="<Ability:M31_FontAbility>Hunker Down</font> confers +<Ability:M31_SharpshooterAim_AimBonus> aim and +<Ability:M31_SharpshooterAim_CritBonus> critical chance for the first shot on the following turn."
 LocPromotionPopupText="<Bullet> The bonus applies to any weapon shot.<br><Bullet> Affects <Ability:M31_Aim_Abilities>."
-
-[M31_AdvancedAidProtocol X2AbilityTemplate]
-LocFriendlyName="Advanced Aid Protocol"
-LocLongDescription="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being critically hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
-LocHelpText="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also increase the target's dodge by <Ability:M31_AdvancedAidProtocol_DodgeBonus> and reduce the chance of being critically hit by <Ability:M31_AdvancedAidProtocol_CritResistance>."
-; LocPromotionPopupText=""
 
 [M31_AdvancedOptics X2AbilityTemplate]
 LocFriendlyName="Advanced Optics"
@@ -34,28 +28,28 @@ LocPromotionPopupText="<Bullet> The <Ability:ClassName> will enter concealment e
 [M31_AssaultShot X2AbilityTemplate]
 LocFriendlyName="Assault Shot"
 LocFlyOverText="Assault Shot"
-LocLongDescription="Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. <Ability:M31_FreeAction>, but cannot crit. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. <Ability:M31_FreeAction>, but cannot crit."
+LocLongDescription="Fire a shot against a target within a <Ability:M31_AssaultShot_Range>-tile radius. <Ability:M31_FreeAction>, but cannot crit. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Fire a shot against a target within a <Ability:M31_AssaultShot_Range>-tile radius. <Ability:M31_FreeAction>, but cannot crit."
 LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Cannot target environmental objects."
 
 [M31_Bandit X2AbilityTemplate]
 LocFriendlyName="Bandit"
-LocFlyOverText="Bandit"
+LocFlyOverText="Bandit: +<Ability:M31_Bandit_AmmoReloaded> ammo"
 LocLongDescription="Once per turn, recover <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
 LocHelpText="Once per turn, recover <Ability:M31_Bandit_AmmoToReload> ammo after taking a shot with your <Ability:M31_BoundWeaponName>."
 
 [M31_BattalionCommander X2AbilityTemplate]
 LocFriendlyName="Battle Presence"
 LocFlyOverText="Battle Presence"
-LocLongDescription="Reduce Combat Presence's cooldown by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
-LocHelpText="Reduce Combat Presence's cooldown by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
+LocLongDescription="The cooldown of Combat Presence is reduced by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
+LocHelpText="The cooldown of Combat Presence is reduced by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
 
 [M31_BloodThirst X2AbilityTemplate]
 LocFriendlyName="Blood Thirst"
 LocFlyOverText="Blood Thirst"
 LocLongDescription="Whenever you attack with your <Ability:M31_BoundWeaponName>, gain a stackable +<Ability:M31_BloodThirst_DamagePerStack> damage bonus for your melee attacks for <Ability:M31_BloodThirst_StackDuration> turn(s)."
 LocHelpText="Whenever you attack with your <Ability:M31_BoundWeaponName>, gain a stackable +<Ability:M31_BloodThirst_DamagePerStack> damage bonus for your melee attacks."
-LocPromotionPopupText="<Bullet> Stacks up to <Ability:M31_BloodThirst_MaxStacks> time(s) (unlimited if <font color='#ffd700'>0</font>).<br><Bullet> Can gain up to <Ability:M31_BloodThirst_MaxStacksPerTurn> stack(s) per turn (unlimited if <font color='#ffd700'>0</font>).<br><Bullet> New applications refresh the duration: <Ability:M31_BloodThirst_bRefreshDuration>.<br><Bullet> Applies only to <Ability:M31_BoundWeaponName> attacks: <Ability:M31_BloodThirst_bMatchSourceWeapon>.<br><Bullet> The bonus increases only on succesful hits: <Ability:M31_BloodThirst_bIncreaseOnlyOnHit>."
+LocPromotionPopupText="<Bullet> Stacks up to <Ability:M31_BloodThirst_MaxStacks> time(s) (unlimited if <Ability:M31_FontGold>0</font>).<br><Bullet> Can gain up to <Ability:M31_BloodThirst_MaxStacksPerTurn> stack(s) per turn (unlimited if <Ability:M31_FontGold>0</font>).<br><Bullet> New applications refresh the duration: <Ability:M31_BloodThirst_bRefreshDuration>.<br><Bullet> Applies only to <Ability:M31_BoundWeaponName> attacks: <Ability:M31_BloodThirst_bMatchSourceWeapon>.<br><Bullet> The bonus increases only on succesful hits: <Ability:M31_BloodThirst_bIncreaseOnlyOnHit>."
 
 [M31_BombAndRun X2AbilityTemplate]
 LocFriendlyName="Bomb and Run"
@@ -69,13 +63,6 @@ LocFlyOverText="Bomb and Run"
 LocLongDescription="Once per turn, gain a movement-only action after throwing or launching a grenade."
 LocHelpText="Once per turn, gain a movement-only action after throwing or launching a grenade."
 
-[M31_Botnet X2AbilityTemplate]
-LocFriendlyName="Botnet"
-LocFlyOverText="Botnet"
-LocLongDescription="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown. <Ability:M31_FreeAction>."
-LocHelpText="Activate to allow your squad's standard shots to reduce the target's hack defense by <Ability:M31_Botnet_HackDefenseChange>. Lasts for <Ability:M31_Botnet_Duration> turn(s)."
-LocPromotionPopupText="<Bullet> Lasts for <Ability:M31_Botnet_Duration> turn(s).<br><Bullet> Your squad's standard shots permanently reduce target's hack defense by <Ability:M31_Botnet_HackDefenseChange>.<br><Bullet> Hack defense reduction can stack.<br><Bullet> Botnet has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up, Pistol Shot and Snap Shot."
-
 [M31_BurstFire X2AbilityTemplate]
 LocFriendlyName="Burst Fire"
 LocFlyOverText="Burst Fire"
@@ -86,9 +73,9 @@ LocHelpText="Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst at th
 [M31_CallForFire X2AbilityTemplate]
 LocFriendlyName="Call for Fire"
 LocFlyOverText="Call for Fire"
-LocLongDescription="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
-LocHelpText="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius> tile radius around you also enter overwatch."
-LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Affected by <font color='#0bff9b'>By My Command</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocLongDescription="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius>-tile radius around you also enter overwatch."
+LocHelpText="Enter overwatch. All allies in a <Ability:M31_CallForFire_Radius>-tile radius around you also enter overwatch."
+LocPromotionPopupText="<Bullet> Costs a single action and ends the turn.<br><Bullet> Affected by <Ability:M31_FontAbility>By My Command</font>.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_ChasingCoveringFire X2AbilityTemplate]
 LocFriendlyName="Fire Support"
@@ -203,8 +190,8 @@ LocHelpText="If no enemy can see you at the start of your turn, gain +<Ability:M
 [M31_EnergyShield X2AbilityTemplate]
 LocFriendlyName="Energy Shield"
 LocFlyOverText="Energy Shield"
-LocLongDescription="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius> tile radius for <Ability:M31_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius> tile radius for <Ability:M31_EnergyShield_Duration> turn(s)."
+LocLongDescription="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius>-tile radius for <Ability:M31_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius>-tile radius for <Ability:M31_EnergyShield_Duration> turn(s)."
 LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_EnergyShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
 
 [M31_Entrench X2AbilityTemplate]
@@ -228,16 +215,9 @@ LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 [M31_EyeOnTarget X2AbilityTemplate]
 LocFriendlyName="Eye on Target"
 LocFlyOverText="Eye on Target"
-LocLongDescription="Gain <font color='#0bff9b'>This One's Mine</font> and <font color='#0bff9b'>Watchful Eye</font>."
-LocHelpText="Gain <font color='#0bff9b'>This One's Mine</font> and <font color='#0bff9b'>Watchful Eye</font>."
+LocLongDescription="Gain <Ability:M31_FontAbility>This One's Mine</font> and <Ability:M31_FontAbility>Watchful Eye</font>."
+LocHelpText="Gain <Ability:M31_FontAbility>This One's Mine</font> and <Ability:M31_FontAbility>Watchful Eye</font>."
 LocPromotionPopupText="<Bullet> This One's Mine allows you to mark a target, giving you bonus critical chance and defense against it.<br><Bullet> Watchful Eye gives you a free overwatch shot when your This One's Mine target moves or attacks."
-
-[M31_ForwardOperator X2AbilityTemplate]
-LocFriendlyName="Forward Operator"
-LocFlyOverText="Forward Operator"
-LocLongDescription="Once per turn, when a new group of enemies is revealed, immediately gain an action."
-LocHelpText="Once per turn, when a new group of enemies is revealed, immediately gain an action."
-LocPromotionPopupText="<Bullet> Forward Operator can activate during the enemy turn.<br><Bullet> Forward Operator will activate even if the <Ability:ClassName> was not the one to reveal enemies."
 
 [M31_Frostbane X2AbilityTemplate]
 LocFriendlyName="Frostbane"
@@ -245,17 +225,6 @@ LocFlyOverText="Frostbane"
 LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_Frostbane_CritBonus> critical chance and +<Ability:M31_Frostbane_PiercingBonus> armor piercing, and additional +<Ability:M31_Frostbane_CritBonusPerTier> critical chance and +<Ability:M31_Frostbane_PiercingBonusPerTier> armor piercing per chill tier on the target."
 LocHelpText="Your <Ability:M31_BoundWeaponName> attacks gain +<Ability:M31_Frostbane_CritBonus> critical chance and +<Ability:M31_Frostbane_PiercingBonus> armor piercing, and additional +<Ability:M31_Frostbane_CritBonusPerTier> critical chance and +<Ability:M31_Frostbane_PiercingBonusPerTier> armor piercing per chill tier on the target."
 ; LocPromotionPopupText=""
-
-[M31_FutureWarfare X2AbilityTemplate]
-LocFriendlyName="Future Warfare"
-LocFlyOverText="Future Warfare"
-LocLongDescription="Whenever the <Ability:ClassName> uses a combat protocol, reduce the cooldown of all combat protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
-LocHelpText="Whenever the <Ability:ClassName> uses a combat protocol, reduce the cooldown of all combat protocols by <Ability:M31_FutureWarfare_CooldownReduction>. Can activate <Ability:M31_FutureWarfare_ActivationsPerTurn> time(s) per turn."
-LocPromotionPopupText="<Bullet> Applies to <Ability:M31_FutureWarfare_Abilities>.<br><Bullet> Reduces the cooldown of the ability that activated the effect."
-
-[M31_FutureWarfare_Trigger X2AbilityTemplate]
-LocFriendlyName="Future Warfare"
-LocFlyOverText="Future Warfare"
 
 [M31_GenevaSuggestion X2AbilityTemplate]
 LocFriendlyName="Geneva Suggestion"
@@ -307,7 +276,7 @@ LocPromotionPopupText="<Bullet> Costs a single action and doesn't end the turn.<
 LocFriendlyName="Malevolence"
 LocLongDescription="Attacks gain additional bonuses depending on the status effects the target is affected by."
 LocHelpText="Attacks gain additional bonuses depending on the status effects the target is affected by."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well most pistol and throwing knives attacks.<br><Bullet> <font color='#ffd700'>Acid Burning</font> - Attacks shred +<Ability:M31_Malevolence_AcidBurning_ShredBonus> armor.<br><Bullet> <font color='#ffd700'>Bleeding</font> - Attacks have +<Ability:M31_Malevolence_Bleeding_CritBonus> critical chance and deal +<Ability:M31_Malevolence_Bleeding_CritDamageBonus> critical damage.<br><Bullet> <font color='#ffd700'>Burning</font> - Attacks increase the damage the target takes from damage-over-time effects by <Ability:M31_Malevolence_Burning_DOTDamageBonus> for <Ability:M31_Malevolence_Burning_DebuffDuration> turns. Doesn't stack.<br><Bullet> <font color='#ffd700'>Poisoned</font> - Attacks reduce the target's critical chance by <Ability:M31_Malevolence_Poisoned_CritPenalty> and increase the graze chance by <Ability:M31_Malevolence_Poisoned_GrazePenalty> for <Ability:M31_Malevolence_Poisoned_DebuffDuration> turns. Stacks.<br><Bullet> <font color='#ffd700'>Hypothermia</font> - Attacks reduce the target's aim by <Ability:M31_Malevolence_Frost_AimPenalty> and defense by <Ability:M31_Malevolence_Frost_DefensePenalty> for <Ability:M31_Malevolence_Frost_DebuffDuration> turns. Stacks.<br><Bullet> <font color='#ffd700'>Radiation</font> - Attacks reduce the target's damage by <Ability:M31_Malevolence_Radiation_DamageReductionPrc> for <Ability:M31_Malevolence_Radiation_DebuffDuration> turns. Doesn't stack.<br><Bullet> <font color='#df07b7'>Requiem Corrosion</font> or <font color='#ffd700'>Psionic Rippling</font> - Attacks gain double bonus damage from Rupture."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well most pistol and throwing knives attacks.<br><Bullet> <Ability:M31_FontGold>Acid Burning</font> - Attacks shred +<Ability:M31_Malevolence_AcidBurning_ShredBonus> armor.<br><Bullet> <Ability:M31_FontGold>Bleeding</font> - Attacks have +<Ability:M31_Malevolence_Bleeding_CritBonus> critical chance and deal +<Ability:M31_Malevolence_Bleeding_CritDamageBonus> critical damage.<br><Bullet> <Ability:M31_FontGold>Burning</font> - Attacks increase the damage the target takes from damage-over-time effects by <Ability:M31_Malevolence_Burning_DOTDamageBonus> for <Ability:M31_Malevolence_Burning_DebuffDuration> turns. Doesn't stack.<br><Bullet> <Ability:M31_FontGold>Poisoned</font> - Attacks reduce the target's critical chance by <Ability:M31_Malevolence_Poisoned_CritPenalty> and increase the graze chance by <Ability:M31_Malevolence_Poisoned_GrazePenalty> for <Ability:M31_Malevolence_Poisoned_DebuffDuration> turns. Stacks.<br><Bullet> <Ability:M31_FontGold>Hypothermia</font> - Attacks reduce the target's aim by <Ability:M31_Malevolence_Frost_AimPenalty> and defense by <Ability:M31_Malevolence_Frost_DefensePenalty> for <Ability:M31_Malevolence_Frost_DebuffDuration> turns. Stacks.<br><Bullet> <Ability:M31_FontGold>Radiation</font> - Attacks reduce the target's damage by <Ability:M31_Malevolence_Radiation_DamageReductionPrc> for <Ability:M31_Malevolence_Radiation_DebuffDuration> turns. Doesn't stack.<br><Bullet> <font color='#df07b7'>Requiem Corrosion</font> or <Ability:M31_FontGold>Psionic Rippling</font> - Attacks gain double bonus damage from Rupture."
 
 [M31_Malevolence_Trigger X2AbilityTemplate]
 LocFriendlyName="Malevolence"
@@ -328,8 +297,8 @@ LocFlyOverText="Meld"
 [M31_Minelayer2 X2AbilityTemplate]
 LocFriendlyName="Minelayer+"
 LocFlyOverText="Minelayer+"
-LocLongDescription="Grants <font color='#ffd700'>2</font> free proximity mines."
-LocHelpText="Grants <font color='#ffd700'>2</font> free proximity mines."
+LocLongDescription="Grants <Ability:M31_FontGold>2</font> free proximity mines."
+LocHelpText="Grants <Ability:M31_FontGold>2</font> free proximity mines."
 ; LocPromotionPopupText=""
 
 [M31_NeurotoxicShot X2AbilityTemplate]
@@ -355,15 +324,15 @@ LocPromotionPopupText="<Bullet> Rupture from multiple attacks doesn't stack. Hig
 [M31_Overpower X2AbilityTemplate]
 LocFriendlyName="Overpower"
 LocFlyOverText="Overpower"
-LocLongDescription="Special melee attack against any enemy within movement range. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Special melee attack against any enemy within movement range. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units."
+LocLongDescription="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Attack any enemy within movement range with your <Ability:M31_BoundWeaponName>. Stuns the target for <Ability:M31_Overpower_StunDuration> action(s) and shreds <Ability:M31_Overpower_Shred> points of armor. Cannot be used against large units."
 LocPromotionPopupText="<Bullet> Shred is applied as a separate damage instance and is not affected by armor piercing and damage modifiers."
 
 [M31_Overseer X2AbilityTemplate]
 LocFriendlyName="Overseer"
-LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br><Bullet> <font color='#0bff9b'>Sniper Overwatch</font> is affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
+LocLongDescription="Gain <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Sniper Overwatch</font> when a sniper rifle is equipped as the primary weapon."
+LocPromotionPopupText="<Bullet> <Ability:M31_FontAbility>Sniper Overwatch</font> is a specialized form of Overwatch that allows you to take a reaction shot against an enemy that moves or attacks within a cone of fire.<br><Bullet> <Ability:M31_FontAbility>Sniper Overwatch</font> is affected by <Ability:M31_FontAbility>Sentinel</font> and <Ability:M31_FontAbility>Rapid Reaction</font>."
 
 [M31_PerfectHandling X2AbilityTemplate]
 LocFriendlyName="Perfect Handling"
@@ -392,13 +361,6 @@ LocLongDescription="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageB
 LocHelpText="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted units."
 LocPromotionPopupText="<Bullet> Applies to all ranged attacks.<br><Bullet> Both the Holotargeter and the Holo Targeting ability are valid for this bonus."
 
-[M31_RapidDumping X2AbilityTemplate]
-LocFriendlyName="Rapid Dumping"
-LocFlyOverText="Rapid Dumping"
-LocLongDescription="Combat protocols no longer end the turn."
-LocHelpText="Combat protocols no longer end the turn."
-LocPromotionPopupText="<Bullet> Applies to <Ability:M31_RapidDumping_Abilities>."
-
 [M31_Relentless X2AbilityTemplate]
 LocFriendlyName="Relentless"
 LocFlyOverText="Relentless"
@@ -411,7 +373,7 @@ LocFriendlyName="Advanced Reposition"
 LocFlyOverText="Reposition"
 LocLongDescription="Once per turn, gain an additional move action after taking a standard or one of the special shots at a flanked or exposed target with your primary weapon."
 LocHelpText="Once per turn, gain an additional move action after taking a standard or one of the special shots at a flanked or exposed target with your primary weapon."
-LocPromotionPopupText="<Bullet> Cannot activate on the same turn as <font color='#0bff9b'>Run and Gun</font> or <font color='#0bff9b'>Close Encounters</font>.<br><Bullet> Applies when attacking unflankable units: <Ability:M31_RepositionPlus_bApplyToUnflankable>.<br><Bullet> Applies to <Ability:M31_Reposition_Abilities>."
+LocPromotionPopupText="<Bullet> Cannot activate on the same turn as <Ability:M31_FontAbility>Run and Gun</font> or <Ability:M31_FontAbility>Close Encounters</font>.<br><Bullet> Applies when attacking unflankable units: <Ability:M31_RepositionPlus_bApplyToUnflankable>.<br><Bullet> Applies to <Ability:M31_Reposition_Abilities>."
 
 [M31_SaltInTheWound X2AbilityTemplate]
 LocFriendlyName="Salt in the Wound"
@@ -437,13 +399,9 @@ LocFriendlyName="Buckshot"
 LocFlyOverText="Buckshot"
 LocLongDescription="Take a cone-based shot with your <Ability:M31_BoundWeaponName>. Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>, gaining bonus length and width for each additional ammo consumed. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Cone-based <Ability:M31_BoundWeaponName> shot. Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>, gaining bonus length and width for each additional ammo consumed."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>.<br><Bullet> The cone is <Ability:M31_SawedOffSweeper_Length> long and <Ability:M31_SawedOffSweeper_Width> wide.<br><Bullet> The length is increased by <Ability:M31_SawedOffSweeper_LengthPerAmmo> and the width is increased by <Ability:M31_SawedOffSweeper_WidthPerAmmo> for each additional ammo consumed.<br><Bullet> Affected by <font color='#0bff9b'>Hipfire</font>: <Ability:M31_SawedOffSweeper_bHipfire>.<br><Bullet> Allies in the area of effect can take damage.<br><Bullet> The spread pattern is blocked by heavy cover."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Requires <Ability:M31_SawedOffSweeper_MinAmmo> ammo, but consumes up to <Ability:M31_SawedOffSweeper_MaxAmmo>.<br><Bullet> The cone is <Ability:M31_SawedOffSweeper_Length> long and <Ability:M31_SawedOffSweeper_Width> wide.<br><Bullet> The length is increased by <Ability:M31_SawedOffSweeper_LengthPerAmmo> and the width is increased by <Ability:M31_SawedOffSweeper_WidthPerAmmo> for each additional ammo consumed.<br><Bullet> Affected by <Ability:M31_FontAbility>Hipfire</font>: <Ability:M31_SawedOffSweeper_bHipfire>.<br><Bullet> Allies in the area of effect can take damage.<br><Bullet> The spread pattern is blocked by heavy cover."
 
-[M31_ShadowstepAid X2AbilityTemplate]
-LocFriendlyName="Shadowstep Aid"
-LocLongDescription="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also grant temporary Shadowstep and a movement-only action."
-LocHelpText="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also grant temporary Shadowstep and a movement-only action."
-; LocPromotionPopupText=""
+
 
 [M31_Shadowstrike X2AbilityTemplate]
 LocFriendlyName="Shadowstrike"
@@ -498,7 +456,7 @@ LocFriendlyName="Sniper Overwatch"
 LocFlyOverText="Sniper Overwatch"
 LocLongDescription="A specialized form of overwatch. Take a reaction shot against an enemy that moves or attacks within a cone of fire."
 LocHelpText="Take a reaction shot against an enemy that moves or attacks within a cone of fire."
-LocPromotionPopupText="<Bullet> Sniper Overwatch utilizes Squadsight, even if the soldier does not have Long Watch.<br><Bullet> Affected by <font color='#0bff9b'>Sentinel</font> and <font color='#0bff9b'>Rapid Reaction</font>."
+LocPromotionPopupText="<Bullet> Sniper Overwatch utilizes Squadsight, even if the soldier does not have Long Watch.<br><Bullet> Affected by <Ability:M31_FontAbility>Sentinel</font> and <Ability:M31_FontAbility>Rapid Reaction</font>."
 
 [M31_SolidSnake X2AbilityTemplate]
 LocFriendlyName="Hunter's Focus"
@@ -528,23 +486,23 @@ LocPromotionPopupText="<Bullet> Bonus increases with the weapon tier."
 [M31_SuperheavyOrdnance X2AbilityTemplate]
 LocFriendlyName="Superheavy Ordnance"
 LocFlyOverText="Superheavy Ordnance"
-LocLongDescription="The item in your grenade-only slot gains two bonus uses and your grenades gain <Ability:M31_SuperheavyOrdnance_RangeBonus> tiles extra range."
-LocHelpText="The item in your grenade-only slot gains two bonus uses and your grenades gain <Ability:M31_SuperheavyOrdnance_RangeBonus> tiles extra range."
-LocPromotionPopupText="<Bullet> All grenades are viable for Superheavy Ordnance, even non-offensive grenades like Battle Scanners and Smoke Grenades.<br><Bullet> The range bonus applies to both launched and thrown grenades.<br><Bullet> Grants a Grenade-only slot."
+LocLongDescription="The item in your grenade-only slot gains <Ability:M31_SuperheavyOrdnance_ChargeBonus> bonus use(s) and the range of your grenades is increased by <Ability:M31_SuperheavyOrdnance_RangeBonus> tile(s)."
+LocHelpText="The item in your grenade-only slot gains <Ability:M31_SuperheavyOrdnance_ChargeBonus> bonus use(s) and the range of your grenades is increased by <Ability:M31_SuperheavyOrdnance_RangeBonus> tile(s)."
+LocPromotionPopupText="<Bullet> All grenades are viable for Superheavy Ordnance, even non-offensive grenades like Battle Scanners and Smoke Grenades.<br><Bullet> The range bonus applies to both launched and thrown grenades.<br><Bullet> Grants a Grenade-only slot if the <Ability:ClassName> doesn't have one yet."
 
 [M31_SupplyPack X2AbilityTemplate]
 LocFriendlyName="Supply Pack"
 LocFlyOverText="Supply Pack"
-LocLongDescription="Gain <font color='#0bff9b'>Resupply Ammo</font>, <font color='#0bff9b'>Bandage Throw</font> and <font color='#0bff9b'>Supply Run</font>."
-LocHelpText="Gain <font color='#0bff9b'>Resupply Ammo</font>, <font color='#0bff9b'>Bandage Throw</font> and <font color='#0bff9b'>Supply Run</font>."
-LocPromotionPopupText="<Bullet> <font color='#0bff9b'>Resupply Ammo</font>: Throw a spare magazine to a target ally so they can reload their weapon for free.<br><Bullet> <font color='#0bff9b'>Bandage Throw</font>: Throw bandages to a target ally so they can heal over time and stop bleeding.<br><Bullet> <font color='#0bff9b'>Supply Run</font>: Using Resupply Ammo or Bandage Throw on an ally grants the Keeper a Move-only action."
+LocLongDescription="Gain <Ability:M31_FontAbility>Resupply Ammo</font>, <Ability:M31_FontAbility>Bandage Throw</font> and <Ability:M31_FontAbility>Supply Run</font>."
+LocHelpText="Gain <Ability:M31_FontAbility>Resupply Ammo</font>, <Ability:M31_FontAbility>Bandage Throw</font> and <Ability:M31_FontAbility>Supply Run</font>."
+LocPromotionPopupText="<Bullet> <Ability:M31_FontAbility>Resupply Ammo</font>: Throw a spare magazine to a target ally so they can reload their weapon for free.<br><Bullet> <Ability:M31_FontAbility>Bandage Throw</font>: Throw bandages to a target ally so they can heal over time and stop bleeding.<br><Bullet> <Ability:M31_FontAbility>Supply Run</font>: Using Resupply Ammo or Bandage Throw on an ally grants the Keeper a Move-only action."
 
 [M31_SuppressingFire X2AbilityTemplate]
 LocFriendlyName="Suppressing Fire"
 LocFlyOverText="Suppressing Fire"
 LocLongDescription="Take a shot with your <Ability:M31_BoundWeaponName>. If the target is still alive, suppress them. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Take a shot with your <Ability:M31_BoundWeaponName>. If the target is still alive, suppress them."
-LocPromotionPopupText="<Bullet> Suppressing Fire requires <font color='#ffd700'>3</font> ammo to use, but the shot consumes only <font color='#ffd700'>1</font>.<br><Bullet> Suppressing Fire has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocPromotionPopupText="<Bullet> Suppressing Fire requires <Ability:M31_FontGold>3</font> ammo to use, but the shot consumes only <Ability:M31_FontGold>1</font>.<br><Bullet> Suppressing Fire has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_SuppressingFire_Trigger X2AbilityTemplate]
 LocFriendlyName="Suppressing Fire"
@@ -552,14 +510,8 @@ LocFlyOverText="Suppressing Fire"
 
 [M31_Suppression X2AbilityTemplate]
 LocFriendlyName="Oppression"
-LocLongDescription="Gain <font color='#0bff9b'>Suppression</font>. Additionally, gain <font color='#0bff9b'>Area Suppression</font> when a cannon is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Suppression</font>. Additionally, gain <font color='#0bff9b'>Area Suppression</font> when a cannon is equipped as the primary weapon."
-; LocPromotionPopupText=""
-
-[M31_TargetingAid X2AbilityTemplate]
-LocFriendlyName="Targeting Aid"
-LocLongDescription="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
-LocHelpText="<font color='#0bff9b'>Aid Protocol</font> and <font color='#0bff9b'>Stronghold Protocol</font> also increase the target's aim by <Ability:M31_TargetingAid_AimBonus> and critical chance by <Ability:M31_TargetingAid_CritBonus>."
+LocLongDescription="Gain <Ability:M31_FontAbility>Suppression</font>. Additionally, gain <Ability:M31_FontAbility>Area Suppression</font> when a cannon is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Suppression</font>. Additionally, gain <Ability:M31_FontAbility>Area Suppression</font> when a cannon is equipped as the primary weapon."
 ; LocPromotionPopupText=""
 
 [M31_TrackingFire X2AbilityTemplate]
@@ -571,20 +523,20 @@ LocPromotionPopupText="<Bullet> Can be used while the soldier has at least one s
 
 [M31_TrainedSniper_Squadsight X2AbilityTemplate]
 LocFriendlyName="Trained Sniper (Squadsight)"
-LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> when a sniper rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> when a sniper rifle is equipped as the primary weapon."
+LocLongDescription="Gain <Ability:M31_FontAbility>Squadsight</font> when a sniper rifle is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Squadsight</font> when a sniper rifle is equipped as the primary weapon."
 ; LocPromotionPopupText=""
 
 [M31_TrainedSniper_LongWatch X2AbilityTemplate]
 LocFriendlyName="Trained Sniper (Long Watch)"
-LocLongDescription="Gain <font color='#0bff9b'>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
+LocLongDescription="Gain <Ability:M31_FontAbility>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
 ; LocPromotionPopupText=""
 
 [M31_RangeFinder X2AbilityTemplate]
 LocFriendlyName="Range Finder"
-LocLongDescription="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
-LocHelpText="Gain <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
+LocLongDescription="Gain <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
+LocHelpText="Gain <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Long Watch</font> when a sniper rifle is equipped as the primary weapon."
 ; LocPromotionPopupText=""
 
 [M31_TraverseFire X2AbilityTemplate]
@@ -618,6 +570,13 @@ LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> shots can crit: <Abil
 LocFriendlyName="Unload"
 LocFlyOverText="Unload"
 
+[M31_Warbringer X2AbilityTemplate]
+LocFriendlyName="Warbringer"
+LocFlyOverText="Warbringer"
+LocLongDescription="Grants +<Ability:M31_Warbringer_ChargeBonus> charge(s) to every grenade equipped and your grenades' area of effect is increased by <Ability:M31_Warbringer_RadiusBonus>."
+LocHelpText="Your grenades' area of effect is increased by <Ability:M31_Warbringer_RadiusBonus>."
+LocPromotionPopupText="<Bullet> This includes both launched and thrown grenades.<br><Bullet> Grants +<Ability:M31_Warbringer_ChargeBonus> charge(s) to every grenade equipped.<br><Bullet> Applies to the grenade slot as well as the standard utility slots, but not other slots.<br><Bullet> Temporary grenades provided by other abilities do not get extra charges."
+
 [M31_WatchfulEye X2AbilityTemplate]
 LocFriendlyName="Eyeful Watch"
 LocFlyOverText="Eyeful Watch"
@@ -629,12 +588,12 @@ LocPromotionPopupText="<Bullet> The mark persists for as long as the enemy is ho
 LocFriendlyName="Eyeful Watch"
 LocFlyOverText="Eyeful Watch"
 
-[M31_Warbringer X2AbilityTemplate]
-LocFriendlyName="Warbringer"
-LocFlyOverText="Warbringer"
-LocLongDescription="Grants +<Ability:M31_Warbringer_ChargeBonus> charge(s) to every grenade equipped and your grenades' area of effect is increased by <Ability:M31_Warbringer_RadiusBonus>."
-LocHelpText="Your grenades' area of effect is increased by <Ability:M31_Warbringer_RadiusBonus>."
-LocPromotionPopupText="<Bullet> This includes both launched and thrown grenades.<br><Bullet> Grants +<Ability:M31_Warbringer_ChargeBonus> charge(s) to every grenade equipped.<br><Bullet> Applies to the grenade slot as well as the standard utility slots, but not other slots.<br><Bullet> Temporary grenades provided by other abilities do not get extra charges."
+[M31_ZoneOfControl X2AbilityTemplate]
+LocFriendlyName="Zone of Control"
+LocFlyOverText="Zone of Control"
+LocLongDescription="All enemies within <Ability:M31_ZoneOfControl_Radius> tile(s) suffer a penalty of -<Ability:M31_ZoneOfControl_AimPenalty> aim and -<Ability:M31_ZoneOfControl_MobilityPenalty> mobility."
+LocHelpText="All enemies within <Ability:M31_ZoneOfControl_Radius> tile(s) suffer a penalty of -<Ability:M31_ZoneOfControl_AimPenalty> aim and -<Ability:M31_ZoneOfControl_MobilityPenalty> mobility."
+LocPromotionPopupText="<Bullet> The effect is active even if the <Ability:ClassName> is impaired: <Ability:M31_ZoneOfControl_bAllowWhileImpaired>.<br><Bullet> The penalty can stack: <Ability:M31_ZoneOfControl_bAllowStack>."
 
 [M31_AcidRoundsPassive X2AbilityTemplate]
 LocFriendlyName="Caustic Terror"
@@ -650,7 +609,7 @@ LocFlyOverText="Caustic Terror"
 LocFriendlyName="Exsanguination"
 LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
 LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <font color='#ffd700'>1</font> against the Chosen and Alien Rulers."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers."
 
 [M31_BleedingRounds_Attack X2AbilityTemplate]
 LocFriendlyName="Exsanguination"
@@ -660,7 +619,7 @@ LocFlyOverText="Exsanguination"
 LocFriendlyName="Bloodlet"
 LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
 LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <font color='#ffd700'>1</font> against the Chosen and Alien Rulers."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers."
 
 [M31_Bloodlet_Attack X2AbilityTemplate]
 LocFriendlyName="Bloodlet"
@@ -698,9 +657,9 @@ LocFlyOverText="Greater Shiver"
 
 [M31_Chimera X2AbilityTemplate]
 LocFriendlyName="Chimera"
-LocLongDescription="The <Ability:ClassName> can now equip <font color='#ffd700'>cannons</font>, <font color='#ffd700'>sniper rifles</font>, <font color='#ffd700'>vektor rifles</font>, <font color='#ffd700'>bullpups</font>, and <font color='#ffd700'>ripjacks</font>, and gains additional abilities depending on the weapons equipped."
-LocHelpText="The <Ability:ClassName> can now equip <font color='#ffd700'>cannons</font>, <font color='#ffd700'>sniper rifles</font>, <font color='#ffd700'>vektor rifles</font>, <font color='#ffd700'>bullpups</font>, and <font color='#ffd700'>ripjacks</font>, and gains additional abilities depending on the weapons equipped."
-LocPromotionPopupText="<Bullet> <font color='#ffd700'>SMG</font>: <font color='#0bff9b'>Airstrike</font> - Once per mission, call in an airstrike that does damage in a large area.<br><Bullet> <font color='#ffd700'>Rifle</font>: <font color='#0bff9b'>Cyclic Fire</font> - Fire three shots at a target in a single attack.<br><Bullet> <font color='#ffd700'>Boltcaster</font>: <font color='#0bff9b'>Pinpoint</font> - Special shot that has bonus aim, critical chance and critical damage for each action consumed.<br><Bullet> <font color='#ffd700'>Shotgun</font>: <font color='#0bff9b'>Assault Shot</font> - Fire a shot against a target within a <Ability:M31_AssaultShot_Range> tile radius. Free action, but can't crit. Has a <Ability:M31_AssaultShot_Cooldown> turn cooldown.<br><Bullet> <font color='#ffd700'>Cannon</font>: <font color='#0bff9b'>Saturation Fire</font> - Fire a cone shaped barrage of bullets at every enemy in an area. Deals high damage to cover.<br><Bullet> <font color='#ffd700'>Sniper Rifle</font>: <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Double Tap</font> - Fire a standard shot and gain a second action restricted to an additional shot or overwatching.<br><Bullet> <font color='#ffd700'>Vektor Rifle</font>: <font color='#0bff9b'>Squadsight</font> and <font color='#0bff9b'>Burst Fire</font> - Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst. Has a <Ability:M31_BurstFire_Cooldown> turn cooldown.<br><Bullet> <font color='#ffd700'>Bullpup</font>: <font color='#0bff9b'>Battlelord</font> - Activate to take an action after each enemy in line of sight takes a turn.<br><br><Bullet> <font color='#ffd700'>Sword</font>: <font color='#0bff9b'>Overpower</font> - Dashing melee attack. Stuns the target and shreds all of its armor. Non-large units only.<br><Bullet> <font color='#ffd700'>Combat Knife</font>: <font color='#0bff9b'>Crippling Wound</font> - Dashing melee attack. Inflicts a permanent non-stacking debuff that severely reduces the target's mobility, aim and dodge.<br><Bullet> <font color='#ffd700'>Ripjack</font>: <font color='#0bff9b'>Combat Advance</font> - Dashing melee attack. Costs a single action, doesn't end the turn, and grants a movement-only action. Has a <Ability:M31_CombatAdvance_Cooldown> turn cooldown.<br><br><Bullet> <font color='#ffd700'>Pistol</font>: <font color='#0bff9b'>Frantic Fire</font> - As a free action, fire the pistol at 2 random enemies.<br><Bullet> <font color='#ffd700'>Sidearm</font>: <font color='#0bff9b'>Roulette</font> - Pistol shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
+LocLongDescription="The <Ability:ClassName> can now equip <Ability:M31_FontGold>cannons</font>, <Ability:M31_FontGold>sniper rifles</font>, <Ability:M31_FontGold>vektor rifles</font>, <Ability:M31_FontGold>bullpups</font>, and <Ability:M31_FontGold>ripjacks</font>, and gains additional abilities depending on the weapons equipped."
+LocHelpText="The <Ability:ClassName> can now equip <Ability:M31_FontGold>cannons</font>, <Ability:M31_FontGold>sniper rifles</font>, <Ability:M31_FontGold>vektor rifles</font>, <Ability:M31_FontGold>bullpups</font>, and <Ability:M31_FontGold>ripjacks</font>, and gains additional abilities depending on the weapons equipped."
+LocPromotionPopupText="<Bullet> <Ability:M31_FontGold>SMG</font>: <Ability:M31_FontAbility>Airstrike</font> - Once per mission, call in an airstrike that does damage in a large area.<br><Bullet> <Ability:M31_FontGold>Rifle</font>: <Ability:M31_FontAbility>Cyclic Fire</font> - Fire three shots at a target in a single attack.<br><Bullet> <Ability:M31_FontGold>Boltcaster</font>: <Ability:M31_FontAbility>Pinpoint</font> - Special shot that has bonus aim, critical chance and critical damage for each action consumed.<br><Bullet> <Ability:M31_FontGold>Shotgun</font>: <Ability:M31_FontAbility>Assault Shot</font> - Fire a shot against a target within a <Ability:M31_AssaultShot_Range>-tile radius. Free action, but can't crit. Has a <Ability:M31_AssaultShot_Cooldown> turn cooldown.<br><Bullet> <Ability:M31_FontGold>Cannon</font>: <Ability:M31_FontAbility>Saturation Fire</font> - Fire a cone shaped barrage of bullets at every enemy in an area. Deals high damage to cover.<br><Bullet> <Ability:M31_FontGold>Sniper Rifle</font>: <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Double Tap</font> - Fire a standard shot and gain a second action restricted to an additional shot or overwatching.<br><Bullet> <Ability:M31_FontGold>Vektor Rifle</font>: <Ability:M31_FontAbility>Squadsight</font> and <Ability:M31_FontAbility>Burst Fire</font> - Fire an automatic <Ability:M31_BurstFire_NumShots>-shot burst. Has a <Ability:M31_BurstFire_Cooldown> turn cooldown.<br><Bullet> <Ability:M31_FontGold>Bullpup</font>: <Ability:M31_FontAbility>Battlelord</font> - Activate to take an action after each enemy in line of sight takes a turn.<br><br><Bullet> <Ability:M31_FontGold>Sword</font>: <Ability:M31_FontAbility>Overpower</font> - Dashing melee attack. Stuns the target and shreds armor. Non-large units only.<br><Bullet> <Ability:M31_FontGold>Combat Knife</font>: <Ability:M31_FontAbility>Crippling Wound</font> - Dashing melee attack. Inflicts a permanent non-stacking debuff that severely reduces the target's mobility, aim and dodge.<br><Bullet> <Ability:M31_FontGold>Ripjack</font>: <Ability:M31_FontAbility>Combat Advance</font> - Dashing melee attack. Costs a single action, doesn't end the turn, and grants a movement-only action. Has a <Ability:M31_CombatAdvance_Cooldown> turn cooldown.<br><br><Bullet> <Ability:M31_FontGold>Pistol</font>: <Ability:M31_FontAbility>Frantic Fire</font> - As a free action, fire the pistol at 2 random enemies.<br><Bullet> <Ability:M31_FontGold>Sidearm</font>: <Ability:M31_FontAbility>Roulette</font> - Pistol shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
 
 [M31_HypothermiaRounds X2AbilityTemplate]
 LocFriendlyName="Withering Frost"
@@ -716,7 +675,7 @@ LocFlyOverText="Withering Frost"
 LocFriendlyName="Chilling Critical"
 LocLongDescription="Critical hits with your <Ability:M31_BoundWeaponName> have a <Ability:M31_ShiverCrit2_PrcChance> chance to inflict bitterfrost."
 LocHelpText="Critical hits with your <Ability:M31_BoundWeaponName> have a <Ability:M31_ShiverCrit2_PrcChance> chance to inflict bitterfrost."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks as well as <font color='#0bff9b'>Frostbite Spit</font>."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks as well as <Ability:M31_FontAbility>Frostbite Spit</font>."
 
 [M31_ShiverCrit2_Attack X2AbilityTemplate]
 LocFriendlyName="Chilling Critical"
@@ -725,8 +684,8 @@ LocFlyOverText="Chilling Critical"
 [M31_Rider_AutoGuard X2AbilityTemplate]
 LocFriendlyName="Quick Guard"
 LocFlyOverText="Quick Guard"
-LocLongDescription="Automatically <font color='#0bff9b'>Guard</font> at the start of each turn."
-LocHelpText="Automatically <font color='#0bff9b'>Guard</font> at the start of each turn."
+LocLongDescription="Automatically <Ability:M31_FontAbility>Guard</font> at the start of each turn."
+LocHelpText="Automatically <Ability:M31_FontAbility>Guard</font> at the start of each turn."
 LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> will not activate if the <Ability:ClassName> is disoriented, stunned, panicking, on fire or otherwise impaired."
 
 

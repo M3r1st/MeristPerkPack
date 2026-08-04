@@ -167,10 +167,7 @@ delegate int SortTargetNodes(TargetNode A, TargetNode B)
     }
 }
 
-simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
-{
-    // no-op
-}
+simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles);
 
 // in Units^2
 simulated function float GetDistanceBetweenTargets(const XComGameState_Ability Ability, const XComGameState_Unit SourceUnit)

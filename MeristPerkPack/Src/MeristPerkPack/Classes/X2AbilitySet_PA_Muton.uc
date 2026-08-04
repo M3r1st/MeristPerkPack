@@ -316,37 +316,44 @@ static function X2AbilityTemplate Barbarian()
 
 static function X2AbilityTemplate ExcessiveForce()
 {
-    local X2AbilityTemplate Template;
-    local array<name> AbilitiesToAdd;
+    local X2AbilityTemplate         Template;
+    local X2Condition_ValidWeapon   WeaponCondition;
 
     Template = Passive('M31_PA_ExcessiveForce', "img:///KetarosPkg_Abilities.UIPerk_gatling", false, false);
-    
-    AbilitiesToAdd.Length = 0;
-    AbilitiesToAdd.AddItem('SkirmisherStrike');
 
-    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    WeaponCondition = new class'X2Condition_ValidWeapon';
+    WeaponCondition.AllowedWeaponCategories = default.ExcessiveForce_RifleCategories;
+    WeaponCondition.Slot = eInvSlot_PrimaryWeapon;
 
-    AbilitiesToAdd.Length = 0;
-    AbilitiesToAdd.AddItem('TraverseFire');
+    class'X2DLCInfo_MeristPerkPack'.static.AddConditionalEarnedAbility(Template.DataName, 'SkirmisherStrike', eInvSlot_PrimaryWeapon, WeaponCondition);
 
-    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ExcessiveForce_CannonCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    WeaponCondition = new class'X2Condition_ValidWeapon';
+    WeaponCondition.AllowedWeaponCategories = default.ExcessiveForce_CannonCategories;
+    WeaponCondition.Slot = eInvSlot_PrimaryWeapon;
+
+    class'X2DLCInfo_MeristPerkPack'.static.AddConditionalEarnedAbility(Template.DataName, 'TraverseFire', eInvSlot_PrimaryWeapon, WeaponCondition);
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
 
 static function X2AbilityTemplate ChargeIn()
 {
-    local X2AbilityTemplate Template;
-    local array<name> AbilitiesToAdd;
+    local X2AbilityTemplate         Template;
+    local X2Condition_ValidWeapon   WeaponCondition;
 
     Template = Passive('M31_PA_ChargeIn', "img:///UILibrary_MZChimeraIcons.Ability_BatteringRam", false, false);
 
     Template.AdditionalAbilities.AddItem('RunAndGun_LW');
 
-    AbilitiesToAdd.Length = 0;
-    AbilitiesToAdd.AddItem('ExtraConditioning');
+    WeaponCondition = new class'X2Condition_ValidWeapon';
+    WeaponCondition.AllowedWeaponCategories = default.ChargeIn_RifleCategories;
+    WeaponCondition.Slot = eInvSlot_PrimaryWeapon;
 
-    class'M31_Helpers'.static.AddConditionalAbilityEffect(Template, default.ChargeIn_RifleCategories, AbilitiesToAdd, eInvSlot_PrimaryWeapon);
+    class'X2DLCInfo_MeristPerkPack'.static.AddConditionalEarnedAbility(Template.DataName, 'ExtraConditioning', eInvSlot_PrimaryWeapon, WeaponCondition);
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
@@ -641,6 +648,8 @@ static function X2AbilityTemplate ChargeAndShoot()
 
     Template.DamagePreviewFn = ChargeAndShootDamagePreview;
     Template.PostActivationEvents.AddItem('M31_PA_ChargeAndShoot2');
+
+    Template.AdditionalAbilities.AddItem('M31_PA_ChargeAndShoot2');
 
     Template.DefaultSourceItemSlot = eInvSlot_SecondaryWeapon;
 

@@ -37,8 +37,8 @@ event name CallAbilityMeetsCondition(XComGameState_Ability kAbility, XComGameSta
             AvailableCode = Cost.CanAfford(AbilityState, SourceUnit);
             if (AvailableCode != 'AA_Success')
             {
-                `LOG("Can't afford " $ AbilityName, true, 'X2Condition_CanAffordCost');
-                `LOG("Returning " $ (bFailIfCanAfford ? 'AA_Success' : AvailableCode), true, 'X2Condition_CanAffordCost');
+                // `LOG("Can't afford " $ AbilityName, true, 'X2Condition_CanAffordCost');
+                // `LOG("Returning " $ (bFailIfCanAfford ? 'AA_Success' : AvailableCode), true, 'X2Condition_CanAffordCost');
                 return (bFailIfCanAfford ? 'AA_Success' : AvailableCode);
             }
         }

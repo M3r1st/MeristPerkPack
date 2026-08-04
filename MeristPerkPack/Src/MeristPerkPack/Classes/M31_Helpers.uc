@@ -216,30 +216,6 @@ static function AddRadiationToMultiTarget(out X2AbilityTemplate Template,
         Template.AddMultiTargetEffect(Effect);
 }
 
-static function AddConditionalAbilityEffect(out X2AbilityTemplate Template, array<name> WeaponCats, array<name> AbilitiesToAdd, EInventorySlot Slot = eInvSlot_Unknown)
-{
-    local X2Condition_ValidWeapon   Condition;
-    local X2Effect_AddAbilities     Effect;
-
-    Condition = new class'X2Condition_ValidWeapon';
-    Condition.AllowedWeaponCategories = WeaponCats;
-    if (Slot != eInvSlot_Unknown)
-    {
-        Condition.bCheckSpecificSlot = true;
-        Condition.SpecificSlot = Slot;
-    }
-
-    Effect = new class'X2Effect_AddAbilities';
-    Effect.AddAbilities = AbilitiesToAdd;
-    if (Slot != eInvSlot_Unknown)
-    {
-        Effect.ApplyToWeaponSlot = Slot;
-    }
-    Effect.TargetConditions.AddItem(Condition);
-    
-    Template.AddTargetEffect(Effect);
-}
-
 static function bool IsUnitInterruptingEnemyTurn(XComGameState_Unit UnitState)
 {
     local XComGameState_BattleData BattleState;
@@ -252,7 +228,7 @@ static function bool IsFlanking(XComGameState_Unit Attacker, XComGameState_Unit 
 {
     local GameRulesCache_VisibilityInfo VisInfo;
 
-    if (Attacker.CanFlank() && Target.CanTakeCover())
+    if (Attacker.CanFlank() && Target.GetMyTemplate().bCanTakeCover)
     {
         if (HistoryIndex != -1)
         {
@@ -355,4 +331,92 @@ static function bool AbilityDealsDamage(XComGameState_Ability kAbility, optional
     }
 
     return false;
+}
+
+static function EventListenerReturn TriggerAbilityFlyover_Static(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+    local XComGameState NewGameState;
+    local XComGameState_Unit UnitState;
+    local XComGameState_Ability AbilityState;
+    local XComGameState_Effect EffectState;
+
+    UnitState = XComGameState_Unit(EventSource);
+    AbilityState = XComGameState_Ability(EventData);
+    EffectState = XComGameState_Effect(CallbackData);
+    if (UnitState != none && AbilityState != none)
+    {
+        NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+        UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(UnitState.Class, UnitState.ObjectID));
+        AbilityState = XComGameState_Ability(NewGameState.ModifyStateObject(AbilityState.Class, AbilityState.ObjectID));
+        if (EffectState != none)
+            EffectState = XComGameState_Effect(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
+        XComGameStateContext_ChangeContainer(NewGameState.GetContext()).BuildVisualizationFn = TriggerAbilityFlyover_BuildVisualization;
+        `TACTICALRULES.SubmitGameState(NewGameState);
+    }
+    return ELR_NoInterrupt;
+}
+
+static function TriggerAbilityFlyover_BuildVisualization(XComGameState VisualizeGameState)
+{
+    local XComGameStateHistory          History;
+    local XComGameState_Ability         AbilityState;
+    local X2AbilityTemplate             AbilityTemplate;
+    local XComGameState_Unit            UnitState;
+    local XComGameState_Effect          EffectState;
+    local VisualizationActionMetadata   EmptyTrack;
+    local VisualizationActionMetadata   ActionMetadata;
+    local X2Action_PlaySoundAndFlyOver  SoundAndFlyOver;
+    local X2AbilityTag                  AbilityTag;
+
+    local bool                          bGoodAbility;
+    local EWidgetColor                  FlyoverColor;
+    local string                        FlyoverText;
+
+    History = `XCOMHISTORY;
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Ability', AbilityState)
+    {
+        break;
+    }
+    foreach VisualizeGameState.IterateByClassType(class'XComGameState_Effect', EffectState)
+    {
+        break;
+    }
+
+    if (AbilityState != none)
+    {
+        AbilityTemplate = AbilityState.GetMyTemplate();
+        if (AbilityTemplate != none)
+        {
+            FlyOverText = AbilityTemplate.LocFlyOverText;
+            if (EffectState != none)
+            {
+                AbilityTag = X2AbilityTag(`XEXPANDCONTEXT.FindTag("Ability"));
+                AbilityTag.ParseObj = EffectState;
+                FlyOverText = `XEXPAND.ExpandString(FlyOverText);
+                AbilityTag.ParseObj = none;
+            }
+            else
+            {
+                AbilityTag = X2AbilityTag(`XEXPANDCONTEXT.FindTag("Ability"));
+                AbilityTag.ParseObj = AbilityState;
+                FlyOverText = `XEXPAND.ExpandString(FlyOverText);
+                AbilityTag.ParseObj = none;
+            }
+
+            foreach VisualizeGameState.IterateByClassType(class'XComGameState_Unit', UnitState)
+            {
+                ActionMetadata = EmptyTrack;
+                History.GetCurrentAndPreviousGameStatesForObjectID(UnitState.ObjectID, ActionMetadata.StateObject_OldState, ActionMetadata.StateObject_NewState, , VisualizeGameState.HistoryIndex);
+                ActionMetadata.StateObject_NewState = UnitState;
+                ActionMetadata.VisualizeActor = UnitState.GetVisualizer();
+
+                bGoodAbility = UnitState.IsFriendlyToLocalPlayer();
+                FlyoverColor = bGoodAbility ? eColor_Good : eColor_Bad;
+
+                SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded));
+                SoundAndFlyOver.SetSoundAndFlyOverParameters(None, FlyOverText, '', FlyoverColor, AbilityTemplate.IconImage, `DEFAULTFLYOVERLOOKATTIME, true);
+            }
+            return;
+        }
+    }
 }

@@ -14,28 +14,37 @@ function float GetPostDefaultAttackingDamageModifier_CH(
     XComGameState NewGameState)
 {
     local XComGameState_Unit TargetUnit;
-    local float Bonus;
-
-    if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
-        return 0;
 
     TargetUnit = XComGameState_Unit(Target);
 
-    if (TargetUnit == none)
-        return 0;
+    if (TargetUnit != none)
+    {
+        if (class'XComGameStateContext_Ability'.static.IsHitResultHit(ApplyEffectParameters.AbilityResultContext.HitResult))
+        {
+            if (CurrentDamage > 0)
+            {
+                if (ApplyEffectParameters.EffectRef.ApplyOnTickIndex != INDEX_NONE)
+                {
+                    return 0;
+                }
 
-    if (!TargetUnit.CanTakeCover())
-        Bonus += DamageBonusToUnflankable;
-    
-    if (TargetUnit.UnitSize > 1)
-        Bonus += DamageBonusToLarge;
+                if (TargetUnit.UnitSize > 1)
+                {
+                    return CurrentDamage * (DamageBonusToLarge + DamageBonusToUnflankable) / 100;
+                }
+                else if (!TargetUnit.GetMyTemplate().bCanTakeCover)
+                {
+                    return CurrentDamage * DamageBonusToUnflankable / 100;
+                }
+            }
+        }
+    }
 
-    return CurrentDamage * Bonus / 100;
+    return 0;
 }
 
 defaultproperties
 {
     EffectName = M31_PA_WS_DragonSlayer
-
     bDisplayInSpecialDamageMessageUI = true
 }

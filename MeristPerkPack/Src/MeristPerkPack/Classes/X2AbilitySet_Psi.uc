@@ -317,26 +317,20 @@ simulated function PsiEnergyShield_BuildVisualization(XComGameState VisualizeGam
 
 static function X2AbilityTemplate ShadowPhase()
 {
-    local X2AbilityTemplate                     Template;
-    local X2Effect_Persistent                   ShadowstepEffect;
-    local X2Effect_PersistentTraversalChange    WallPhasing;
+    local X2AbilityTemplate         Template;
+    local X2Effect_WallPhasing      Effect;
 
     Template = Passive('M31_ShadowPhase', "img:///UILibrary_PerkIcons.UIPerk_item_wraith", false, true);
-    
-    ShadowstepEffect = new class'X2Effect_Persistent';
-    ShadowstepEffect.EffectName = 'M31_ShadowPhase';
-    ShadowstepEffect.DuplicateResponse = eDupe_Refresh;
-    ShadowstepEffect.EffectRank = 99;
-    ShadowstepEffect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(ShadowstepEffect);
+    // Thanks, Firaxis.
+    Template.bIsPassive = false;
 
-    WallPhasing = new class'X2Effect_PersistentTraversalChange';
-    WallPhasing.AddTraversalChange(eTraversal_Phasing, true);
-    WallPhasing.EffectName = 'PhasingEffect';
-    WallPhasing.DuplicateResponse = eDupe_Refresh;
-    WallPhasing.EffectRank = 99;
-    WallPhasing.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(WallPhasing);
+    Effect = new class'X2Effect_WallPhasing';
+    Effect.EffectName = 'M31_ShadowPhase';
+    Effect.AddTraversalChange(eTraversal_Phasing, true);
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
+
+    Template.OverrideAbilities.AddItem('WallPhasing');
 
     return Template;
 }

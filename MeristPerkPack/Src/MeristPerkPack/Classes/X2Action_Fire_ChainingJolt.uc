@@ -1,0 +1,1 @@
+class X2Action_Fire_ChainingJolt extends X2Action_Fire_Chain;

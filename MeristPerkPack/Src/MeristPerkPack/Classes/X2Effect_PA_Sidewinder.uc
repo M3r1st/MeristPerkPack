@@ -52,9 +52,9 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
 
     if (Effect != none)
     {
-        if (Effect.IsAbilityRelevant(AbilityState, Defender, Attacker, EffectState))
+        if (Effect.IsEffectCurrentlyRelevant(EffectState, Defender))
         {
-            if (Effect.IsEffectCurrentlyRelevant(EffectState, Defender))
+            if (Effect.IsAbilityRelevant(AbilityState, Defender, Attacker, EffectState, false))
             {
                 if (AbilityContext.InputContext.PrimaryTarget.ObjectID == Defender.ObjectID)
                 {
@@ -64,13 +64,16 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
                         bChangedResult = true;
                     }
                 }
+            }
+            if (Effect.IsAbilityRelevant(AbilityState, Defender, Attacker, EffectState, true))
+            {
                 for (Index = 0; Index < AbilityContext.ResultContext.MultiTargetHitResults.Length; Index++)
                 {
                     if (AbilityContext.InputContext.MultiTargets[Index].ObjectID == Defender.ObjectID)
                     {
                         if (AbilityContext.IsResultContextMultiHit(Index))
                         {
-                            AbilityContext.ResultContext.HitResult = Effect.NewHitResult;
+                            AbilityContext.ResultContext.MultiTargetHitResults[Index] = Effect.NewHitResult;
                             bChangedResult = true;
                         }
                     }
@@ -80,6 +83,10 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
                     `XEVENTMGR.TriggerEvent(Effect.EventName, AbilityContext, Defender);
                 }
             }
+        }
+        if (bChangedResult)
+        {
+            `XEVENTMGR.TriggerEvent(Effect.EventName, AbilityContext, Defender);
         }
     }
 
@@ -163,7 +170,7 @@ static function AddSidewinderCooldown(out X2AbilityTemplate Template, int NumTur
     Template.AbilityShooterConditions.AddItem(EffectCondition);
 }
 
-function bool IsAbilityRelevant(XComGameState_Ability AbilityState, XComGameState_Unit Defender, XComGameState_Unit Attacker, XComGameState_Effect EffectState)
+function bool IsAbilityRelevant(XComGameState_Ability AbilityState, XComGameState_Unit Defender, XComGameState_Unit Attacker, XComGameState_Effect EffectState, optional bool bMultiTarget)
 {
     local X2AbilityTemplate AbilityTemplate;
     local bool              bDealsDamage;
@@ -175,12 +182,12 @@ function bool IsAbilityRelevant(XComGameState_Ability AbilityState, XComGameStat
 
     AbilityTemplate = AbilityState.GetMyTemplate();
 
-    if (!AbilityState.IsAbilityInputTriggered() || X2AbilityToHitCalc_DeadEye(AbilityTemplate.AbilityToHitCalc) != none)
+    if (!AbilityState.IsAbilityInputTriggered() || X2AbilityToHitCalc_StandardAim(AbilityTemplate.AbilityToHitCalc) == none)
     {
         return false;
     }
 
-    bDealsDamage = AbilityTemplate.TargetEffectsDealDamage(AbilityState.GetSourceWeapon(), AbilityState);
+    bDealsDamage = class'M31_Helpers'.static.AbilityDealsDamage(AbilityState, Attacker, Defender, bMultiTarget);
     if (AbilityTemplate.Hostility != eHostility_Offensive || !bDealsDamage || AbilityTemplate.bIsASuppressionEffect)
     {
         return false;

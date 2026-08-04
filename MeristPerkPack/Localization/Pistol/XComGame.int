@@ -3,20 +3,20 @@ LocFriendlyName="Crutch Shot"
 LocFlyOverText="Crutch Shot"
 LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that's guaranteed to hit, but cannot crit."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that's guaranteed to hit, but cannot crit."
-LocPromotionPopupText="<Bullet> Affected by <font color='#0bff9b'>Quickdraw</font> and <font color='#0bff9b'>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_ClutchShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_ClutchShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_ClutchShotCrit X2AbilityTemplate]
 LocFriendlyName="Intended Behavior"
 LocFlyOverText="Intended Behavior"
-LocLongDescription="<font color='#0bff9b'>Crutch Shot</font> is guaranteed to crit."
-LocHelpText="<font color='#0bff9b'>Crutch Shot</font> is guaranteed to crit."
+LocLongDescription="<Ability:M31_FontAbility>Crutch Shot</font> is guaranteed to crit."
+LocHelpText="<Ability:M31_FontAbility>Crutch Shot</font> is guaranteed to crit."
 LocPromotionPopupText=""
 
 [M31_ClutchShotReset X2AbilityTemplate]
 LocFriendlyName="Nice Feature"
 LocFlyOverText="Nice Feature"
-LocLongDescription="Whenever you kill an enemy using <font color='#0bff9b'>Crutch Shot</font>, its cooldown is instantly reset."
-LocHelpText="Whenever you kill an enemy using <font color='#0bff9b'>Crutch Shot</font>, its cooldown is instantly reset."
+LocLongDescription="Whenever you kill an enemy using <Ability:M31_FontAbility>Crutch Shot</font>, its cooldown is instantly reset."
+LocHelpText="Whenever you kill an enemy using <Ability:M31_FontAbility>Crutch Shot</font>, its cooldown is instantly reset."
 LocPromotionPopupText=""
 
 [M31_ClutchShotReset_Trigger X2AbilityTemplate]
@@ -39,28 +39,28 @@ LocFriendlyName="Detonation Shot (Pistol)"
 LocFlyOverText="Detonation Shot (Pistol)"
 LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that detonates explosives carried by the enemy. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that detonates explosives carried by the enemy."
-LocPromotionPopupText="<Bullet> Affected by <font color='#0bff9b'>Quickdraw</font> and <font color='#0bff9b'>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDetonationShot_AmmoCost> ammo."
+LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDetonationShot_AmmoCost> ammo."
 
 [M31_PistolDisarmingShot X2AbilityTemplate]
 LocFriendlyName="Disarming Shot (Pistol)"
 LocFlyOverText="Disarming Shot (Pistol)"
 LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing."
-LocPromotionPopupText="<Bullet> Affected by <font color='#0bff9b'>Quickdraw</font> and <font color='#0bff9b'>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDisarmingShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
+LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDisarmingShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
 
 [M31_PistolMaim X2AbilityTemplate]
 LocFriendlyName="Maim (Pistol)"
 LocFlyOverText="Maim (Pistol)"
 LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn."
-LocPromotionPopupText="<Bullet> Affected by <font color='#0bff9b'>Quickdraw</font> and <font color='#0bff9b'>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolMaim_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Useful to isolate a high-value target during an ambush.<br><Bullet> Certain enemies cannot be immobilized."
+LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolMaim_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Useful to isolate a high-value target during an ambush.<br><Bullet> Certain enemies cannot be immobilized."
 
 [M31_PistolRouletteShot X2AbilityTemplate]
 LocFriendlyName="Roulette"
 LocFlyOverText="Roulette"
 LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
 LocHelpText="Special <Ability:M31_BoundWeaponName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
-LocPromotionPopupText="<Bullet> The probability of the outcomes is equal.<br><Bullet> Affected by <font color='#0bff9b'>Quickdraw</font> and <font color='#0bff9b'>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolRouletteShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocPromotionPopupText="<Bullet> The probability of the outcomes is equal.<br><Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolRouletteShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_PistolRouletteShot_Damage X2AbilityTemplate]
 LocFriendlyName="Roulette"
@@ -69,8 +69,8 @@ LocFlyOverText="Roulette"
 [M31_ReflexShot X2AbilityTemplate]
 LocFriendlyName="Reflex Shot"
 LocFlyOverText="Reflex Shot"
-LocLongDescription="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius> tile radius."
-LocHelpText="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius> tile radius."
+LocLongDescription="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
+LocHelpText="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
 LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_ReflexShot_bReactionFire>."
 
 [M31_ReflexShot_Attack X2AbilityTemplate]

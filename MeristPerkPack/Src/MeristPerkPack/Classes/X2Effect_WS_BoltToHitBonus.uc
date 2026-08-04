@@ -3,23 +3,33 @@ class X2Effect_WS_BoltToHitBonus extends X2Effect_Persistent;
 struct BoltToHitBonusInfo
 {
     var name AbilityName;
-    var int Aim;
-    var int Crit;
-    var bool bBallista;
+    var int AimBonus;
+    var int CritBonus;
 };
 
-var array<BoltToHitBonusInfo> ToHitBonuses;
+var array<BoltToHitBonusInfo> Bonuses;
+var array<BoltToHitBonusInfo> BallistaBonuses;
 
-function AddToHitBonus(name AbilityName, int Aim, int Crit, optional bool bBallista)
+function AddBonus(name _AbilityName, int _AimBonus, int _CritBonus)
 {
     local BoltToHitBonusInfo NewBonus;
 
-    NewBonus.AbilityName = AbilityName;
-    NewBonus.Aim = Aim;
-    NewBonus.Crit = Crit;
-    NewBonus.bBallista = bBallista;
+    NewBonus.AbilityName = _AbilityName;
+    NewBonus.AimBonus = _AimBonus;
+    NewBonus.CritBonus = _CritBonus;
 
-    ToHitBonuses.AddItem(NewBonus);
+    Bonuses.AddItem(NewBonus);
+}
+
+function AddBallistaBonus(name _AbilityName, int _AimBonus, int _CritBonus)
+{
+    local BoltToHitBonusInfo NewBonus;
+
+    NewBonus.AbilityName = _AbilityName;
+    NewBonus.AimBonus = _AimBonus;
+    NewBonus.CritBonus = _CritBonus;
+
+    BallistaBonuses.AddItem(NewBonus);
 }
 
 function GetToHitModifiers(
@@ -35,28 +45,47 @@ function GetToHitModifiers(
 {
     local ShotModifierInfo AimInfo;
     local ShotModifierInfo CritInfo;
-    local BoltToHitBonusInfo BonusInfo;
-    local bool bBallista;
+    local int Index;
 
-    bBallista = class'X2Effect_WS_ApplyBoltDamage'.static.IsSourceWeaponBallista(AbilityState);
-
-    foreach ToHitBonuses(BonusInfo)
+    if (class'X2Effect_WS_ApplyBoltDamage'.static.IsSourceWeaponBallista(AbilityState))
     {
-        if (AbilityState.GetMyTemplateName() == BonusInfo.AbilityName
-            && (bBallista && BonusInfo.bBallista || !bBallista && !BonusInfo.bBallista))
+        `LOG("BallistaBonuses.Length = " $ BallistaBonuses.Length, true, 'X2Effect_WS_BoltToHitBonus');
+        Index = BallistaBonuses.Find('AbilityName', AbilityState.GetMyTemplateName());
+        if (Index != INDEX_NONE)
         {
-            if (BonusInfo.Aim != 0)
+            if (BallistaBonuses[Index].AimBonus != 0)
             {
                 AimInfo.ModType = eHit_Success;
-                AimInfo.Reason = FriendlyName;
-                AimInfo.Value = BonusInfo.Aim;
+                AimInfo.Reason = AbilityState.GetMyFriendlyName();
+                AimInfo.Value = BallistaBonuses[Index].AimBonus;
                 ShotModifiers.AddItem(AimInfo);
             }
-            if (BonusInfo.Crit != 0)
+            if (BallistaBonuses[Index].CritBonus != 0)
             {
                 CritInfo.ModType = eHit_Crit;
-                CritInfo.Reason = FriendlyName;
-                CritInfo.Value = BonusInfo.Crit;
+                CritInfo.Reason = AbilityState.GetMyFriendlyName();
+                CritInfo.Value = BallistaBonuses[Index].CritBonus;
+                ShotModifiers.AddItem(CritInfo);
+            }
+        }
+    }
+    else
+    {
+        Index = Bonuses.Find('AbilityName', AbilityState.GetMyTemplateName());
+        if (Index != INDEX_NONE)
+        {
+            if (Bonuses[Index].AimBonus != 0)
+            {
+                AimInfo.ModType = eHit_Success;
+                AimInfo.Reason = AbilityState.GetMyFriendlyName();
+                AimInfo.Value = Bonuses[Index].AimBonus;
+                ShotModifiers.AddItem(AimInfo);
+            }
+            if (Bonuses[Index].CritBonus != 0)
+            {
+                CritInfo.ModType = eHit_Crit;
+                CritInfo.Reason = AbilityState.GetMyFriendlyName();
+                CritInfo.Value = Bonuses[Index].CritBonus;
                 ShotModifiers.AddItem(CritInfo);
             }
         }

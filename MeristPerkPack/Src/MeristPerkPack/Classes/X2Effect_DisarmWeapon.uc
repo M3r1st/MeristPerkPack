@@ -25,7 +25,6 @@ function name CheckWeaponImmunities(const out EffectAppliedData ApplyEffectParam
 {
     local XComGameState_Unit TargetUnit;
     local XComGameState_Item WeaponState;
-    local X2WeaponTemplate WeaponTemplate;
 
     TargetUnit = XComGameState_Unit(kNewTargetState);
     if (TargetUnit != none)
@@ -37,10 +36,11 @@ function name CheckWeaponImmunities(const out EffectAppliedData ApplyEffectParam
         }
         else
         {
-            WeaponTemplate = X2WeaponTemplate(WeaponState.GetMyTemplate());
-
-            if (default.WeaponsImmuneToDisable.Find(WeaponState.GetMyTemplateName()) != INDEX_NONE || WeaponTemplate.InfiniteAmmo)
+            if (WeaponState.HasInfiniteAmmo()
+                || default.WeaponsImmuneToDisable.Find(WeaponState.GetMyTemplateName()) != INDEX_NONE)
+            {
                 return 'AA_UnitIsImmune';
+            }
         }
     }
 

@@ -1,0 +1,14 @@
+
+[M31_ForwardOperator X2AbilityTemplate]
+LocFriendlyName="Forward Operator"
+LocFlyOverText="Forward Operator"
+LocLongDescription="Once per turn, when a new group of enemies is revealed, immediately gain an action."
+LocHelpText="Once per turn, when a new group of enemies is revealed, immediately gain an action."
+LocPromotionPopupText="<Bullet> Forward Operator can activate during the enemy turn.<br><Bullet> Forward Operator will activate even if the <Ability:ClassName> was not the one to reveal enemies."
+
+[M31_SK_FullKit X2AbilityTemplate]
+LocFriendlyName="Deep Pockets"
+LocFlyOverText="Deep Pockets"
+LocLongDescription="Gain <Ability:M31_FontGold>3</font> <font color='#00ffff'>Ordnance</font> slots that can be used for grenades or ammo."
+LocHelpText=""
+LocPromotionPopupText=""

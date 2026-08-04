@@ -119,10 +119,7 @@ simulated function GetMultiTargetOptions(const XComGameState_Ability Ability, ou
     }
 }
 
-simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles)
-{
-    // no-op
-}
+simulated function GetValidTilesForLocation(const XComGameState_Ability Ability, const vector Location, out array<TTile> ValidTiles);
 
 // in Units^2
 simulated function float GetDistanceBetweenTargets(const XComGameState_Ability Ability, const XComGameState_Unit SourceUnit)

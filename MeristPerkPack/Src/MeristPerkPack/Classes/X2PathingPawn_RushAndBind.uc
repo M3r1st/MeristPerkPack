@@ -9,11 +9,29 @@ function bool SelectAttackTile(
     optional bool _Unsorted = false
 )
 {
+    local X2AbilityTarget_MovingMelee MeleeTarget;
+
+    MeleeTarget = X2AbilityTarget_MovingMelee(AbilityState.GetMyTemplate().AbilityTargetStyle);
+
+    if (MeleeTarget != none)
+    {
+        return MeleeTarget.SelectAttackTile(_UnitState, _TargetState, _MeleeAbilityTemplate, _SortedPossibleTiles, _IdealTile, _Unsorted);
+    }
+
     return class'X2AbilityTarget_RushAndBind'.static.SelectAttackTile(_UnitState, _TargetState, _MeleeAbilityTemplate, _SortedPossibleTiles, _IdealTile, _Unsorted);
 }
 
 function bool IsValidAttackTile(XComGameState_Unit _UnitState, const out TTile _SourceTile, const out TTile _TargetTile, X2ReachableTilesCache _TileCache)
 {
+    local X2AbilityTarget_MovingMelee MeleeTarget;
+
+    MeleeTarget = X2AbilityTarget_MovingMelee(AbilityState.GetMyTemplate().AbilityTargetStyle);
+
+    if (MeleeTarget != none)
+    {
+        return MeleeTarget.IsValidAttackTile(_UnitState, _SourceTile, _TargetTile, _TileCache);
+    }
+
     return class'X2AbilityTarget_RushAndBind'.static.IsValidAttackTile(_UnitState, _SourceTile, _TargetTile, _TileCache);
 }
 
@@ -41,7 +59,7 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
 
     PossibleTiles.Length = 0;
 
-    if(SelectAttackTile(UnitState, Target, AbilityTemplate, PossibleTiles))
+    if (SelectAttackTile(UnitState, Target, AbilityTemplate, PossibleTiles))
     {
         // Start Issue #1084
         // The native `class'X2AbilityTarget_MovingMelee'.static.SelectAttackTile` function
@@ -65,10 +83,10 @@ simulated function UpdateMeleeTarget(XComGameState_BaseObject Target)
         // and update the tiles to reflect the new target options
         UpdatePossibleTilesVisuals();
 
-        if(`ISCONTROLLERACTIVE)
+        if (`ISCONTROLLERACTIVE)
         {
             // move the 3D cursor to the new target
-            if(`XWORLD.GetFloorPositionForTile(PossibleTiles[0], TileLocation))
+            if (`XWORLD.GetFloorPositionForTile(PossibleTiles[0], TileLocation))
             {
                 // Single Line for #520
                 /// HL-Docs: ref:Bugfixes; issue:520

@@ -79,7 +79,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 
                 RouletteState.LastValue = Rolls[i].Value;
                 NewGameState.GetContext().PostBuildVisualizationFn.AddItem(Roulette_PostBuildVisualization);
-                return CurrentDamage * Rolls[i].Value / 100 - CurrentDamage;
+                return CurrentDamage * 1.0f * Rolls[i].Value / 100 - CurrentDamage;
             }
         }
     }

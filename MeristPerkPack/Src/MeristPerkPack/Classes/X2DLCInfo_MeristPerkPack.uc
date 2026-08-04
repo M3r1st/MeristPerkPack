@@ -8,22 +8,25 @@
 
 class X2DLCInfo_MeristPerkPack extends X2DownloadableContentInfo config(GameData_SoldierSkills);
 
+struct ItemTech
+{
+    var name Tech;
+    var int Tier;
+};
+
+var config array<ItemTech> GremlinTiers;
+var config array<ItemTech> WeaponTiers;
+var config array<ItemTech> ArmorTiers;
+
 var privatewrite config bool bLWOTC;
 var privatewrite name SuppressingFireActionPoint;
-var config array<name> Botnet2_AllowedAbilities;
+
 var config array<name> Aim_AllowedAbilities;
 var config array<name> AddImpairingAttack;
 var config array<name> AttackGrenades;
 var config array<name> SmokeGrenades;
 var config array<name> GrenadeAbilities;
 var config array<name> MarauderElite_AllowedAbilities;
-var config array<name> RapidDumping_AllowedAbilities;
-var config array<name> ShadowstepAid_AllowedAbilities;
-var config array<name> ShadowstepAid_AllowedMultiTargetAbilities;
-var config array<name> TargetingAid_AllowedAbilities;
-var config array<name> TargetingAid_AllowedMultiTargetAbilities;
-var config array<name> AdvancedAidProtocol_AllowedAbilities;
-var config array<name> AdvancedAidProtocol_AllowedMultiTargetAbilities;
 var config array<name> WatchfulEye_AllowedAbilities;
 var config array<name> SuppressingFire_AllowedAbilities;
 var config array<name> ImprovedSuppression_AllowedAbilities;
@@ -45,6 +48,16 @@ var localized string strDefaultWeapon;
 var localized string strPerRank;
 var localized string strFreeAction;
 
+struct ConditionalEarnedAbility
+{
+    var name RequiredAbility;
+    var X2Condition_ValidWeapon WeaponCondition;
+    var SoldierClassAbilityType AbilityToAdd;
+    var bool bAllowDuplicate;
+};
+
+var privatewrite config array<ConditionalEarnedAbility> ConditionalEarnedAbilities;
+
 struct CanAddItemOverrideInfo
 {
     struct CanAddItemOverrideWeaponCatInfo
@@ -52,6 +65,7 @@ struct CanAddItemOverrideInfo
         var name WeaponCat;
         var EInventorySlot Slot;
     };
+
     var name AbilityName;
     var array<CanAddItemOverrideWeaponCatInfo> WeaponCategoriesToUnlock;
 };
@@ -69,8 +83,7 @@ var config string DefaultSpecialColor;
 
 var privatewrite config array<string> Aim_Abilities;
 var privatewrite config array<string> ControlledDetonation_Abilities;
-var privatewrite config array<string> RapidDumping_Abilities;
-var privatewrite config array<string> FutureWarfare_Abilities;
+var privatewrite config array<string> OffensiveProtocols_Abilities;
 var privatewrite config array<string> LetItGo_Abilities;
 var privatewrite config array<string> MarauderElite_Abilities;
 var privatewrite config array<string> Reposition_Abilities;
@@ -91,7 +104,7 @@ static event OnPostTemplatesCreated()
 
     AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 
-    foreach default.Botnet2_AllowedAbilities(AbilityName)
+    foreach class'X2AbilitySet_Gremlin'.default.Botnet_AllowedAbilities(AbilityName)
     {
         AddBotnetEffectToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
@@ -128,39 +141,14 @@ static event OnPostTemplatesCreated()
         AddMarauderEliteToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
 
-    foreach default.RapidDumping_AllowedAbilities(AbilityName)
+    foreach class'X2AbilitySet_Gremlin'.default.OffensiveProtocols(AbilityName)
     {
         AddRapidDumpingToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
 
-    foreach default.ShadowstepAid_AllowedAbilities(AbilityName)
+    foreach class'X2AbilitySet_Gremlin'.default.AidProtocols(AbilityName)
     {
-        AddShadowstepAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), false);
-    }
-
-    foreach default.ShadowstepAid_AllowedMultiTargetAbilities(AbilityName)
-    {
-        AddShadowstepAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
-    }
-
-    foreach default.TargetingAid_AllowedAbilities(AbilityName)
-    {
-        AddTargetingAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), false);
-    }
-
-    foreach default.TargetingAid_AllowedMultiTargetAbilities(AbilityName)
-    {
-        AddTargetingAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
-    }
-
-    foreach default.AdvancedAidProtocol_AllowedAbilities(AbilityName)
-    {
-        AddAdvancedAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), false);
-    }
-
-    foreach default.AdvancedAidProtocol_AllowedMultiTargetAbilities(AbilityName)
-    {
-        AddAdvancedAidToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName), true);
+        AddAdditionalAidProtocolEffectsToAbility(AbilityTemplateManager.FindAbilityTemplate(AbilityName));
     }
 
     foreach default.WatchfulEye_AllowedAbilities(AbilityName)
@@ -184,6 +172,68 @@ static event OnPostTemplatesCreated()
     AddModifiersToGrenadeAbilities();
 
     GetLocalizedAbilityLists();
+}
+
+static function AddConditionalEarnedAbility(
+    name _RequiredAbility,
+    name _AbilityName,
+    EInventorySlot _ApplyToWeaponSlot,
+    optional X2Condition_ValidWeapon _WeaponCondition,
+    optional bool _bAllowDuplicate)
+{
+    local ConditionalEarnedAbility NewAbilityData;
+
+    NewAbilityData.RequiredAbility = _RequiredAbility;
+    NewAbilityData.AbilityToAdd.AbilityName = _AbilityName;
+    NewAbilityData.AbilityToAdd.ApplyToWeaponSlot = _ApplyToWeaponSlot;
+    NewAbilityData.WeaponCondition = _WeaponCondition;
+    NewAbilityData.bAllowDuplicate = _bAllowDuplicate;
+
+    default.ConditionalEarnedAbilities.AddItem(NewAbilityData);
+}
+
+static function ModifyEarnedSoldierAbilities(out array<SoldierClassAbilityType> EarnedAbilities, XComGameState_Unit UnitState)
+{
+    local ConditionalEarnedAbility  AbilityData;
+    local int                       Index, i;
+    local bool                      bDuplicate;
+
+    foreach default.ConditionalEarnedAbilities(AbilityData)
+    {
+        bDuplicate = false;
+
+        Index = EarnedAbilities.Find('AbilityName', AbilityData.RequiredAbility);
+        if (Index != INDEX_NONE)
+        {
+            if (AbilityData.WeaponCondition != none)
+            {
+                if (!AbilityData.WeaponCondition.CanEverBeValid(UnitState, false))
+                {
+                    continue;
+                }
+            }
+
+            if (AbilityData.bAllowDuplicate)
+            {
+                EarnedAbilities.AddItem(AbilityData.AbilityToAdd);
+            }
+            else
+            {
+                for (i = 0; i < EarnedAbilities.Length; i++)
+                {
+                    if (EarnedAbilities[i] == AbilityData.AbilityToAdd)
+                    {
+                        bDuplicate = true;
+                        break;
+                    }
+                }
+                if (!bDuplicate)
+                {
+                    EarnedAbilities.AddItem(AbilityData.AbilityToAdd);
+                }
+            }
+        }
+    }
 }
 
 static function bool CanAddItemToInventory_CH_Improved(
@@ -283,11 +333,8 @@ static function GetLocalizedAbilityLists()
             if (class'X2Effect_ControlledDetonation'.default.ControlledDetonation_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.ControlledDetonation_Abilities.AddItem(OutString);
 
-            if (default.RapidDumping_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
-                default.RapidDumping_Abilities.AddItem(OutString);
-
-            if (class'X2AbilitySet_Merist'.default.FutureWarfare_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
-                default.FutureWarfare_Abilities.AddItem(OutString);
+            if (class'X2AbilitySet_Gremlin'.default.OffensiveProtocols.Find(Template.DataName) != INDEX_NONE)
+                default.OffensiveProtocols_Abilities.AddItem(OutString);
 
             if (class'X2AbilitySet_Psi'.default.LetItGo_AllowedAbilities.Find(Template.DataName) != INDEX_NONE)
                 default.LetItGo_Abilities.AddItem(OutString);
@@ -307,8 +354,7 @@ static function GetLocalizedAbilityLists()
     }
     default.Aim_Abilities.Sort(SortAbilities);
     default.ControlledDetonation_Abilities.Sort(SortAbilities);
-    default.RapidDumping_Abilities.Sort(SortAbilities);
-    default.FutureWarfare_Abilities.Sort(SortAbilities);
+    default.OffensiveProtocols_Abilities.Sort(SortAbilities);
     default.LetItGo_Abilities.Sort(SortAbilities);
     default.MarauderElite_Abilities.Sort(SortAbilities);
     default.Reposition_Abilities.Sort(SortAbilities);
@@ -522,6 +568,78 @@ static function AddRapidDumpingToAbility(X2AbilityTemplate Template)
     }
 }
 
+static function AddAdditionalAidProtocolEffectsToAbility(X2AbilityTemplate Template)
+{
+    if (Template != none)
+    {
+        if (Template.AbilityTargetStyle != none && Template.AbilityTargetEffects.Length > 0)
+        {
+            AddAdvancedAidToAbility(Template, false);
+            AddTargetingAidToAbility(Template, false);
+            AddShadowstepAidToAbility(Template, false);
+        }
+        if (Template.AbilityMultiTargetStyle != none && Template.AbilityMultiTargetEffects.Length > 0)
+        {
+            AddAdvancedAidToAbility(Template, true);
+            AddTargetingAidToAbility(Template, true);
+            AddShadowstepAidToAbility(Template, true);
+        }
+    }
+}
+
+static function AddAdvancedAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
+{
+    local X2Effect_AdvancedAidProtocol  Effect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+    if (Template != none)
+    {
+        AbilityCondition = new class'X2Condition_AbilityProperty';
+        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_AdvancedAidProtocol');
+
+        Effect = new class'X2Effect_AdvancedAidProtocol';
+        Effect.EffectName = 'M31_AdvancedAid';
+        Effect.DuplicateResponse = eDupe_Refresh;
+        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_AdvancedAidProtocol_FriendlyName"), `GetLocalizedString("M31_AdvancedAidProtocol_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_ArmorSystem", true,, Template.AbilitySourceName);
+        Effect.TargetConditions.AddItem(AbilityCondition);
+        if (bAddToMultiTarget)
+        {
+            Template.AddMultiTargetEffect(Effect);
+        }
+        else
+        {
+            Template.AddTargetEffect(Effect);
+        }
+    }
+}
+
+static function AddTargetingAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
+{
+    local X2Effect_TargetingAid         Effect;
+    local X2Condition_AbilityProperty   AbilityCondition;
+
+    if (Template != none)
+    {
+        AbilityCondition = new class'X2Condition_AbilityProperty';
+        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_TargetingAid');
+
+        Effect = new class'X2Effect_TargetingAid';
+        Effect.EffectName = 'M31_TargetingAid';
+        Effect.DuplicateResponse = eDupe_Refresh;
+        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
+        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_TargetingAid_FriendlyName"), `GetLocalizedString("M31_TargetingAid_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_CombatProtocol", true,, Template.AbilitySourceName);
+        Effect.TargetConditions.AddItem(AbilityCondition);
+        if (bAddToMultiTarget)
+        {
+            Template.AddMultiTargetEffect(Effect);
+        }
+        else
+        {
+            Template.AddTargetEffect(Effect);
+        }
+    }
+}
+
 static function AddShadowstepAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
 {
     local X2Effect_Persistent               ShadowstepEffect;
@@ -565,60 +683,6 @@ static function AddShadowstepAidToAbility(X2AbilityTemplate Template, bool bAddT
         {
             Template.AddTargetEffect(ShadowstepEffect);
             Template.AddTargetEffect(ActionPointEffect);
-        }
-    }
-}
-
-static function AddTargetingAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
-{
-    local X2Effect_TargetingAid         Effect;
-    local X2Condition_AbilityProperty   AbilityCondition;
-
-    if (Template != none)
-    {
-        AbilityCondition = new class'X2Condition_AbilityProperty';
-        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_TargetingAid');
-
-        Effect = new class'X2Effect_TargetingAid';
-        Effect.EffectName = 'M31_TargetingAid';
-        Effect.DuplicateResponse = eDupe_Refresh;
-        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_TargetingAid_FriendlyName"), `GetLocalizedString("M31_TargetingAid_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_CombatProtocol", true,, Template.AbilitySourceName);
-        Effect.TargetConditions.AddItem(AbilityCondition);
-        if (bAddToMultiTarget)
-        {
-            Template.AddMultiTargetEffect(Effect);
-        }
-        else
-        {
-            Template.AddTargetEffect(Effect);
-        }
-    }
-}
-
-static function AddAdvancedAidToAbility(X2AbilityTemplate Template, bool bAddToMultiTarget)
-{
-    local X2Effect_AdvancedAidProtocol  Effect;
-    local X2Condition_AbilityProperty   AbilityCondition;
-
-    if (Template != none)
-    {
-        AbilityCondition = new class'X2Condition_AbilityProperty';
-        AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_AdvancedAidProtocol');
-
-        Effect = new class'X2Effect_AdvancedAidProtocol';
-        Effect.EffectName = 'M31_AdvancedAid';
-        Effect.DuplicateResponse = eDupe_Refresh;
-        Effect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
-        Effect.SetDisplayInfo(ePerkBuff_Bonus, `GetLocalizedString("M31_AdvancedAidProtocol_FriendlyName"), `GetLocalizedString("M31_AdvancedAidProtocol_BuffText"), "img:///UILibrary_MZChimeraIcons.Ability_ArmorSystem", true,, Template.AbilitySourceName);
-        Effect.TargetConditions.AddItem(AbilityCondition);
-        if (bAddToMultiTarget)
-        {
-            Template.AddMultiTargetEffect(Effect);
-        }
-        else
-        {
-            Template.AddTargetEffect(Effect);
         }
     }
 }
@@ -970,6 +1034,12 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_AutoFont":
             OutString = ColorText_Auto("", true, UnitState);
             return true;
+        case "M31_FontAbility":
+            OutString = ColorText_LimeGreen("", true);
+            return true;
+        case "M31_FontGold":
+            OutString = ColorText_Gold("", true);
+            return true;
 
         case "M31_EffectTurnsTicked":
             OutString = string(GetEffectTurnsTicked(ParseObj, StrategyParseOb, GameState));
@@ -1173,6 +1243,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
             return true;
 
+        case "M31_Bandit_AmmoReloaded":
+            OutString = class'X2Effect_Bandit'.static.GetFlyoverOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
         case "M31_BloodThirst_BuffText":
             OutString = class'X2Effect_BloodThirst'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
             return true;
@@ -1205,7 +1279,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
 
         case "M31_SawedOffReload_Charges":
         case "M31_Stiletto_PierceBonus":
-            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState,, true);
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState);
             return true;
 
         case "M31_StaticGrenades_Mk1_Damage":
@@ -1225,6 +1299,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         return true;
 
     if (GetPistolOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
+    if (GetGremlinOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
         return true;
 
     if (GetViperOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
@@ -1260,12 +1337,8 @@ static function bool GetLocalizedListOutStrings(string InString, out string OutS
             OutString = GetStringFromLocalizedList(default.ControlledDetonation_Abilities);
             return true;
 
-        case "M31_RapidDumping_Abilities":
-            OutString = GetStringFromLocalizedList(default.RapidDumping_Abilities);
-            return true;
-
-        case "M31_FutureWarfare_Abilities":
-            OutString = GetStringFromLocalizedList(default.FutureWarfare_Abilities);
+        case "M31_OffensiveProtocols":
+            OutString = GetStringFromLocalizedList(default.OffensiveProtocols_Abilities);
             return true;
 
         case "M31_LetItGo_Abilities":
@@ -1334,6 +1407,45 @@ static function bool GetPistolOutStrings(string InString, out string OutString, 
 
         case "M31_SleightOfHand_BuffText":
             OutString = class'X2Effect_SleightOfHand'.static.GetFriendlyDescOutString(ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetGremlinOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit UnitState;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+
+    switch (InString)
+    {
+        case "M31_SP_Capacitors_BonusNumTargets":
+        case "M31_SP_VoltaicArc_Radius":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_SP_StormGenerator_BonusRadius":
+            ColorText_Auto(TruncateFloat2(`GetConfigFloat(InString)) $ "m",, UnitState);
+            return true;
+
+        // case "":
+        //     OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+        //     return true;
+
+        case "M31_SP_ChainingJolt_bOverrideCombatProtocol":
+            OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
+            return true;
+
+        case "M31_SP_ChainingJolt_Radius":
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState,,, "m");
+            return true;
+        case "M31_SP_ChainingJolt_MaxTargets":
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState);
             return true;
 
         default:
@@ -2256,7 +2368,11 @@ static private function string GetWinterSentinelBallistaBonusString(string InStr
                 OutString = string(`GetConfigInt(InString $ BallistaSuffix)) $ "%";
                 break;
         }
-        OutString = ColorText_Auto(OutString,, SourceUnit) $ ColorText_Green("*");
+        OutString = ColorText_Auto(OutString,, SourceUnit);
+        if (StrategyParseObj != none)
+        {
+            OutString $= ColorText_Green("*");
+        }
     }
     else
     {
@@ -2300,11 +2416,6 @@ static private function string GetSelfCooldown(Object ParseObj, Object StrategyP
     return ColorText_Grey("?");
 }
 
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
 static private function string GetSelfCharges(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local X2AbilityTemplate         AbilityTemplate;
@@ -2323,19 +2434,16 @@ static private function string GetSelfCharges(Object ParseObj, Object StrategyPa
     return ColorText_Grey("?");
 }
 
-
-// Purpose: helper function for AbilityTagExpandHandler_CH().
-// Use:
-// Typical use case: 
-
-static private function string GetTagValueFromItemTech(string Tag, Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional EInventorySlot Slot = eInvSlot_Unknown, optional bool bSquash)
+static private function string GetTagValueFromItemTech(string Tag, Object ParseObj, Object StrategyParseObj, XComGameState GameState,
+    optional EInventorySlot Slot = eInvSlot_Unknown, optional bool bSquash = true, optional string Suffix)
 {
     local XComGameState_Unit    SourceUnit;
     local X2ItemTemplate        ItemTemplate;
-    local bool          bStrategy;
-    local int           i, Index;
-    local array<int>    Array, NewArray;
-    local string        OutString;
+    local bool                  bStrategy;
+    local int                   i, Index;
+    local array<float>          Array, NewArray;
+    local string                OutString;
+    local string                LeftString, MidString, RightString;
 
     bStrategy = StrategyParseObj != none;
     SourceUnit = GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
@@ -2349,7 +2457,7 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
         ItemTemplate = GetItemTemplateFromParseObj(ParseObj, StrategyParseObj, GameState);
     }
 
-    Array = `GetConfigArrayInt(Tag);
+    Array = `GetConfigArrayFloat(Tag);
 
     if (Array.Length == 0)
         return ColorText_Grey("?");
@@ -2366,7 +2474,7 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     {
         if (0 <= Index && Index < Array.Length)
         {
-            OutString = ColorText_Auto(Array[Index],, SourceUnit);
+            OutString = ColorText_Auto(TruncateFloat2(Array[Index]) $ Suffix,, SourceUnit);
         }
     }
     else
@@ -2386,41 +2494,38 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
             }
             Array = NewArray;
         }
-        if (Array.Length == 1)
-        {
-            if (Index == 0)
-                OutString = ColorText_Auto(Array[Index],, SourceUnit);
-            else
-                OutString = ColorText_Grey(Array[Index]);
-        }
-        else
+        if (Index == -1)
         {
             for (i = 0; i < Array.Length; i++)
             {
-                if (i == 0)
-                {
-                    if (i == Index)
-                        OutString = ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
-                    else
-                        OutString = ColorText_Grey(Array[i], true);
-                }
-                else if (i < Array.Length - 1)
-                {
-                    if (i == Index)
-                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit) $ ColorText_Grey("", true);
-                    else
-                        OutString = OutString $ string(Array[i]);
-                }
-                else
-                {
-                    if (i == Index)
-                        OutString = OutString $ ColorText_Close() $ ColorText_Auto(Array[i],, SourceUnit);
-                    else
-                        OutString = OutString $ string(Array[i]) $ ColorText_Close();
-                }
+                OutString $= TruncateFloat2(Array[Index]) $ Suffix;
                 if (i < Array.Length - 1)
+                {
                     OutString = OutString $ " / ";
+                }
             }
+        }
+        else
+        {
+            for (i = 0; i < Index; i++)
+            {
+                LeftString $= TruncateFloat2(Array[Index]) $ Suffix;
+                if (i < Array.Length - 1)
+                {
+                    LeftString = LeftString $ " / ";
+                }
+            }
+            MidString = TruncateFloat2(Array[Index]) $ Suffix;
+            for (i = Index + 1; i < Array.Length; i++)
+            {
+                RightString $= " / " $ TruncateFloat2(Array[Index]) $ Suffix;
+            }
+
+            if (LeftString != "")
+                OutString $= ColorText_Grey(LeftString);
+            OutString $= ColorText_Auto(MidString,, SourceUnit);
+            if (RightString != "")
+                OutString $= ColorText_Grey(RightString);
         }
     }
     
@@ -2429,7 +2534,6 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
     
     return ColorText_Grey("?");
 }
-
 
 // Purpose: helper function for AbilityTagExpandHandler_CH().
 // Use:
@@ -2560,52 +2664,44 @@ static private function string GetTagValueFromRank(string Tag, Object ParseObj, 
 
 static function int GetTechLevel(X2ItemTemplate ItemTemplate)
 {
+    local X2GremlinTemplate     GremlinTemplate;
     local X2WeaponTemplate      WeaponTemplate;
     local X2ArmorTemplate       ArmorTemplate;
-    local X2GremlinTemplate     GremlinTemplate;
     local int Index;
 
-    Index = -1;
     if (ItemTemplate != none)
     {
+        GremlinTemplate = X2GremlinTemplate(ItemTemplate);
         WeaponTemplate = X2WeaponTemplate(ItemTemplate);
         ArmorTemplate = X2ArmorTemplate(ItemTemplate);
-        GremlinTemplate = X2GremlinTemplate(ItemTemplate);
 
         if (GremlinTemplate != none)
         {
-            switch (GremlinTemplate.WeaponTech)
+            Index = default.GremlinTiers.Find('Tech', GremlinTemplate.WeaponTech);
+            if (Index != INDEX_NONE)
             {
-                case 'beam':            Index = 2;  break;
-                case 'magnetic':        Index = 1;  break;
-                case 'conventional':    Index = 0;  break;
-                default:                Index = -1; break;
+                return default.GremlinTiers[Index].Tier;
             }
         }
         else if (WeaponTemplate != none)
         {
-            switch (WeaponTemplate.WeaponTech)
+            Index = default.WeaponTiers.Find('Tech', WeaponTemplate.WeaponTech);
+            if (Index != INDEX_NONE)
             {
-                case 'beam':            Index = 4;  break;
-                case 'coilgun_lw':      Index = 3;  break;
-                case 'magnetic':        Index = 2;  break;
-                case 'laser_lw':        Index = 1;  break;
-                case 'conventional':    Index = 0;  break;
-                default:                Index = -1; break;
+                return default.WeaponTiers[Index].Tier;
             }
         }
         else if (ArmorTemplate != none)
         {
-            switch (ArmorTemplate.ArmorTechCat)
+            Index = default.ArmorTiers.Find('Tech', ArmorTemplate.ArmorTechCat);
+            if (Index != INDEX_NONE)
             {
-                case 'powered':         Index = 2;  break;
-                case 'plated':          Index = 1;  break;
-                case 'conventional':    Index = 0;  break;
-                default:                Index = -1; break;
+                return default.ArmorTiers[Index].Tier;
             }
         }
     }
-    return Index;
+
+    return -1;
 }
 
 static private function GetShieldEffectValues(Object ParseObj, Object StrategyParseObj, XComGameState GameState, out int ShieldRemaining, out int ShieldPriority)
