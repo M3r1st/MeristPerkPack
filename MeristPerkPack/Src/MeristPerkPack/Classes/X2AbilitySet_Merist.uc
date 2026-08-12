@@ -2586,7 +2586,7 @@ static function X2AbilityTemplate Stiletto()
     Effect = new class'X2Effect_Stiletto';
     Effect.PierceBonus = `GetConfigArrayInt("M31_Stiletto_PierceBonus");
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, false);
     Template.AddTargetEffect(Effect);
 
     return Template;
