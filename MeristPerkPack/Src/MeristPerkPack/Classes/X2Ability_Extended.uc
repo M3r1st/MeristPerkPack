@@ -240,7 +240,7 @@ static function X2AbilityTemplate StandardMelee(name TemplateName, string IconIm
     return Template;
 }
 
-static function X2AbilityTemplate MovingMelee( name TemplateName, string IconImage,
+static function X2AbilityTemplate MovingMelee(name TemplateName, string IconImage,
     optional bool bCrossClassEligible = false, optional bool bAddDefaultEffects = true)
 {
     local X2AbilityTemplate Template;
