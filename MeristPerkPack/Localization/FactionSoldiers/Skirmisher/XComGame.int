@@ -12,3 +12,14 @@ LocFlyOverText="Deep Pockets"
 LocLongDescription="Gain <Ability:M31_FontGold>3</font> <font color='#00ffff'>Ordnance</font> slots that can be used for grenades or ammo."
 LocHelpText=""
 LocPromotionPopupText=""
+
+[M31_SK_Pinions X2AbilityTemplate]
+LocFriendlyName="Blazing Pinions"
+LocFlyOverText="Blazing Pinions"
+LocLongDescription="The pinions are blazing."
+LocHelpText="This is a help text."
+LocPromotionPopupText=""
+
+[M31_SK_Pinions_Attack X2AbilityTemplate]
+LocFriendlyName="Blazing Pinions"
+LocFlyOverText="Blazing Pinions"

@@ -221,4 +221,7 @@ RadBurningTitle                     = "Radiation Burn"
 RadBleedingTitle                    = "Boiling Blood"
 RadDisorientedTitle                 = "Irradiated"
 
-
+[X2TargetingMethod_MeristPinions]
+strLockAreaText                     = ""
+strSelectLocationText               = "Select Target:\n"
+strConfirmActivationText            = ""
