@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------------
-//  FILE:   X2Effect_ApplyHeal.uc
+//  FILE:    X2Effect_ApplyHeal.uc
 //  AUTHOR:  Grobobobo/inspired by shadow ops
 //  PURPOSE: Effect that heals stuff per turn.
 //---------------------------------------------------------------------------------------
@@ -15,9 +15,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     local XComGameState_Unit OldTargetState, NewTargetState;
     local UnitValue HealthRegenerated;
     local int AmountToHeal, Healed, NewHealthRegenerated;
-    
-    `LOG("X2Effect_ApplyHeal added");
-    
+
     OldTargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
     if (HealthRegeneratedName != '' && MaxHealAmount > 0)
@@ -32,7 +30,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         else
         {
             // Ensure the unit is not healed for more than the maximum allowed amount
-            AmountToHeal = min(HealAmount, (MaxHealAmount - HealthRegenerated.fValue));
+            AmountToHeal = Min(HealAmount, (MaxHealAmount - HealthRegenerated.fValue));
         }
     }
     else
@@ -43,7 +41,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     // Perform the heal
     NewTargetState = XComGameState_Unit(NewGameState.ModifyStateObject(OldTargetState.Class, OldTargetState.ObjectID));
-    NewTargetState.ModifyCurrentStat(estat_HP, AmountToHeal);
+    NewTargetState.ModifyCurrentStat(eStat_HP, AmountToHeal);
 
     // If this health regen is being tracked, save how much the unit was healed
     if (HealthRegeneratedName != '')
