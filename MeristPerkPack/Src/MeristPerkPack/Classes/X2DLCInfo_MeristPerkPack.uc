@@ -1316,6 +1316,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         return true;
 
     if (GetShieldbearerOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
+        return true;
+
     return false;
 }
 

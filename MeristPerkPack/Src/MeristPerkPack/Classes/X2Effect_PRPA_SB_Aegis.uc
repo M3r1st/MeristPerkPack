@@ -1,7 +1,6 @@
-class X2Effect_PA_Aegis extends X2Effect_Persistent;
+class X2Effect_PRPA_SB_Aegis extends X2Effect_Persistent;
 
 var int DamageReduction;
-var name RequiredEffect;
 
 function float GetPostDefaultDefendingDamageModifier_CH(
     XComGameState_Effect EffectState,
@@ -29,16 +28,11 @@ function float GetPostDefaultDefendingDamageModifier_CH(
 
 function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
 {
-    if (RequiredEffect != '')
-    {
-        return TargetUnit.IsUnitAffectedByEffectName(RequiredEffect);
-    }
-
-    return true;
+    return TargetUnit.IsUnitAffectedByEffectName(class'X2Effect_PRPA_SB_EnergyShield'.default.EffectName);
 }
 
 defaultproperties
 {
-    EffectName = M31_PA_Aegis
-    DuplicateResponse = eDupe_Ignore
+    EffectName = X2Effect_PRPA_SB_Aegis
+    DuplicateResponse = eDupe_Refresh
 }

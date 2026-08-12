@@ -1,0 +1,41 @@
+[M31_PRPA_SB_EnergyShield X2AbilityTemplate]
+LocFriendlyName="Energy Shield"
+LocFlyOverText="Energy Shield"
+LocLongDescription="Grant <Ability:M31_PRPA_SB_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_PRPA_SB_EnergyShield_Radius>-tile radius. Lasts for <Ability:M31_PRPA_SB_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Grant <Ability:M31_PRPA_SB_EnergyShield_ShieldAmount> shields to self and all allies in the area. Lasts for <Ability:M31_PRPA_SB_EnergyShield_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> The strength of the shield increases with the technology level of the <Ability:ClassName>'s armor.<br><Bullet> Shield priority: <Ability:M31_PRPA_SB_EnergyShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
+
+[M31_PRPA_SB_HealingShield X2AbilityTemplate]
+LocFriendlyName="Cleansing Shield"
+LocFlyOverText="Cleansing Shield"
+LocLongDescription="Energy Shield heals the targets for <Ability:M31_PRPA_SB_HealingShield_HealAmount> HP and removes poison, burning, and acid burning."
+LocHelpText="Energy Shield heals the targets for <Ability:M31_PRPA_SB_HealingShield_HealAmount> HP and removes poison, burning, and acid burning."
+LocPromotionPopupText="<Bullet> Each soldier can gain up to <Ability:M31_PRPA_SB_HealingShield_MaxHealAmount> HP per mission from this ability. This value is shared between all sources.<br><Bullet> Removes the same status effects as a medikit."
+
+[M31_PRPA_SB_HoloShield X2AbilityTemplate]
+LocFriendlyName="Motivating Shield"
+LocFlyOverText="Motivating Shield"
+LocLongDescription="Energy Shield increases the targets' aim by <Ability:M31_PRPA_SB_HoloShield_AimBonus> and critical chance by <Ability:M31_PRPA_SB_HoloShield_CritBonus>."
+LocHelpText="Energy Shield increases the targets' aim by <Ability:M31_PRPA_SB_HoloShield_AimBonus> and critical chance by <Ability:M31_PRPA_SB_HoloShield_CritBonus>."
+LocPromotionPopupText="<Bullet> The bonus applies for as long as the shield holds."
+
+[M31_PRPA_SB_ImprovedShield X2AbilityTemplate]
+LocFriendlyName="Improved Energy Shield"
+LocFlyOverText="Improved Energy Shield"
+LocLongDescription="Energy Shield provides <Ability:M31_PRPA_SB_ImprovedShield_ShieldBonus> additional points of ablative HP, its range is increased by <Ability:M31_PRPA_SB_ImprovedShield_RadiusBonus> tile(s), and its cooldown is reduced by <Ability:M31_PRPA_SB_ImprovedShield_CooldownReduction> turn(s)."
+LocHelpText="Energy Shield provides additional shields and has increased range and reduced cooldown."
+LocPromotionPopupText=""
+
+[M31_PRPA_SB_AegisShield X2AbilityTemplate]
+LocFriendlyName="Aegis Shield"
+LocFlyOverText="Aegis Shield"
+LocLongDescription="Energy Shield reduces incoming damage by <Ability:M31_PRPA_SB_AegisShield_DamageReduction>."
+LocHelpText="Energy Shield reduces incoming damage by <Ability:M31_PRPA_SB_AegisShield_DamageReduction>."
+LocPromotionPopupText="<Bullet> The bonus applies for as long as the shield holds."
+
+[M31_PRPA_SB_HasteShield X2AbilityTemplate]
+LocFriendlyName="Accelerating Shield"
+LocFlyOverText="Accelerating Shield"
+LocLongDescription="Energy Shield increases the targets' mobility by <Ability:M31_PRPA_SB_HasteShield_MobilityBonus>."
+LocHelpText="Energy Shield increases the targets' mobility by <Ability:M31_PRPA_SB_HasteShield_MobilityBonus>."
+LocPromotionPopupText="<Bullet> The bonus increases with the technology level of the <Ability:ClassName>'s armor.<br><Bullet> The bonus applies for as long as the shield holds."

@@ -58,7 +58,6 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(EMPBomber());
     Templates.AddItem(EnemyUnknown());
         Templates.AddItem(EnemyUnknownPassive());
-    Templates.AddItem(EnergyShield());
     Templates.AddItem(EnhancedLowProfile());
     Templates.AddItem(Entrench());
         Templates.AddItem(EntrenchTrigger());
@@ -414,7 +413,7 @@ static function X2AbilityTemplate BombAndRun()
     local X2Condition_UnitEffects           EffectCondition;
 
     Template = SelfTargetTrigger('M31_BombAndRun', "img:///UILibrary_XPerkIconPack.UIPerk_move_grenade");
-    
+
     Trigger = new class'X2AbilityTrigger_EventListener';
     Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
     Trigger.ListenerData.EventID = 'AbilityActivated';
@@ -1025,97 +1024,6 @@ static function X2AbilityTemplate EnemyUnknown()
 static function X2AbilityTemplate EnemyUnknownPassive()
 {
     return Passive('M31_EnemyUnknown_Passive', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_shadow", false, true);
-}
-
-static function X2AbilityTemplate EnergyShield()
-{
-    local X2AbilityTemplate                 Template;
-    local X2AbilityCooldown_Extended        Cooldown;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
-    local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
-    local X2AbilityPassiveAOE_WeaponRadius  PassiveRadius;
-    local X2Effect_EnhancedEnergyShield     ShieldEffect;
-
-    Template = SelfTargetActivated('M31_EnergyShield', "img:///UILibrary_PerkIcons.UIPerk_adventshieldbearer_energyshield", false);
-
-    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_SingleConsumeAll, eHostility_Defensive);
-    Template.Hostility = eHostility_Defensive;
-
-    Cooldown = new class'X2AbilityCooldown_Extended';
-    Cooldown.iNumTurns = `GetConfigInt("M31_EnergyShield_Cooldown");
-    Cooldown.CooldownModifiers = class'X2Effect_EnhancedEnergyShield'.default.EnergyShield_CooldownModifiers;
-    Template.AbilityCooldown = Cooldown;
-
-    AddCharges(Template, `GetConfigInt("M31_EnergyShield_Charges"));
-    AddActionPointCost(Template, eCost_SingleConsumeAll);
-
-    Template.AddShooterEffectExclusions();
-
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.ExcludeHostileToSource = true;
-    UnitPropertyCondition.ExcludeFriendlyToSource = false;
-    UnitPropertyCondition.RequireSquadmates = true;
-    UnitPropertyCondition.FailOnNonUnits = true;
-    UnitPropertyCondition.ExcludeCivilian = true;
-    // UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = true;
-    Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
-
-    RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-    RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_EnergyShield_Radius"));
-    RadiusMultiTarget.bIgnoreBlockingCover = true;
-    RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-    Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-
-    PassiveRadius = new class'X2AbilityPassiveAOE_WeaponRadius';
-    PassiveRadius.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_EnergyShield_Radius"));
-    Template.AbilityPassiveAOEStyle = PassiveRadius;
-
-    ShieldEffect = new class'X2Effect_EnhancedEnergyShield';
-    ShieldEffect.EffectName = 'M31_EnergyShield';
-    ShieldEffect.ShieldAmount = `GetConfigArrayInt("M31_EnergyShield_ShieldAmount");
-    ShieldEffect.ShieldPriority = `GetConfigInt("M31_EnergyShield_ShieldPriority");
-    ShieldEffect.bGetShieldAmountFromArmor = true;
-    ShieldEffect.BuildPersistentEffect(`GetConfigInt("M31_EnergyShield_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
-    ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, class'X2Effect_PersonalShield'.default.strFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
-    ShieldEffect.EffectRemovedVisualizationFn = class'X2Ability_AdventShieldBearer'.static.OnShieldRemoved_BuildVisualization;
-    Template.AddTargetEffect(ShieldEffect);
-    Template.AddMultiTargetEffect(ShieldEffect);
-    
-    Template.bSkipFireAction = false;
-    
-    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-    Template.BuildVisualizationFn = EnergyShield_BuildVisualization;
-
-    Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
-
-    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
-
-    return Template;
-}
-
-static simulated function EnergyShield_BuildVisualization(XComGameState VisualizeGameState)
-{
-    local XComGameStateHistory History;
-    local XComGameStateContext_Ability  Context;
-    local StateObjectReference InteractingUnitRef;
-    local VisualizationActionMetadata EmptyTrack;
-    local VisualizationActionMetadata ActionMetadata;
-    local X2Action_PlayAnimation PlayAnimationAction;
-
-    History = `XCOMHISTORY;
-
-    Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
-    InteractingUnitRef = Context.InputContext.SourceObject;
-
-    // Configure the visualization track for the shooter
-    // ****************************************************************************************
-    ActionMetadata = EmptyTrack;
-    ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(InteractingUnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
-    ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(InteractingUnitRef.ObjectID);
-    ActionMetadata.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
-
-    PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-    PlayAnimationAction.Params.AnimName = 'HL_EnergyShield';
 }
 
 static function X2AbilityTemplate EnhancedLowProfile()

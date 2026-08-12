@@ -40,6 +40,50 @@ simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectPa
     return Shield;
 }
 
+simulated function int GetShieldAmountPreview(XComGameState_Ability AbilityState)
+{
+    local XComGameState_Item    SourceWeapon;
+    local XComGameState_Unit    SourceUnit;
+    local AdditionalShieldAmountInfo Info;
+    local int                   Tech;
+    local int                   Shield;
+
+    Shield = ShieldAmountBase;
+
+    if (bGetShieldAmountFromWeapon)
+    {
+        SourceWeapon = AbilityState.GetSourceWeapon();
+
+        if (SourceWeapon != none)
+        {
+            Tech = `GetTechLevel(SourceWeapon.GetMyTemplate());
+            Tech = Clamp(Tech, 0, ShieldAmount.Length - 1);
+            Shield += ShieldAmount[Tech];
+        }
+    }
+
+    SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+    if (SourceUnit != none)
+    {
+        if (bGetShieldAmountFromArmor)
+        {
+            Tech = `GetTechLevel(SourceUnit.GetItemInSlot(eInvSlot_Armor).GetMyTemplate());
+            Tech = Clamp(Tech, 0, ShieldAmount.Length - 1);
+            Shield += ShieldAmount[Tech];
+        }
+
+        foreach AdditionalShieldAmount(Info)
+        {
+            if (SourceUnit.HasSoldierAbility(Info.RequiredAbility, true))
+            {
+                Shield += Info.AdditionalAmount;
+            }
+        }
+    }
+
+    return Shield;
+}
+
 simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     local XComGameState_Unit SourceUnit;
@@ -55,7 +99,7 @@ simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAp
     {
         foreach AdditionalShieldAmount(Info)
         {
-            if (SourceUnit.HasSoldierAbility(Info.RequiredAbility))
+            if (SourceUnit.HasSoldierAbility(Info.RequiredAbility, true))
             {
                 Shield += Info.AdditionalAmount;
             }

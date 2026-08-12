@@ -119,6 +119,7 @@ static function X2AbilityTemplate Aegis()
 
     Effect = new class'X2Effect_PA_Aegis';
     Effect.DamageReduction = `GetConfigInt("M31_PA_Aegis_DamageReduction");
+    Effect.RequiredEffect = class'X2AbilitySet_PA_Muton'.default.PersonalShieldEffectName;
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(Effect);

@@ -187,13 +187,6 @@ LocFlyOverText="Enemy Unknown"
 LocLongDescription="If no enemy can see you at the start of your turn, gain +<Ability:M31_EnemyUnknown_MobilityBonus> mobility, +<Ability:M31_EnemyUnknown_CritBonus> critical chance and +<Ability:M31_EnemyUnknown_CritDamageBonus> critical damage until the start of your next turn."
 LocHelpText="If no enemy can see you at the start of your turn, gain +<Ability:M31_EnemyUnknown_MobilityBonus> mobility, +<Ability:M31_EnemyUnknown_CritBonus> critical chance and +<Ability:M31_EnemyUnknown_CritDamageBonus> critical damage until the start of your next turn."
 
-[M31_EnergyShield X2AbilityTemplate]
-LocFriendlyName="Energy Shield"
-LocFlyOverText="Energy Shield"
-LocLongDescription="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius>-tile radius for <Ability:M31_EnergyShield_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Activate to grant <Ability:M31_EnergyShield_ShieldAmount> points of ablative HP to self and all allies in a <Ability:M31_EnergyShield_Radius>-tile radius for <Ability:M31_EnergyShield_Duration> turn(s)."
-LocPromotionPopupText="<Bullet> Shield strength increases with the armor's tech level.<br><Bullet> Shield priority: <Ability:M31_EnergyShield_ShieldPriority>.<br><Bullet> Shields with higher priority will be depleted first."
-
 [M31_Entrench X2AbilityTemplate]
 LocFriendlyName="Entrench"
 LocFlyOverText="Entrench"
