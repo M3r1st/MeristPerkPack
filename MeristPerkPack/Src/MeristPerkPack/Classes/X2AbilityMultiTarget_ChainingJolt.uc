@@ -77,7 +77,7 @@ simulated function int GetMaxNumTargets(const XComGameState_Ability Ability, con
     if (arrMaxTargets.Length > 0)
     {
         Tech = `GetTechLevel(Ability.GetSourceWeapon().GetMyTemplate());
-        Tech = Clamp(Tech, 0, arrTargetRadius.Length - 1);
+        Tech = Clamp(Tech, 0, arrMaxTargets.Length - 1);
         NumTargets = arrMaxTargets[Tech];
     }
     else
