@@ -357,8 +357,8 @@ LocHelpText="Your damaging grenades inflict bleeding, dealing <Ability:M31_PipeB
 
 [M31_PriorityFocus X2AbilityTemplate]
 LocFriendlyName="Priority Focus"
-LocLongDescription="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted units."
-LocHelpText="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted units."
+LocLongDescription="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted targets."
+LocHelpText="Your ranged attacks deal +<Ability:M31_PriorityFocus_DamageBonus> damage against holotargeted targets."
 LocPromotionPopupText="<Bullet> Applies to all ranged attacks.<br><Bullet> Both the Holotargeter and the Holo Targeting ability are valid for this bonus."
 
 [M31_Relentless X2AbilityTemplate]
