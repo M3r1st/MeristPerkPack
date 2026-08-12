@@ -1104,9 +1104,6 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_EnemyUnknown_DefenseBonus":
         case "M31_EnemyUnknown_DodgeBonus":
         case "M31_EnemyUnknown_MobilityBonus":
-        case "M31_EnergyShield_Duration":
-        case "M31_EnergyShield_Radius":
-        case "M31_EnergyShield_ShieldPriority":
         case "M31_EnhancedLowProfile_AimBonus":
         case "M31_EnhancedLowProfile_CritBonus":
         case "M31_Escalation_CritBonus":
@@ -1273,10 +1270,6 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
             OutString = GetOutStringWithRank(`GetConfigInt(InString), `GetConfigFloat(InString $ "PerRank"), ParseObj, StrategyParseOb, GameState, "%", true, 0, 100);
             return true;
 
-        case "M31_EnergyShield_ShieldAmount":
-            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState, eInvSlot_Armor);
-            return true;
-
         case "M31_SawedOffReload_Charges":
         case "M31_Stiletto_PierceBonus":
             OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState);
@@ -1322,6 +1315,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
     if (GetPsiOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
         return true;
 
+    if (GetShieldbearerOutStrings(InString, OutString, ParseObj, StrategyParseOb, GameState))
     return false;
 }
 
@@ -2065,6 +2059,77 @@ static function bool GetPsiOutStrings(string InString, out string OutString, Obj
         case "M31_Psi_NullWard_ShieldAmount":
         case "M31_Psi_Cryotherapy_HealAmount":
             OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState,, true);
+            return true;
+
+        default:
+            return false;
+    }
+
+    return false;
+}
+
+static function bool GetShieldbearerOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
+{
+    local XComGameState_Unit        UnitState;
+    local XComGameState_Ability     AbilityState;
+    local X2AbilityTemplate         AbilityTemplate;
+    local X2Effect_EnergyShieldExtended ShieldEffect;
+    local int                       i;
+
+    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    switch (InString)
+    {
+        case "M31_PRPA_SB_EnergyShield_Duration":
+        case "M31_PRPA_SB_EnergyShield_ShieldPriority":
+        case "M31_PRPA_SB_HealingShield_HealAmount":
+        case "M31_PRPA_SB_HealingShield_MaxHealAmount":
+        case "M31_PRPA_SB_ImprovedShield_CooldownReduction":
+        case "M31_PRPA_SB_ImprovedShield_RadiusBonus":
+        case "M31_PRPA_SB_ImprovedShield_ShieldBonus":
+            OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            return true;
+
+        case "M31_PRPA_SB_AegisShield_DamageReduction":
+            OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
+            return true;
+
+        case "M31_PRPA_SB_HoloShield_AimBonus":
+        case "M31_PRPA_SB_HoloShield_CritBonus":
+        case "M31_PRPA_SB_HasteShield_MobilityBonus":
+            OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState, eInvSlot_Armor);
+            return true;
+
+        case "M31_PRPA_SB_EnergyShield_Radius":
+            AbilityState = XComGameState_Ability(ParseObj);
+            if (AbilityState != none && StrategyParseOb == none)
+            {
+                OutString = ColorText_Auto(int(`UNITSTOTILES(AbilityState.GetAbilityRadius())),, UnitState);
+            }
+            else
+            {
+                OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
+            }
+            return true;
+
+        case "M31_PRPA_SB_EnergyShield_ShieldAmount":
+            AbilityState = XComGameState_Ability(ParseObj);
+            if (AbilityState != none && StrategyParseOb == none)
+            {
+                AbilityTemplate = AbilityState.GetMyTemplate();
+                for (i = 0; i < AbilityTemplate.AbilityMultiTargetEffects.Length; i++)
+                {
+                    ShieldEffect = X2Effect_EnergyShieldExtended(AbilityTemplate.AbilityMultiTargetEffects[i]);
+                    if (ShieldEffect != none)
+                    {
+                        OutString = ColorText_Auto(ShieldEffect.GetShieldAmountPreview(AbilityState),, UnitState);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                OutString = GetTagValueFromItemTech(InString, ParseObj, StrategyParseOb, GameState, eInvSlot_Armor);
+            }
             return true;
 
         default:
