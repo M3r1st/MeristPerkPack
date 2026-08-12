@@ -4,7 +4,8 @@
 //---------------------------------------------------------------------------------------
 class X2Effect_EnergyShieldExtended extends X2Effect_EnergyShield abstract;
 
-var int ShieldPriority;
+var int                 ShieldPriority;
+var array<StatChange>   AdditionalStatChanges;;
 
 // Called by the handler in the corresponding listener
 var delegate<ShieldsTakeDamage> ShieldsTakeDamageFn;
@@ -23,10 +24,11 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
     EffectState = XCGS_Effect_EnergyShieldExtended(NewEffectState);
     EffectState.SetHandlerID(NewGameState);
 
-    ShieldStrength = GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, EffectState);
-
     m_aStatChanges.Length = 0;
-    AddPersistentStatChange(eStat_ShieldHP, ShieldStrength);
+
+    ShieldStrength = GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+    super(X2Effect_PersistentStatChange).AddPersistentStatChange(eStat_ShieldHP, ShieldStrength);
+    GetAdditionalStatChanges(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
     EffectState.ShieldPriority = ShieldPriority;
     EffectState.ShieldRemaining = ShieldStrength;
@@ -75,6 +77,24 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     return 0;
+}
+
+simulated function int GetShieldAmountPreview(XComGameState_Ability AbilityState)
+{
+    return 0;
+}
+
+simulated function GetAdditionalStatChanges(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState);
+
+simulated function AddPersistentStatChange(ECharStatType StatType, float StatAmount, optional EStatModOp InModOp = MODOP_Addition)
+{
+    local StatChange NewChange;
+    
+    NewChange.StatType = StatType;
+    NewChange.StatAmount = StatAmount;
+    NewChange.ModOp = InModOp;
+
+    AdditionalStatChanges.AddItem(NewChange);
 }
 
 function bool IsThisEffectBetterThanExistingEffect(const out XComGameState_Effect ExistingEffect)
