@@ -35,7 +35,7 @@ LocPromotionPopupText="<Bullet> The debuff will increase the damage from damage-
 LocFriendlyName="Blaster Master"
 LocLongDescription="Grenades no longer have a cooldown. Gain a free Muton Plasma Grenade."
 LocHelpText="Grenades no longer have a cooldown."
-LocPromotionPopupText="<Bullet> Muton Plasma Grenade has <Ability:M31_FontGold>3 - 8</font> damage, <Ability:M31_FontGold>2</font> shred, <Ability:M31_FontGold>4m</font> radius, and <Ability:M31_FontGold>10</font> environmental damage."
+LocPromotionPopupText="<Bullet> Muton Plasma Grenade deals <Ability:M31_PA_HarrierBlasterMaster_Damage> damage, <Ability:M31_PA_HarrierBlasterMaster_EnvDamage> environmental damage and shreds <Ability:M31_PA_HarrierBlasterMaster_Shred> armor in a radius of <Ability:M31_PA_HarrierBlasterMaster_Radius>."
 
 [M31_PA_NoGraze X2AbilityTemplate]
 LocFriendlyName="Undodgeable"

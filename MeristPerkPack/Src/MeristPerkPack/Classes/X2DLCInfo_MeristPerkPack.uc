@@ -382,6 +382,94 @@ delegate int SortAbilities(string A, string B)
         return 0;
 }
 
+static function string GetLocalizedTemplateProperty(name TemplateName, class TemplateClass, name PropertyName)
+{
+    local X2ItemTemplate            ItemTemplate;
+    local X2WeaponTemplate          WeaponTemplate;
+    local X2AbilityTemplate         AbilityTemplate;
+    local X2CharacterTemplate       CharTemplate;
+
+    local X2ItemTemplateManager         ItemMgr;
+    local X2AbilityTemplateManager      AbilityMgr;
+    local X2CharacterTemplateManager    CharMgr;
+
+    if (ClassIsChildOf(TemplateClass, class'X2ItemTemplate'))
+    {
+        ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+        ItemTemplate = ItemMgr.FindItemTemplate(TemplateName);
+        if (ItemTemplate != none)
+        {
+            WeaponTemplate = X2WeaponTemplate(ItemTemplate);
+            if (WeaponTemplate != none)
+            {
+                switch (PropertyName)
+                {
+                    case 'iEnvironmentDamage':
+                        return string(WeaponTemplate.iEnvironmentDamage);
+                    case 'iRange':
+                        return string(WeaponTemplate.iRange);
+                    case 'iRadius':
+                        return string(WeaponTemplate.iRadius);
+                    case 'iClipSize':
+                        return string(WeaponTemplate.iClipSize);
+                    case 'BaseDamage':
+                        return GetDamageRangeString(WeaponTemplate.BaseDamage);
+                    case 'BaseDamage_Damage':
+                        return string(WeaponTemplate.BaseDamage.Damage);
+                    case 'BaseDamage_Spread':
+                        return string(WeaponTemplate.BaseDamage.Spread);
+                    case 'BaseDamage_PlusOne':
+                        return string(WeaponTemplate.BaseDamage.PlusOne);
+                    case 'BaseDamage_Crit':
+                        return string(WeaponTemplate.BaseDamage.Crit);
+                    case 'BaseDamage_Pierce':
+                        return string(WeaponTemplate.BaseDamage.Pierce);
+                    case 'BaseDamage_Rupture':
+                        return string(WeaponTemplate.BaseDamage.Rupture);
+                    case 'BaseDamage_Shred':
+                        return string(WeaponTemplate.BaseDamage.Shred);
+                }
+            }
+        }
+    }
+    else if (ClassIsChildOf(TemplateClass, class'X2AbilityTemplate'))
+    {
+        AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+        AbilityTemplate = AbilityMgr.FindAbilityTemplate(TemplateName);
+        if (AbilityTemplate != none)
+        {
+
+        }
+    }
+    else if (ClassIsChildOf(TemplateClass, class'X2CharacterTemplate'))
+    {
+        CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+        CharTemplate = CharMgr.FindCharacterTemplate(TemplateName);
+        if (CharTemplate != none)
+        {
+
+        }
+    }
+
+    return "";
+}
+
+static function string GetDamageRangeString(WeaponDamageValue Damage)
+{
+    local int       MinDamage, MaxDamage;
+    local string    OutString;
+
+    MinDamage = Damage.Damage - Damage.Spread + (Damage.PlusOne >= 100 ? 1 : 0);
+    MaxDamage = Damage.Damage + Damage.Spread + (Damage.PlusOne > 0 ? 1 : 0);
+
+    if (MinDamage < MaxDamage)
+        OutString = string(MinDamage) $ " - " $ string(MaxDamage);
+    else
+        OutString = string(MaxDamage);
+
+    return OutString;
+}
+
 static function AddBotnetEffectToAbility(X2AbilityTemplate Template)
 {
     local X2Condition_UnitProperty              UnitPropertyCondition;
@@ -1789,6 +1877,19 @@ static function bool GetMutonOutStrings(string InString, out string OutString, O
                 OutString = "+" $ ColorText_Auto(TruncateFloat2(fValue,, false) $ "m",, UnitState);
             else
                 OutString = "-" $ ColorText_Auto(TruncateFloat2(-1 * fValue,, false) $ "m",, UnitState);
+            return true;
+
+        case "M31_PA_HarrierBlasterMaster_Damage":
+            OutString = GetDamageValueOutString(ParseObj, StrategyParseOb, GameState, class'X2Item_DefaultGrenades'.default.MUTON_GRENADE_BASEDAMAGE);
+            return true;
+        case "M31_PA_HarrierBlasterMaster_EnvDamage":
+            OutString = ColorText_Auto(class'X2Item_DefaultGrenades'.default.ALIENGRENADE_IENVIRONMENTDAMAGE,, UnitState);
+            return true;
+        case "M31_PA_HarrierBlasterMaster_Shred":
+            OutString = ColorText_Auto(class'X2Item_DefaultGrenades'.default.MUTON_GRENADE_BASEDAMAGE.Shred,, UnitState);
+            return true;
+        case "M31_PA_HarrierBlasterMaster_Radius":
+            OutString = ColorText_Auto(GetLocalizedTemplateProperty('MutonGrenade', class'X2GrenadeTemplate', 'iRadius') $ "m",, UnitState);
             return true;
 
         default:
