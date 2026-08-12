@@ -2498,7 +2498,7 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
         {
             for (i = 0; i < Array.Length; i++)
             {
-                OutString $= TruncateFloat2(Array[Index]) $ Suffix;
+                OutString $= TruncateFloat2(Array[i]) $ Suffix;
                 if (i < Array.Length - 1)
                 {
                     OutString = OutString $ " / ";
@@ -2509,16 +2509,16 @@ static private function string GetTagValueFromItemTech(string Tag, Object ParseO
         {
             for (i = 0; i < Index; i++)
             {
-                LeftString $= TruncateFloat2(Array[Index]) $ Suffix;
+                LeftString $= TruncateFloat2(Array[i]) $ Suffix;
                 if (i < Array.Length - 1)
                 {
                     LeftString = LeftString $ " / ";
                 }
             }
-            MidString = TruncateFloat2(Array[Index]) $ Suffix;
+            MidString = TruncateFloat2(Array[i]) $ Suffix;
             for (i = Index + 1; i < Array.Length; i++)
             {
-                RightString $= " / " $ TruncateFloat2(Array[Index]) $ Suffix;
+                RightString $= " / " $ TruncateFloat2(Array[i]) $ Suffix;
             }
 
             if (LeftString != "")
