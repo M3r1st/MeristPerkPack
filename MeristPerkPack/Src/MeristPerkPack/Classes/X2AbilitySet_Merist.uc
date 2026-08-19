@@ -2,26 +2,30 @@ class X2AbilitySet_Merist extends X2Ability_Extended config(GameData_SoldierSkil
 
 var privatewrite name SniperOverwatchActionPoint;
 
-var config array<name> RocketLauncherTemplates;
-var config array<name> BoltCasterTemplates;
-var config array<name> PistolCategories;
-
 var config array<name> AdvancedOptics_AllowedEffects;
+var config array<name> Aim_AllowedAbilities;
 var config array<name> BombAndRun_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
+var config array<name> ImprovedSuppression_AllowedAbilities;
 var config array<name> Malevolence_AllowedCategories;
+var config array<name> MarauderElite_AllowedAbilities;
 var config array<name> PriorityFocus_AllowedEffects;
 var config array<name> Relentless_AllowedAbilities;
 var config array<name> Reposition_AllowedAbilities;
+var config array<name> ShiverCrit2_AdditionalCategories;
 var config array<name> ShotgunWedding_AllowedCategories;
 var config array<name> SniperElite_AllowedEffects;
+var config array<name> SuppressingFire_AllowedAbilities;
 var config array<name> Suppression_Area_AllowedCategories;
 var config array<name> TrainedSniper_AllowedCategories;
 var config array<name> TraverseFire_AllowedAbilities;
 var config array<name> TraverseFirePlus_AllowedAbilities;
-var config array<name> ShiverCrit2_AdditionalCategories;
+var config array<name> TroubleShooter_AllowedAbilities;
 var config array<EInventorySlot> Warbringer_AllowedSlots;
+var config array<name> WatchfulEye_AllowedAbilities;
+
+var privatewrite name SuppressingFireActionPoint;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -65,6 +69,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(Escalation());
     Templates.AddItem(Frostbane());
     Templates.AddItem(ImprovedSuppression());
+    Templates.AddItem(KeenEdge());
     Templates.AddItem(LowProfileNest());
     Templates.AddItem(GenevaSuggestion());
     Templates.AddItem(Maim());
@@ -1337,6 +1342,23 @@ static function X2AbilityTemplate ImprovedSuppression()
     return Template;
 }
 
+static function X2AbilityTemplate KeenEdge()
+{
+    local X2AbilityTemplate Template;
+    local X2Effect_KeenEdge Effect;
+
+    Template = Passive('M31_KeenEdge', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_keenedge", false, false);
+
+    Effect = new class'X2Effect_KeenEdge';
+    Effect.DamageBonus = `GetConfigArrayInt("M31_KeenEdge_DamageBonus");
+    Effect.PierceBonus = `GetConfigArrayInt("M31_KeenEdge_PierceBonus");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
 static function X2AbilityTemplate LowProfileNest()
 {
     local X2AbilityTemplate         Template;
@@ -1405,6 +1427,8 @@ static function X2AbilityTemplate Malevolence()
     Template.AddTargetEffect(WeaponEffect);
 
     Template.AdditionalAbilities.AddItem('M31_Malevolence_Trigger');
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
@@ -1635,6 +1659,8 @@ static function X2AbilityTemplate OverchargedBlast()
     DamageEffect.EffectDamageValue.Rupture = `GetConfigInt("M31_OverchargedBlast_Rupture");
     Template.AddTargetEffect(DamageEffect);
     Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
 
     return Template;
 }
@@ -2489,12 +2515,12 @@ static function X2AbilityTemplate Stiletto()
     local X2AbilityTemplate Template;
     local X2Effect_Stiletto Effect;
 
-    Template = Passive('M31_Stiletto', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_Needle", false, true);
+    Template = Passive('M31_Stiletto', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_Needle", false, false);
 
     Effect = new class'X2Effect_Stiletto';
     Effect.PierceBonus = `GetConfigArrayInt("M31_Stiletto_PierceBonus");
     Effect.BuildPersistentEffect(1, true, false);
-    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     return Template;
@@ -2581,7 +2607,7 @@ static function X2AbilityTemplate SuppressingFireAddActions()
 
     Effect = new class'X2Effect_GrantActionPoints';
     Effect.NumActionPoints = 1;
-    Effect.PointType = class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint;
+    Effect.PointType = default.SuppressingFireActionPoint;
     Template.AddTargetEffect(Effect);
 
     // Template.bShowActivation = true;
@@ -2608,7 +2634,7 @@ static function X2AbilityTemplate SuppressingFireRemoveActions()
     ActionPointCost = new class'X2AbilityCost_ActionPoints';
     ActionPointCost.iNumPoints = 1;
     ActionPointCost.AllowedTypes.Length = 0;
-    ActionPointCost.AllowedTypes.AddItem(class'X2DLCInfo_MeristPerkPack'.default.SuppressingFireActionPoint);
+    ActionPointCost.AllowedTypes.AddItem(default.SuppressingFireActionPoint);
     Template.AbilityCosts.AddItem(ActionPointCost);
 
     return Template;
@@ -3210,13 +3236,13 @@ static function X2AbilityTemplate AcidRoundsAttackPassive()
     WeaponEffect = new class'X2Effect_WeaponEffect';
     WeaponEffect.EffectName = 'M31_AcidRounds_Passive';
     WeaponEffect.AttackName = 'M31_AcidRounds_Attack';
-    WeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
+    WeaponEffect.AdditionalWeaponCategories = class'X2DLCInfo_MeristPerkPack'.default.PistolCategories;
     WeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(WeaponEffect);
 
     ShredEffect = new class'X2Effect_AcidRoundsShred';
     ShredEffect.ShredBonus = `GetConfigInt("M31_AcidRounds_ShredBonus");
-    ShredEffect.AdditionalWeaponCategories = default.PistolCategories;
+    ShredEffect.AdditionalWeaponCategories = class'X2DLCInfo_MeristPerkPack'.default.PistolCategories;
     ShredEffect.BuildPersistentEffect(1, true, false);
     ShredEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage, false);
     Template.AddTargetEffect(ShredEffect);
@@ -3259,7 +3285,7 @@ static function X2AbilityTemplate BleedingRoundsAttackPassive()
     WeaponEffect = new class'X2Effect_WeaponEffect';
     WeaponEffect.EffectName = 'M31_BleedingRounds_Passive';
     WeaponEffect.AttackName = 'M31_BleedingRounds_Attack';
-    WeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
+    WeaponEffect.AdditionalWeaponCategories = class'X2DLCInfo_MeristPerkPack'.default.PistolCategories;
     WeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(WeaponEffect);
 
@@ -3306,7 +3332,7 @@ static function X2AbilityTemplate Bloodlet()
     WeaponEffect = new class'X2Effect_WeaponEffect';
     WeaponEffect.EffectName = 'M31_Bloodlet';
     WeaponEffect.AttackName = 'M31_Bloodlet_Attack';
-    WeaponEffect.AdditionalWeaponCategories = default.PistolCategories;
+    WeaponEffect.AdditionalWeaponCategories = class'X2DLCInfo_MeristPerkPack'.default.PistolCategories;
     WeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(WeaponEffect);
 
@@ -3613,14 +3639,14 @@ static function X2AbilityTemplate Chimera()
     // Rifle (excluding Bolt Caster)
     WeaponCondition = new class'X2Condition_ValidWeapon';
     WeaponCondition.AllowedWeaponCategories.AddItem('rifle');
-    WeaponCondition.ExcludedWeaponTemplates = default.BoltCasterTemplates;
+    WeaponCondition.ExcludedWeaponTemplates = class'X2DLCInfo_MeristPerkPack'.default.BoltCasterTemplates;
     WeaponCondition.Slot = eInvSlot_PrimaryWeapon;
 
     class'X2DLCInfo_MeristPerkPack'.static.AddConditionalEarnedAbility(Template.DataName, 'CyclicFire', eInvSlot_PrimaryWeapon, WeaponCondition);
 
     // Bolt Caster
     WeaponCondition = new class'X2Condition_ValidWeapon';
-    WeaponCondition.AllowedWeaponTemplates = default.BoltCasterTemplates;
+    WeaponCondition.AllowedWeaponTemplates = class'X2DLCInfo_MeristPerkPack'.default.BoltCasterTemplates;
     WeaponCondition.Slot = eInvSlot_PrimaryWeapon;
 
     class'X2DLCInfo_MeristPerkPack'.static.AddConditionalEarnedAbility(Template.DataName, 'M31_Pinpoint', eInvSlot_PrimaryWeapon, WeaponCondition);
@@ -3703,4 +3729,5 @@ static function X2AbilityTemplate Chimera()
 defaultproperties
 {
     SniperOverwatchActionPoint = M31_SniperOverwatch
+    SuppressingFireActionPoint = M31_SuppressingFire
 }

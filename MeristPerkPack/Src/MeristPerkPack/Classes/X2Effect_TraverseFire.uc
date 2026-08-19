@@ -28,7 +28,7 @@ static function EventListenerReturn OnAbilityActivated(Object EventData, Object 
                 {
                     if (Effect.IsAbilityRelevant(AbilityState, SourceUnit, EffectState))
                     {
-                        if (!WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                        if (!class'M31_Helpers'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
                         {
                             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
                             SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -54,7 +54,7 @@ static function EventListenerReturn OnAbilityActivated(Object EventData, Object 
                     {
                         if (AbilityState.IsAbilityInputTriggered())
                         {
-                            if (AbilityState.GetMyTemplate().Hostility == eHostility_Offensive || !WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                            if (AbilityState.GetMyTemplate().Hostility == eHostility_Offensive || !class'M31_Helpers'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
                             {
                                 NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
                                 SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -82,7 +82,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
         {
             if (IsAbilityRelevant(kAbility, SourceUnit, EffectState))
             {
-                if (!WasAbilityFree(kAbility, SourceUnit))
+                if (!class'M31_Helpers'.static.WasAbilityFree(kAbility, SourceUnit))
                 {
                     if (CountValueName != '')
                     {
@@ -104,7 +104,7 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
             {
                 if (kAbility.IsAbilityInputTriggered())
                 {
-                    if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || !WasAbilityFree(kAbility, SourceUnit))
+                    if (kAbility.GetMyTemplate().Hostility == eHostility_Offensive || !class'M31_Helpers'.static.WasAbilityFree(kAbility, SourceUnit))
                     {
                         SourceUnit.SetUnitFloatValue(CountValueName, ActivationsPerTurn + 1, eCleanup_BeginTurn);
                     }

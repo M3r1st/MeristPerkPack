@@ -141,14 +141,14 @@ LocFriendlyName="Poison Spit"
 LocFlyOverText="Poison Spit"
 LocLongDescription="Spit deadly toxin that poisons all targets within the area. Does not leave a cloud. Costs a single action and doesn't end the turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Spit deadly toxin that poisons any targets within the area. Does not leave a cloud."
-LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_Damage> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> turn(s).<br><Bullet> The poison is affected by <Ability:M31_FontAbility>Enhanced Poison</font>.<br><Bullet> Has a <Ability:M31_PA_PoisonSpit_Radius> radius."
+LocPromotionPopupText="<Bullet> The poison deals <Ability:M31_PA_Poison_Damage> damage per turn.<br><Bullet> The poison reduces mobility by <Ability:M31_PA_Poison_MobilityPenalty> and aim by <Ability:M31_PA_Poison_AimPenalty>.<br><Bullet> The poison lasts for <Ability:M31_PA_Poison_Duration> turn(s).<br><Bullet> The poison is affected by <Ability:M31_FontAbility>Enhanced Poison</font>.<br><Bullet> Has a <Ability:M31_PA_PoisonSpit_Radius> radius."
 
 [M31_PA_EnhancedPoison X2AbilityTemplate]
 LocFriendlyName="Enhanced Poison"
 LocFlyOverText="Enhanced Poison"
 LocLongDescription="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
 LocHelpText="Improves the <Ability:ClassName>'s poison, increasing its duration, damage per turn, and aim and mobility penalties."
-LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_Damage> of the target's max HP (rounded up) damage per turn.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> turn(s)."
+LocPromotionPopupText="<Bullet> Enhanced poison deals <Ability:M31_PA_EnhancedPoison_Damage> damage per turn.<br><Bullet> Enhanced poison reduces mobility by <Ability:M31_PA_EnhancedPoison_MobilityPenalty> and aim by <Ability:M31_PA_EnhancedPoison_AimPenalty>.<br><Bullet> Enhanced poison lasts for <Ability:M31_PA_EnhancedPoison_Duration> turn(s)."
 
 [M31_PA_BlindingPoison X2AbilityTemplate]
 LocFriendlyName="Blinding Poison"

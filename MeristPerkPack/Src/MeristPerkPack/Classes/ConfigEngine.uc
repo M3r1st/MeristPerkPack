@@ -87,17 +87,17 @@ IntArray = `GetConfigArrayInt("SomeIntArrayProperty");
 struct ConfigStruct
 {
     // Config property name
-    var string				N; 
+    var string              N; 
 
     // Properties
-    var string				V;	// Value of the property
-    var array<string>		VA; // Array of values (when appropriate)
-    var WeaponDamageValue	Damage;
-    var StrategyCost		Cost;
+    var string              V;  // Value of the property
+    var array<string>       VA; // Array of values (when appropriate)
+    var WeaponDamageValue   Damage;
+    var StrategyCost        Cost;
     var StrategyRequirement	Requirements;
 
-    var array<name>			RDLC;		// List of required modnames for this config entry to be considered
-    var int					Priority;	// Priority. If several config entries share the same name N, the entry with highest priority will be used. 
+    var array<name>         RDLC;       // List of required modnames for this config entry to be considered
+    var int                 Priority;   // Priority. If several config entries share the same name N, the entry with highest priority will be used. 
                                         // If priority matches, the latest entry in config load order will be used.
     structdefaultproperties
     {
@@ -165,9 +165,9 @@ static final function string GetConfigString(const coerce string ConfigName)
 
 static final function array<int> GetConfigArrayInt(const coerce string ConfigName)
 {
-    local array<string>	StringArray;
-    local array<int>	ReturnArray;
-    local int			Index;
+    local array<string> StringArray;
+    local array<int>    ReturnArray;
+    local int           Index;
 
     StringArray = GetConfig(ConfigName).VA;
     for (Index = 0; Index < StringArray.Length; Index++)
@@ -180,9 +180,9 @@ static final function array<int> GetConfigArrayInt(const coerce string ConfigNam
 
 static final function array<float> GetConfigArrayFloat(const coerce string ConfigName)
 {
-    local array<string>	StringArray;
-    local array<float>	ReturnArray;
-    local int			Index;
+    local array<string> StringArray;
+    local array<float>  ReturnArray;
+    local int           Index;
 
     StringArray = GetConfig(ConfigName).VA;
     for (Index = 0; Index < StringArray.Length; Index++)
@@ -195,9 +195,9 @@ static final function array<float> GetConfigArrayFloat(const coerce string Confi
 
 static final function array<name> GetConfigArrayName(const coerce string ConfigName, optional bool bCanBeNull)
 {
-    local array<string>	StringArray;
-    local array<name>	ReturnArray;
-    local int			Index;
+    local array<string> StringArray;
+    local array<name>   ReturnArray;
+    local int           Index;
 
     StringArray = GetConfig(ConfigName, bCanBeNull).VA;
     for (Index = 0; Index < StringArray.Length; Index++)

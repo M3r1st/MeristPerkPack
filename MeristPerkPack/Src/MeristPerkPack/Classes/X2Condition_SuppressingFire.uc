@@ -20,7 +20,7 @@ event name CallMeetsConditionWithSource(XComGameState_BaseObject kTarget, XComGa
         /// I would advise against using this condition if you can avoid it.
         /// If you can't do that, try not to add any abilities that have similar conditions to the list.
         /// - Merist
-        foreach class'X2DLCInfo_MeristPerkPack'.default.SuppressingFire_AllowedAbilities(SuppressionAbilityName)
+        foreach class'X2AbilitySet_Merist'.default.SuppressingFire_AllowedAbilities(SuppressionAbilityName)
         {
             SuppressionRef = SourceUnit.FindAbility(SuppressionAbilityName);
             if (SuppressionRef.ObjectID > 0)

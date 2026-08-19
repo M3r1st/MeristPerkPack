@@ -43,82 +43,92 @@ function EventListenerReturn ShieldsTakeDamage(Object EventData, Object EventSou
     local XComGameState                     NewGameState;
     local int   ShieldDamageRemaining;
     local int   Index, x;
-    
+
     UnitState = XComGameState_Unit(EventSource);
     OldUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(UnitState.ObjectID,, GameState.HistoryIndex - 1));
     ShieldDamageRemaining = OldUnitState.GetCurrentStat(eStat_ShieldHP) - UnitState.GetCurrentStat(eStat_ShieldHP);
 
-    `LOG("Total damage to shields: " $ ShieldDamageRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-    for (Index = LinkedShieldEffects.Length - 1; Index >= 0 && ShieldDamageRemaining > 0; Index--)
+    if (ShieldDamageRemaining > 0 && LinkedShieldEffects.Length > 0)
     {
-        ShieldEffectState = XCGS_Effect_EnergyShieldExtended(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldExtended', LinkedShieldEffects[Index].EffectID));
-        
-        x = Min(ShieldDamageRemaining, ShieldEffectState.ShieldRemaining);
-        ShieldDamageRemaining -= x;
-        ShieldEffectState.ShieldRemaining -= x;
+        `LOG("Total damage to shields: " $ ShieldDamageRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
 
-        `LOG("Damaging " $ ShieldEffectState.GetX2Effect().EffectName $ ":", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-        `LOG("    Remaining shield: " $ ShieldEffectState.ShieldRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-        `LOG("    Remaining damage: " $ ShieldDamageRemaining,class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
+        for (Index = LinkedShieldEffects.Length - 1; Index >= 0 && ShieldDamageRemaining > 0; Index--)
+        {
+            ShieldEffectState = XCGS_Effect_EnergyShieldExtended(NewGameState.ModifyStateObject(class'XCGS_Effect_EnergyShieldExtended', LinkedShieldEffects[Index].EffectID));
+            
+            x = Min(ShieldDamageRemaining, ShieldEffectState.ShieldRemaining);
+            ShieldDamageRemaining -= x;
+            ShieldEffectState.ShieldRemaining -= x;
 
-        ShieldEffect = X2Effect_EnergyShieldExtended(ShieldEffectState.GetX2Effect());
-        if (ShieldEffect.ShieldsTakeDamageFn != none)
-            ShieldEffect.ShieldsTakeDamageFn(ShieldEffect, ShieldEffectState, NewGameState, UnitState, x);
-    }
-    if (NewGameState.GetNumGameStateObjects() > 0)
-    {
-        LogShields(NewGameState);
-        `TACTICALRULES.SubmitGameState(NewGameState);
-    }
-    else
-    {
-        `XCOMHISTORY.CleanupPendingGameState(NewGameState);
+            `LOG("Damaging " $ ShieldEffectState.GetX2Effect().EffectName $ ":", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+            `LOG("    Remaining shield: " $ ShieldEffectState.ShieldRemaining, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+            `LOG("    Remaining damage: " $ ShieldDamageRemaining,class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+
+            ShieldEffect = X2Effect_EnergyShieldExtended(ShieldEffectState.GetX2Effect());
+            if (ShieldEffect.ShieldsTakeDamageFn != none)
+                ShieldEffect.ShieldsTakeDamageFn(ShieldEffect, ShieldEffectState, NewGameState, UnitState, x);
+        }
+        if (NewGameState.GetNumGameStateObjects() > 0)
+        {
+            LogShields(NewGameState);
+            `TACTICALRULES.SubmitGameState(NewGameState);
+        }
+        else
+        {
+            `XCOMHISTORY.CleanupPendingGameState(NewGameState);
+        }
     }
     return ELR_NoInterrupt;
 }
 
 function EventListenerReturn RemoveDepletedShields(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
 {
+    local XComGameStateHistory                  History;
     local XCGS_Effect_EnergyShieldExtended      ShieldEffectState;
     local XComGameStateContext_EffectRemoved    EffectRemovedContext;
     local XComGameState                         NewGameState;
     local bool bAtLeastOneRemoved;
     local int Index;
-    
-    `LOG("", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-    for (Index = LinkedShieldEffects.Length - 1; Index >= 0; Index--)
-    {
-        ShieldEffectState = XCGS_Effect_EnergyShieldExtended(`XCOMHISTORY.GetGameStateForObjectID(LinkedShieldEffects[Index].EffectID));
-        
-        if (!ShieldEffectState.bRemoved && ShieldEffectState.ShieldRemaining == 0)
-        {
-            `LOG(ShieldEffectState.GetX2Effect().EffectName $ " ---- Shield Depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-            if (!bAtLeastOneRemoved)
-            {
-                EffectRemovedContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(ShieldEffectState);
-                NewGameState = `XCOMHISTORY.CreateNewGameState(true, EffectRemovedContext);
-                ShieldEffectState.RemoveEffect(NewGameState, GameState);
 
-                bAtLeastOneRemoved = true;
-            }
-            else
+    if (LinkedShieldEffects.Length > 0)
+    {
+        History = `XCOMHISTORY;
+
+        `LOG("LinkedShieldEffects.Length = " $ LinkedShieldEffects.Length, class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        for (Index = LinkedShieldEffects.Length - 1; Index >= 0; Index--)
+        {
+            ShieldEffectState = XCGS_Effect_EnergyShieldExtended(History.GetGameStateForObjectID(LinkedShieldEffects[Index].EffectID));
+            
+            if (!ShieldEffectState.bRemoved && ShieldEffectState.ShieldRemaining == 0)
             {
-                ShieldEffectState.RemoveEffect(NewGameState, GameState);
-                EffectRemovedContext.RemovedEffects.AddItem(ShieldEffectState.GetReference());
+                `LOG(ShieldEffectState.GetX2Effect().EffectName $ " ---- Shield Depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+                if (!bAtLeastOneRemoved)
+                {
+                    EffectRemovedContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(ShieldEffectState);
+                    NewGameState = History.CreateNewGameState(true, EffectRemovedContext);
+                    ShieldEffectState.RemoveEffect(NewGameState, GameState);
+
+                    bAtLeastOneRemoved = true;
+                }
+                else
+                {
+                    ShieldEffectState.RemoveEffect(NewGameState, GameState);
+                    EffectRemovedContext.RemovedEffects.AddItem(ShieldEffectState.GetReference());
+                }
             }
         }
+        if (bAtLeastOneRemoved)
+        {
+            LogShields(NewGameState);
+            `TACTICALRULES.SubmitGameState(NewGameState);
+        }
+        else
+        {
+            `LOG("No shields were depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
+        }
     }
-    if (bAtLeastOneRemoved)
-    {
-        LogShields(NewGameState);
-        `TACTICALRULES.SubmitGameState(NewGameState);
-    }
-    else
-    {
-        `LOG("No shields were depleted", class'X2DLCInfo_MeristEnhancedShieldEffects'.default.bLog, GetFuncName());
-    }
+
     return ELR_NoInterrupt;
 }
 

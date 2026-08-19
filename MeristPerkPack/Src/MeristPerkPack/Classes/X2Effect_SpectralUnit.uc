@@ -21,31 +21,30 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
 
 simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata, const name EffectApplyResult, XComGameState_Effect RemovedEffect)
 {
-    local XComGameStateVisualizationMgr VisualizationMgr;
-    local XComGameStateHistory History;
-    local X2Action_PlayAnimation AnimationAction, CosmeticAnimationAction;
-    local X2Action_Delay DelayAction;
-    local X2Action_Death DeathAction;
-    local X2Action DelayParentAction;
-    local XComGameState_Unit Unit, CosmeticUnit;
-    local VisualizationActionMetadata CosmeticUnitMetaData;
-    local XComGameState_Item ItemState;
-    local X2GremlinTemplate GremlinTemplate;
-    local bool bHasGremlin;
+    local XComGameStateVisualizationMgr     VisualizationMgr;
+    local XComGameStateHistory              History;
+    local X2Action_PlayAnimation            AnimationAction, CosmeticAnimationAction;
+    local X2Action_Delay                    DelayAction;
+    local X2Action_Death                    DeathAction;
+    local X2Action                          DelayParentAction;
+    local XComGameState_Unit                Unit, CosmeticUnit;
+    local VisualizationActionMetadata       CosmeticUnitMetaData;
+    local XComGameState_Item                ItemState;
+    local X2GremlinTemplate                 GremlinTemplate;
+    local bool                              bHasGremlin;
 
     super.AddX2ActionsForVisualization_Removed(VisualizeGameState, ActionMetadata, EffectApplyResult, RemovedEffect);
 
-    if( EffectApplyResult != 'AA_Success' || ActionMetadata.VisualizeActor == none )
+    if (EffectApplyResult != 'AA_Success' || ActionMetadata.VisualizeActor == none)
     {
         return;
     }
 
-    
     VisualizationMgr = `XCOMVISUALIZATIONMGR;
     History = `XCOMHISTORY;
 
     DeathAction = X2Action_Death(VisualizationMgr.GetNodeOfType(VisualizationMgr.BuildVisTree, class'X2Action_Death', ActionMetadata.VisualizeActor));
-    if( DeathAction == None )
+    if (DeathAction == none)
     {
         DeathAction = X2Action_Death(VisualizationMgr.GetNodeOfType(VisualizationMgr.VisualizationTree, class'X2Action_Death', ActionMetadata.VisualizeActor));
     }
@@ -56,7 +55,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
     ItemState = Unit.GetSecondaryWeapon();
 
     GremlinTemplate = X2GremlinTemplate(ItemState.GetMyTemplate());
-    if( GremlinTemplate != none )
+    if (GremlinTemplate != none)
     {
         CosmeticUnit = XComGameState_Unit(History.GetGameStateForObjectID(ItemState.CosmeticUnitRef.ObjectID));
 
@@ -66,13 +65,13 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
         bHasGremlin = true;
     }
 
-    if( DeathAction != None )
+    if (DeathAction != none)
     {
         // This unit is dying so play the additive before the Death
         AnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext(), true, , DeathAction.ParentActions));
         DelayParentAction = DeathAction;
 
-        if( bHasGremlin )
+        if (bHasGremlin)
         {
             CosmeticAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(CosmeticUnitMetaData, VisualizeGameState.GetContext(), true, , DeathAction.ParentActions));
         }
@@ -82,7 +81,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
         AnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext()));
         DelayParentAction = AnimationAction;
 
-        if( bHasGremlin )
+        if (bHasGremlin)
         {
             CosmeticAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(CosmeticUnitMetaData, VisualizeGameState.GetContext()));
         }
@@ -92,7 +91,7 @@ simulated function AddX2ActionsForVisualization_Removed(XComGameState VisualizeG
     AnimationAction.Params.BlendTime = 0.0f;
     AnimationAction.Params.Additive = true;
 
-    if( bHasGremlin )
+    if (bHasGremlin)
     {
         CosmeticAnimationAction.Params.AnimName = RemoveEffectAnimName;
         CosmeticAnimationAction.Params.BlendTime = 0.0f;
@@ -128,7 +127,7 @@ simulated function AddX2ActionsForVisualization_Sync( XComGameState VisualizeGam
     ItemState = Unit.GetSecondaryWeapon();
     
     GremlinTemplate = X2GremlinTemplate(ItemState.GetMyTemplate());
-    if( GremlinTemplate != none )
+    if (GremlinTemplate != none)
     {
         History = `XCOMHISTORY;
         CosmeticUnit = XComGameState_Unit(History.GetGameStateForObjectID(ItemState.CosmeticUnitRef.ObjectID));
@@ -148,6 +147,6 @@ function bool DoesEffectAllowUnitToBeLooted(XComGameState NewGameState, XComGame
 
 DefaultProperties
 {
-    DuplicateResponse=eDupe_Ignore
-    EffectName = SpectralUnit
+    EffectName = M31_SpectralUnit
+    DuplicateResponse = eDupe_Ignore
 }

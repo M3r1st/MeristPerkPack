@@ -9,9 +9,11 @@ static function array<X2DataTemplate> CreateTemplates()
     local array<X2DataTemplate> Templates;
 
     Templates.AddItem(ForwardOperator());
-    Templates.AddItem(FullKit());
-    // Templates.AddItem(Pinions());
-    // /*>>*/Templates.AddItem(PinionsAttack());
+    Templates.AddItem(DeepPockets());
+    Templates.AddItem(ZeroIn());
+    Templates.AddItem(BloodThirst());
+    Templates.AddItem(Pinions());
+    /*>>*/Templates.AddItem(PinionsAttack());
 
     return Templates;
 }
@@ -32,11 +34,52 @@ static function X2AbilityTemplate ForwardOperator()
     return Template;
 }
 
-static function X2AbilityTemplate FullKit()
+static function X2AbilityTemplate DeepPockets()
 {
     local X2AbilityTemplate Template;
 
-    Template = Passive('M31_SK_FullKit', "img:///UILibrary_XPerkIconPack.UIPerk_grenade_plus", false, true);
+    Template = Passive('M31_SK_DeepPockets', "img:///UILibrary_XPerkIconPack.UIPerk_grenade_plus", false, false);
+
+    return Template;
+}
+
+static function X2AbilityTemplate BloodThirst()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_BloodThirst  Effect;
+    
+    Template = Passive('M31_SK_BloodThirst', "img:///UILibrary_PerkIcons.UIPerk_beserker_rage", false, true);
+
+    Effect = new class'X2Effect_BloodThirst';
+    Effect.DamagePerStack = `GetConfigInt("M31_SK_BloodThirst_DamagePerStack");
+    Effect.MaxStacks = `GetConfigInt("M31_SK_BloodThirst_MaxStacks");
+    Effect.MaxStacksPerTurn = `GetConfigInt("M31_SK_BloodThirst_MaxStacksPerTurn");
+    Effect.StackDuration = `GetConfigInt("M31_SK_BloodThirst_StackDuration");
+    Effect.bRefreshDuration = `GetConfigBool("M31_SK_BloodThirst_bRefreshDuration");
+    Effect.bMatchSourceWeapon = `GetConfigBool("M31_SK_BloodThirst_bMatchSourceWeapon");
+    Effect.bIncreaseOnlyOnHit = `GetConfigBool("M31_SK_BloodThirst_bIncreaseOnlyOnHit");
+    Effect.BuildPersistentEffect(1, true, false, false, eGameRule_PlayerTurnBegin);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, class'X2Effect_BloodThirst'.default.strFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
+    return Template;
+}
+
+static function X2AbilityTemplate ZeroIn()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_SK_ZeroIn    Effect;
+    
+    Template = Passive('M31_SK_ZeroIn', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_zeroin", false, true);
+
+    Effect = new class'X2Effect_SK_ZeroIn';
+    Effect.CritPerShot = `GetConfigInt("M31_SK_ZeroIn_CritPerShot");
+    Effect.LockedInAimPerShot = `GetConfigInt("M31_SK_ZeroIn_LockedInAimPerShot");
+    Effect.bDontResetOnMovement = `GetConfigBool("M31_SK_ZeroIn_bDontResetOnMovement");
+    Effect.bAllowIncrementWithoutInput = `GetConfigBool("M31_SK_ZeroIn_bAllowIncrementWithoutInput");
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, class'X2Effect_SK_ZeroIn'.default.strFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
 
     return Template;
 }
@@ -44,9 +87,10 @@ static function X2AbilityTemplate FullKit()
 static function X2AbilityTemplate Pinions()
 {
     local X2AbilityTemplate                     Template;
-    local X2AbilityMultiTarget_MeristPinions    PinionsMultiTarget;
     local X2AbilityTarget_Cursor                CursorTarget;
+    local X2AbilityMultiTarget_MeristPinions    PinionsMultiTarget;
     local X2Condition_UnitProperty              UnitPropertyCondition;
+    local X2Condition_UnitEffects               ExcludeEffects;
     local X2Effect_DelayedAbilityActivation     DelayAbilityEffect;
     local X2Effect_Persistent                   PersistentEffect;
 
@@ -58,23 +102,28 @@ static function X2AbilityTemplate Pinions()
     Template.Hostility = eHostility_Offensive;
     Template.TwoTurnAttackAbility = 'M31_SK_Pinions_Attack';
 
-    SetAbilityShotHUDPriority(Template, ePriorityType_Secondary, eCost_SingleConsumeAll, eHostility_Offensive);
+    SetAbilityShotHUDPriority(Template, ePriorityType_None, eCost_SingleConsumeAll, eHostility_Offensive);
+
+    Template.bCrossClassEligible = false;
+    Template.bDisplayInUITooltip = false;
+    Template.bDisplayInUITacticalText = false;
 
     Template.AbilityToHitCalc = default.DeadEye;
+
     CursorTarget = new class'X2AbilityTarget_Cursor';
     CursorTarget.bRestrictToSquadsightRange = true;
-    CursorTarget.FixedAbilityRange = class'X2Ability_Archon'.default.BLAZING_PINIONS_SELECTION_RANGE;
+    CursorTarget.FixedAbilityRange = `TILESTOMETERS(`GetConfigInt("M31_SK_Pinions_Range"));
     Template.AbilityTargetStyle = CursorTarget;
 
-    Template.TargetingMethod = class'X2TargetingMethod_MeristPinions';
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     PinionsMultiTarget = new class'X2AbilityMultiTarget_MeristPinions';
-    PinionsMultiTarget.fTargetRadius = class'X2Ability_Archon'.default.BLAZING_PINIONS_IMPACT_RADIUS_METERS;
-    PinionsMultiTarget.NumTargets = class'X2Ability_Archon'.default.BLAZING_PINIONS_NUM_TARGETS;
-    PinionsMultiTarget.fAreaTargetRadius = class'X2Ability_Archon'.default.BLAZING_PINIONS_TARGETING_AREA_RADIUS;
+    PinionsMultiTarget.fTargetRadius = `GetConfigFloat("M31_SK_Pinions_Radius");
+    PinionsMultiTarget.NumTargets = `GetConfigInt("M31_SK_Pinions_NumTargets");
+    PinionsMultiTarget.fAreaTargetRadius = `GetConfigFloat("M31_SK_Pinions_AreaRadius");
     PinionsMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
     Template.AbilityMultiTargetStyle = PinionsMultiTarget;
+    Template.TargetingMethod = class'X2TargetingMethod_MeristPinions';
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeDead = false;
@@ -82,18 +131,19 @@ static function X2AbilityTemplate Pinions()
     UnitPropertyCondition.ExcludeHostileToSource = false;
     UnitPropertyCondition.FailOnNonUnits = false;
     Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
-
-    AddSuppressedCondition(Template);
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.HasClearanceToMaxZ = true;
-    Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
+    AddSuppressedCondition(Template);
+
+    ExcludeEffects = new class'X2Condition_UnitEffects';
+    ExcludeEffects.AddExcludeEffect(default.PinionsShooterEffectName, 'AA_DuplicateEffectIgnored');
+    Template.AbilityShooterConditions.AddItem(ExcludeEffects);
 
     AddActionPointCost(Template, eCost_SingleConsumeAll);
-    AddCooldown(Template, 3);
+    AddCooldown(Template, `GetConfigInt("M31_SK_Pinions_Cooldown"));
+    AddCharges(Template, `GetConfigInt("M31_SK_Pinions_Charges"));
 
-    // Delayed Effect to cause the second Blazing Pinions stage to occur
+    // Delayed effect to cause the second stage to occur
     DelayAbilityEffect = new class 'X2Effect_DelayedAbilityActivation';
     DelayAbilityEffect.EffectName = default.PinionsDelayEffectName;
     DelayAbilityEffect.TriggerEventName = default.PinionsEventName;
@@ -101,33 +151,34 @@ static function X2AbilityTemplate Pinions()
     DelayAbilityEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddShooterEffect(DelayAbilityEffect);
 
-    // An effect to attach Perk FX to
+    // Callback effect for the second stage
     PersistentEffect = new class'X2Effect_Persistent';
     PersistentEffect.EffectName = default.PinionsShooterEffectName;
-    PersistentEffect.BuildPersistentEffect(1, true, false, true);
+    PersistentEffect.BuildPersistentEffect(1, true, false);
     Template.AddShooterEffect(PersistentEffect);
 
     Template.AddShooterEffect(new class'X2Effect_ApplyBlazingPinionsTargetToWorld');
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.BuildAppliedVisualizationSyncFn = Pinions_BuildVisualizationSync;
-    // Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-    Template.DamagePreviewFn = Pinions_DamagePreview;
+    Template.CustomFireAnim = 'HL_SignalPoint';
 
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
-    Template.CustomFireAnim = 'HL_SignalPoint';
-    Template.CinescriptCameraType = "Archon_BlazingPinions_Stage1";
-
-    Template.bShowActivation = true;
-
+    // Template.CinescriptCameraType = "Archon_BlazingPinions_Stage1";
     Template.bFrameEvenWhenUnitIsHidden = true;
 
-    Template.bDisplayInUITooltip = false;
-    Template.bDisplayInUITacticalText = false;
+    Template.bSkipFireAction = false;
+    Template.bShowActivation = true;
 
-    Template.bCrossClassEligible = false;
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildAppliedVisualizationSyncFn = Pinions_BuildVisualizationSync;
+
+    Template.DamagePreviewFn = Pinions_DamagePreview;
+
+    Template.ConcealmentRule = eConceal_Never;
+    Template.SuperConcealmentLoss = 100;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.NonAggressiveChosenActivationIncreasePerUse;
+    // Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
     Template.AdditionalAbilities.AddItem('M31_SK_Pinions_Attack');
 
@@ -178,10 +229,12 @@ function bool Pinions_DamagePreview(XComGameState_Ability AbilityState, StateObj
 static function X2AbilityTemplate PinionsAttack()
 {
     local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StandardAim    StandardAim;
     local X2AbilityTrigger_EventListener    EventListener;
     local X2AbilityMultiTarget_Radius       RadiusMultiTarget;
     local X2Effect_RemoveEffects            RemoveEffects;
     local X2Effect_ApplyWeaponDamage        DamageEffect;
+    local X2Effect_Burning                  BurningEffect;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_SK_Pinions_Attack');
 
@@ -190,7 +243,11 @@ static function X2AbilityTemplate PinionsAttack()
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
     Template.Hostility = eHostility_Offensive;
 
-    Template.AbilityToHitCalc = default.DeadEye;
+    StandardAim = new class'X2AbilityToHitCalc_StandardAim';
+    StandardAim.bGuaranteedHit = true;
+    StandardAim.bAllowCrit = false;
+    Template.AbilityToHitCalc = StandardAim;
+
     Template.AbilityTargetStyle = default.SelfTarget;
 
     EventListener = new class'X2AbilityTrigger_EventListener';
@@ -201,7 +258,7 @@ static function X2AbilityTemplate PinionsAttack()
     Template.AbilityTriggers.AddItem(EventListener);
 
     RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-    RadiusMultiTarget.fTargetRadius = class'X2Ability_Archon'.default.BLAZING_PINIONS_IMPACT_RADIUS_METERS;
+    RadiusMultiTarget.fTargetRadius = `GetConfigFloat("M31_SK_Pinions_Radius");
     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 
     RemoveEffects = new class'X2Effect_RemoveEffects';
@@ -210,12 +267,16 @@ static function X2AbilityTemplate PinionsAttack()
     Template.AddShooterEffect(RemoveEffects);
 
     DamageEffect = new class'X2Effect_ApplyWeaponDamage';
-    // DamageEffect.EffectDamageValue = `GetConfigDamage("M31_ENEMY_ViperBite2_Damage");
-    DamageEffect.EffectDamageValue = class'X2Item_DefaultWeapons'.default.ARCHON_BLAZINGPINIONS_BASEDAMAGE;
-    DamageEffect.EnvironmentalDamageAmount = class'X2Item_DefaultWeapons'.default.ARCHON_BLAZINGPINIONS_ENVDAMAGE;
+    DamageEffect.EffectDamageValue = `GetConfigDamage("M31_SK_Pinions_Damage");
+    DamageEffect.EnvironmentalDamageAmount = `GetConfigInt("M31_SK_Pinions_EnvDamage");
+    DamageEffect.bExplosiveDamage = `GetConfigBool("M31_SK_Pinions_bExplosiveDamage");
     DamageEffect.bIgnoreBaseDamage = true;
     DamageEffect.bApplyWorldEffectsForEachTargetLocation = true;
     Template.AddMultiTargetEffect(DamageEffect);
+
+    BurningEffect = class'X2StatusEffects'.static.CreateBurningStatusEffect(
+        `GetConfigInt("M31_SK_Pinions_BurnDamage"), `GetConfigInt("M31_SK_Pinions_BurnDamage_Spread"));
+    Template.AddMultiTargetEffect(BurningEffect);
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = PinionsAttack_BuildVisualization;
@@ -223,11 +284,13 @@ static function X2AbilityTemplate PinionsAttack()
 
     Template.ActionFireClass = class'X2Action_MeristPinionsAttack';
 
-    Template.CinescriptCameraType = "Archon_BlazingPinions_Stage2";
-
-    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.HeavyWeaponLostSpawnIncreasePerUse;
-
+    // Template.CinescriptCameraType = "Archon_BlazingPinions_Stage2";
     Template.bFrameEvenWhenUnitIsHidden = true;
+
+    Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
+    // Template.SuperConcealmentLoss = 100;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.HeavyWeaponLostSpawnIncreasePerUse;
 
     return Template;
 }
@@ -246,7 +309,7 @@ static function PinionsAttack_ModifyActivatedAbilityContext(XComGameStateContext
     AbilityContext = XComGameStateContext_Ability(Context);
 
     AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
-    RadiusMultiTarget = AbilityState.GetMyTemplate().AbilityMultiTargetStyle;// new class'X2AbilityMultiTarget_Radius';
+    RadiusMultiTarget = AbilityState.GetMyTemplate().AbilityMultiTargetStyle;
 
     AbilityContext.ResultContext.ProjectileHitLocations.Length = 0;
     for (i = 0; i < AbilityContext.InputContext.TargetLocations.Length; i++)
@@ -295,7 +358,7 @@ static function EventListenerReturn AbilityTriggerEventListener_PinionsAttack(Ob
     return ELR_NoInterrupt;
 }
 
-simulated function PinionsAttack_BuildVisualization(XComGameState VisualizeGameState)
+static function PinionsAttack_BuildVisualization(XComGameState VisualizeGameState)
 {
     local XComGameStateHistory              History;
     local XComGameStateContext_Ability      AbilityContext;
@@ -344,10 +407,6 @@ simulated function PinionsAttack_BuildVisualization(XComGameState VisualizeGameS
             AbilityContext.ResultContext.ShooterEffectResults.ApplyResults[i]);
     }
 
-    if (AbilityContext.InputContext.MovementPaths.Length > 0)
-    {
-        class'X2VisualizerHelpers'.static.ParsePath(AbilityContext, ActionMetadata);
-    }
     // ****************************************************************************************
 
     // ****************************************************************************************
@@ -433,5 +492,5 @@ defaultproperties
 {
     PinionsEventName = M31_SK_Pinions_Attack
     PinionsDelayEffectName = M31_SK_Pinions_Delay
-    PinionsShooterEffectName = M31_SK_Pinions_FX
+    PinionsShooterEffectName = M31_SK_Pinions_Callback
 }

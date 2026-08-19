@@ -1,122 +1,36 @@
-class X2AbilitySet_Psi extends X2Ability_Extended config(GameData_SoldierSkills);
+class X2AbilitySet_Psionics extends X2Ability_Extended config(GameData_SoldierSkills);
 
 var config array<name> LetItGo_AllowedAbilities;
 
-var privatewrite name SpectralZombieLinkName;
-var privatewrite name SpectralLancerLinkName;
-var privatewrite name SpectralCreatureLinkName;
-
-var privatewrite name SpectralZombieSpawnName;
-var privatewrite name SpectralLancerSpawnName;
-var privatewrite name SpectralCreatureSpawnName;
-
-var privatewrite name ImprovedSpectresAbilityName;
-var privatewrite name KillDuplicateSpectresEventName;
-var privatewrite name PsiZombieLinkName;
+var localized string strNullGuardFriendlyDesc;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
     local array<X2DataTemplate> Templates;
 
-    Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_Psi_Animations', ""));
-    
-    // Templates.AddItem(Meltdown());
+    // Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_Psi_Animations', ""));
 
-    Templates.AddItem(PsionicReaper());
-    Templates.AddItem(SectoidPsionicReaper());
-    // Templates.AddItem(FrostChainLightning());
-    Templates.AddItem(NullWard());
-    Templates.AddItem(ShadowPhase());
-    Templates.AddItem(ShadowPhaseFortress());
-    Templates.AddItem(TeleportAlly());
+    // Templates.AddItem(PsionicReaper());
+    // Templates.AddItem(SectoidPsionicReaper());
+    // Templates.AddItem(WallPhasing());
 
-    Templates.AddItem(Compulsion());
-    Templates.AddItem(GreatestChampion());
+    // Templates.AddItem(NullWard());
+    // Templates.AddItem(NullGuard());
+    // Templates.AddItem(TeleportAlly());
+    // Templates.AddItem(Compulsion());
+    // Templates.AddItem(GreatestChampion());
+    // Templates.AddItem(PsiStealth('M31_Psi_Stealth', ""));
+    // Templates.AddItem(PsiStealth('M31_Psi_Blend', "", true));
 
-    Templates.AddItem(PsiStealth('M31_Psi_Stealth', ""));
-    Templates.AddItem(PsiStealth('M31_Psi_Blend', "", true));
+    // Templates.AddItem(Cryotherapy());
+    // Templates.AddItem(MassCryotherapy());
+    // Templates.AddItem(LetItGo());
 
-    Templates.AddItem(Cryotherapy());
-    Templates.AddItem(MassCryotherapy());
-
-    Templates.AddItem(LetItGo());
-
-    Templates.AddItem(ImprovedSpectres());
-
-    Templates.AddItem(SummonSpectralZombie());
-        Templates.AddItem(KillSpectralZombie());
-        Templates.AddItem(CreateSpectreLink(default.SpectralZombieLinkName, "img:///UILibrary_PerkIcons.UIPerk_sectoid_psireanimate", default.SpectralZombieLinkName));
-
-    Templates.AddItem(SummonSpectralLancer());
-        Templates.AddItem(KillSpectralLancer());
-        Templates.AddItem(CreateSpectreLink(default.SpectralLancerLinkName, "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_possess", default.SpectralLancerLinkName));
-
-    Templates.AddItem(SummonSpectralCreature());
-        Templates.AddItem(KillSpectralCreature());
-        Templates.AddItem(CreateSpectreLink(default.SpectralCreatureLinkName, "img:///UILibrary_PerkIcons.UIPerk_chryssalid_burrow", default.SpectralCreatureLinkName));
-    
-    Templates.AddItem(SpectralUnitInit('M31_Psi_SpectralZombieInit', "", 'ADD_SpectralFrost_Start', 'ADD_SpectralFrost_Stop'));
-    Templates.AddItem(SpectralUnitInit('M31_Psi_SpectralLancerInit', "", 'ADD_SpectralArmy_Restart', 'ADD_SpectralArmy_Stop'));
-    Templates.AddItem(SpectralUnitInit('M31_Psi_SpectralCreatureInit', "", '', ''));
+    // Templates.AddItem(Mindspin());
+    // Templates.AddItem(ArcMindspin());
+    // Templates.AddItem(Domination());
 
     return Templates;
-}
-
-static function X2AbilityTemplate Meltdown()
-{
-    local X2AbilityTemplate             Template;
-    local X2Effect_ApplyDamage_Meltdown DamageEffect;
-
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_Meltdown');
-
-    Template.IconImage = "";
-    Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.Hostility = eHostility_Offensive;
-
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
-    Template.AbilityToHitCalc = default.DeadEye;
-    Template.AbilityTargetStyle = default.SimpleSingleTarget;
-
-    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-    Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
-    Template.AddShooterEffectExclusions();
-
-    AddActionPointCost(Template, eCost_SingleConsumeAll);
-    AddCooldown(Template, `GetConfigInt("M31_Psi_Meltdown_Cooldown"));
-
-    DamageEffect = new class'X2Effect_ApplyDamage_Meltdown';
-    DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.DamageTag = 'M31_Psi_Meltdown';
-    DamageEffect.AdditionalDamageTag = 'M31_Psi_MeltdownArmor';
-    Template.AddTargetEffect(DamageEffect);
-
-    if (`GetConfigBool("M31_Psi_Meltdown_bApplyRadiation"))
-    {
-        class'M31_Helpers'.static.AddRadiationToTarget(Template);
-    }
-
-    Template.ActivationSpeech = 'Mindblast';
-    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
-    Template.CustomFireAnim = 'HL_M31_Psi_ProjectileMedium';
-    Template.CinescriptCameraType = "Psionic_FireAtUnit";
-
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-
-    Template.bShowActivation = true;
-
-    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
-    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
-    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
-
-    Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
-
-    return Template;
 }
 
 static function X2AbilityTemplate PsionicReaper()
@@ -125,7 +39,9 @@ static function X2AbilityTemplate PsionicReaper()
     local X2Effect_PsiDamageBonus   Effect;
 
     Template = Passive('M31_PsionicReaper', "", false, true);
-    
+
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
     Effect = new class'X2Effect_PsiDamageBonus';
     Effect.bMatchSourceWeapon = true;
     Effect.bCeiling = false;
@@ -144,7 +60,9 @@ static function X2AbilityTemplate SectoidPsionicReaper()
     local X2Effect_PsiDamageBonus   Effect;
 
     Template = Passive('M31_PA_PsionicReaper', "", false, true);
-    
+
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+
     Effect = new class'X2Effect_PsiDamageBonus';
     Effect.bMatchSourceWeapon = true;
     Effect.bCeiling = false;
@@ -157,85 +75,27 @@ static function X2AbilityTemplate SectoidPsionicReaper()
     return Template;
 }
 
-// static function X2AbilityTemplate FrostChainLightning()
-// {
-//     local X2AbilityTemplate             Template;
-//     local X2Effect_ApplyWeaponDamageExtended    DamageEffect;
-//     local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
-//     local X2Condition_UnitImmunities    UnitImmunityCondition;
+static function X2AbilityTemplate WallPhasing()
+{
+    local X2AbilityTemplate         Template;
+    local X2Effect_WallPhasing      Effect;
 
-//     `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_FrostChainLightning');
+    Template = Passive('M31_WallPhasing', "img:///UILibrary_PerkIcons.UIPerk_item_wraith", false, true);
+    // Thanks, Firaxis.
+    Template.bIsPassive = false;
 
-//     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_amplify";
-//     Template.AbilitySourceName = 'eAbilitySource_Psionic';
-//     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-//     Template.Hostility = eHostility_Offensive;
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
 
-//     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    Effect = new class'X2Effect_WallPhasing';
+    Effect.EffectName = 'M31_WallPhasing';
+    Effect.AddTraversalChange(eTraversal_Phasing, true);
+    Effect.BuildPersistentEffect(1, true, false);
+    Template.AddTargetEffect(Effect);
 
-//     Template.AbilityToHitCalc = default.DeadEye;
-//     Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.OverrideAbilities.AddItem('WallPhasing');
 
-//     RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-//     RadiusMultiTarget.bIgnoreBlockingCover = true;
-//     RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
-//     RadiusMultiTarget.fTargetRadius = `GetConfigFloat("M31_Psi_FrostChainLightning_Radius");
-//     // RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(default.VOLT_TILE_RADIUS) + 0.01;
-//     // RadiusMultiTarget.AddAbilityBonusRadius('VoltDangerZone', `TILESTOMETERS(default.VOLT_DANGER_ZONE_BONUS_RADIUS) + 0.01);
-//     // RadiusMultiTarget.AddAbilityBonusRadius('TemplarTerror', `TILESTOMETERS(default.VOLT_TERRORIZE_BONUS) + 0.01);
-//     Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-
-//     Template.TargetingMethod = class'X2TargetingMethod_AreaTopDown';
-
-//     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-//     Template.AbilityMultiTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
-    
-//     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
-//     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
-//     Template.AddShooterEffectExclusions();
-
-//     UnitImmunityCondition = new class'X2Condition_UnitImmunities';
-//     UnitImmunityCondition.AddExcludeDamageType('Frost');
-//     UnitImmunityCondition.AddExcludeDamageType('Electrical');
-//     UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
-//     Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
-//     Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
-
-//     AddActionPointCost(Template, eCost_SingleConsumeAll);
-//     AddCooldown(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Cooldown"));
-//     AddCharges(Template, `GetConfigInt("M31_Psi_FrostChainLightning_Charges"));
-
-//     class'BitterfrostHelper'.static.AddBitterfrostToTarget(Template);
-//     class'BitterfrostHelper'.static.AddBitterfrostToMultiTarget(Template);
-
-//     DamageEffect = new class'X2Effect_ApplyWeaponDamageExtended';
-//     DamageEffect.bIgnoreBaseDamage = true;
-//     DamageEffect.bIgnoreArmor = true;
-//     DamageEffect.DamageTag = 'M31_Psi_FrostChainLightning';
-//     DamageEffect.OverrideDamageTypes.AddItem('Frost');
-//     DamageEffect.OverrideDamageTypes.AddItem('Electrical');
-//     Template.AddTargetEffect(DamageEffect);
-//     Template.AddMultiTargetEffect(DamageEffect);
-
-//     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
-//     Template.CustomFireAnim = 'HL_M31_Psi_Volt';
-//     Template.ActionFireClass = class'X2Action_Fire_Volt';
-
-//     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-//     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
-//     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
-
-//     Template.bShowActivation = true;
-
-//     Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
-//     Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
-//     Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
-
-//     Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
-
-//     return Template;
-// }
+    return Template;
+}
 
 static function X2AbilityTemplate NullWard()
 {
@@ -246,9 +106,9 @@ static function X2AbilityTemplate NullWard()
 
     Template = SelfTargetActivated('M31_Psi_NullWard', "img:///UILibrary_PerkIcons.UIPerk_aethershift", false);
 
-    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Defensive);
-
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.Hostility = eHostility_Defensive;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Defensive);
 
     AddCooldown(Template, `GetConfigInt("M31_Psi_NullWard_Cooldown"));
     AddActionPointCost(Template, eCost_SingleConsumeAll);
@@ -281,7 +141,7 @@ static function X2AbilityTemplate NullWard()
     Template.AddTargetEffect(ShieldEffect);
     Template.AddMultiTargetEffect(ShieldEffect);
         
-    Template.BuildVisualizationFn = PsiEnergyShield_BuildVisualization;
+    Template.BuildVisualizationFn = NullWard_BuildVisualization;
 
     Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
 
@@ -290,19 +150,22 @@ static function X2AbilityTemplate NullWard()
     return Template;
 }
 
-simulated function PsiEnergyShield_BuildVisualization(XComGameState VisualizeGameState)
+static function NullWard_BuildVisualization(XComGameState VisualizeGameState)
 {
-    local XComGameStateHistory History;
+    local XComGameStateHistory          History;
     local XComGameStateContext_Ability  Context;
-    local StateObjectReference InteractingUnitRef;
-    local VisualizationActionMetadata EmptyTrack;
-    local VisualizationActionMetadata ActionMetadata;
-    local X2Action_PlayAnimation PlayAnimationAction;
+    local StateObjectReference          InteractingUnitRef;
+    local X2AbilityTemplate             AbilityTemplate;
+    local VisualizationActionMetadata   EmptyTrack;
+    local VisualizationActionMetadata   ActionMetadata;
+    local X2Action_PlayAnimation        PlayAnimationAction;
 
     History = `XCOMHISTORY;
 
     Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
     InteractingUnitRef = Context.InputContext.SourceObject;
+
+    AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
 
     // Configure the visualization track for the shooter
     // ****************************************************************************************
@@ -312,37 +175,54 @@ simulated function PsiEnergyShield_BuildVisualization(XComGameState VisualizeGam
     ActionMetadata.VisualizeActor = History.GetVisualizer(InteractingUnitRef.ObjectID);
 
     PlayAnimationAction = X2Action_PlayAnimation(class'X2Action_PlayAnimation'.static.AddToVisualizationTree(ActionMetadata, Context, false, ActionMetadata.LastActionAdded));
-    PlayAnimationAction.Params.AnimName = 'HL_M31_Psi_EnergyShield';
+    PlayAnimationAction.Params.AnimName = AbilityTemplate.CustomFireAnim;
 }
 
-static function X2AbilityTemplate ShadowPhase()
+static function X2AbilityTemplate NullGuard()
 {
-    local X2AbilityTemplate         Template;
-    local X2Effect_WallPhasing      Effect;
+    local X2AbilityTemplate             Template;
+    local X2Condition_UnitProperty      UnitPropertyCondition;
+    local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
+    local X2Effect_BlockDamage          ShieldEffect;
 
-    Template = Passive('M31_ShadowPhase', "img:///UILibrary_PerkIcons.UIPerk_item_wraith", false, true);
-    // Thanks, Firaxis.
-    Template.bIsPassive = false;
+    Template = SelfTargetActivated('M31_Psi_NullGuard', "img:///UILibrary_PerkIcons.UIPerk_aethershift", false);
 
-    Effect = new class'X2Effect_WallPhasing';
-    Effect.EffectName = 'M31_ShadowPhase';
-    Effect.AddTraversalChange(eTraversal_Phasing, true);
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
+    Template.Hostility = eHostility_Defensive;
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Defensive);
 
-    Template.OverrideAbilities.AddItem('WallPhasing');
+    AddCooldown(Template, `GetConfigInt("M31_Psi_NullGuard_Cooldown"));
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
 
-    return Template;
-}
+    Template.AddShooterEffectExclusions();
 
-static function X2AbilityTemplate ShadowPhaseFortress()
-{
-    local X2AbilityTemplate Template;
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeHostileToSource = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = false;
+    UnitPropertyCondition.RequireSquadmates = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    UnitPropertyCondition.ExcludeCivilian = true;
+    // UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = true;
+    Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
-    Template = Passive('M31_ShadowPhaseFortress', "img:///UILibrary_PerkIcons.UIPerk_item_wraith", false, false);
+    RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
+    RadiusMultiTarget.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_Psi_NullGuard_Radius"));
+    RadiusMultiTarget.bIgnoreBlockingCover = true;
+    RadiusMultiTarget.bExcludeSelfAsTargetIfWithinRadius = true;
+    Template.AbilityMultiTargetStyle = RadiusMultiTarget;
 
-    Template.AdditionalAbilities.AddItem('M31_ShadowPhase');
-    Template.AdditionalAbilities.AddItem('Fortress');
+    ShieldEffect = new class'X2Effect_BlockDamage';
+    ShieldEffect.EffectName = 'M31_Psi_NullGuard';
+    ShieldEffect.BuildPersistentEffect(`GetConfigInt("M31_Psi_NullGuard_Duration"), false, true, false, eGameRule_PlayerTurnBegin);
+    ShieldEffect.SetDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, default.strNullGuardFriendlyDesc, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(ShieldEffect);
+    Template.AddMultiTargetEffect(ShieldEffect);
+        
+    Template.BuildVisualizationFn = NullWard_BuildVisualization;
+
+    Template.CinescriptCameraType = "AdvShieldBearer_EnergyShieldArmor";
+
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
     return Template;
 }
@@ -353,10 +233,10 @@ static function X2AbilityTemplate TeleportAlly()
     local X2AbilityTarget_TeleportAlly  TeleportAllyTarget;
     local X2Condition_UnitProperty      UnitPropertyCondition;
 
-    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_TeleportAlly');
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_TeleportAlly');
 
     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_teleportally";
-    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.Hostility = eHostility_Neutral;
     Template.DisplayTargetHitChance = false;
@@ -412,7 +292,7 @@ static function X2AbilityTemplate Compulsion()
     local X2Condition_UnitImmunities        UnitImmunityCondition;
     local X2Effect_MindControl              MindControlEffect;
     local X2Effect_StunRecover              StunRecoverEffect;
-    local X2Condition_UnitEffects           EffectCondition;
+    local X2Condition_UnitEffects           ExcludeEffects;
     local X2Condition_SoldierAbilities      NoAdvancedEffectCondition;
     local X2Condition_SoldierAbilities      AdvancedEffectCondition;
     local X2Effect_GrantActionPoints        ActionPointEffect;
@@ -427,11 +307,12 @@ static function X2AbilityTemplate Compulsion()
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.Hostility = eHostility_Offensive;
 
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Offensive);
 
     StatCheck = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
     StatCheck.BaseValue = `GetConfigInt("M31_Psi_Compulsion_BaseChance");
     Template.AbilityToHitCalc = StatCheck;
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -440,10 +321,8 @@ static function X2AbilityTemplate Compulsion()
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
-
     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
     Template.AddShooterEffectExclusions();
 
     AddActionPointCost(Template, eCost_SingleConsumeAll);
@@ -453,9 +332,10 @@ static function X2AbilityTemplate Compulsion()
     Cooldown.AddCooldownModifier('M31_Psi_GreatestChampion', -1 * `GetConfigInt("M31_Psi_GreatestChampion_CooldownReduction"));
     Template.AbilityCooldown = Cooldown;
 
-    EffectCondition = new class'X2Condition_UnitEffects';
-    EffectCondition.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
-    Template.AbilityTargetConditions.AddItem(EffectCondition);
+    ExcludeEffects = new class'X2Condition_UnitEffects';
+    ExcludeEffects.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
+    ExcludeEffects.AddExcludeEffect(class'X2Ability_CarryUnit'.default.CarryUnitEffectName, 'AA_CarryingUnit');
+    Template.AbilityTargetConditions.AddItem(ExcludeEffects);
 
     UnitImmunityCondition = new class'X2Condition_UnitImmunities';
     UnitImmunityCondition.AddExcludeDamageType('Mental');
@@ -574,10 +454,9 @@ static function X2AbilityTemplate PsiStealth(name DataName, string IconImage, op
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
     Template.Hostility = eHostility_Neutral;
 
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-
     Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
     UnitPropertyCondition.ExcludeDead = true;
@@ -596,6 +475,8 @@ static function X2AbilityTemplate PsiStealth(name DataName, string IconImage, op
 
     if (bBlend)
     {
+        SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_Single, eHostility_Neutral);
+
         AddActionPointCost(Template, eCost_Single);
         AddCooldown(Template, `GetConfigInt("M31_Psi_Blend_Cooldown"));
         AddCharges(Template, `GetConfigInt("M31_Psi_Blend_Charges"));
@@ -610,6 +491,8 @@ static function X2AbilityTemplate PsiStealth(name DataName, string IconImage, op
     }
     else
     {
+        SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Neutral);
+
         AddActionPointCost(Template, eCost_SingleConsumeAll);
         AddCooldown(Template, `GetConfigInt("M31_Psi_Stealth_Cooldown"));
         AddCharges(Template, `GetConfigInt("M31_Psi_Stealth_Charges"));
@@ -658,12 +541,13 @@ static function X2AbilityTemplate Cryotherapy()
     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chosenrevive";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.Hostility = eHostility_Neutral;
+    Template.Hostility = eHostility_Defensive;
 
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_Single, eHostility_Defensive);
 
     Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SingleTargetWithSelf;
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     PassiveRadius = new class'X2AbilityPassiveAOE_WeaponRadius';
     PassiveRadius.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_Psi_Cryotherapy_Range"));
@@ -734,14 +618,14 @@ static function X2AbilityTemplate Cryotherapy()
         UnitPropertyCondition.IsBleedingOut = true;
         UnitPropertyCondition.FailOnNonUnits = true;
 
+        UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect(, true);
+        UnconsciousEffect.TargetConditions.AddItem(UnitPropertyCondition);
+        Template.AddTargetEffect(UnconsciousEffect);
+
         RemoveEffects = new class'X2Effect_RemoveEffects';
         RemoveEffects.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BleedingOutName);
         RemoveEffects.TargetConditions.AddItem(UnitPropertyCondition);
         Template.AddTargetEffect(RemoveEffects);
-
-        UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect(, true);
-        UnconsciousEffect.TargetConditions.AddItem(UnitPropertyCondition);
-        Template.AddTargetEffect(UnconsciousEffect);
     }
 
     Template.ActivationSpeech = 'HealingAlly';
@@ -779,12 +663,13 @@ static function X2AbilityTemplate MassCryotherapy()
     Template.IconImage = "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_chosenrevive";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.Hostility = eHostility_Neutral;
+    Template.Hostility = eHostility_Defensive;
 
-    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Defensive);
 
     Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SelfTarget;
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
 
     PassiveRadius = new class'X2AbilityPassiveAOE_WeaponRadius';
     PassiveRadius.fTargetRadius = `TILESTOMETERS(`GetConfigInt("M31_Psi_MassCryotherapy_Radius"));
@@ -871,14 +756,14 @@ static function X2AbilityTemplate MassCryotherapy()
         UnitPropertyCondition.IsBleedingOut = true;
         UnitPropertyCondition.FailOnNonUnits = true;
 
+        UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect(, true);
+        UnconsciousEffect.TargetConditions.AddItem(UnitPropertyCondition);
+        Template.AddMultiTargetEffect(UnconsciousEffect);
+
         RemoveEffects = new class'X2Effect_RemoveEffects';
         RemoveEffects.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BleedingOutName);
         RemoveEffects.TargetConditions.AddItem(UnitPropertyCondition);
         Template.AddMultiTargetEffect(RemoveEffects);
-
-        UnconsciousEffect = class'X2StatusEffects'.static.CreateUnconsciousStatusEffect(, true);
-        UnconsciousEffect.TargetConditions.AddItem(UnitPropertyCondition);
-        Template.AddMultiTargetEffect(UnconsciousEffect);
     }
 
     Template.ActivationSpeech = 'HealingAlly';
@@ -905,380 +790,292 @@ static function X2AbilityTemplate LetItGo()
     return Template;
 }
 
-static function X2AbilityTemplate CreateSummonAbility(name DataName, string IconImage)
+static function X2AbilityTemplate Mindspin(name DataName = 'M31_Psi_Mindspin')
 {
-    local X2AbilityTemplate             Template;
-    local X2AbilityTarget_Cursor        CursorTarget;
-    local X2AbilityMultiTarget_Radius   RadiusMultiTarget;
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StatCheck_UnitVsUnit StatCheck;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_UnitImmunities        UnitImmunityCondition;
+    local X2Condition_UnitEffects           ExcludeEffects;
+    local X2Effect_PersistentStatChange     DisorientedEffect;
+    local X2Effect_Panicked                 PanickedEffect;
+    local X2Effect_MindControl              MindControlEffect;
+    local X2Effect_RemoveEffects            MindControlRemoveEffects;
 
     `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
 
-    Template.IconImage = IconImage;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sectoid_Mindspin";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
     Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
-    Template.Hostility = eHostility_Neutral;
+    Template.Hostility = eHostility_Offensive;
 
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Offensive);
+
+    StatCheck = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+    StatCheck.BaseValue = `GetConfigInt("M31_Psi_Mindspin_BaseChance");
+    Template.AbilityToHitCalc = StatCheck;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
 
-    Template.AbilityToHitCalc = default.DeadEye;
-
-    Template.TargetingMethod = class'X2TargetingMethod_Teleport';
-
-    CursorTarget = new class'X2AbilityTarget_Cursor';
-    CursorTarget.bRestrictToSquadsightRange = true;
-    if (`GetConfigInt("M31_Psi_SummonRange") > 0)
-    {
-        CursorTarget.FixedAbilityRange = `GetConfigInt("M31_Psi_SummonRange");
-    }
-    Template.AbilityTargetStyle = CursorTarget;
-
-    RadiusMultiTarget = new class'X2AbilityMultiTarget_Radius';
-    RadiusMultiTarget.fTargetRadius = 0.25;
-    Template.AbilityMultiTargetStyle = RadiusMultiTarget;
-
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = true;
+    UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
-
     Template.AddShooterEffectExclusions();
 
+    ExcludeEffects = new class'X2Condition_UnitEffects';
+    ExcludeEffects.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
+    ExcludeEffects.AddExcludeEffect(class'X2Ability_CarryUnit'.default.CarryUnitEffectName, 'AA_CarryingUnit');
+    Template.AbilityTargetConditions.AddItem(ExcludeEffects);
+
+    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+    UnitImmunityCondition.AddExcludeDamageType('Mental');
+    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
+    Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
+
+    AddCooldown(Template, `GetConfigInt("M31_Psi_Mindspin_Cooldown"));
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+
+    //  Disorient effect for 1 unblocked psi hit
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect();
+    DisorientedEffect.iNumTurns = class'X2Ability_Sectoid'.default.SECTOID_Mindspin_DISORIENTED_DURATION;
+    DisorientedEffect.MinStatContestResult = 1;
+    DisorientedEffect.MaxStatContestResult = 1;
+    Template.AddTargetEffect(DisorientedEffect);
+    //  Disorient effect for 2 unblocked psi hits
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect();
+    DisorientedEffect.iNumTurns = class'X2Ability_Sectoid'.default.SECTOID_Mindspin_DISORIENTED_DURATION + 1;
+    DisorientedEffect.MinStatContestResult = 2;
+    DisorientedEffect.MaxStatContestResult = 2;
+    Template.AddTargetEffect(DisorientedEffect);
+
+    PanickedEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
+    PanickedEffect.MinStatContestResult = 3;
+    PanickedEffect.MaxStatContestResult = 4;
+    Template.AddTargetEffect(PanickedEffect);
+
+    MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(class'X2Ability_Sectoid'.default.SECTOID_Mindspin_CONTROL_DURATION);
+    MindControlEffect.MinStatContestResult = 5;
+    MindControlEffect.MaxStatContestResult = 0;
+    Template.AddTargetEffect(MindControlEffect);
+
+    MindControlRemoveEffects = class'X2StatusEffects'.static.CreateMindControlRemoveEffects();
+    MindControlRemoveEffects.MinStatContestResult = 5;
+    MindControlRemoveEffects.MaxStatContestResult = 0;
+    MindControlRemoveEffects.DamageTypes.AddItem('Mental');
+    Template.AddTargetEffect(MindControlRemoveEffects);
+
+    Template.CustomFireAnim = 'HL_M31_Psi_ProjectileMedium';
+
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
-    Template.CustomFireAnim = 'HL_M31_Psi_Corrupt';
-    Template.CinescriptCameraType = "Warlock_SpectralZombie";
 
-    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
-    Template.BuildVisualizationFn = SpawnUnit_BuildVisualization;
+    Template.ActivationSpeech = 'Insanity';
+    Template.SourceMissSpeech = 'SoldierFailsControl';
+    Template.TargetMissSpeech = 'SoldierResistsMindControl';
 
-    Template.bShowActivation = true;
+    Template.CinescriptCameraType = "Sectoid_Mindspin";
     Template.bFrameEvenWhenUnitIsHidden = true;
 
-    Template.ConcealmentRule = eConceal_Never;
+    Template.bShowActivation = true;
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+
     Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
     Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
 
     return Template;
 }
 
-simulated function SpawnUnit_BuildVisualization(XComGameState VisualizeGameState)
+static function X2AbilityTemplate ArcMindspin()
 {
-    local XComGameStateVisualizationMgr VisMgr;
-    local XComWorldData WorldData;
-    local XComGameStateContext_Ability Context;
-    local VisualizationActionMetadata ActionMetadata;
-    local X2Action_CameraLookAt LookAtAction;
-    local Array<X2Action> FoundActions;
-    local X2Action FireAction;
-    local XComGameState_Unit GameStateUnit;
-    local X2Action_CameraRemove RemoveCamera;
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StatCheck_UnitVsUnit StatCheck;
+    local X2AbilityMultiTarget_ChainingJolt ChainMultiTarget;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_UnitImmunities        UnitImmunityCondition;
+    local X2Condition_UnitEffects           ExcludeEffects;
+    local X2Effect_PersistentStatChange     DisorientedEffect;
+    local X2Effect_Panicked                 PanickedEffect;
+    local X2Effect_MindControl              MindControlEffect;
+    local X2Effect_RemoveEffects            MindControlRemoveEffects;
 
-    // Build the basic ability visualization
-    TypicalAbility_BuildVisualization(VisualizeGameState);
+    Template = Mindspin('M31_Psi_ArcMindspin');
 
-    VisMgr = `XCOMVISUALIZATIONMGR;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_sectoid_Mindspin";
 
-    Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+    StatCheck = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+    StatCheck.BaseValue = `GetConfigInt("M31_Psi_Mindspin_BaseChance");
+    Template.AbilityToHitCalc = StatCheck;
 
-    //Add a look at camera to the spawned units
-    //****************************************************************************************
-    VisMgr.GetNodesOfType(VisMgr.BuildVisTree, class'X2Action_ShowSpawnedUnit', FoundActions);
-    FireAction = VisMgr.GetNodeOfType(VisMgr.BuildVisTree, class'X2Action_Fire', , Context.InputContext.SourceObject.ObjectID);
+    ChainMultiTarget = new class'X2AbilityMultiTarget_ChainingJolt';
+    ChainMultiTarget.fTargetRadius = `GetConfigFloat("M31_Psi_ArcMindspin_Radius");
+    ChainMultiTarget.MaxTargets = `GetConfigInt("M31_Psi_ArcMindspin_MaxTargets");
+    Template.AbilityMultiTargetStyle = ChainMultiTarget;
+    Template.TargetingMethod = class'X2TargetingMethod_Chain';
 
-    if( (FoundActions.Length > 0) &&
-        (FireAction != none) )
-    {
-        ActionMetadata.StateObject_OldState = FoundActions[0].MetaData.StateObject_OldState;
-        ActionMetadata.StateObject_NewState = FoundActions[0].MetaData.StateObject_NewState;
-        ActionMetadata.VisualizeActor = FoundActions[0].MetaData.VisualizeActor;
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = true;
+    UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityMultiTargetConditions.AddItem(default.MeleeVisibilityCondition);
 
-        GameStateUnit = XComGameState_Unit(ActionMetadata.StateObject_NewState);
+    ExcludeEffects = new class'X2Condition_UnitEffects';
+    ExcludeEffects.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
+    ExcludeEffects.AddExcludeEffect(class'X2Ability_CarryUnit'.default.CarryUnitEffectName, 'AA_CarryingUnit');
+    Template.AbilityMultiTargetConditions.AddItem(ExcludeEffects);
 
-        if( GameStateUnit != none )
-        {
-            WorldData = `XWORLD;
+    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+    UnitImmunityCondition.AddExcludeDamageType('Mental');
+    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
+    Template.AbilityMultiTargetConditions.AddItem(UnitImmunityCondition);
 
-            LookAtAction = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ActionMetadata, Context, true, FireAction));
-            LookAtAction.LookAtLocation = WorldData.GetPositionFromTileCoordinates(GameStateUnit.TileLocation);
-            LookAtAction.LookAtDuration = class'X2Ability_ChosenWarlock'.default.CORRESS_LOOKAT_DURATION * (`XPROFILESETTINGS.Data.bEnableZipMode ? class'X2TacticalGameRuleset'.default.ZipModeDelayModifier : 1.0);;
-            LookAtAction.BlockUntilActorOnScreen = true;
-            LookAtAction.AddInputEvent('Visualizer_AbilityHit');
+    AddCooldown(Template, `GetConfigInt("M31_Psi_ArcMindspin_Cooldown"));
 
-            ActionMetadata.StateObject_NewState = `XCOMHISTORY.GetGameStateForObjectID( Context.InputContext.SourceObject.ObjectID );
-            ActionMetadata.StateObject_OldState = ActionMetadata.StateObject_NewState.GetPreviousVersion( );
-            ActionMetadata.VisualizeActor = `XCOMHISTORY.GetVisualizer( Context.InputContext.SourceObject.ObjectID );
-
-            RemoveCamera = X2Action_CameraRemove( class'X2Action_CameraRemove'.static.AddToVisualizationTree( ActionMetadata, Context, true, ActionMetadata.LastActionAdded ) );
-            RemoveCamera.CameraTagToRemove = 'AbilityFraming';
-        }
-    }
-}
-
-static function X2AbilityTemplate ImprovedSpectres()
-{
-    local X2AbilityTemplate Template;
-    
-    Template = Passive(default.ImprovedSpectresAbilityName, "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_ghost", false, true);
-
-    return Template;
-}
-
-static function X2AbilityTemplate SummonSpectralZombie()
-{
-    local X2AbilityTemplate     Template;
-    local X2Effect_SummonUnit   SpawnUnitEffect;
-    
-    Template = CreateSummonAbility('M31_Psi_SummonSpectralZombie', "img:///UILibrary_PerkIcons.UIPerk_sectoid_psireanimate");
-
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 3;
-
+    Template.AbilityCosts.Length = 0;
     AddActionPointCost(Template, eCost_SingleConsumeAll);
-    AddCooldown(Template, `GetConfigInt("M31_Psi_SummonSpectralZombie_Cooldown"));
-    AddCharges(Template, `GetConfigInt("M31_Psi_SummonSpectralZombie_Charges"));
 
-    SpawnUnitEffect = new class'X2Effect_SummonUnit';
-    SpawnUnitEffect.UnitToSpawnName = 'M31_SpectralZombie_M1';
-    SpawnUnitEffect.UnitToSpawnNameT2 = 'M31_SpectralZombie_M2';
-    SpawnUnitEffect.UnitToSpawnNameT3 = 'M31_SpectralZombie_M3';
+    //  Disorient effect for 1 unblocked psi hit
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect();
+    DisorientedEffect.iNumTurns = class'X2Ability_Sectoid'.default.SECTOID_Mindspin_DISORIENTED_DURATION;
+    DisorientedEffect.MinStatContestResult = 1;
+    DisorientedEffect.MaxStatContestResult = 1;
+    Template.AddMultiTargetEffect(DisorientedEffect);
+    //  Disorient effect for 2 unblocked psi hits
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect();
+    DisorientedEffect.iNumTurns = class'X2Ability_Sectoid'.default.SECTOID_Mindspin_DISORIENTED_DURATION + 1;
+    DisorientedEffect.MinStatContestResult = 2;
+    DisorientedEffect.MaxStatContestResult = 2;
+    Template.AddMultiTargetEffect(DisorientedEffect);
 
-    SpawnUnitEffect.AltReqAbilityName = default.ImprovedSpectresAbilityName;
-    SpawnUnitEffect.AltUnitToSpawnName = 'M31_AdvSpectralZombie_M1';
-    SpawnUnitEffect.AltUnitToSpawnNameT2 = 'M31_AdvSpectralZombie_M2';
-    SpawnUnitEffect.AltUnitToSpawnNameT3 = 'M31_AdvSpectralZombie_M3';
+    PanickedEffect = class'X2StatusEffects'.static.CreatePanickedStatusEffect();
+    PanickedEffect.MinStatContestResult = 3;
+    PanickedEffect.MaxStatContestResult = 4;
+    Template.AddMultiTargetEffect(PanickedEffect);
 
-    SpawnUnitEffect.NumStartingPoints = 1;
-    SpawnUnitEffect.SpawnAnim = 'HL_FrostZombieRise';
-    SpawnUnitEffect.LinkName = default.SpectralZombieLinkName;
-    SpawnUnitEffect.SpawnUnitValueName = default.SpectralZombieSpawnName;
-    Template.AddShooterEffect(SpawnUnitEffect);
+    MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(class'X2Ability_Sectoid'.default.SECTOID_Mindspin_CONTROL_DURATION);
+    MindControlEffect.MinStatContestResult = 5;
+    MindControlEffect.MaxStatContestResult = 0;
+    Template.AddMultiTargetEffect(MindControlEffect);
 
-    Template.AdditionalAbilities.AddItem('M31_Psi_KillSpectralZombie');
-    Template.PostActivationEvents.AddItem(default.KillDuplicateSpectresEventName);
+    MindControlRemoveEffects = class'X2StatusEffects'.static.CreateMindControlRemoveEffects();
+    MindControlRemoveEffects.MinStatContestResult = 5;
+    MindControlRemoveEffects.MaxStatContestResult = 0;
+    MindControlRemoveEffects.DamageTypes.AddItem('Mental');
+    Template.AddMultiTargetEffect(MindControlRemoveEffects);
 
-    return Template;
-}
+    Template.CustomFireAnim = 'HL_M31_Psi_ProjectileMedium';
 
-static function X2AbilityTemplate KillSpectralZombie()
-{
-    local X2AbilityTemplate Template;
-    
-    Template = KillLinkedSpectres('M31_Psi_KillSpectralZombie', "img:///UILibrary_PerkIcons.UIPerk_sectoid_psireanimate", default.SpectralZombieLinkName, default.SpectralZombieSpawnName);
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
-    return Template;
-}
+    Template.ActivationSpeech = 'Insanity';
+    Template.SourceMissSpeech = 'SoldierFailsControl';
+    Template.TargetMissSpeech = 'SoldierResistsMindControl';
 
-static function X2AbilityTemplate SummonSpectralLancer()
-{
-    local X2AbilityTemplate     Template;
-    local X2Effect_SummonUnit   SpawnUnitEffect;
-    
-    Template = CreateSummonAbility('M31_Psi_SummonSpectralLancer', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_possess");
+    Template.CinescriptCameraType = "Sectoid_Mindspin";
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 2;
+    Template.bShowActivation = true;
 
-    AddActionPointCost(Template, eCost_SingleConsumeAll);
-    AddCooldown(Template, `GetConfigInt("M31_Psi_SummonSpectralLancer_Cooldown"));
-    AddCharges(Template, `GetConfigInt("M31_Psi_SummonSpectralLancer_Charges"));
+    Template.ActionFireClass = class'X2Action_Fire_ArcMindspin';
 
-    SpawnUnitEffect = new class'X2Effect_SummonUnit';
-    SpawnUnitEffect.UnitToSpawnName = 'M31_SpectralLancer_M1';
-    SpawnUnitEffect.UnitToSpawnNameT2 = 'M31_SpectralLancer_M2';
-    SpawnUnitEffect.UnitToSpawnNameT3 = 'M31_SpectralLancer_M3';
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-    SpawnUnitEffect.AltReqAbilityName = default.ImprovedSpectresAbilityName;
-    SpawnUnitEffect.AltUnitToSpawnName = 'M31_AdvSpectralLancer_M1';
-    SpawnUnitEffect.AltUnitToSpawnNameT2 = 'M31_AdvSpectralLancer_M2';
-    SpawnUnitEffect.AltUnitToSpawnNameT3 = 'M31_AdvSpectralLancer_M3';
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
 
-    SpawnUnitEffect.NumStartingPoints = 1;
-    SpawnUnitEffect.SpawnAnim = 'HL_SpectralArmy_Target';
-    SpawnUnitEffect.LinkName = default.SpectralLancerLinkName;
-    SpawnUnitEffect.SpawnUnitValueName = default.SpectralLancerSpawnName;
-    Template.AddShooterEffect(SpawnUnitEffect);
-
-    Template.AdditionalAbilities.AddItem('M31_Psi_KillSpectralLancer');
-    Template.PostActivationEvents.AddItem(default.KillDuplicateSpectresEventName);
+    Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
 
     return Template;
 }
 
-static function X2AbilityTemplate KillSpectralLancer()
+static function X2AbilityTemplate Domination()
 {
-    local X2AbilityTemplate Template;
-    
-    Template = KillLinkedSpectres('M31_Psi_KillSpectralLancer', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_possess", default.SpectralLancerLinkName, default.SpectralLancerSpawnName);
+    local X2AbilityTemplate                 Template;
+    local X2AbilityToHitCalc_StatCheck_UnitVsUnit StatCheck;
+    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_UnitImmunities        UnitImmunityCondition;
+    local X2Condition_UnitEffects           ExcludeEffects;
+    local X2Effect_MindControl              MindControlEffect;
 
-    return Template;
-}
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Psi_Domination');
 
-static function X2AbilityTemplate SummonSpectralCreature()
-{
-    local X2AbilityTemplate     Template;
-    local X2Effect_SummonUnit   SpawnUnitEffect;
-    
-    Template = CreateSummonAbility('M31_Psi_SummonSpectralCreature', "img:///UILibrary_PerkIcons.UIPerk_chryssalid_burrow");
-
-    Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY - 1;
-
-    AddActionPointCost(Template, eCost_DoubleConsumeAll);
-    AddCooldown(Template, `GetConfigInt("M31_Psi_SummonSpectralCreature_Cooldown"));
-    AddCharges(Template, `GetConfigInt("M31_Psi_SummonSpectralCreature_Charges"));
-
-    SpawnUnitEffect = new class'X2Effect_SummonUnit';
-    SpawnUnitEffect.UnitToSpawnName = 'M31_SpectralCreature_M1';
-    SpawnUnitEffect.UnitToSpawnNameT2 = 'M31_SpectralCreature_M2';
-    SpawnUnitEffect.UnitToSpawnNameT3 = 'M31_SpectralCreature_M3';
-
-    SpawnUnitEffect.AltReqAbilityName = default.ImprovedSpectresAbilityName;
-    SpawnUnitEffect.AltUnitToSpawnName = 'M31_AdvSpectralCreature_M1';
-    SpawnUnitEffect.AltUnitToSpawnNameT2 = 'M31_AdvSpectralCreature_M2';
-    SpawnUnitEffect.AltUnitToSpawnNameT3 = 'M31_AdvSpectralCreature_M3';
-
-    SpawnUnitEffect.NumStartingPoints = 1;
-    SpawnUnitEffect.SpawnAnim = 'NO_CocoonHatch';
-    // SpawnUnitEffect.SpawnAnim = 'AHW_SpectralBug';
-    SpawnUnitEffect.LinkName = default.SpectralCreatureLinkName;
-    SpawnUnitEffect.SpawnUnitValueName = default.SpectralCreatureSpawnName;
-    Template.AddShooterEffect(SpawnUnitEffect);
-
-    Template.AdditionalAbilities.AddItem('M31_Psi_KillSpectralCreature');
-    Template.PostActivationEvents.AddItem(default.KillDuplicateSpectresEventName);
-
-    return Template;
-}
-
-static function X2AbilityTemplate KillSpectralCreature()
-{
-    local X2AbilityTemplate Template;
-    
-    Template = KillLinkedSpectres('M31_Psi_KillSpectralCreature', "img:///UILibrary_PerkIcons.UIPerk_chryssalid_burrow", default.SpectralCreatureLinkName, default.SpectralCreatureSpawnName);
-
-    return Template;
-}
-
-static function X2AbilityTemplate CreateSpectreLink(name DataName, string IconImage, name LinkName)
-{
-    local X2AbilityTemplate Template;
-    local X2Effect_Persistent SpectralArmyLinkEffect;
-
-    `CREATE_X2ABILITY_TEMPLATE(Template, DataName);
-
-    Template.IconImage = IconImage;
+    Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_domination";
     Template.AbilitySourceName = 'eAbilitySource_Psionic';
-    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
-    Template.Hostility = eHostility_Neutral;
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+    Template.Hostility = eHostility_Offensive;
 
+    SetAbilityShotHUDPriority(Template, ePriorityType_Psi, eCost_SingleConsumeAll, eHostility_Offensive);
+
+    StatCheck = new class'X2AbilityToHitCalc_StatCheck_UnitVsUnit';
+    StatCheck.BaseValue = `GetConfigInt("M31_Psi_Domination_BaseChance");
+    Template.AbilityToHitCalc = StatCheck;
+    Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
-    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
 
-    // Create an effect that will be attached to the spawned unit
-    SpectralArmyLinkEffect = new class'X2Effect_Persistent';
-    SpectralArmyLinkEffect.BuildPersistentEffect(1, true, false, true);
-    SpectralArmyLinkEffect.bRemoveWhenTargetDies = true;
-    SpectralArmyLinkEffect.EffectName = LinkName;
-    Template.AddTargetEffect(SpectralArmyLinkEffect);
+    UnitPropertyCondition = new class'X2Condition_UnitProperty';
+    UnitPropertyCondition.ExcludeDead = true;
+    UnitPropertyCondition.ExcludeFriendlyToSource = true;
+    UnitPropertyCondition.ExcludeRobotic = true;
+    UnitPropertyCondition.FailOnNonUnits = true;
+    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+    Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+    Template.AddShooterEffectExclusions();
 
-    Template.BuildNewGameStateFn = class'X2Ability_Sectoid '.static.Empty_BuildGameState;
-    Template.BuildVisualizationFn = none;
+    ExcludeEffects = new class'X2Condition_UnitEffects';
+    ExcludeEffects.AddExcludeEffect(class'X2Effect_MindControl'.default.EffectName, 'AA_UnitIsMindControlled');
+    ExcludeEffects.AddExcludeEffect(class'X2Ability_CarryUnit'.default.CarryUnitEffectName, 'AA_CarryingUnit');
+    Template.AbilityTargetConditions.AddItem(ExcludeEffects);
 
-    return Template;
-}
+    UnitImmunityCondition = new class'X2Condition_UnitImmunities';
+    UnitImmunityCondition.AddExcludeDamageType('Mental');
+    UnitImmunityCondition.bOnlyOnCharacterTemplate = false;
+    Template.AbilityTargetConditions.AddItem(UnitImmunityCondition);
 
-static function X2AbilityTemplate KillLinkedSpectres(name DataName, string IconImage, name LinkName, name SpawnName)
-{
-    local X2AbilityTemplate                         Template;
-    local X2AbilityTrigger_EventListener            Trigger;
-    local X2Condition_UnitEffectsWithAbilitySource  EffectCondition;
-    local X2Effect_KillUnit                         KillUnitEffect;
-    local X2Condition_UnitValue                     ValueCondition;
-    local X2Effect_SetUnitValue                     UnitValueEffect;
-    
-    Template = SelfTargetTrigger(DataName, IconImage);
+    AddActionPointCost(Template, eCost_SingleConsumeAll);
+    AddCooldown(Template, `GetConfigInt("M31_Psi_Domination_Cooldown"));
+    AddCharges(Template, `GetConfigInt("M31_Psi_Domination_Charges"));
 
-    // Trigger if the source dies
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = 'UnitDied';
-    Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_SelfWithAdditionalTargets;
-    Template.AbilityTriggers.AddItem(Trigger);
+    MindControlEffect = class'X2StatusEffects'.static.CreateMindControlStatusEffect(1, false, true);
+    Template.AddTargetEffect(MindControlEffect);
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateStunRecoverEffect());
+    Template.AddTargetEffect(class'X2StatusEffects'.static.CreateMindControlRemoveEffects());
 
-    // Trigger if the source is removed from play (e.g. evacs)
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = 'UnitRemovedFromPlay';
-    Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_SelfIgnoreCache;
-    Trigger.ListenerData.Priority = 75;	// We need this to happen before the unit is actually removed from play
-    Template.AbilityTriggers.AddItem(Trigger);
+    Template.CustomFireAnim = 'HL_M31_Psi_MindControl';
 
-    // Trigger if we need to remove the old summon
-    Trigger = new class'X2AbilityTrigger_EventListener';
-    Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-    Trigger.ListenerData.EventID = default.KillDuplicateSpectresEventName;
-    Trigger.ListenerData.Filter = eFilter_Unit;
-    Trigger.ListenerData.EventFn = class'XComGameState_Ability'.static.AbilityTriggerEventListener_SelfWithAdditionalTargets;
-    Trigger.ListenerData.Priority = 40;
-    Template.AbilityTriggers.AddItem(Trigger);
+    Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
-    Template.AbilityMultiTargetStyle = new class'X2AbilityMultiTarget_AllUnits';
+    Template.ActivationSpeech = 'Domination';
+    Template.SourceMissSpeech = 'SoldierFailsControl';
 
-    // Match the link name
-    EffectCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
-    EffectCondition.AddRequireEffect(LinkName, 'AA_UnitIsImmune');
-    Template.AbilityMultiTargetConditions.AddItem(EffectCondition);
+    Template.CinescriptCameraType = "Psionic_FireAtUnit";
+    Template.bFrameEvenWhenUnitIsHidden = true;
 
-    // Condition to not kill the new summon
-    ValueCondition = new class'X2Condition_UnitValue';
-    ValueCondition.AddCheckValue(SpawnName, 1, eCheck_LessThan);
-    Template.AbilityMultiTargetConditions.AddItem(ValueCondition);
+    Template.bShowActivation = true;
 
-    // Kill the old summon
-    KillUnitEffect = new class'X2Effect_KillUnit';
-    KillUnitEffect.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
-    KillUnitEffect.DeathActionClass = class'X2Action_ZombieSireDeath';
-    KillUnitEffect.VisualizationFn = class'X2Ability_Sectoid'.static.BuildVisualization_SireDeathEffect;
-    Template.AddMultiTargetEffect(KillUnitEffect);
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
 
-    // Remove protection from the new summon
-    UnitValueEffect = new class'X2Effect_SetUnitValue';
-    UnitValueEffect.UnitName = SpawnName;
-    UnitValueEffect.NewValueToSet = 0;
-    UnitValueEffect.CleanupType = eCleanup_BeginTactical;
-    Template.AddMultiTargetEffect(UnitValueEffect);
+    Template.SuperConcealmentLoss = class'X2AbilityTemplateManager'.default.SuperConcealmentStandardShotLoss;
+    Template.ChosenActivationIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotChosenActivationIncreasePerUse;
+    Template.LostSpawnIncreasePerUse = class'X2AbilityTemplateManager'.default.StandardShotLostSpawnIncreasePerUse;
+
+    Template.AdditionalAbilities.AddItem('M31_Psi_Animations');
 
     return Template;
-}
-
-static function X2AbilityTemplate SpectralUnitInit(name DataName, string IconImage, name AddEffectAnimName, name RemoveEffectAnimName)
-{
-    local X2AbilityTemplate         Template;
-    local X2Effect_SpectralUnit     Effect;
-    
-    Template = Passive(DataName, IconImage, false, false);
-
-    Effect = new class'X2Effect_SpectralUnit';
-    Effect.AddEffectAnimName = AddEffectAnimName;
-    Effect.RemoveEffectAnimName =  RemoveEffectAnimName;
-    Effect.BuildPersistentEffect(1, true, true);
-    Effect.bRemoveWhenTargetDies = true;
-    Template.AddTargetEffect(Effect);
-
-    return Template;
-}
-
-
-defaultproperties
-{
-    SpectralZombieLinkName = M31_Psi_SpectralZombieLink
-    SpectralLancerLinkName = M31_Psi_SpectralLancerLink
-    SpectralCreatureLinkName = M31_Psi_SpectralCreatureLink
-
-    SpectralZombieSpawnName = M31_Psi_SpectralZombieSpawn
-    SpectralLancerSpawnName = M31_Psi_SpectralLancerSpawn
-    SpectralCreatureSpawnName = M31_Psi_SpectralCreatureSpawn
-
-    ImprovedSpectresAbilityName = M31_Psi_StrongerSpectres
-
-    KillDuplicateSpectresEventName = M31_Psi_KillDuplicateSpectres
-
-    PsiZombieLinkName = M31_Psi_PsiZombieLink
-
 }

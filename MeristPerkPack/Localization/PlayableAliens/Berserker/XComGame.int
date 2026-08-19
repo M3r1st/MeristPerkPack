@@ -1,0 +1,97 @@
+[M31_PA_BK_Smash X2AbilityTemplate]
+LocFriendlyName="Devastating Blow"
+LocFlyOverText="Devastating Blow"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Taunt X2AbilityTemplate]
+LocFriendlyName="Taunt"
+LocFlyOverText="Taunt"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_CrossOut X2AbilityTemplate]
+LocFriendlyName="Cross Out"
+LocFlyOverText="Cross Out"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Shredder X2AbilityTemplate]
+LocFriendlyName="Shellcracker"
+LocFlyOverText="Shellcracker"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Aftershock X2AbilityTemplate]
+LocFriendlyName="Aftershock"
+LocFlyOverText="Aftershock"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_SuckerPunch X2AbilityTemplate]
+LocFriendlyName="Sucker Punch"
+LocFlyOverText="Sucker Punch"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Reaper X2AbilityTemplate]
+LocFriendlyName="Queen of the Crowd"
+LocFlyOverText="Queen of the Crowd"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Parry X2AbilityTemplate]
+LocFriendlyName="Combatives"
+LocFlyOverText="Combatives"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_ParryReset X2AbilityTemplate]
+LocFriendlyName=""
+LocFlyOverText=""
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Bladestorm X2AbilityTemplate]
+LocFriendlyName="Thrash"
+LocFlyOverText="Thrash"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_CoupDeGrace X2AbilityTemplate]
+LocFriendlyName="Coup de Grace"
+LocFlyOverText="Coup de Grace"
+LocLongDescription=""
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_Resilience X2AbilityTemplate]
+LocFriendlyName="Resilience"
+LocFlyOverText="Resilience"
+LocLongDescription="Critical chance of incoming attacks is reduced by <> + <> for each point of armor you have. "
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_FearStriker X2AbilityTemplate]
+LocFriendlyName=""
+LocFlyOverText=""
+LocLongDescription=" "
+LocHelpText=""
+LocPromotionPopupText=""
+
+[M31_PA_BK_ X2AbilityTemplate]
+LocFriendlyName=""
+LocFlyOverText=""
+LocLongDescription="Gain +<> critical chance for each point of armor you have (up to a maximum of +<>)."
+LocHelpText=""
+LocPromotionPopupText=""

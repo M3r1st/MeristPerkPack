@@ -262,7 +262,7 @@ function bool DetonationShot_DamagePreview(XComGameState_Ability AbilityState, S
         if (class'X2Condition_FuseTarget'.static.GetAvailableFuse(TargetUnit, FuseRef))
         {
             FuseTargetAbility = XComGameState_Ability(History.GetGameStateForObjectID(FuseRef.ObjectID));
-            if (FuseTargetAbility != None)
+            if (FuseTargetAbility != none)
             {
                 FuseTargetAbility.GetDamagePreview(EmptyRef, MinDamagePreview, MaxDamagePreview, AllowsShield);
                 return true;

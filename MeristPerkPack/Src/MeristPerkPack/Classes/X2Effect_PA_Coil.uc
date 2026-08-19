@@ -40,7 +40,7 @@ static function EventListenerReturn EffectEventListener_Coil(Object EventData, O
             {
                 if (AbilityState.IsAbilityInputTriggered() && AbilityState.GetMyTemplate().Hostility != eHostility_Movement)
                 {
-                    if (!class'X2Effect_RefundActionPoints'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                    if (!class'M31_Helpers'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
                     {
                         if (!EffectState.bRemoved)
                         {

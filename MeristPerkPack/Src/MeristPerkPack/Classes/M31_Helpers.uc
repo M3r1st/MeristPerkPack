@@ -420,3 +420,62 @@ static function TriggerAbilityFlyover_BuildVisualization(XComGameState Visualize
         }
     }
 }
+
+static function bool WasAbilityFree(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner, optional int HistoryIndex = -1)
+{
+    local XComGameStateHistory      History;
+    local XComGameState_Ability     OldAbilityState;
+    local XComGameState_Unit        OldAbilityOwner;
+    local X2AbilityTemplate         Template;
+    local X2AbilityCost             Cost;
+    local X2AbilityCost_ActionPoints ActionPointCost;
+
+    History = `XCOMHISTORY;
+
+    Template = AbilityState.GetMyTemplate();
+
+    if (HistoryIndex != -1)
+    {
+        OldAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityState.ObjectID,, HistoryIndex));
+        OldAbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityOwner.ObjectID,, HistoryIndex));
+    }
+    else
+    {
+        OldAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityState.ObjectID));
+        OldAbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityOwner.ObjectID));
+    }
+
+    foreach Template.AbilityCosts(Cost)
+    {
+        ActionPointCost = X2AbilityCost_ActionPoints(Cost);
+        if (ActionPointCost != none)
+        {
+            if (!ActionPointCost.bFreeCost && ActionPointCost.GetPointCost(OldAbilityState, OldAbilityOwner) > 0)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+static function int GetNumHitsForAbility(XComGameState_Ability AbilityState)
+{
+    local X2AbilityTemplate AbilityTemplate;
+    local X2AbilityMultiTarget_BurstFire BurstFire;
+    local XComGameState_Unit AbilityOwner;
+
+    AbilityTemplate = AbilityState.GetMyTemplate();
+    BurstFire = X2AbilityMultiTarget_BurstFire(AbilityTemplate.AbilityMultiTargetStyle);
+    if (BurstFire != none)
+    {
+        return 1 + BurstFire.NumExtraShots;
+    }
+    else if (X2AbilityMultiTarget_RadiusTimesFocus(AbilityTemplate.AbilityMultiTargetStyle) != none)
+    {
+        AbilityOwner = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(AbilityState.OwnerStateObject.ObjectID));
+        return AbilityOwner.GetTemplarFocusLevel();
+    }
+    return 1;
+}

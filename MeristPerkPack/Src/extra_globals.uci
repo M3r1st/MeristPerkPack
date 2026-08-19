@@ -21,3 +21,4 @@
 `define GetConfigDamage(VarName) class'ConfigEngine'.static.GetConfigDamage(`VarName)
 
 `define GetTechLevel(VarName) class'X2DLCInfo_MeristPerkPack'.static.GetTechLevel(`VarName)
+`define IsModActive(VarName) class'X2DLCInfo_MeristPerkPack'.static.IsModActive(`VarName)

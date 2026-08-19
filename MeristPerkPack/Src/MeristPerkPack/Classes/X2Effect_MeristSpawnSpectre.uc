@@ -1,114 +1,81 @@
-class X2Effect_SummonUnit extends X2Effect_SpawnUnit;
+class X2Effect_MeristSpawnSpectre extends X2Effect_SpawnUnit;
 
+var name LinkAbilityName;
 var name SpawnAnim;
-var name LinkName;
-var name SpawnUnitValueName;
 
-var name UnitToSpawnNameT2;
-var name UnitToSpawnNameT3;
-
-var name AltReqAbilityName;
-
-var name AltUnitToSpawnName;
-var name AltUnitToSpawnNameT2;
-var name AltUnitToSpawnNameT3;
-
+var name AltRequiredAbility;
+var array<name> UnitToSpawnNames, AltUnitToSpawnNames;
 var int NumStartingPoints;
 
 var privatewrite bool bLog;
 
 function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, StateObjectReference NewUnitRef, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit SpectralUnit;
-    local EffectAppliedData NewEffectParams;
-    local X2Effect SpectralArmyLinkEffect;
+    local XComGameState_Unit    SpawnedUnit;
+    local EffectAppliedData     NewEffectParams;
+    local X2Effect              SireLinkEffect;
     local int i;
 
-    SpectralUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(NewUnitRef.ObjectID));
+    SpawnedUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(NewUnitRef.ObjectID));
 
-    if (SpectralUnit == none)
+    if (SpawnedUnit == none)
     {
         `LOG(GetFuncName() $ ": spawned unit is missing", default.bLog, self.Class.Name);
         return;
     }
 
-    SpectralUnit.ActionPoints.Length = 0;
+    SpawnedUnit.ActionPoints.Length = 0;
     for (i = 0; i < NumStartingPoints; i++)
     {
-        SpectralUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
+        SpawnedUnit.ActionPoints.AddItem(class'X2CharacterTemplateManager'.default.StandardActionPoint);
     }
 
-    //SpectralUnit.GhostSourceUnit = ApplyEffectParameters.SourceStateObjectRef;
-    SpectralUnit.SetUnitFloatValue('TurnedIntoZombie', 1, eCleanup_BeginTactical);
-    SpectralUnit.SetUnitFloatValue('NewSpawnedUnit', 1, eCleanup_BeginTactical);
-    SpectralUnit.kAppearance.bGhostPawn = true;
-
-    if (SpawnUnitValueName != '')
-        SpectralUnit.SetUnitFloatValue(SpawnUnitValueName, 1, eCleanup_BeginTactical);
+    SpawnedUnit.SetUnitFloatValue(class'X2Effect_SpawnPsiZombie'.default.TurnedZombieName, 1, eCleanup_BeginTactical);
+    SpawnedUnit.SetUnitFloatValue('NewSpawnedUnit', 1, eCleanup_BeginTactical);
+    SpawnedUnit.kAppearance.bGhostPawn = true;
 
     // Link the source and zombie
     NewEffectParams = ApplyEffectParameters;
     NewEffectParams.EffectRef.ApplyOnTickIndex = INDEX_NONE;
     NewEffectParams.EffectRef.LookupType = TELT_AbilityTargetEffects;
-    NewEffectParams.EffectRef.SourceTemplateName = LinkName;
+    NewEffectParams.EffectRef.SourceTemplateName = LinkAbilityName;
     NewEffectParams.EffectRef.TemplateEffectLookupArrayIndex = 0;
-    NewEffectParams.TargetStateObjectRef = SpectralUnit.GetReference();
+    NewEffectParams.TargetStateObjectRef = SpawnedUnit.GetReference();
 
-    SpectralArmyLinkEffect = class'X2Effect'.static.GetX2Effect(NewEffectParams.EffectRef);
-
-    if (SpectralArmyLinkEffect == none)
+    SireLinkEffect = class'X2Effect'.static.GetX2Effect(NewEffectParams.EffectRef);
+    if (SireLinkEffect == none)
     {
         `LOG(GetFuncName() $ ": link effect is missing", default.bLog, self.Class.Name);
         return;
     }
+    SireLinkEffect.ApplyEffect(NewEffectParams, SpawnedUnit, NewGameState);
 
-    SpectralArmyLinkEffect.ApplyEffect(NewEffectParams, SpectralUnit, NewGameState);
-
-    `XEVENTMGR.TriggerEvent('UnitMoveFinished', SpectralUnit, SpectralUnit, NewGameState);
+    `XEVENTMGR.TriggerEvent('UnitMoveFinished', SpawnedUnit, SpawnedUnit, NewGameState);
 }
 
 function name GetUnitToSpawnName(const out EffectAppliedData ApplyEffectParameters)
 {
-    local XComGameStateHistory History;
-    local XComGameState_Unit SourceUnit;
-    local XComGameState_Item SourceWeapon;
+    local XComGameStateHistory  History;
+    local XComGameState_Unit    SourceUnit;
+    local XComGameState_Item    SourceWeapon;
+    local array<name>           arrUnitNames;
     local int Tech;
 
     History = `XCOMHISTORY;
+
     SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+
+    arrUnitNames = UnitToSpawnNames;
+    if (SourceUnit.HasSoldierAbility(AltRequiredAbility, true))
+    {
+        arrUnitNames = AltUnitToSpawnNames;
+    }
+
     SourceWeapon = XComGameState_Item(History.GetGameStateForObjectID(ApplyEffectParameters.ItemStateObjectRef.ObjectID));
-
     Tech = `GetTechLevel(SourceWeapon.GetMyTemplate());
-    Tech = Clamp(Tech, 0, 4);
-    
-    `assert(SourceUnit != none);
+    Tech = Clamp(Tech, 0, arrUnitNames.Length - 1);
 
-    if (SourceUnit.HasSoldierAbility(AltReqAbilityName, true))
-    {
-        switch (Tech)
-        {
-            case 4:
-                return AltUnitToSpawnNameT3;
-            case 3:
-            case 2:
-                return AltUnitToSpawnNameT2;
-            default:
-                return AltUnitToSpawnName;
-        }
-    }
-    else
-    {
-        switch (Tech)
-        {
-            case 4:
-                return UnitToSpawnNameT3;
-            case 3:
-            case 2:
-                return UnitToSpawnNameT2;
-            default:
-                return UnitToSpawnName;
-        }    
-    }
+    return arrUnitNames[Tech];
 }
 
 function vector GetSpawnLocation(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState)
@@ -136,7 +103,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
     local XComGameStateHistory History;
     local XComGameStateVisualizationMgr VisualizationMgr;
     local X2Action_Fire_SpectralArmy FireAction;
-    local array<XComGameState_Unit> SpectralUnits;
+    local array<XComGameState_Unit> SpawnedUnits;
     local VisualizationActionMetadata EmptyTrack, NewUnitActionMetadata;
     local int j;
     local XComGameState_Unit SpawnedUnit;
@@ -150,12 +117,12 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
     // Find the X2Action_Fire_SpectralArmy
     FireAction = X2Action_Fire_SpectralArmy(VisualizationMgr.GetNodeOfType(VisualizationMgr.BuildVisTree, class'X2Action_Fire_SpectralArmy', ActionMetadata.VisualizeActor));
 
-    FindNewlySpawnedUnit(VisualizeGameState, SpectralUnits);
+    FindNewlySpawnedUnit(VisualizeGameState, SpawnedUnits);
 
-    for (j = 0; j < SpectralUnits.Length; ++j)
+    for (j = 0; j < SpawnedUnits.Length; ++j)
     {
         NewUnitActionMetadata = EmptyTrack;
-        NewUnitActionMetadata.StateObject_OldState = SpectralUnits[j];
+        NewUnitActionMetadata.StateObject_OldState = SpawnedUnits[j];
         NewUnitActionMetadata.StateObject_NewState = NewUnitActionMetadata.StateObject_OldState;
         SpawnedUnit = XComGameState_Unit(NewUnitActionMetadata.StateObject_NewState);
         NewUnitActionMetadata.VisualizeActor = History.GetVisualizer(SpawnedUnit.ObjectID);

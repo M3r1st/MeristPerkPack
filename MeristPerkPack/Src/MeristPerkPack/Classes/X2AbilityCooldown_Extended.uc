@@ -9,13 +9,17 @@ struct CooldownModifierInfo
 
 var array<CooldownModifierInfo> CooldownModifiers;
 
-var() bool    bApplyOnlyOnHit;
+var bool bApplyOnlyOnHit;
 
-function AddCooldownModifier(name RequiredAbility, int Modifier)
+var array<int> NumTurnsFromTech;
+var EInventorySlot SpecificSlot;
+
+function AddCooldownModifier(name RequiredAbility, optional int Modifier, optional bool bRemoveCooldown)
 {
     local CooldownModifierInfo CooldownModifier;
     CooldownModifier.RequiredAbility = RequiredAbility;
     CooldownModifier.Modifier = Modifier;
+    CooldownModifier.bRemoveCooldown = bRemoveCooldown;
     CooldownModifiers.AddItem(CooldownModifier);
 }
 
@@ -56,31 +60,49 @@ simulated function ApplyCooldown(XComGameState_Ability kAbility, XComGameState_B
 
 simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState_BaseObject AffectState, XComGameState_Item AffectWeapon, XComGameState NewGameState)
 {
-    local XComGameState_Unit    Unit;
+    local XComGameState_Unit    SourceUnit;
+    local XComGameState_Item    SourceItem;
     local CooldownModifierInfo  CooldownModifier;
-    local int x;
+    local int                   Cooldown;
+    local int                   Tech;
 
-    Unit = XComGameState_Unit(AffectState);
+    SourceUnit = XComGameState_Unit(AffectState);
 
-    x = iNumTurns;
-    if (Unit != none)
+    Cooldown = iNumTurns;
+
+    if (NumTurnsFromTech.Length > 0)
+    {
+        if (SpecificSlot != eInvSlot_Unknown)
+            SourceItem = SourceUnit.GetItemInSlot(SpecificSlot);
+        else
+            SourceItem = AffectWeapon;
+
+        if (SourceItem != none)
+        {
+            Tech = `GetTechLevel(SourceItem.GetMyTemplate());
+            Tech = Clamp(Tech, 0, NumTurnsFromTech.Length - 1);
+            Cooldown = NumTurnsFromTech[Tech];
+        }
+    }
+
+    if (SourceUnit != none)
     {
         foreach CooldownModifiers(CooldownModifier)
         {
-            if (Unit.HasSoldierAbility(CooldownModifier.RequiredAbility, true))
+            if (SourceUnit.HasSoldierAbility(CooldownModifier.RequiredAbility, true))
             {
                 if (CooldownModifier.bRemoveCooldown)
                 {
-                    x = 0;
+                    Cooldown = 0;
                     break;
                 }
                 else
                 {
-                    x = Max(0, x + CooldownModifier.Modifier);
+                    Cooldown = Max(0, Cooldown + CooldownModifier.Modifier);
                 }
             }
         }
     }
 
-    return x;
+    return Cooldown;
 }

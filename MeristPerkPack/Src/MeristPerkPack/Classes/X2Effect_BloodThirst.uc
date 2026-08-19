@@ -207,7 +207,7 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
     local XCGS_Effect_BloodThirst BloodThirstEffectState;
 
     BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectGameState);
-    
+
     return BloodThirstEffectState != none && BloodThirstEffectState.GetTotalStacksRemaining() > 0;
 }
 

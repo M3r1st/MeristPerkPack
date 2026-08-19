@@ -25,9 +25,28 @@ static function array<X2DataTemplate> CreateTemplates()
 
     if (default.UseSlot != eInvSlot_Unknown)
     {
-        Templates.AddItem(CreateSlotTemplate());
+        if (default.UseSlot != eInvSlot_ExtraGrenadePocket || !IsModActive('ExtraGrenadePocket'))
+            Templates.AddItem(CreateSlotTemplate());
     }
     return Templates;
+}
+
+static final function bool IsModActive(name ModName)
+{
+    local XComOnlineEventMgr    EventManager;
+    local int                   Index;
+
+    EventManager = `ONLINEEVENTMGR;
+
+    for (Index = EventManager.GetNumDLC() - 1; Index >= 0; Index--) 
+    {
+        if (EventManager.GetDLCNames(Index) == ModName)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 static function X2DataTemplate CreateSlotTemplate()
@@ -151,16 +170,15 @@ static function SlotValidateLoadout(CHItemSlot Slot, XComGameState_Unit Unit, XC
     //  Unit has slot
     if (HasSlot)
     {
-        //  ... but not enough items equipped.
-        for (i = ItemStates.Length; i < iMaxItems; i++)
-        {
-            ItemState = FindBestWeapon(Unit, Slot.InvSlot, XComHQ, NewGameState);
-            if (ItemState != none)
-            {
-                Unit.AddItemToInventory(ItemState, Slot.InvSlot, NewGameState);
-            }
-            else return;    //  Could not find a weapon to put into the slot - exit.
-        }
+        // for (i = ; i < ItemStates.Length; i++)
+        // {
+        //     ItemState = FindBestWeapon(Unit, Slot.InvSlot, XComHQ, NewGameState);
+        //     if (ItemState != none)
+        //     {
+        //         Unit.AddItemToInventory(ItemState, Slot.InvSlot, NewGameState);
+        //     }
+        //     else return;    //  Could not find a weapon to put into the slot - exit.
+        // }
 
         //  ... but too many items equipped.
         for (i = ItemStates.Length; i > iMaxItems; i--)

@@ -2350,6 +2350,57 @@ static function X2Condition_ValidWeapon GetNoBallistaCondition()
     return Condition;
 }
 
+static function string GetWinterSentinelBallistaBonusString(string InString, name Type, Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+{
+    local XComGameState_Unit    SourceUnit;
+    local X2ItemTemplate        ItemTemplate;
+    local string                OutString;
+    local string                BallistaSuffix;
+
+    SourceUnit = class'X2DLCInfo_MeristPerkPack2'.static.GetSourceUnitFromParseObj(ParseObj, StrategyParseObj, GameState);
+    ItemTemplate = class'X2DLCInfo_MeristPerkPack2'.static.GetItemTemplateFromParseObj(ParseObj, StrategyParseObj, GameState);
+
+    if (class'X2AbilitySet_PA_WinterSentinel'.default.Ballista_Templates.Find(ItemTemplate.DataName) != INDEX_NONE)
+    {
+        BallistaSuffix = "_Ballista";
+        switch (Type)
+        {
+            case 'Int':
+                OutString = string(`GetConfigInt(InString $ BallistaSuffix));
+                break;
+            case 'Float':
+                OutString = class'X2DLCInfo_MeristPerkPack2'.static.TruncateFloat(`GetConfigFloat(InString $ BallistaSuffix)) $ "m";
+                break;
+            case 'Percent':
+                OutString = string(`GetConfigInt(InString $ BallistaSuffix)) $ "%";
+                break;
+        }
+        OutString = class'X2DLCInfo_MeristPerkPack2'.static.ColorText_Auto(OutString,, SourceUnit);
+        if (StrategyParseObj != none)
+        {
+            OutString $= class'X2DLCInfo_MeristPerkPack2'.static.ColorText_Green("*");
+        }
+    }
+    else
+    {
+        switch (Type)
+        {
+            case 'Int':
+                OutString = string(`GetConfigInt(InString));
+                break;
+            case 'Float':
+                OutString = class'X2DLCInfo_MeristPerkPack2'.static.TruncateFloat(`GetConfigFloat(InString)) $ "m";
+                break;
+            case 'Percent':
+                OutString = string(`GetConfigInt(InString)) $ "%";
+                break;
+        }
+        OutString = class'X2DLCInfo_MeristPerkPack2'.static.ColorText_Auto(OutString,, SourceUnit);
+    }
+
+    return OutString;
+}
+
 defaultproperties
 {
     HeavyOrdnanceAbilityName = M31_PA_WS_HeavyOrdnance

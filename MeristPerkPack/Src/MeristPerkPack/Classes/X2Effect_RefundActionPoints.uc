@@ -113,7 +113,7 @@ static function EventListenerReturn OnOverrideAbilityIconColor(Object EventData,
                         {
                             if (bIsTurnEnding)
                             {
-                                if (class'X2DLCInfo_MeristPerkPack'.default.CBAC_AllowedTypes.Find(Effect.ActionPointType) != INDEX_NONE)
+                                if (class'X2DLCInfo_MeristPerkPack2'.default.CBAC_AllowedTypes.Find(Effect.ActionPointType) != INDEX_NONE)
                                 {
                                     bOverride = true;
                                     PointCost = Max(0, UnitState.ActionPoints.Length - 1);
@@ -170,7 +170,7 @@ static function EventListenerReturn OnAbilityActivated(Object EventData, Object 
                 {
                     if (Effect.IsAbilityRelevant(AbilityState, SourceUnit, EffectState))
                     {
-                        if (!WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
+                        if (!class'M31_Helpers'.static.WasAbilityFree(AbilityState, SourceUnit, GameState.HistoryIndex - 1))
                         {
                             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
                             SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -219,7 +219,7 @@ function bool PostAbilityCostPaid(
         {
             if (IsAbilityRelevant(kAbility, SourceUnit, EffectState))
             {
-                if (!WasAbilityFree(kAbility, SourceUnit))
+                if (!class'M31_Helpers'.static.WasAbilityFree(kAbility, SourceUnit))
                 {
                     if (CountValueName != '')
                     {
@@ -298,45 +298,6 @@ function name GetActionPointType()
     {
         return class'X2CharacterTemplateManager'.default.StandardActionPoint;
     }
-}
-
-static function bool WasAbilityFree(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner, optional int HistoryIndex = -1)
-{
-    local XComGameStateHistory      History;
-    local XComGameState_Ability     OldAbilityState;
-    local XComGameState_Unit        OldAbilityOwner;
-    local X2AbilityTemplate         Template;
-    local X2AbilityCost             Cost;
-    local X2AbilityCost_ActionPoints ActionPointCost;
-
-    History = `XCOMHISTORY;
-
-    Template = AbilityState.GetMyTemplate();
-
-    if (HistoryIndex != -1)
-    {
-        OldAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityState.ObjectID,, HistoryIndex));
-        OldAbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityOwner.ObjectID,, HistoryIndex));
-    }
-    else
-    {
-        OldAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityState.ObjectID));
-        OldAbilityOwner = XComGameState_Unit(History.GetGameStateForObjectID(AbilityOwner.ObjectID));
-    }
-
-    foreach Template.AbilityCosts(Cost)
-    {
-        ActionPointCost = X2AbilityCost_ActionPoints(Cost);
-        if (ActionPointCost != none)
-        {
-            if (!ActionPointCost.bFreeCost && ActionPointCost.GetPointCost(OldAbilityState, OldAbilityOwner) > 0)
-            {
-                return false;
-            }
-        }
-    }
-
-    return true;
 }
 
 defaultproperties

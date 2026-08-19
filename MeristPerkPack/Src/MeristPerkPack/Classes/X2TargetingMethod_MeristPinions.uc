@@ -165,6 +165,7 @@ protected function bool CancelInput()
     if (TargetIndex > 0)
     {
         RemoveLastTargetTile();
+        CachedTargetLocation.Z = -255;
         return true; // after removing the last location you still have to cancel one additional time to unlock the area.
     }
     
@@ -192,14 +193,14 @@ function GetTargetLocations(out array<Vector> TargetLocations)
     TargetLocations.AddItem(LockedAreaLocation);
 
     // Then add all of the cached target locations
-    for (i = 0; i < TargetTiles.Length; i++)
+    for (i = 0; i < TargetIndex; i++)
     {
         CenterTile = TargetTiles[i];
         TargetLocations.AddItem(World.GetPositionFromTileCoordinates(CenterTile));
     }
 
     // Lastly, if there are still available targets, add the pending one
-    if (TargetTiles.Length < GetNumTargets())
+    if (TargetIndex < GetNumTargets())
     {
         Center = GetSplashRadiusCenter();
         CenterTile = World.GetTileCoordinatesFromPosition(Center);
@@ -254,9 +255,6 @@ function name ValidateTargetLocations(const array<Vector> TargetLocations)
 
 function bool VerifyTargetableFromIndividualMethod(delegate<ConfirmAbilityCallback> fnCallback)
 {
-    if (GetNumTargets() == 0)
-        return true;
-
     if (bFinalClickReady)
         return true;
 
@@ -266,7 +264,6 @@ function bool VerifyTargetableFromIndividualMethod(delegate<ConfirmAbilityCallba
         LockedAreaLocation = CachedTargetLocation;
         Cursor.m_fMaxChainedDistance = -1;
         bAreaLocked = true;
-        // Move to an impossible location to force an update
         CachedTargetLocation.Z = -255;
         return false;
     }
@@ -276,14 +273,11 @@ function bool VerifyTargetableFromIndividualMethod(delegate<ConfirmAbilityCallba
     // Then see if we need to lock more.
     if (TargetIndex < GetNumTargets())
     {
-        // Move to an impossible location to force an update
         CachedTargetLocation.Z = -255;
         return false;
     }
 
     bFinalClickReady = true;
-
-    // Move to an impossible location to force an update
     CachedTargetLocation.Z = -255;
     return false;
 }
@@ -318,7 +312,7 @@ protected function RemoveLastTargetTile()
     local XComEmitter TargetEmitter;
     local TTile EmptyTile;
 
-    if (TargetIndex >= 0)
+    if (TargetIndex > 0)
     {
         TargetEmitter = TargetEmitters[TargetIndex - 1];
         TargetEmitters.Remove(TargetIndex - 1, 1);
@@ -327,9 +321,6 @@ protected function RemoveLastTargetTile()
         TargetTiles[TargetIndex - 1] = EmptyTile;
 
         TargetIndex--;
-
-        // Move to an impossible location to force an update
-        CachedTargetLocation.Z = -255;
     }
 }
 
@@ -371,8 +362,9 @@ function Update(float DeltaTime)
         else if (!bFinalClickReady)
         {
             SelectedTile = World.GetTileCoordinatesFromPosition(NewTargetLocation);
-            if (class'Helpers'.static.FindTileInList(SelectedTile, AreaTiles) != INDEX_NONE &&
-                class'Helpers'.static.FindTileInList(SelectedTile, TargetTiles) == INDEX_NONE)
+            if (class'Helpers'.static.FindTileInList(SelectedTile, AreaTiles) != INDEX_NONE
+                && class'Helpers'.static.FindTileInList(SelectedTile, TargetTiles) == INDEX_NONE
+                && (!bRestrictToSquadsightRange || class'X2TacticalVisibilityHelpers'.static.CanSquadSeeLocation(AssociatedPlayerState.ObjectID, SelectedTile)))
             {
                 GetTargetedActors(NewTargetLocation, CurrentlyMarkedTargets, Tiles);
                 CheckForFriendlyUnit(CurrentlyMarkedTargets);
@@ -502,7 +494,7 @@ function int GetNumTargets()
 
 function int GetTargetIndex()
 {
-    return 0;
+    return -1;
 }
 
 function bool GetAdditionalTargets(out AvailableTarget AdditionalTargets)

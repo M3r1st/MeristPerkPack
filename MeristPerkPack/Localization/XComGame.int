@@ -101,9 +101,9 @@ LocPromotionPopupText="<Bullet> Requires a single action.<br><Bullet> Doesn't en
 [M31_ConcussiveGrenades X2AbilityTemplate]
 LocFriendlyName="Concussive Grenades"
 LocFlyOverText="Concussive Grenades"
-LocLongDescription="Your damaging grenades disorient and have a <Ability:M31_ConcussiveGrenades_StunChance> chance to stun enemies for <Ability:M31_ConcussiveGrenades_StunDuration> action(s)."
-LocHelpText="Your damaging grenades disorient and have a <Ability:M31_ConcussiveGrenades_StunChance> chance to stun enemies for <Ability:M31_ConcussiveGrenades_StunDuration> action(s)."
-LocPromotionPopupText="<Bullet> Affects both robotic and organic enemies."
+LocLongDescription="Your damaging grenades disorient and have a <Ability:M31_ConcussiveGrenades_StunChance> chance to stun targets for <Ability:M31_ConcussiveGrenades_StunDuration> action(s)."
+LocHelpText="Your damaging grenades disorient and have a <Ability:M31_ConcussiveGrenades_StunChance> chance to stun targets for <Ability:M31_ConcussiveGrenades_StunDuration> action(s)."
+LocPromotionPopupText="<Bullet> Affects both robotic and organic targets."
 
 [M31_ControlledDetonation X2AbilityTemplate]
 LocFriendlyName="Controlled Detonation"
@@ -232,6 +232,12 @@ LocFlyOverText="Improved Suppression"
 LocLongDescription="Your Suppression and Area Suppression abilities also disorient the primary target."
 LocHelpText="Your Suppression and Area Suppression abilities also disorient the primary target."
 LocPromotionPopupText="<Bullet> Disoriented units have reduced Aim and Mobility, and can't use most special abilities.<br><Bullet> The disorientation is applied when you activate suppression.<br><Bullet> This ability will disorient any unit (including robotic enemies) that is not specifically immune to disorientation.<br><Bullet> Having the suppression broken won't remove the disorientation early."
+
+[M31_KeenEdge X2AbilityTemplate]
+LocFriendlyName="Keen Edge"
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks deal +<Ability:M31_KeenEdge_DamageBonus> damage and pierce <Ability:M31_KeenEdge_PierceBonus> additional points of armor."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks deal +<Ability:M31_KeenEdge_DamageBonus> damage and pierce <Ability:M31_KeenEdge_PierceBonus> additional points of armor."
+LocPromotionPopupText="<Bullet> The bonus increases with the technology level of your <Ability:M31_BoundWeaponName>.<br><Bullet> Applies to all <Ability:M31_BoundWeaponName> attacks.<br><Bullet> Does not apply to damage-over-time effects."
 
 [M31_LowProfile X2AbilityTemplate]
 LocFriendlyName="Lower Profile"
@@ -600,9 +606,11 @@ LocFlyOverText="Caustic Terror"
 
 [M31_BleedingRoundsPassive X2AbilityTemplate]
 LocFriendlyName="Exsanguination"
-LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
-LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_BleedingRounds_BleedDamage> damage per turn for <Ability:M31_BleedingRounds_BleedDuration> turn(s)."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks."
+;  of the target's max HP (rounded up)
+; <br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers.
 
 [M31_BleedingRounds_Attack X2AbilityTemplate]
 LocFriendlyName="Exsanguination"
@@ -610,9 +618,9 @@ LocFlyOverText="Exsanguination"
 
 [M31_Bloodlet X2AbilityTemplate]
 LocFriendlyName="Bloodlet"
-LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
-LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> of the target's max HP (rounded up) damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
-LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks.<br><Bullet> Damage based on max HP is reduced to <Ability:M31_FontGold>1</font> against the Chosen and Alien Rulers."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks inflict bleeding, dealing <Ability:M31_Bloodlet_BleedDamage> damage per turn for <Ability:M31_Bloodlet_BleedDuration> turn(s)."
+LocPromotionPopupText="<Bullet> Applies to most <Ability:M31_BoundWeaponName> as well as most pistol attacks."
 
 [M31_Bloodlet_Attack X2AbilityTemplate]
 LocFriendlyName="Bloodlet"

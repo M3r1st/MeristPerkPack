@@ -4,22 +4,36 @@ LocFriendlyName="Forward Operator"
 LocFlyOverText="Forward Operator"
 LocLongDescription="Once per turn, when a new group of enemies is revealed, immediately gain an action."
 LocHelpText="Once per turn, when a new group of enemies is revealed, immediately gain an action."
-LocPromotionPopupText="<Bullet> Forward Operator can activate during the enemy turn.<br><Bullet> Forward Operator will activate even if the <Ability:ClassName> was not the one to reveal enemies."
+LocPromotionPopupText="<Bullet> Forward Operator can activate during the enemy turn. The action will be granted at the start of the <Ability:ClassName>'s next turn.<br><Bullet> Forward Operator will activate even if the <Ability:ClassName> was not the one to reveal enemies."
 
-[M31_SK_FullKit X2AbilityTemplate]
+[M31_SK_DeepPockets X2AbilityTemplate]
 LocFriendlyName="Deep Pockets"
 LocFlyOverText="Deep Pockets"
-LocLongDescription="Gain <Ability:M31_FontGold>3</font> <font color='#00ffff'>Ordnance</font> slots that can be used for grenades or ammo."
-LocHelpText=""
+LocLongDescription="Gain <Ability:M31_SK_DeepPockets_NumSlots> <font color='#00ffff'>Ordnance</font> slots that can be used for grenades or ammo."
+LocHelpText="Gain <Ability:M31_SK_DeepPockets_NumSlots> <font color='#00ffff'>Ordnance</font> slots that can be used for grenades or ammo."
 LocPromotionPopupText=""
+
+[M31_SK_BloodThirst X2AbilityTemplate]
+LocFriendlyName="Blood Thirst"
+LocFlyOverText="Blood Thirst"
+LocLongDescription="Whenever you perform a successful melee attack, gain a stackable +<Ability:M31_SK_BloodThirst_DamagePerStack> damage bonus for your melee attacks for <Ability:M31_SK_BloodThirst_StackDuration> turn(s)."
+LocHelpText="Whenever you perform a successful melee attack, gain a stackable damage bonus for your melee attacks."
+LocPromotionPopupText="<Bullet> The bonus increases only on succesful hits."
+
+[M31_SK_ZeroIn X2AbilityTemplate]
+LocFriendlyName="Zero In"
+LocFlyOverText="Zero In"
+LocLongDescription="Gain +<Ability:M31_SK_ZeroIn_CritPerShot> critical chance for each subsequent <Ability:M31_BoundWeaponName> attack, and additional +<Ability:M31_SK_ZeroIn_LockedInAimPerShot> aim if they are performed against the same target."
+LocHelpText="Gain +<Ability:M31_SK_ZeroIn_CritPerShot> critical chance for each subsequent <Ability:M31_BoundWeaponName> attack, and additional +<Ability:M31_SK_ZeroIn_LockedInAimPerShot> aim if they are performed against the same target."
+LocPromotionPopupText="<Bullet> The counter resets when the <Ability:ClassName> performs an offensive or a costly action that's not tied to their <Ability:M31_BoundWeaponName>. <br><Bullet> The effect persists in between multiple turns.<br><Bullet> Area-of-effect-based attacks do not grant the bonus."
 
 [M31_SK_Pinions X2AbilityTemplate]
-LocFriendlyName="Blazing Pinions"
-LocFlyOverText="Blazing Pinions"
-LocLongDescription="The pinions are blazing."
-LocHelpText="This is a help text."
-LocPromotionPopupText=""
+LocFriendlyName="Saturation Strike"
+LocFlyOverText="Saturation Strike"
+LocLongDescription="Select an area in a <Ability:M31_SK_Pinions_Range>-tile radius and <Ability:M31_SK_Pinions_NumTargets> locations in it. At the start of your next turn a missile will strike each location, dealing damage and setting targets on fire. Has a <Ability:M31_SelfCooldown>-turn cooldown and <Ability:M31_SelfCharges> charge(s) per mission."
+LocHelpText="Select an area and <Ability:M31_SK_Pinions_NumTargets> locations in it. At the start of your next turn a missile will strike each location."
+LocPromotionPopupText="<Bullet> Target locations must be visible and have overhead clearance.<br><Bullet> Initial area has a radius of <Ability:M31_SK_Pinions_AreaRadius>, and each missile a radius of <Ability:M31_SK_Pinions_Radius>.<br><Bullet> Each missile deals <Ability:M31_SK_Pinions_Damage> damage, <Ability:M31_SK_Pinions_EnvDamage> environmental damage, and shreds <Ability:M31_SK_Pinions_Shred> point(s) of armor.<br><Bullet> The missiles destroy timed loot and corpses: <Ability:M31_SK_Pinions_bExplosiveDamage>.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Has <Ability:M31_SelfCharges> charge(s) per mission."
 
 [M31_SK_Pinions_Attack X2AbilityTemplate]
-LocFriendlyName="Blazing Pinions"
-LocFlyOverText="Blazing Pinions"
+LocFriendlyName="Saturation Strike"
+LocFlyOverText="Saturation Strike"
