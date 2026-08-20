@@ -1,61 +1,18 @@
-class X2Effect_NullWard extends X2Effect_EnergyShieldExtended;
+class X2Effect_NullWard extends X2Effect_PersonalShield;
 
-struct AdditionalShieldAmountInfo
-{
-    var name RequiredAbility;
-    var int AdditionalAmount;
-};
-
-var int ShieldAmountBase;
 var int ShieldAmountPsiFactor;
 var bool ShieldAmountPsiFactor_bCeiling;
 var name ShieldAmountDamageTag;
-var array<AdditionalShieldAmountInfo> AdditionalShieldAmount;
-
-function AddAdditionalShieldAmount(name RequiredAbility, int Modifier)
-{
-    local AdditionalShieldAmountInfo ShieldModifier;
-    ShieldModifier.RequiredAbility = RequiredAbility;
-    ShieldModifier.AdditionalAmount = Modifier;
-    AdditionalShieldAmount.AddItem(ShieldModifier);
-}
 
 simulated function int GetShieldAmount(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
     local int Shield;
 
-    Shield = ShieldAmountBase;
+    Shield = super.GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
     Shield += GetAdditionalShieldAmountFromPsi(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 
     Shield += GetAdditionalShieldAmountFromDamageTag(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-
-    Shield += GetAdditionalShieldAmountFromAbilities(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-
-    return Shield;
-}
-
-simulated function int GetAdditionalShieldAmountFromAbilities(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
-{
-    local XComGameState_Unit SourceUnit;
-    local AdditionalShieldAmountInfo Info;
-    local int Shield;
-
-    if (AdditionalShieldAmount.Length == 0)
-        return 0;
-
-    SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-
-    if (SourceUnit != none)
-    {
-        foreach AdditionalShieldAmount(Info)
-        {
-            if (SourceUnit.HasSoldierAbility(Info.RequiredAbility))
-            {
-                Shield += Info.AdditionalAmount;
-            }
-        }
-    }
 
     return Shield;
 }

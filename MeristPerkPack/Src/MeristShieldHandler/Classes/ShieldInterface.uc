@@ -21,5 +21,3 @@ function bool ShouldRemoveEffect(
 function int GetShieldPriority();
 
 function bool RemoveWhenDepleted();
-
-function bool CanBeHandled();

@@ -19,8 +19,8 @@ static function CHEventListenerTemplate CreateTacticalListeners()
     Template.AddCHEvent(class'XGS_ShieldHandler'.default.UpdateEventName, OnHandlerUpdate, ELD_OnStateSubmitted, 50);
 
     Template.AddCHEvent('PersistentEffectAdded', OnPersistentEffectAdded, ELD_Immediate, 20);
-    Template.AddCHEvent('A', OnPrePersistentEffectRemoved, ELD_Immediate, 20);
-    Template.AddCHEvent('B', OnPostPersistentEffectRemoved, ELD_Immediate, 20);
+    Template.AddCHEvent('PrePersistentEffectRemoved', OnPrePersistentEffectRemoved, ELD_Immediate, 20);
+    Template.AddCHEvent('PostPersistentEffectRemoved', OnPostPersistentEffectRemoved, ELD_Immediate, 20);
 
     Template.RegisterInTactical = true;
 
@@ -29,18 +29,16 @@ static function CHEventListenerTemplate CreateTacticalListeners()
 
 static function EventListenerReturn OnUnitTakeEffectDamage(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
 {
-    local XComGameStateHistory  History;
     local XGS_ShieldHandler     Handler;
     local XComGameState_Unit    TargetUnit, NewTargetState;
     local XComGameState_Effect  EffectState, NewEffectState;
     local ShieldInterface       ShieldInterface;
+    local ShieldEffectData      EffectData;
     local int                   DamageRemaining, CurrentDamage;
     local int                   Index, UnitIndex;
     local bool                  bShouldRemove;
 
-    History = `XCOMHISTORY;
-
-    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
+    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState);
     TargetUnit = XComGameState_Unit(EventSource);
 
     if (Handler != none && TargetUnit != none)
@@ -55,48 +53,51 @@ static function EventListenerReturn OnUnitTakeEffectDamage(Object EventData, Obj
                 NewTargetState = XComGameState_Unit(NewGameState.ModifyStateObject(TargetUnit.Class, TargetUnit.ObjectID));
             }
 
-            DamageRemaining = NewTargetState.DamageResults[NewTargetState.DamageResults.Length - 1].DamageAbsorbedByShield;
-            if (DamageRemaining > 0)
+            DamageRemaining = NewTargetState.DamageResults[NewTargetState.DamageResults.Length - 1].ShieldHP;
+            if (DamageRemaining > 0 && Handler.UnitData[UnitIndex].Effects.Length > 0)
             {
+                Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
                 for (Index = Handler.UnitData[UnitIndex].Effects.Length - 1; Index >= 0 && DamageRemaining > 0; Index--)
                 {
-                    CurrentDamage = Min(DamageRemaining, Handler.UnitData[UnitIndex].Effects[Index].Amount);
-                    if (DamageCurrent > 0)
+                    EffectData = Handler.UnitData[UnitIndex].Effects[Index];
+                    if (EffectData.bShouldRemove)
                     {
-                        EffectState = XComGameState_Effect(NewGameState.GetGameStateForObjectID(Handler.UnitData[UnitIndex].Effects[Index].EffectID));
+                        continue;
+                    }
+                    CurrentDamage = Min(DamageRemaining, EffectData.Amount);
+                    if (CurrentDamage > 0)
+                    {
+                        EffectState = XComGameState_Effect(NewGameState.GetGameStateForObjectID(EffectData.EffectID));
                         if (EffectState == none)
                         {
                             NewEffectState = XComGameState_Effect(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
                         }
-                        if (EffectState != none)
+                        if (EffectState != none && !EffectState.bRemoved)
                         {
                             ShieldInterface = ShieldInterface(NewEffectState.GetX2Effect());
                             if (ShieldInterface != none)
                             {
-                                ShieldInterface.ShieldsTakeDamage(x, Handler.UnitData[UnitIndex].Effects[Index], NewEffectState, NewTargetState, NewGameState);
+                                ShieldInterface.ShieldsTakeDamage(CurrentDamage, EffectData, NewEffectState, NewTargetState, NewGameState);
                             }
 
                             DamageRemaining -= CurrentDamage;
-                            Handler.UnitData[UnitIndex].Effects[Index].Amount -= CurrentDamage;
+                            EffectData.Amount -= CurrentDamage;
 
                             if (ShieldInterface != none && ShieldInterface.OverrideShouldRemoveEffect())
                             {
-                                bShouldRemove = ShieldInterface.ShouldRemoveEffect(x, Handler.UnitData[UnitIndex].Effects[Index], NewEffectState, NewTargetState, NewGameState);
+                                bShouldRemove = ShieldInterface.ShouldRemoveEffect(CurrentDamage, EffectData, NewEffectState, NewTargetState, NewGameState);
                             }
                             else
                             {
-                                bShouldRemove = Handler.UnitData[UnitIndex].Effects[Index].bRemoveWhenDepleted && (Handler.UnitData[UnitIndex].Effects[Index].Amount <= 0);
+                                bShouldRemove = EffectData.bRemoveWhenDepleted && (EffectData.Amount <= 0);
                             }
 
-                            Handler.UnitData[UnitIndex].Effects[Index].bShouldRemove = bShouldRemove;
+                            EffectData.bShouldRemove = bShouldRemove;
+                            Handler.UnitData[UnitIndex].Effects[Index] = EffectData;
 
                             if (bShouldRemove)
                             {
-                                if (!Handler.bRequiresUpdate)
-                                {
-                                    Handler.bRequiresUpdate = true;
-                                    `XEVENTMGR.TriggerEvent(class'XGS_ShieldHandler'.default.UpdateEventName, none, none, NewGameState);
-                                }
+                                Handler.RequestUpdate(NewGameState);
                             }
                         }
                     }
@@ -104,6 +105,8 @@ static function EventListenerReturn OnUnitTakeEffectDamage(Object EventData, Obj
             }
         }
     }
+
+    return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn OnHandlerUpdate(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -112,7 +115,6 @@ static function EventListenerReturn OnHandlerUpdate(Object EventData, Object Eve
     local XGS_ShieldHandler     Handler;
     local XComGameState         NewGameState;
     local XComGameStateContext_EffectRemoved EffectRemovedContext;
-    local XComGameState_Unit    NewTargetState;
     local XComGameState_Effect  NewEffectState;
     local int                   Index, UnitIndex;
     local bool                  bCleansed, bPurge;
@@ -127,7 +129,6 @@ static function EventListenerReturn OnHandlerUpdate(Object EventData, Object Eve
 
     for (UnitIndex = Handler.UnitData.Length - 1; UnitIndex >= 0; UnitIndex--)
     {
-        NewTargetState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', Handler.UnitData[UnitIndex].UnitID));
         for (Index = Handler.UnitData[UnitIndex].Effects.Length - 1; Index >= 0; Index--)
         {
             if (Handler.UnitData[UnitIndex].Effects[Index].bShouldRemove)
@@ -145,6 +146,8 @@ static function EventListenerReturn OnHandlerUpdate(Object EventData, Object Eve
     }
 
     `TACTICALRULES.SubmitGameState(NewGameState);
+
+    return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn OnPersistentEffectAdded(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
@@ -156,38 +159,45 @@ static function EventListenerReturn OnPersistentEffectAdded(Object EventData, Ob
     local ShieldInterface       ShieldInterface;
     local int                   Index, Amount;
 
-    // 'PersistentEffectAdded' doesn't pass the NewGameState. Thanks, Firaxis. 
-    NewGameState = NewTargetState.GetParentGameState();
-    if (NewGameState != none)
-    {
-        Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
-        NewTargetState = XComGameState_Unit(EventSource);
-        NewEffectState = XComGameState_Effect(EventData);
+    NewTargetState = XComGameState_Unit(EventSource);
+    NewEffectState = XComGameState_Effect(EventData);
 
-        if (Handler != none && NewTargetState != none && NewEffectState != none)
+    if (NewTargetState != none && NewEffectState != none)
+    {
+        // 'PersistentEffectAdded' doesn't pass the NewGameState. Thanks, Firaxis. 
+        NewGameState = NewTargetState.GetParentGameState();
+        if (NewGameState != none)
         {
-            if (class'XGS_ShieldHandler'.static.IsEffectValidForHandling(NewEffectState))
+            Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState);
+
+            if (Handler != none)
             {
-                Index = NewEffectState.StatChanges.Find('StatType', eStat_ShieldHP);
-                if (Index != INDEX_NONE)
+                if (class'XGS_ShieldHandler'.static.IsEffectValidForHandling(NewEffectState))
                 {
-                    Amount = NewEffectState.StatChanges[Index].StatAmount;
-                    if (Amount > 0 && NewEffectState.StatChanges[Index].ModOp == MODOP_Addition)
+                    Index = NewEffectState.StatChanges.Find('StatType', eStat_ShieldHP);
+                    if (Index != INDEX_NONE)
                     {
-                        ShieldInterface = ShieldInterface(NewEffectState.GetX2Effect());
-                        if (ShieldInterface != none)
+                        Amount = NewEffectState.StatChanges[Index].StatAmount;
+                        if (Amount > 0 && NewEffectState.StatChanges[Index].ModOp == MODOP_Addition)
                         {
-                            Handler.UpdateShieldEffectData(NewTargetState.ObjectID, NewEffectState.ObjectID, Amount, ShieldInterface.GetShieldPriority(), ShieldInterface.RemoveWhenDepleted());
-                        }
-                        else
-                        {
-                            Handler.UpdateShieldEffectData(NewTargetState.ObjectID, NewEffectState.ObjectID, Amount);
+                            Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
+                            ShieldInterface = ShieldInterface(NewEffectState.GetX2Effect());
+                            if (ShieldInterface != none)
+                            {
+                                Handler.UpdateShieldEffectData(NewTargetState.ObjectID, NewEffectState.ObjectID, Amount, ShieldInterface.GetShieldPriority(), ShieldInterface.RemoveWhenDepleted());
+                            }
+                            else
+                            {
+                                Handler.UpdateShieldEffectData(NewTargetState.ObjectID, NewEffectState.ObjectID, Amount);
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn OnPrePersistentEffectRemoved(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
@@ -197,7 +207,7 @@ static function EventListenerReturn OnPrePersistentEffectRemoved(Object EventDat
     local XComGameState_Effect  NewEffectState;
     local int                   Index, UnitIndex;
 
-    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
+    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState);
     NewTargetState = XComGameState_Unit(EventSource);
     NewEffectState = XComGameState_Effect(EventData);
 
@@ -209,10 +219,13 @@ static function EventListenerReturn OnPrePersistentEffectRemoved(Object EventDat
             Index = Handler.UnitData[UnitIndex].Effects.Find('EffectID', NewEffectState.ObjectID);
             if (Index != INDEX_NONE)
             {
+                Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
                 Handler.UnitData[UnitIndex].Effects[Index].ShieldCached = NewTargetState.GetCurrentStat(eStat_ShieldHP);
             }
         }
     }
+
+    return ELR_NoInterrupt;
 }
 
 static function EventListenerReturn OnPostPersistentEffectRemoved(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
@@ -223,7 +236,7 @@ static function EventListenerReturn OnPostPersistentEffectRemoved(Object EventDa
     local int                   Index, UnitIndex;
     local int                   NewShieldHP;
 
-    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
+    Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState);
     NewTargetState = XComGameState_Unit(EventSource);
     NewEffectState = XComGameState_Effect(EventData);
 
@@ -235,13 +248,16 @@ static function EventListenerReturn OnPostPersistentEffectRemoved(Object EventDa
             Index = Handler.UnitData[UnitIndex].Effects.Find('EffectID', NewEffectState.ObjectID);
             if (Index != INDEX_NONE)
             {
+                Handler = class'XGS_ShieldHandler'.static.GetHandlerState(NewGameState, true);
                 NewShieldHP = Handler.UnitData[UnitIndex].Effects[Index].ShieldCached - Handler.UnitData[UnitIndex].Effects[Index].Amount;
                 if (NewShieldHP > 0)
                 {
                     NewTargetState.SetCurrentStat(eStat_ShieldHP, NewShieldHP);
                 }
-                Handler.UnitData[UnitIndex].Effects.Remove(Index, 1);
+                Handler.RemoveShieldEffectData(UnitIndex, Index);
             }
         }
     }
+
+    return ELR_NoInterrupt;
 }

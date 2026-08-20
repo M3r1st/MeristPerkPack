@@ -879,7 +879,7 @@ static function bool GetMutonOutStrings(string InString, out string OutString, O
         case "M31_PA_PersonalShield_ShieldAmount":
             if (XComGameState_Ability(ParseObj) != none && StrategyParseOb == none)
             {
-                Value = class'X2DLCInfo_MeristEnhancedShieldEffects'.static.GetShieldAmountPreview(ParseObj, StrategyParseOb, GameState);
+                Value = class'X2Effect_PersonalShield'.static.GetShieldAmountPreviewFromParseObj(ParseObj, StrategyParseOb, GameState);
                 OutString = ColorText_Auto(Value,, UnitState);
             }
             else
@@ -1287,7 +1287,7 @@ static function bool GetShieldbearerOutStrings(string InString, out string OutSt
             AbilityState = XComGameState_Ability(ParseObj);
             if (AbilityState != none && StrategyParseOb == none)
             {
-                Value = class'X2DLCInfo_MeristEnhancedShieldEffects'.static.GetShieldAmountPreview(ParseObj, StrategyParseOb, GameState);
+                Value = class'X2Effect_PersonalShield'.static.GetShieldAmountPreviewFromParseObj(ParseObj, StrategyParseOb, GameState);
                 OutString = ColorText_Auto(Value,, UnitState);
             }
             else

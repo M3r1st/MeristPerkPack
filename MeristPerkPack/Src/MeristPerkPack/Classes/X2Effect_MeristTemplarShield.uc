@@ -1,36 +1,57 @@
-class X2Effect_MeristTemplarShield extends X2Effect_EnergyShieldExtended;
+class X2Effect_MeristTemplarShield extends X2Effect_PersistentStatChange implements(ShieldInterface);
 
 var privatewrite name TemplarShield_ShieldValueName;
 var privatewrite name TemplarShield_ShieldRemovedEventName;
+var int ShieldPriority;
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-    local XComGameState_Unit                kTargetUnitState;
+    local XComGameState_Unit kTargetUnitState;
     local int ShieldStrength;
 
+    m_aStatChanges.Length = 0;
+
     kTargetUnitState = XComGameState_Unit(kNewTargetState);
-    ShieldStrength = GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
-    kTargetUnitState.SetUnitFloatValue(default.TemplarShield_ShieldValueName, ShieldStrength, eCleanup_BeginTactical);
-    
+    if (kTargetUnitState != none)
+    {
+        ShieldStrength = GetShieldAmount(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+        super(X2Effect_PersistentStatChange).AddPersistentStatChange(eStat_ShieldHP, ShieldStrength);
+        kTargetUnitState.SetUnitFloatValue(default.TemplarShield_ShieldValueName, ShieldStrength, eCleanup_BeginTactical);
+    }
+
     super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
 }
 
 simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParameters, XComGameState NewGameState, bool bCleansed, XComGameState_Effect RemovedEffectState)
 {
-    local XComGameState_Unit                UnitState;
+    local XComGameState_Unit UnitState;
 
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-    `assert(UnitState != none);
-    UnitState.SetUnitFloatValue(default.TemplarShield_ShieldValueName, 0, eCleanup_BeginTactical);
+    UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+    if (UnitState == none)
+    {
+        UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+    }
+    if (UnitState != none)
+    {
+        UnitState.SetUnitFloatValue(default.TemplarShield_ShieldValueName, 0, eCleanup_BeginTactical);
+    }
 
     `XEVENTMGR.TriggerEvent(default.TemplarShield_ShieldRemovedEventName, UnitState, UnitState, NewGameState);
 
     super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
-function TemplarShieldTakesDamage(X2Effect_EnergyShieldExtended ShieldEffect, XComGameState_Effect kNewEffectState, XComGameState NewGameState, XComGameState_Unit kTargetUnitState, int DamageTaken)
+function bool OverrideShouldRemoveEffect() { return false; }
+
+function bool ShouldRemoveEffect(int DamageTaken, const out ShieldEffectData CurrentShieldData, XComGameState_Effect kNewEffectState, XComGameState_Unit kTargetUnitState, XComGameState NewGameState) { return false; }
+
+function int GetShieldPriority() { return ShieldPriority; }
+
+function bool RemoveWhenDepleted() { return true; }
+
+function ShieldsTakeDamage(int DamageTaken, const out ShieldEffectData CurrentShieldData, XComGameState_Effect kNewEffectState, XComGameState_Unit kTargetUnitState, XComGameState NewGameState)
 {
-    local UnitValue             ShieldRemainingUV;
+    local UnitValue ShieldRemainingUV;
 
     kTargetUnitState.GetUnitValue(default.TemplarShield_ShieldValueName, ShieldRemainingUV);
     kTargetUnitState.SetUnitFloatValue(default.TemplarShield_ShieldValueName, ShieldRemainingUV.fValue - DamageTaken, eCleanup_BeginTactical);
@@ -72,9 +93,7 @@ static final function bool WasUnitFullyProtected(const XComGameState_Unit OldUni
     //`LOG("Unit fully protected:" @ NewUnitState.GetCurrentStat(eStat_HP) >= OldUnitState.GetCurrentStat(eStat_HP),, 'TemplarParryRework');
 
     // Bleeding out check is required, because if the unit had 1 HP before the attack that made them start bleeding out, they will still have 1 HP while bleeding out.
-    return NewUnitState.GetCurrentStat(eStat_HP) >= OldUnitState.GetCurrentStat(eStat_HP) &&
-        !NewUnitState.IsBleedingOut() &&
-        ShieldRemainingUV.fValue >= 0;
+    return NewUnitState.GetCurrentStat(eStat_HP) >= OldUnitState.GetCurrentStat(eStat_HP) && !NewUnitState.IsBleedingOut() && ShieldRemainingUV.fValue >= 0;
 }
 
 static final function bool WasShieldFullyConsumed(const XComGameState_Unit OldUnitState, const XComGameState_Unit NewUnitState)
@@ -116,8 +135,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
     local X2EventManager EventMgr;
     local Object EffectObj;
-
-    super.RegisterForEvents(EffectGameState);
 
     EventMgr = `XEVENTMGR;
     EffectObj = EffectGameState;
@@ -534,6 +551,5 @@ defaultproperties
     EffectName = "IRI_TemplarShield_Effect"
     TemplarShield_ShieldValueName = "M31_TemplarShieldHP"
     TemplarShield_ShieldRemovedEventName = "M31_TemplarShield_Removed"
-    ShieldsTakeDamageFn = TemplarShieldTakesDamage
     EffectRemovedVisualizationFn = OnShieldRemoved_BuildVisualization
 }
