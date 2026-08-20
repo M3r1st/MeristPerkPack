@@ -55,6 +55,8 @@
     <Folder Include="Src\XModBase_Core_3_0_0\Classes\" />
     <Folder Include="Src\XModBase_Interfaces\" />
     <Folder Include="Src\XModBase_Interfaces\Classes\" />
+    <Folder Include="Src\MeristShieldHandler\" />
+    <Folder Include="Src\MeristShieldHandler\Classes\" />
     <Content Include="ContentOptions.json" />
     <Content Include="ModPreview.jpg" />
     <Content Include="PublishedFileId.ID" />
@@ -416,5 +418,9 @@
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBTargetingMethod_Grenade.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBEffectInterface.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBOverrideInterface.uc" />
+    <Content Include="Src\MeristShieldHandler\Classes\ShieldInterface.uc" />
+    <Content Include="Src\MeristShieldHandler\Classes\X2DLCInfo_MeristShieldHandler.uc" />
+    <Content Include="Src\MeristShieldHandler\Classes\X2EventListener_ShieldHandler.uc" />
+    <Content Include="Src\MeristShieldHandler\Classes\XGS_ShieldHandler.uc" />
   </ItemGroup>
 </Project>
