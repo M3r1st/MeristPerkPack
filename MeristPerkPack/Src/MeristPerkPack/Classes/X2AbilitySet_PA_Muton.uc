@@ -72,6 +72,7 @@ static function X2DataTemplate PersonalShield()
     Template.AddTargetEffect(Effect);
 
     Template.CustomFireAnim = 'HL_SignalPositive';
+    Template.bShowActivation = false;
 
     Template.BuildVisualizationFn = PersonalShield_BuildVisualization;
 
