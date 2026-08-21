@@ -590,9 +590,15 @@ LocFlyOverText="Eyeful Watch"
 [M31_ZoneOfControl X2AbilityTemplate]
 LocFriendlyName="Zone of Control"
 LocFlyOverText="Zone of Control"
-LocLongDescription="All enemies within <Ability:M31_ZoneOfControl_Radius> tile(s) suffer a penalty of -<Ability:M31_ZoneOfControl_AimPenalty> aim and -<Ability:M31_ZoneOfControl_MobilityPenalty> mobility."
-LocHelpText="All enemies within <Ability:M31_ZoneOfControl_Radius> tile(s) suffer a penalty of -<Ability:M31_ZoneOfControl_AimPenalty> aim and -<Ability:M31_ZoneOfControl_MobilityPenalty> mobility."
-LocPromotionPopupText="<Bullet> The effect is active even if the <Ability:ClassName> is impaired: <Ability:M31_ZoneOfControl_bAllowWhileImpaired>.<br><Bullet> The penalty can stack: <Ability:M31_ZoneOfControl_bAllowStack>."
+LocLongDescription="All enemies in a <Ability:M31_ZoneOfControl_Radius> radius suffer a penalty to aim and mobility."
+LocHelpText="All enemies in a <Ability:M31_ZoneOfControl_Radius> radius suffer a penalty to aim and mobility."
+LocPromotionPopupText="<Bullet> Reduces aim by <Ability:M31_ZoneOfControl_AimPenalty> and mobility by <Ability:M31_ZoneOfControl_MobilityPenalty>.<br><Bullet> The effect is active even if the <Ability:ClassName> is impaired: <Ability:M31_ZoneOfControl_bAllowWhileImpaired>.<br><Bullet> The penalty can stack: <Ability:M31_ZoneOfControl_bAllowStack>."
+
+[M31_ZoneOfControl_Passive X2AbilityTemplate]
+LocFriendlyName="Zone of Control"
+LocFlyOverText="Zone of Control"
+LocLongDescription="All enemies in a <Ability:M31_ZoneOfControl_Radius> radius suffer a penalty to aim and mobility."
+LocHelpText="All enemies in a <Ability:M31_ZoneOfControl_Radius> radius suffer a penalty to aim and mobility."
 
 [M31_AcidRoundsPassive X2AbilityTemplate]
 LocFriendlyName="Caustic Terror"

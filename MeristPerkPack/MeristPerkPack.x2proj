@@ -416,5 +416,6 @@
     <Content Include="Src\XModBase_Core_3_0_0\Classes\XMBTargetingMethod_Grenade.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBEffectInterface.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBOverrideInterface.uc" />
+    <Content Include="Content\M31_Perks.upk" />
   </ItemGroup>
 </Project>

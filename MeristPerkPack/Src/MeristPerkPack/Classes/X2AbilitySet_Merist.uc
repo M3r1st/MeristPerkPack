@@ -3169,7 +3169,7 @@ static function X2AbilityTemplate ZoneOfControl()
     local X2Condition_UnitEffectsWithAbilitySource EffectCondition;
     local X2Effect_ZoneOfControl            Effect;
 
-    Template = SelfTargetTrigger('M31_ZoneOfControl', "img:///UILibrary_XPACK_Common.PerkIcons.weak_EasyTarget");
+    Template = SelfTargetTrigger('M31_ZoneOfControl', "img:///UILibrary_WOTC_APA_Class_Pack_LW.perk_ZoneOfControl");
 
     Template.BuildVisualizationFn = none;
     Template.AbilityTargetStyle = default.SingleTargetWithSelf;
@@ -3213,16 +3213,41 @@ static function X2AbilityTemplate ZoneOfControlPassive()
     local X2AbilityTemplate             Template;
     local X2Effect_ZoneOfControl_Source Effect;
 
-    Template = Passive('M31_ZoneOfControl_Passive', "img:///UILibrary_XPACK_Common.PerkIcons.weak_EasyTarget", false, false);
+    // TODO: Import icon
+    Template = Passive('M31_ZoneOfControl_Passive', "img:///UILibrary_WOTC_APA_Class_Pack_LW.perk_ZoneOfControl", false, false);
+    Template.bIsPassive = false;
 
     Effect = new class'X2Effect_ZoneOfControl_Source';
-    Effect.EffectName = 'M31_ZoneOfControl_Passive';
     Effect.UpdateEventName = class'X2Effect_ZoneOfControl'.default.UpdateEventName;
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
+    // TODO: Does this need a sync?
+    // Template.BuildAppliedVisualizationSyncFn = ZoneOfControl_BuildVisualizationSync;
+
     return Template;
+}
+
+static function ZoneOfControl_BuildVisualizationSync(name EffectName, XComGameState VisualizeGameState, out VisualizationActionMetadata ActionMetadata)
+{
+    local XComGameStateContext_Ability  AbilityContext;
+    local X2AbilityTemplate             AbilityTemplate;
+    local int                           i;
+
+    if (!`XENGINE.IsMultiplayerGame() && EffectName == class'X2Effect_ZoneOfControl_Source'.default.EffectName)
+    {
+        AbilityContext = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+        AbilityTemplate = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate(AbilityContext.InputContext.AbilityTemplateName);
+
+        // The references to the shooter effect instances in the input context don't restore to be the references to the ability
+        // template that they should.  Which is okay, we'll just use the effects directly.
+        for (i = 0; i < AbilityTemplate.AbilityShooterEffects.Length; i++)
+        {
+            AbilityTemplate.AbilityShooterEffects[i].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, 
+                AbilityContext.ResultContext.ShooterEffectResults.ApplyResults[i]);
+        }
+    }
 }
 
 static function X2AbilityTemplate AcidRoundsAttackPassive()

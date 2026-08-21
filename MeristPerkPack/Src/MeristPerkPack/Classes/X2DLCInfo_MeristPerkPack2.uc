@@ -308,6 +308,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Warbringer_RadiusBonus":
         case "M31_WatchfulEye_ActivationsPerTurn":
         case "M31_WatchfulEye_AttacksPerTurn":
+        case "M31_ZoneOfControl_AimPenalty":
+        case "M31_ZoneOfControl_MobilityPenalty":
             OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
             return true;
 
@@ -337,6 +339,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_SawedOffSweeper_Width":
         case "M31_SawedOffSweeper_WidthPerAmmo":
             OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)) $ "m",, UnitState);
+            return true;
+
+        case "M31_ZoneOfControl_Radius":
+            OutString = ColorText_Auto(TruncateFloat(`GetConfigFloat(InString)),, UnitState);
             return true;
 
         case "M31_BloodThirst_bIncreaseOnlyOnHit":

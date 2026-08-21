@@ -1,4 +1,4 @@
-class X2Effect_PersistentAuraWithStats_Source extends X2Effect_Persistent;
+class X2Effect_PersistentAuraWithStats_Source extends X2Effect_Persistent abstract;
 
 var name UpdateEventName;
 
@@ -40,7 +40,14 @@ static function EventListenerReturn UpdateStats(Object EventData, Object EventSo
             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Aura update for " $ EffectState.ApplyEffectParameters.AbilityInputContext.AbilityTemplateName);
             SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
             `XEVENTMGR.TriggerEvent(Effect.UpdateEventName, SourceUnit, SourceUnit, NewGameState);
-            `TACTICALRULES.SubmitGameState(NewGameState);
+            if (NewGameState.GetNumGameStateObjects() > 0)
+            {
+                `TACTICALRULES.SubmitGameState(NewGameState);
+            }
+            else
+            {
+                History.CleanupPendingGameState(NewGameState);
+            }
         }
     }
 
@@ -49,5 +56,6 @@ static function EventListenerReturn UpdateStats(Object EventData, Object EventSo
 
 defaultproperties
 {
+    EffectName = M31_PersistentAuraWithStats_Source
     DuplicateResponse = eDupe_Ignore
 }

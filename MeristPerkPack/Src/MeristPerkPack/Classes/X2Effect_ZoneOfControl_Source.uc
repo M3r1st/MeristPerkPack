@@ -22,3 +22,8 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
         EventMgr.RegisterForEvent(EffectObj, 'ImpairingEffect', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
     }
 }
+
+defaultproperties
+{
+    EffectName = M31_ZoneOfControl_Source
+}
