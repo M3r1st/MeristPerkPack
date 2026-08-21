@@ -240,7 +240,7 @@ static function X2AbilityTemplate Lockjaw()
     Template.bFrameEvenWhenUnitIsHidden = true;
 
     ToHitCalc = new class'X2AbilityToHitCalc_StandardMelee';
-    ToHitCalc.BuiltInHitMod = `GetConfigInt("MM31_PA_Lockjaw_AimBonus");
+    ToHitCalc.BuiltInHitMod = `GetConfigInt("M31_PA_Lockjaw_AimBonus");
     ToHitCalc.BuiltInCritMod = `GetConfigInt("M31_PA_Lockjaw_CritBonus");
     ToHitCalc.bAllowCrit = `GetConfigBool("M31_PA_Lockjaw_bAllowCrit");
     ToHitCalc.bReactionFire = true;
