@@ -1,2 +1,2 @@
 [X2Effect_SK_ZeroIn]
-strFriendlyDesc = ""
+strFriendlyDesc = "Gains bonus critical chance for each subsequent <Ability:M31_BoundWeaponName> attack, and additional bonus aim if they are performed against the same target."
