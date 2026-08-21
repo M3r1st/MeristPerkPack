@@ -196,6 +196,7 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_BloodThirst_MaxStacks":
         case "M31_BloodThirst_MaxStacksPerTurn":
         case "M31_BloodThirst_StackDuration":
+        case "M31_BombAndRun_ActivationsPerTurn":
         case "M31_Botnet_Duration":
         case "M31_Botnet_HackDefenseChange":
         case "M31_BurstFire_Cooldown":
