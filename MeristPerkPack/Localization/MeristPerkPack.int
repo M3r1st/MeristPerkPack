@@ -1,6 +1,7 @@
 [X2DLCInfo_MeristPerkPack2]
 
 strDefaultWeapon            = "weapon"
+strDefaultWeapon_Pistol     = "pistol"
 strPerRank                  = "per rank"
 strFreeAction               = "Free action"
 

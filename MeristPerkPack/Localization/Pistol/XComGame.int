@@ -1,8 +1,8 @@
 [M31_ClutchShot X2AbilityTemplate]
 LocFriendlyName="Crutch Shot"
 LocFlyOverText="Crutch Shot"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that's guaranteed to hit, but cannot crit."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that's guaranteed to hit, but cannot crit."
+LocLongDescription="Take a special <Ability:M31_BoundPistolName> shot that's guaranteed to hit, but cannot crit."
+LocHelpText="Special <Ability:M31_BoundPistolName> shot that's guaranteed to hit, but cannot crit."
 LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_ClutchShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_ClutchShotCrit X2AbilityTemplate]
@@ -26,8 +26,8 @@ LocFlyOverText="Nice Feature"
 [M31_PistolAvenger X2AbilityTemplate]
 LocFriendlyName="Han Shot First"
 LocFlyOverText="Han Shot First"
-LocLongDescription="Once per turn, take a preemptive <Ability:M31_BoundWeaponName> shot against a visible enemy that takes an offensive action."
-LocHelpText="Once per turn, take a preemptive <Ability:M31_BoundWeaponName> shot against a visible enemy that takes an offensive action."
+LocLongDescription="Once per turn, take a preemptive <Ability:M31_BoundPistolName> shot against a visible enemy that takes an offensive action."
+LocHelpText="Once per turn, take a preemptive <Ability:M31_BoundPistolName> shot against a visible enemy that takes an offensive action."
 LocPromotionPopupText="<Bullet> Counts as reaction fire: <Ability:M31_PistolAvenger_bReactionFire>.<br><Bullet> Ignores cover bonuses: <Ability:M31_PistolAvenger_bIgnoreCoverBonus>."
 
 [M31_PistolAvenger_Attack X2AbilityTemplate]
@@ -37,29 +37,29 @@ LocFlyOverText="Han Shot First"
 [M31_PistolDetonationShot X2AbilityTemplate]
 LocFriendlyName="Detonation Shot (Pistol)"
 LocFlyOverText="Detonation Shot (Pistol)"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that detonates explosives carried by the enemy. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that detonates explosives carried by the enemy."
+LocLongDescription="Take a special <Ability:M31_BoundPistolName> shot that detonates explosives carried by the enemy. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Special <Ability:M31_BoundPistolName> shot that detonates explosives carried by the enemy."
 LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDetonationShot_AmmoCost> ammo."
 
 [M31_PistolDisarmingShot X2AbilityTemplate]
 LocFriendlyName="Disarming Shot (Pistol)"
 LocFlyOverText="Disarming Shot (Pistol)"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that disables the target's weapon, forcing them to reload before firing."
+LocLongDescription="Take a special <Ability:M31_BoundPistolName> shot that disables the target's weapon, forcing them to reload before firing. Reduces the target's aim by <Ability:M31_DisarmingShot_AimPenalty> and critical chance by <Ability:M31_DisarmingShot_CritPenalty> for <Ability:M31_DisarmingShot_Duration> turn(s). Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Special <Ability:M31_BoundPistolName> shot that disables the target's weapon, forcing them to reload before firing."
 LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolDisarmingShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
 
 [M31_PistolMaim X2AbilityTemplate]
 LocFriendlyName="Maim (Pistol)"
 LocFlyOverText="Maim (Pistol)"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that immobilizes the target until the end of their next turn."
+LocLongDescription="Take a special <Ability:M31_BoundPistolName> shot that immobilizes the target until the end of their next turn. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Special <Ability:M31_BoundPistolName> shot that immobilizes the target until the end of their next turn."
 LocPromotionPopupText="<Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolMaim_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Useful to isolate a high-value target during an ambush.<br><Bullet> Certain enemies cannot be immobilized."
 
 [M31_PistolRouletteShot X2AbilityTemplate]
 LocFriendlyName="Roulette"
 LocFlyOverText="Roulette"
-LocLongDescription="Take a special <Ability:M31_BoundWeaponName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
-LocHelpText="Special <Ability:M31_BoundWeaponName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
+LocLongDescription="Take a special <Ability:M31_BoundPistolName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
+LocHelpText="Special <Ability:M31_BoundPistolName> shot that deals either <Ability:M31_PistolRouletteShot_MinDamagePrc> or <Ability:M31_PistolRouletteShot_MaxDamagePrc> of the normal damage."
 LocPromotionPopupText="<Bullet> The probability of the outcomes is equal.<br><Bullet> Affected by <Ability:M31_FontAbility>Quickdraw</font> and <Ability:M31_FontAbility>Bullet Time</font>.<br><Bullet> Requires <Ability:M31_PistolRouletteShot_AmmoCost> ammo.<br><Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_PistolRouletteShot_Damage X2AbilityTemplate]
@@ -69,8 +69,8 @@ LocFlyOverText="Roulette"
 [M31_ReflexShot X2AbilityTemplate]
 LocFriendlyName="Reflex Shot"
 LocFlyOverText="Reflex Shot"
-LocLongDescription="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
-LocHelpText="Once per turn, take a free <Ability:M31_BoundWeaponName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
+LocLongDescription="Once per turn, take a free <Ability:M31_BoundPistolName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
+LocHelpText="Once per turn, take a free <Ability:M31_BoundPistolName> shot against any visible enemy that moves or attacks from within a <Ability:M31_ReflexShot_Radius>-tile radius."
 LocPromotionPopupText="<Bullet> Will not activate while the soldier is concealed or during their own turn.<br><Bullet> Will not activate against enemies with Shadowstep.<br><Bullet> Affected by reaction fire penalties: <Ability:M31_ReflexShot_bReactionFire>."
 
 [M31_ReflexShot_Attack X2AbilityTemplate]
@@ -80,13 +80,13 @@ LocFlyOverText="Reflex Shot"
 [M31_SleightOfHand X2AbilityTemplate]
 LocFriendlyName="Sleight of Hand"
 LocFlyOverText="Sleight of Hand"
-LocLongDescription="Gain +<Ability:M31_SleightOfHand_AimPerStack> aim and +<Ability:M31_SleightOfHand_CritPerStack> critical chance for every <Ability:M31_BoundWeaponName> attack. Stacks up to <Ability:M31_SleightOfHand_MaxStacks> times. Loses <Ability:M31_SleightOfHand_StackDecay> stack(s) at the start of each turn."
-LocHelpText="Gain +<Ability:M31_SleightOfHand_AimPerStack> aim and +<Ability:M31_SleightOfHand_CritPerStack> critical chance for every <Ability:M31_BoundWeaponName> attack. Stacks up to <Ability:M31_SleightOfHand_MaxStacks> times. Loses <Ability:M31_SleightOfHand_StackDecay> stack(s) at the start of each turn."
+LocLongDescription="Gain +<Ability:M31_SleightOfHand_AimPerStack> aim and +<Ability:M31_SleightOfHand_CritPerStack> critical chance for every <Ability:M31_BoundPistolName> attack. Stacks up to <Ability:M31_SleightOfHand_MaxStacks> times. Loses <Ability:M31_SleightOfHand_StackDecay> stack(s) at the start of each turn."
+LocHelpText="Gain +<Ability:M31_SleightOfHand_AimPerStack> aim and +<Ability:M31_SleightOfHand_CritPerStack> critical chance for every <Ability:M31_BoundPistolName> attack. Stacks up to <Ability:M31_SleightOfHand_MaxStacks> times. Loses <Ability:M31_SleightOfHand_StackDecay> stack(s) at the start of each turn."
 LocPromotionPopupText="<Bullet> Abilities that hit multiple times apply a stack for each attack performed."
 
 [M31_Undertaker X2AbilityTemplate]
 LocFriendlyName="Undertaker"
 LocFlyOverText="Undertaker"
-LocLongDescription="Take a free <Ability:M31_BoundWeaponName> shot against an undead enemy. Has a <Ability:M31_SelfCooldown>-turn cooldown."
-LocHelpText="Free <Ability:M31_BoundWeaponName> shot against an undead enemy."
+LocLongDescription="Take a free <Ability:M31_BoundPistolName> shot against an undead enemy. Has a <Ability:M31_SelfCooldown>-turn cooldown."
+LocHelpText="Free <Ability:M31_BoundPistolName> shot against an undead enemy."
 LocPromotionPopupText="<Bullet> Undead enemies include psi zombies, spectral zombies, Spectral Lancers, the Lost, Shadowbound units and Chryssalid cocoons."

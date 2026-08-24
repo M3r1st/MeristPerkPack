@@ -17,6 +17,7 @@ var localized array<name>   AbilitiesToHide;
 var localized array<string> RankNames;
 
 var localized string strDefaultWeapon;
+var localized string strDefaultWeapon_Pistol;
 var localized string strPerRank;
 var localized string strFreeAction;
 
@@ -139,6 +140,10 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
     {
         case "M31_BoundWeaponName":
             OutString = GetBoundWeaponName(ParseObj, StrategyParseOb, GameState);
+            return true;
+
+        case "M31_BoundPistolName":
+            OutString = GetBoundWeaponName(ParseObj, StrategyParseOb, GameState, default.strDefaultWeapon_Pistol);
             return true;
 
         case "M31_FriendlyName":
@@ -2062,7 +2067,7 @@ static function X2ItemTemplate GetItemTemplateFromParseObj(Object ParseObj, Obje
     return ItemTemplate;
 }
 
-static function string GetBoundWeaponName(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
+static function string GetBoundWeaponName(Object ParseObj, Object StrategyParseObj, XComGameState GameState, optional string DefaultName)
 {
     local X2ItemTemplate ItemTemplate;
 
@@ -2070,6 +2075,11 @@ static function string GetBoundWeaponName(Object ParseObj, Object StrategyParseO
     if (ItemTemplate != none)
     {
         return ItemTemplate.GetItemAbilityDescName();
+    }
+
+    if (DefaultName != "")
+    {
+        return DefaultName;
     }
 
     return default.strDefaultWeapon;
