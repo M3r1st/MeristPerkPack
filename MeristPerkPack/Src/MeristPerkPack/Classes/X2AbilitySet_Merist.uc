@@ -8,6 +8,7 @@ var config array<name> BombAndRun_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
 var config array<name> ImprovedSuppression_AllowedAbilities;
+var config array<name> KeenEdge_AdditionalAbilities;
 var config array<name> Malevolence_AllowedCategories;
 var config array<name> MarauderElite_AllowedAbilities;
 var config array<name> PriorityFocus_AllowedEffects;
@@ -1352,6 +1353,7 @@ static function X2AbilityTemplate KeenEdge()
     Effect = new class'X2Effect_KeenEdge';
     Effect.DamageBonus = `GetConfigArrayInt("M31_KeenEdge_DamageBonus");
     Effect.PierceBonus = `GetConfigArrayInt("M31_KeenEdge_PierceBonus");
+    Effect.AdditionalAbilities = default.KeenEdge_AdditionalAbilities;
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
