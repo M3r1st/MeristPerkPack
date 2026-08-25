@@ -419,7 +419,7 @@ static function AddEffectsToEMPGrenade(X2GrenadeTemplate GrenadeTemplate)
     local X2Condition_UnitImmunities    UnitImmunityCondition;
 
     local X2Effect_Persistent                   DisorientedEffect;
-    local X2Effect_ApplyDamage_NoPreview        DamageEffect;
+    local X2Effect_ApplyDamage_RequiredAbility  DamageEffect;
     local X2Effect_DisarmWeapon                 DisarmEffect;
     local X2Effect_RemoveEffects                RemoveEffects;
 
@@ -442,9 +442,10 @@ static function AddEffectsToEMPGrenade(X2GrenadeTemplate GrenadeTemplate)
     DisorientedEffect.TargetConditions.AddItem(OrganicCondition);
     DisorientedEffect.TargetConditions.AddItem(UnitImmunityCondition);
 
-    DamageEffect = new class'X2Effect_ApplyDamage_NoPreview';
+    DamageEffect = new class'X2Effect_ApplyDamage_RequiredAbility';
     DamageEffect.bIgnoreBaseDamage = true;
-    DamageEffect.DamageTag = 'M31_StaticGrenades';
+    DamageEffect.RequiredAbility = 'M31_StaticGrenades';
+    DamageEffect.BonusDamageTag = 'M31_StaticGrenades';
     DamageEffect.TargetConditions.AddItem(AbilityCondition);
     DamageEffect.TargetConditions.AddItem(OrganicCondition);
     DamageEffect.TargetConditions.AddItem(UnitImmunityCondition);

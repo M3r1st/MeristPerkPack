@@ -418,5 +418,6 @@
     <Content Include="Src\XModBase_Interfaces\Classes\XMBOverrideInterface.uc" />
     <Content Include="Content\M31_Perks.upk" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Blademaster.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_ApplyDamage_RequiredAbility.uc" />
   </ItemGroup>
 </Project>

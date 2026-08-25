@@ -481,7 +481,7 @@ LocHelpText="Special <Ability:M31_BoundWeaponName> shot that sets the target on 
 LocFriendlyName="Static Grenades"
 LocLongDescription="Your EMP grenades and bombs disorient and deal a small amount of damage to organic units and disable weapons, forcing the enemies to reload before firing."
 LocHelpText="Your EMP grenades and bombs disorient and deal a small amount of damage to organic units and disable weapons, forcing the enemies to reload before firing."
-LocPromotionPopupText="<Bullet> EMP grenades will deal <Ability:M31_StaticGrenades_Mk1_Damage> damage.<br><Bullet> EMP bombs will deal <Ability:M31_StaticGrenades_Mk2_Damage> damage.<br><Bullet> The damage pierces all armor, but not shields.<Bullet> Disorientation and damage will not apply against units immune to electricity.<br><Bullet> Will disable the weapons of all units in the area, including robots and allies.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
+LocPromotionPopupText="<Bullet> EMP grenades deal <Ability:M31_StaticGrenades_Mk1_Damage> damage.<br><Bullet> EMP bombs deal <Ability:M31_StaticGrenades_Mk2_Damage> damage.<br><Bullet> The damage pierces all armor, but not shields.<br><Bullet> Disorientation and damage will not apply against units immune to electricity.<br><Bullet> Will disable the weapons of all units in the area, including robots and allies.<br><Bullet> Certain weapons, like Purifier Flamethrowers, cannot be disabled."
 
 [M31_Stiletto X2AbilityTemplate]
 LocFriendlyName="Stiletto"
