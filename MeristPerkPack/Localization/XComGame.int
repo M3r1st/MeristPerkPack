@@ -44,6 +44,13 @@ LocFlyOverText="Battle Presence"
 LocLongDescription="The cooldown of Combat Presence is reduced by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
 LocHelpText="The cooldown of Combat Presence is reduced by <Ability:M31_BattlePresence_CooldownReduction> turn(s)."
 
+[M31_Blademaster X2AbilityTemplate]
+LocFriendlyName="Blademaster"
+LocFlyOverText="Blademaster"
+LocLongDescription="Your melee attacks deal +<Ability:M31_Blademaster_DamageBonus> extra damage and have +<Ability:M31_Blademaster_AimBonus> aim."
+LocHelpText="Your melee attacks deal +<Ability:M31_Blademaster_DamageBonus> extra damage and have +<Ability:M31_Blademaster_AimBonus> aim."
+LocPromotionPopupText=""
+
 [M31_BloodThirst X2AbilityTemplate]
 LocFriendlyName="Blood Thirst"
 LocFlyOverText="Blood Thirst"

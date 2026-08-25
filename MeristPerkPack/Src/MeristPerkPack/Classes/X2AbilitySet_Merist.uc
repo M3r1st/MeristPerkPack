@@ -4,6 +4,7 @@ var privatewrite name SniperOverwatchActionPoint;
 
 var config array<name> AdvancedOptics_AllowedEffects;
 var config array<name> Aim_AllowedAbilities;
+var config array<name> Blademaster_AdditionalAbilities;
 var config array<name> BombAndRun_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
@@ -40,6 +41,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(AssaultShot());
     Templates.AddItem(Bandit());
     Templates.AddItem(BattalionCommander());
+    Templates.AddItem(Blademaster());
     Templates.AddItem(BloodThirst());
     Templates.AddItem(BombAndRun());
         Templates.AddItem(BombAndRunPassive());
@@ -386,6 +388,25 @@ static function X2AbilityTemplate BattalionCommander()
 
     Template.PrerequisiteAbilities.AddItem('CombatPresence');
     
+    return Template;
+}
+
+static function X2AbilityTemplate Blademaster()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_Blademaster  Effect;
+
+    Template = Passive('M31_Blademaster', "img:///UILibrary_PerkIcons.UIPerk_momentum", false, false);
+
+    Effect = new class'X2Effect_Blademaster';
+    Effect.EffectName = 'M31_Blademaster';
+    Effect.AimBonus = `GetConfigInt("M31_Blademaster_AimBonus");
+    Effect.DamageBonus = `GetConfigInt("M31_Blademaster_DamageBonus");
+    Effect.AdditionalAbilities = default.Blademaster_AdditionalAbilities;
+    Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(Effect);
+
     return Template;
 }
 

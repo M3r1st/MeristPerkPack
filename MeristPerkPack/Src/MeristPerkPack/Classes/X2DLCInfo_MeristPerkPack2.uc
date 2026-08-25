@@ -195,6 +195,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_AssaultShot_Range":
         case "M31_Bandit_AmmoToReload":
         case "M31_BattlePresence_CooldownReduction":
+        case "M31_Blademaster_AimBonus":
+        case "M31_Blademaster_DamageBonus":
         case "M31_BleedingRounds_BleedDuration":
         case "M31_Bloodlet_BleedDuration":
         case "M31_BloodThirst_DamagePerStack":

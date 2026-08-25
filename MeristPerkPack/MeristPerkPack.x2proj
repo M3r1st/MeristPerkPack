@@ -417,5 +417,6 @@
     <Content Include="Src\XModBase_Interfaces\Classes\XMBEffectInterface.uc" />
     <Content Include="Src\XModBase_Interfaces\Classes\XMBOverrideInterface.uc" />
     <Content Include="Content\M31_Perks.upk" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_Blademaster.uc" />
   </ItemGroup>
 </Project>
