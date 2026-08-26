@@ -396,7 +396,7 @@ static function X2AbilityTemplate Blademaster()
     local X2AbilityTemplate     Template;
     local X2Effect_Blademaster  Effect;
 
-    Template = Passive('M31_Blademaster', "img:///UILibrary_PerkIcons.UIPerk_momentum", false, false);
+    Template = Passive('M31_Blademaster', "img:///UILibrary_MeristPerkIcons.UIPerk_Blademaster", false, false);
 
     Effect = new class'X2Effect_Blademaster';
     Effect.EffectName = 'M31_Blademaster';
