@@ -13,6 +13,11 @@ function WeaponDamageValue GetBonusEffectDamageValue(
     local WeaponDamageValue EmptyDamageValue, ExtraDamageValue;
     local XComGameState_BaseObject TargetObject;
 
+    if (TargetRef.ObjectID == 0)
+    {
+        return EmptyDamageValue;
+    }
+
     if (!SourceUnit.HasSoldierAbility(RequiredAbility, true))
     {
         return EmptyDamageValue;
