@@ -1091,6 +1091,7 @@ static function X2AbilityTemplate PoisonSpit()
     local X2AbilityTemplate             Template;
     local X2AbilityCooldown_Extended    Cooldown;
     local X2Effect_ApplyScalingDamage   DamageEffect;
+    local X2Effect_ApplyWeaponDamage    FakeDamageEffect;
 
     Template = CreateViperSpitAbility('M31_PA_PoisonSpit', "img:///UILibrary_PerkIcons.UIPerk_viper_poisonspit", `GetConfigFloat("M31_PA_PoisonSpit_Radius"));
 
@@ -1108,6 +1109,16 @@ static function X2AbilityTemplate PoisonSpit()
         DamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_PoisonSpit_DamagePerRank");
         DamageEffect.DamageTypes.AddItem('Poison');
         Template.AddMultiTargetEffect(DamageEffect);
+    }
+    else
+    {
+        FakeDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+        FakeDamageEffect.bIgnoreBaseDamage = true;
+        FakeDamageEffect.bAppliesDamage = false;
+        FakeDamageEffect.bAllowFreeKill = false;
+        FakeDamageEffect.bAllowWeaponUpgrade = false;
+        FakeDamageEffect.DamageTypes.AddItem('Poison');
+        Template.AddMultiTargetEffect(FakeDamageEffect);
     }
 
     AddViperPoisonEffects(Template,, true);
@@ -1188,6 +1199,7 @@ static function X2AbilityTemplate FrostBreath()
 {
     local X2AbilityTemplate             Template;
     local X2Effect_ApplyScalingDamage   DamageEffect;
+    local X2Effect_ApplyWeaponDamage    FakeDamageEffect;
 
     Template = CreateViperSpitAbility('M31_PA_FrostBreath', "img:///UILibrary_DLC2Images.UIPerk_freezingbreath", `GetConfigFloat("M31_PA_FrostBreath_Radius"));
 
@@ -1207,6 +1219,16 @@ static function X2AbilityTemplate FrostBreath()
         DamageEffect.DamagePerRank = `GetConfigFloat("M31_PA_FrostBreath_DamagePerRank");
         DamageEffect.DamageTypes.AddItem('Frost');
         Template.AddMultiTargetEffect(DamageEffect);
+    }
+    else
+    {
+        FakeDamageEffect = new class'X2Effect_ApplyWeaponDamage';
+        FakeDamageEffect.bIgnoreBaseDamage = true;
+        FakeDamageEffect.bAppliesDamage = false;
+        FakeDamageEffect.bAllowFreeKill = false;
+        FakeDamageEffect.bAllowWeaponUpgrade = false;
+        FakeDamageEffect.DamageTypes.AddItem('Frost');
+        Template.AddMultiTargetEffect(FakeDamageEffect);
     }
 
     Template.CustomFireAnim = 'HL_M31_FrostBite';
