@@ -3219,6 +3219,7 @@ static function X2AbilityTemplate ZoneOfControl()
     Effect = new class'X2Effect_ZoneOfControl';
     Effect.bIsUnique = !`GetConfigBool("M31_ZoneOfControl_bAllowStack");
     Effect.bAllowWhileImpaired = `GetConfigBool("M31_ZoneOfControl_bAllowWhileImpaired");
+    Effect.bAllowWhileImpairedMomentarily = `GetConfigBool("M31_ZoneOfControl_bAllowWhileImpairedMomentarily");
     Effect.Radius = `GetConfigFloat("M31_ZoneOfControl_Radius");
     Effect.AddPersistentStatChange(eStat_Offense, -1 * `GetConfigInt("M31_ZoneOfControl_AimPenalty"));
     Effect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_ZoneOfControl_MobilityPenalty"));

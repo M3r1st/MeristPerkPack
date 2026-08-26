@@ -1,6 +1,7 @@
 class XCGS_Effect_PersistentAura extends XComGameState_Effect config(Game);
 
 var config bool bLog;
+var config bool bLogRelevancy;
 
 function UpdateStats(XComGameState_Unit TargetUnit, XComGameState NewGameState)
 {

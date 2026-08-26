@@ -178,32 +178,37 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 
     if (SourceUnit == none || SourceUnit.IsDead() || TargetUnit == none || TargetUnit.IsDead())
     {
+        `LOG("Source or target are dead or not found", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
         return false;
     }
 
     if (SourceUnit.ObjectID == TargetUnit.ObjectID)
     {
+        `LOG("Source is the target", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
         return bIncludeOwner;
     }
     else
     {
         if (!bIncludeFriendly && SourceUnit.IsFriendlyUnit(TargetUnit))
         {
+            `LOG("Target is friendly", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
             return false;
         }
         if (!bIncludeHostile && SourceUnit.IsEnemyUnit(TargetUnit))
         {
+            `LOG("Target is hostile", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
             return false;
         }
         if (Radius > 0 && !class'Helpers'.static.IsTileInRange(SourceUnit.TileLocation, TargetUnit.TileLocation, Radius * Radius))
         {
+            `LOG("Target is not in range", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
             return false;
         }
     }
 
     if (IsUniqueModifier())
     {
-        `LOG("IsUniqueModifier: true", class'XCGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+        `LOG("IsUniqueModifier: true", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
         History = `XCOMHISTORY;
 
         foreach TargetUnit.AffectedByEffects(EffectRef)
@@ -215,8 +220,8 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
                 {
                     if (EffectState.GetX2Effect().EffectName == EffectName && EffectState.StatChanges.Length > 0)
                     {
-                        `LOG(TargetUnit.GetMyTemplateName() $ " is already affected by " $ EffectState.GetX2Effect().EffectName, class'XCGS_Effect_PersistentAura'.default.bLog, GetFuncName());
-                        `LOG(GetFuncName() $ ": false", class'XCGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+                        `LOG(TargetUnit.GetMyTemplateName() $ " is already affected by " $ EffectState.GetX2Effect().EffectName, class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, GetFuncName());
+                        `LOG(GetFuncName() $ ": false", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
                         return false;
                     }
                 }
