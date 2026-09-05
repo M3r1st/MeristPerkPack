@@ -659,7 +659,7 @@ static function X2AbilityTemplate ChasingCoveringFire()
     local X2AbilityTemplate     Template;
     local X2Effect_ChasingFire  Effect;
 
-    Template = Passive('M31_ChasingCoveringFire', "img:///UILibrary_XPACK_Common.PerkIcons.UIPerk_zeroin", false, true);
+    Template = Passive('M31_ChasingCoveringFire', "img:///UILibrary_PerkIcons.UIPerk_shotfocused", false, true);
 
     Effect = new class'X2Effect_ChasingFire';
     Effect.EffectName = 'M31_ChasingCoveringFire';
