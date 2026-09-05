@@ -29,6 +29,7 @@ var name FlyoverEventName;
 // Allow using Cost-Based Ability Colors' tuple to adjust the color
 // Cannot rely on ability context
 var bool bAllowCBACOverride;
+var string strCBACOverrideColor;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -41,7 +42,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
     EffectObj = EffectGameState;
     TargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    if (bShowFlyover && FlyoverEventName != '')
+    if (bRefundAll && bShowFlyover && FlyoverEventName != '')
     {
         EventMgr.RegisterForEvent(EffectObj, FlyoverEventName, EffectGameState.TriggerAbilityFlyover, ELD_OnStateSubmitted,, TargetUnit);
     }
@@ -77,6 +78,7 @@ static function EventListenerReturn OnOverrideAbilityIconColor(Object EventData,
     local XComGameState_Ability         AbilityState;
     local XComGameState_Effect          EffectState;
     local X2Effect_RefundActionPoints   Effect;
+    local string                        strOverrideColor;
     local int                           PointCost;
     local bool                          bIsTurnEnding;
 
@@ -86,6 +88,7 @@ static function EventListenerReturn OnOverrideAbilityIconColor(Object EventData,
     `assert(Tuple.Id == 'OverrideAbilityIconColorCBAC');
 
     bOverride = Tuple.Data[1].b;
+    strOverrideColor = Tuple.Data[2].s;
     PointCost = Tuple.Data[3].i;
     bIsTurnEnding = Tuple.Data[4].i > 0;
 
@@ -129,7 +132,12 @@ static function EventListenerReturn OnOverrideAbilityIconColor(Object EventData,
 
                         if (bOverride)
                         {
+                            if (strOverrideColor == "")
+                            {
+                                strOverrideColor = Effect.strCBACOverrideColor;
+                            }
                             Tuple.Data[1].b = bOverride;
+                            Tuple.Data[2].s = strOverrideColor;
                             Tuple.Data[3].i = PointCost;
                             Tuple.Data[4].i = int(bIsTurnEnding);
                         }
