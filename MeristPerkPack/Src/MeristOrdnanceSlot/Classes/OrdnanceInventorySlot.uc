@@ -25,28 +25,9 @@ static function array<X2DataTemplate> CreateTemplates()
 
     if (default.UseSlot != eInvSlot_Unknown)
     {
-        if (default.UseSlot != eInvSlot_ExtraGrenadePocket || !IsModActive('ExtraGrenadePocket'))
-            Templates.AddItem(CreateSlotTemplate());
+        Templates.AddItem(CreateSlotTemplate());
     }
     return Templates;
-}
-
-static final function bool IsModActive(name ModName)
-{
-    local XComOnlineEventMgr    EventManager;
-    local int                   Index;
-
-    EventManager = `ONLINEEVENTMGR;
-
-    for (Index = EventManager.GetNumDLC() - 1; Index >= 0; Index--) 
-    {
-        if (EventManager.GetDLCNames(Index) == ModName)
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 static function X2DataTemplate CreateSlotTemplate()
