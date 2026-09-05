@@ -417,8 +417,7 @@ static function AddSuppressedCondition(out X2AbilityTemplate Template)
     Template.AbilityShooterConditions.AddItem(SuppressedCondition);
 }
 
-// Default = 144
-static function AddAdjacencyCondition(out X2AbilityTemplate Template, optional int Range = 180)
+static function AddAdjacencyCondition(out X2AbilityTemplate Template, optional int Range = 144)
 {
     local X2Condition_UnitProperty AdjacencyCondition;
 
