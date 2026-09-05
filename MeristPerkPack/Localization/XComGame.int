@@ -30,7 +30,7 @@ LocFriendlyName="Assault Shot"
 LocFlyOverText="Assault Shot"
 LocLongDescription="Fire a shot against a target within a <Ability:M31_AssaultShot_Range>-tile radius. <Ability:M31_FreeAction>, but cannot crit. Has a <Ability:M31_SelfCooldown>-turn cooldown."
 LocHelpText="Fire a shot against a target within a <Ability:M31_AssaultShot_Range>-tile radius. <Ability:M31_FreeAction>, but cannot crit."
-LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown.<br><Bullet> Cannot target environmental objects."
+LocPromotionPopupText="<Bullet> Has a <Ability:M31_SelfCooldown>-turn cooldown."
 
 [M31_Bandit X2AbilityTemplate]
 LocFriendlyName="Bandit"

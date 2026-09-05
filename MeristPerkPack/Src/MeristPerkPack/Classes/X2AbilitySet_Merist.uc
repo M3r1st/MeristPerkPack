@@ -343,7 +343,7 @@ static function X2AbilityTemplate AssaultShot()
 {
     local X2AbilityTemplate                 Template;
     local X2AbilityToHitCalc_StandardAim    StandardAim;
-    local X2Condition_UnitProperty          UnitPropertyCondition;
+    local X2Condition_TargetTileInRange     RangeCondition;
 
     Template = Attack('M31_AssaultShot', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilitySnapShot", false, true);
 
@@ -358,11 +358,11 @@ static function X2AbilityTemplate AssaultShot()
     Template.AbilityToHitCalc = StandardAim;
     Template.AbilityToHitOwnerOnMissCalc = StandardAim;
 
-    UnitPropertyCondition = new class'X2Condition_UnitProperty';
-    UnitPropertyCondition.FailOnNonUnits = true;
-    UnitPropertyCondition.RequireWithinRange = true;
-    UnitPropertyCondition.WithinRange = `GetConfigFloat("M31_AssaultShot_Range") * class'XComWorldData'.const.WORLD_StepSize;
-    Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
+    RangeCondition = new class'X2Condition_TargetTileInRange';
+    RangeCondition.Range = `GetConfigFloat("M31_AssaultShot_Range");
+    RangeCondition.bUseVSize = true;
+    RangeCondition.bFailOnNonUnits = false;
+    Template.AbilityTargetConditions.AddItem(RangeCondition);
 
     return Template;
 }
