@@ -34,82 +34,33 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 static function EventListenerReturn EffectEventListener_WeaponEffect(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XComGameStateHistory          History;
-    local XComGameStateContext_Ability  AbilityContext;
-    local XComGameState_Unit            SourceUnit, TargetUnit;
-    local XComGameState_Unit            OldSourceState, OldTargetState;
-    local XComGameState_Ability         AbilityState, AttackAbilityState;
-    local StateObjectReference          AttackAbilityRef;
-    local XComGameState_Effect          EffectState;
-    local XComGameState_Item            SourceWeapon;
-    local X2Effect_WeaponEffect         Effect;
-    local X2AbilityTemplate             AbilityTemplate;
-    local X2AbilityMultiTarget_BurstFire BurstFire;
-    local XComGameStateContext          FindContext;
-    local int                           VisualizeIndex;
-    local bool                          bDealsDamage;
-    local bool                          bHit;
-    local int                           NumShots;
-    local int                           i;
+    local XComGameStateHistory              History;
+    local XComGameStateContext_Ability      AbilityContext;
+    local XComGameState_Unit                SourceUnit, TargetUnit;
+    local XComGameState_Unit                OldSourceState, OldTargetState;
+    local XComGameState_Ability             AbilityState, AttackAbilityState;
+    local XComGameState_Effect              EffectState;
+    local X2Effect_WeaponEffect             Effect;
+    local X2AbilityTemplate                 AbilityTemplate;
+    local XComGameStateContext              FindContext;
+    local int                               VisualizeIndex, NumShots, i;
+    local bool                              bHit;
 
     History = `XCOMHISTORY;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
         SourceUnit = XComGameState_Unit(EventSource);
         AbilityState = XComGameState_Ability(EventData);
         EffectState = XComGameState_Effect(CallbackData);
-
         if (SourceUnit != none && AbilityState != none && EffectState != none)
         {
             Effect = X2Effect_WeaponEffect(EffectState.GetX2Effect());
-
-            if (Effect != none)
+            AbilityTemplate = AbilityState.GetMyTemplate();
+            if (Effect != none && Effect.IsAbilityRelevant(AbilityState, EffectState, SourceUnit, AbilityContext))
             {
-                if (Effect.AllowedAbilities.Length > 0 && Effect.AllowedAbilities.Find(AbilityState.GetMyTemplateName()) == INDEX_NONE)
-                {
-                    return ELR_NoInterrupt;
-                }
-
-                if (AbilityState.SourceWeapon.ObjectID == 0)
-                {
-                    return ELR_NoInterrupt;
-                }
-
-                AbilityTemplate = AbilityState.GetMyTemplate();
-                if (AbilityTemplate.Hostility != eHostility_Offensive || AbilityTemplate.bIsASuppressionEffect)
-                {
-                    return ELR_NoInterrupt;
-                }
-
-                if (Effect.bCountsAsAmmoEffect && !AbilityTemplate.bAllowAmmoEffects
-                    || Effect.bCountsAsWeaponEffect && !AbilityTemplate.bAllowBonusWeaponEffects)
-                {
-                    return ELR_NoInterrupt;
-                }
-
-                if (Effect.bMatchSourceWeapon)
-                {
-                    SourceWeapon = AbilityState.GetSourceWeapon();
-                    AttackAbilityRef = SourceUnit.FindAbility(Effect.AttackName, SourceWeapon.GetReference());
-                    AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
-                    if (AttackAbilityState == none)
-                    {
-                        if (Effect.AdditionalWeaponCategories.Find(SourceWeapon.GetWeaponCategory()) != INDEX_NONE)
-                        {
-                            AttackAbilityRef = SourceUnit.FindAbility(Effect.AttackName);
-                            AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
-                        }
-                    }
-                }
-                else
-                {
-                    AttackAbilityRef = SourceUnit.FindAbility(Effect.AttackName);
-                    AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
-                }
-
+                AttackAbilityState = Effect.FindAttackAbilityState(AbilityState, EffectState, SourceUnit, AbilityContext);
                 if (AttackAbilityState == none)
                 {
                     return ELR_NoInterrupt;
@@ -124,34 +75,23 @@ static function EventListenerReturn EffectEventListener_WeaponEffect(Object Even
                 }
 
                 OldSourceState = XComGameState_Unit(History.GetGameStateForObjectID(SourceUnit.ObjectID,, GameState.HistoryIndex - 1));
-
                 if (Effect.bApplyToSingleTarget)
                 {
                     TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.PrimaryTarget.ObjectID));
-
                     if (TargetUnit != none)
                     {
-                        bHit = false;
-                        if (Effect.AllowedHitResults.Length > 0)
-                        {
-                            bHit = Effect.AllowedHitResults.Find(AbilityContext.ResultContext.HitResult) != INDEX_NONE;
-                        }
-                        else
+                        OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnit.ObjectID,, GameState.HistoryIndex - 1));
+                        if (class'M31_Helpers'.static.AbilityDealsDamage(AbilityState, OldSourceState, OldTargetState))
                         {
                             bHit = AbilityContext.IsResultContextHit();
-                        }
-                        if (bHit && AttackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit, SourceUnit) == 'AA_Success')
-                        {
-                            OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnit.ObjectID,, GameState.HistoryIndex - 1));
-                            bDealsDamage = class'M31_Helpers'.static.AbilityDealsDamage(AbilityState, OldSourceState, OldTargetState);
-                            if (bDealsDamage)
+                            if (Effect.AllowedHitResults.Length > 0)
                             {
-                                NumShots = 1;
-                                BurstFire = X2AbilityMultiTarget_BurstFire(AbilityTemplate.AbilityMultiTargetStyle);
-                                if (BurstFire != none)
-                                {
-                                    NumShots += BurstFire.NumExtraShots;
-                                }
+                                bHit = Effect.AllowedHitResults.Find(AbilityContext.ResultContext.HitResult) != INDEX_NONE;
+                            }
+
+                            if (bHit && AttackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit, SourceUnit) == 'AA_Success')
+                            {
+                                NumShots = class'M31_Helpers'.static.GetNumHitsForAbility(AbilityState);
                                 for (i = 0; i < NumShots; i++)
                                 {
                                     AttackAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.PrimaryTarget, false, VisualizeIndex);
@@ -160,36 +100,27 @@ static function EventListenerReturn EffectEventListener_WeaponEffect(Object Even
                         }
                     }
                 }
-                if (Effect.bApplyToMultiTarget)
+                if (Effect.bApplyToMultiTarget && AbilityTemplate.AbilityMultiTargetStyle != none)
                 {
-                    if (AbilityTemplate.AbilityMultiTargetStyle != none)
+                    for (i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++)
                     {
-                        BurstFire = X2AbilityMultiTarget_BurstFire(AbilityTemplate.AbilityMultiTargetStyle);
-                        if (BurstFire == none)
+                        if (AbilityContext.InputContext.MultiTargets[i].ObjectID != AbilityContext.InputContext.PrimaryTarget.ObjectID)
                         {
-                            for (i = 0; i < AbilityContext.InputContext.MultiTargets.Length; i++)
+                            TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[i].ObjectID));
+                            if (TargetUnit != none)
                             {
-                                TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(AbilityContext.InputContext.MultiTargets[i].ObjectID));
-
-                                if (TargetUnit != none)
+                                OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnit.ObjectID,, GameState.HistoryIndex - 1));
+                                if (class'M31_Helpers'.static.AbilityDealsDamage(AbilityState, OldSourceState, OldTargetState, true))
                                 {
-                                    bHit = false;
+                                    bHit = AbilityContext.IsResultContextMultiHit(i);
                                     if (Effect.AllowedHitResults.Length > 0)
                                     {
                                         bHit = Effect.AllowedHitResults.Find(AbilityContext.ResultContext.MultiTargetHitResults[i]) != INDEX_NONE;
                                     }
-                                    else
-                                    {
-                                        bHit = AbilityContext.IsResultContextMultiHit(i);
-                                    }
+
                                     if (bHit && AttackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit, SourceUnit) == 'AA_Success')
                                     {
-                                        OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(TargetUnit.ObjectID,, GameState.HistoryIndex - 1));
-                                        bDealsDamage = class'M31_Helpers'.static.AbilityDealsDamage(AbilityState, OldSourceState, OldTargetState, true);
-                                        if (bDealsDamage)
-                                        {
-                                            AttackAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.MultiTargets[i], false, VisualizeIndex);
-                                        }
+                                        AttackAbilityState.AbilityTriggerAgainstSingleTarget(AbilityContext.InputContext.MultiTargets[i], false, VisualizeIndex);
                                     }
                                 }
                             }
@@ -201,6 +132,69 @@ static function EventListenerReturn EffectEventListener_WeaponEffect(Object Even
     }
 
     return ELR_NoInterrupt;
+}
+
+function bool IsAbilityRelevant(
+    XComGameState_Ability AbilityState,
+    XComGameState_Effect EffectState,
+    XComGameState_Unit SourceUnit,
+    XComGameStateContext_Ability AbilityContext)
+{
+    local X2AbilityTemplate AbilityTemplate;
+
+    if (AllowedAbilities.Length > 0 && AllowedAbilities.Find(AbilityState.GetMyTemplateName()) == INDEX_NONE)
+    {
+        return false;
+    }
+
+    AbilityTemplate = AbilityState.GetMyTemplate();
+    if (AbilityTemplate.Hostility != eHostility_Offensive || AbilityTemplate.bIsASuppressionEffect)
+    {
+        return false;
+    }
+
+    if ((bCountsAsAmmoEffect && !AbilityTemplate.bAllowAmmoEffects) || (bCountsAsWeaponEffect && !AbilityTemplate.bAllowBonusWeaponEffects))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+function XComGameState_Ability FindAttackAbilityState(
+    XComGameState_Ability AbilityState,
+    XComGameState_Effect EffectState,
+    XComGameState_Unit SourceUnit,
+    XComGameStateContext_Ability AbilityContext)
+{
+    local XComGameStateHistory      History;
+    local XComGameState_Item        SourceWeapon;
+    local StateObjectReference      AttackAbilityRef;
+    local XComGameState_Ability     AttackAbilityState;
+
+    History = `XCOMHISTORY;
+
+    if (bMatchSourceWeapon)
+    {
+        SourceWeapon = AbilityState.GetSourceWeapon();
+        AttackAbilityRef = SourceUnit.FindAbility(AttackName, SourceWeapon.GetReference());
+        AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+        if (AttackAbilityState == none)
+        {
+            if (AdditionalWeaponCategories.Find(SourceWeapon.GetWeaponCategory()) != INDEX_NONE)
+            {
+                AttackAbilityRef = SourceUnit.FindAbility(AttackName);
+                AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+            }
+        }
+    }
+    else
+    {
+        AttackAbilityRef = SourceUnit.FindAbility(AttackName);
+        AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+    }
+
+    return AttackAbilityState;
 }
 
 static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2Action VisualizationTree)
@@ -309,6 +303,7 @@ static function FollowUpShot_MergeVisualization(X2Action BuildTree, out X2Action
 
 defaultproperties
 {
+    EffectName = M31_WeaponEffect
     DuplicateResponse = eDupe_Ignore
     bApplyToSingleTarget = true
     bApplyToMultiTarget = true
