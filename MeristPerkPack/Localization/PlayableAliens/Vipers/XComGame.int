@@ -70,7 +70,7 @@ LocFriendlyName="Rattle"
 LocFlyOverText="Rattle"
 LocLongDescription="Whenever your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
 LocHelpText="Whenever your concealment is broken, non-robotic enemies in line of sight have a <Ability:M31_PA_Rattle_PanicChance> chance to panic."
-LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> <Ability:M31_FriendlyName> can affect up to <Ability:M31_PA_Rattle_MaxTargets> enemies in a single activation."
+LocPromotionPopupText="<Bullet> Can only activate once per turn.<br><Bullet> <Ability:M31_FriendlyName> can affect up to <Ability:M31_PA_Rattle_MaxTargets> enemies in a single activation."
 
 [M31_PA_Rattle_Passive X2AbilityTemplate]
 LocFriendlyName="Rattle"

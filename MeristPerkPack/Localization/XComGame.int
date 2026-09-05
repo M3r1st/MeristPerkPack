@@ -550,14 +550,14 @@ LocFriendlyName="Traverse Fire"
 LocFlyOverText="Traverse Fire"
 LocLongDescription="After taking a standard shot with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
 LocHelpText="After taking a standard shot with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
-LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up and Pistol Shot.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>."
+LocPromotionPopupText="<Bullet> Can only activate once per turn.<br><Bullet> Standard shot abilities also include Standard Sniper Shot, Light 'Em Up and Pistol Shot.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>."
 
 [M31_TraverseFirePlus X2AbilityTemplate]
 LocFriendlyName="Advanced Traverse Fire"
 LocFlyOverText="Advanced Traverse Fire"
 LocLongDescription="After taking a standard shot or one of the special shots with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
 LocHelpText="After taking a standard shot or one of the special shots with your <Ability:M31_BoundWeaponName> with your first action, gain an additional non-movement action."
-LocPromotionPopupText="<Bullet> Activates once per turn.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>.<br><Bullet> Applies to <Ability:M31_TraverseFirePlus_Abilities>."
+LocPromotionPopupText="<Bullet> Can only activate once per turn.<br><Bullet> Free non-offensive actions can be used without invalidating <Ability:M31_FriendlyName>.<br><Bullet> Applies to <Ability:M31_TraverseFirePlus_Abilities>."
 
 [M31_TroubleShooter X2AbilityTemplate]
 LocFriendlyName="Trouble Shooter"
