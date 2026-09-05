@@ -1129,6 +1129,8 @@ static function X2AbilityTemplate Entrench()
         Template.AddTargetEffect(RemoveEffects);
     }
 
+    Template.bShowActivation = false;
+
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = class'X2Ability_DefaultAbilitySet'.static.HunkerDownAbility_BuildVisualization;
 
