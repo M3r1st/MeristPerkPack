@@ -317,6 +317,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_WatchfulEye_AttacksPerTurn":
         case "M31_ZoneOfControl_AimPenalty":
         case "M31_ZoneOfControl_MobilityPenalty":
+        case "M31_Rider_ConcussiveBlows_CritBonus":
+        case "M31_Rider_ConcussiveBlows_StunDuration":
+        case "M31_Rider_ConcussiveBlows_DisorientedDuration":
             OutString = ColorText_Auto(`GetConfigInt(InString),, UnitState);
             return true;
 
@@ -338,6 +341,9 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_OnTheMove_MobilityPenaltyPrc":
         case "M31_Pinpoint_CritDamageBase":
         case "M31_Pinpoint_CritDamagePerAction":
+        case "M31_Rider_ConcussiveBlows_DamageBonusPrc":
+        case "M31_Rider_ConcussiveBlows_StunChance":
+        case "M31_Rider_ConcussiveBlows_DisorientedChance":
             OutString = ColorText_Auto(`GetConfigInt(InString) $ "%",, UnitState);
             return true;
 
@@ -366,6 +372,8 @@ static function bool AbilityTagExpandHandler_CH(string InString, out string OutS
         case "M31_Unload_bAllowCrit":
         case "M31_Unload_bOnlyOnHit":
         case "M31_WatchfulEye_bUniqueTarget":
+        case "M31_Rider_ConcussiveBlows_bApplyOnlyOnCrit":
+        case "M31_Rider_ConcussiveBlows_bStunCanStack":
             OutString = ColorText_Auto(`GetConfigBool(InString),, UnitState);
             return true;
 

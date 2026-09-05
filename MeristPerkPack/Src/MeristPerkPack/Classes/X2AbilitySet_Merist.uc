@@ -8,6 +8,7 @@ var config array<name> Blademaster_AdditionalAbilities;
 var config array<name> BombAndRun_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
+var config array<name> ConcussiveBlows_AdditionalAbilities;
 var config array<name> ImprovedSuppression_AllowedAbilities;
 var config array<name> KeenEdge_AdditionalAbilities;
 var config array<name> Malevolence_AllowedCategories;
@@ -158,6 +159,8 @@ static function array<X2DataTemplate> CreateTemplates()
         Templates.AddItem(ShiverCrit2Attack());
 
     Templates.AddItem(AutoGuard());
+    Templates.AddItem(ConcussiveBlows());
+        Templates.AddItem(ConcussiveBlowsAttack());
 
     Templates.AddItem(Chimera());
 
@@ -2918,7 +2921,7 @@ static function X2AbilityTemplate TraverseFire()
     
     Template = Passive('M31_TraverseFire', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityTraverseFire", false, true);
 
-    Effect = new class 'X2Effect_TraverseFire';
+    Effect = new class'X2Effect_TraverseFire';
     Effect.bRefundAll = false;
     Effect.ActionPointType = class'X2CharacterTemplateManager'.default.RunAndGunActionPoint;
     Effect.AllowedAbilities = default.TraverseFire_AllowedAbilities;
@@ -2940,7 +2943,7 @@ static function X2AbilityTemplate TraverseFirePlus()
     
     Template = Passive('M31_TraverseFirePlus', "img:///UILibrary_MeristOtherPerkIcons.LW_AbilityTraverseFire", false, true);
 
-    Effect = new class 'X2Effect_TraverseFire';
+    Effect = new class'X2Effect_TraverseFire';
     Effect.bRefundAll = false;
     Effect.ActionPointType = class'X2CharacterTemplateManager'.default.RunAndGunActionPoint;
     Effect.AllowedAbilities = default.TraverseFirePlus_AllowedAbilities;
@@ -3636,6 +3639,101 @@ static function X2AbilityTemplate AutoGuard()
     Template = Passive('M31_Rider_AutoGuard', "img:///UILibrary_MeristPerkIcons.UIPerk_Rider_AutoGuard", false, true);
 
     Template.PrerequisiteAbilities.AddItem('IRI_Rider_Guard');
+
+    return Template;
+}
+
+static function X2AbilityTemplate ConcussiveBlows()
+{
+    local X2AbilityTemplate     Template;
+    local X2Effect_WeaponEffect WeaponEffect;
+    local X2Effect_Rider_ConcussiveBlowsBonus BonusEffect;
+
+    Template = Passive('M31_Rider_ConcussiveBlows', "img:///IRIBrawler.UI.UIPerk_ConcussiveBlows", false, false);
+
+    WeaponEffect = new class'X2Effect_Rider_ConcussiveBlows';
+    WeaponEffect.EffectName = 'M31_Rider_ConcussiveBlows';
+    WeaponEffect.AttackName = 'M31_Rider_ConcussiveBlows_Attack';
+    if (`GetConfigBool("M31_Rider_ConcussiveBlows_bApplyOnlyOnCrit"))
+    {
+        WeaponEffect.AllowedHitResults.AddItem(eHit_Crit);
+    }
+    WeaponEffect.BuildPersistentEffect(1, true, false);
+    WeaponEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage,,, Template.AbilitySourceName);
+    Template.AddTargetEffect(WeaponEffect);
+
+    BonusEffect = new class'X2Effect_Rider_ConcussiveBlowsBonus';
+    BonusEffect.EffectName = 'M31_Rider_ConcussiveBlows_Bonus';
+    BonusEffect.CritBonus = `GetConfigInt("M31_Rider_ConcussiveBlows_CritBonus");
+    BonusEffect.DamageBonusPrc = `GetConfigInt("M31_Rider_ConcussiveBlows_DamageBonusPrc");
+    BonusEffect.AdditionalAbilities = default.ConcussiveBlows_AdditionalAbilities;
+    BonusEffect.BuildPersistentEffect(1, true, false);
+    BonusEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocHelpText, Template.IconImage, false,, Template.AbilitySourceName);
+    Template.AddTargetEffect(BonusEffect);
+
+    Template.AdditionalAbilities.AddItem('M31_Rider_ConcussiveBlows_Attack');
+
+    return Template;
+}
+
+static function X2AbilityTemplate ConcussiveBlowsAttack()
+{
+    local X2AbilityTemplate                 Template;
+    local X2Condition_Rider_ConcussiveBlows Condition;
+    local X2Effect_Stunned                  StunnedEffect;
+    local X2Effect_PersistentStatChange     DisorientedEffect;
+
+    `CREATE_X2ABILITY_TEMPLATE(Template, 'M31_Rider_ConcussiveBlows_Attack');
+
+    Template.IconImage = "img:///IRIBrawler.UI.UIPerk_ConcussiveBlows";
+    Template.AbilitySourceName = 'eAbilitySource_Perk';
+    Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+    Template.Hostility = eHostility_Neutral;
+    Template.DisplayTargetHitChance = false;
+
+    Template.bCrossClassEligible = false;
+
+    Template.AbilityToHitCalc = default.DeadEye;
+    Template.AbilityTargetStyle = default.SimpleSingleTarget;
+    Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_Placeholder');
+
+    Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+
+    Condition = new class'X2Condition_Rider_ConcussiveBlows';
+    Condition.bExcludeStunned = `GetConfigBool("M31_Rider_ConcussiveBlows_bStunCanStack");
+    Condition.bRequireDisoriented = true;
+
+    StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(
+        `GetConfigInt("M31_Rider_ConcussiveBlows_StunDuration"), `GetConfigInt("M31_Rider_ConcussiveBlows_StunChance"), false);
+    StunnedEffect.bRemoveWhenSourceDies = false;
+    StunnedEffect.TargetConditions.AddItem(Condition);
+    Template.AddTargetEffect(StunnedEffect);
+
+    Condition = new class'X2Condition_Rider_ConcussiveBlows';
+    Condition.bExcludeStunned = true;
+
+    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(,, false);
+    DisorientedEffect.iNumTurns = `GetConfigInt("M31_Rider_ConcussiveBlows_DisorientedDuration");
+    DisorientedEffect.bRemoveWhenSourceDies = false;
+    DisorientedEffect.ApplyChance = `GetConfigInt("M31_Rider_ConcussiveBlows_DisorientedChance");
+    DisorientedEffect.TargetConditions.AddItem(Condition);
+    Template.AddTargetEffect(DisorientedEffect);
+
+    Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+    Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+    Template.MergeVisualizationFn = class'X2Effect_WeaponEffect'.static.FollowUpShot_MergeVisualization;
+
+    Template.bAllowAmmoEffects = false;
+    Template.bAllowBonusWeaponEffects = false;
+    Template.bAllowFreeFireWeaponUpgrade = false;
+
+    Template.FrameAbilityCameraType = eCameraFraming_Never;
+    Template.bSkipExitCoverWhenFiring = true;
+    Template.bSkipFireAction = true;
+    Template.bShowActivation = false;
+    Template.bUsesFiringCamera = false;
+
+    Template.ConcealmentRule = eConceal_AlwaysEvenWithObjective;
 
     return Template;
 }

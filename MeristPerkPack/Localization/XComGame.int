@@ -702,6 +702,16 @@ LocLongDescription="Automatically <Ability:M31_FontAbility>Guard</font> at the s
 LocHelpText="Automatically <Ability:M31_FontAbility>Guard</font> at the start of each turn."
 LocPromotionPopupText="<Bullet> <Ability:M31_FriendlyName> will not activate if the <Ability:ClassName> is disoriented, stunned, panicking, on fire or otherwise impaired."
 
+[M31_Rider_ConcussiveBlows X2AbilityTemplate]
+LocFriendlyName="Concussive Blows"
+LocFlyOverText="Concussive Blows"
+LocLongDescription="Your critical melee attacks disorient. Critical attacks against disoriented enemies stun. Melee attacks against stunned enemies deal <Ability:M31_Rider_ConcussiveBlows_DamageBonusPrc> more damage. Gain +<Ability:M31_Rider_ConcussiveBlows_CritBonus> melee critical chance."
+LocHelpText="Your critical melee attacks disorient. Critical attacks against disoriented enemies stun. Melee attacks against stunned enemies deal more damage. Melee critical chance is increased."
+LocPromotionPopupText="<Bullet> Critical melee attacks have a <Ability:M31_Rider_ConcussiveBlows_DisorientedChance> chance to disorient the enemies for <Ability:M31_Rider_ConcussiveBlows_DisorientedDuration> turn(s).<br><Bullet> Critical melee attacks against disoriented enemies have a <Ability:M31_Rider_ConcussiveBlows_StunChance> chance to stun them for <Ability:M31_Rider_ConcussiveBlows_StunDuration> action(s).<br><Bullet> Stun will not be applied if the enemy is already stunned."
+
+[M31_Rider_ConcussiveBlows_Attack X2AbilityTemplate]
+LocFriendlyName="Concussive Blows"
+LocFlyOverText="Concussive Blows"
 
 [M31_SpectralZombie_M1 X2CharacterTemplate]
 strCharacterName="Lesser Spectral Zombie"

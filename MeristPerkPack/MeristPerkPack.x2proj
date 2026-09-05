@@ -419,5 +419,8 @@
     <Content Include="Content\M31_Perks.upk" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Blademaster.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_ApplyDamage_RequiredAbility.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Condition_Rider_ConcussiveBlows.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_Rider_ConcussiveBlows.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_Rider_ConcussiveBlowsBonus.uc" />
   </ItemGroup>
 </Project>
