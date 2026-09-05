@@ -1930,6 +1930,7 @@ static function X2AbilityTemplate SawedOffReload()
 
     ReloadEffect = new class'X2Effect_ReloadWeapon';
     ReloadEffect.AmmoToReload = `GetConfigInt("M31_SawedOffReload_AmmoPerUse");
+    ReloadEffect.bReloadSourceWeapon = true;
     ReloadEffect.bSkipClipSizeCheck = true;
     Template.AddTargetEffect(ReloadEffect);
 
