@@ -1,7 +1,16 @@
-class X2TargetingMethod_ViperSpit_New extends X2TargetingMethod_ViperSpit;
+class X2TargetingMethod_ViperSpit_New extends X2TargetingMethod_ViperSpit config(GameData);
 
 var vector NewTargetLocation;
 var bool bBlocked;
+var config bool bSnapToTile;
+var config bool bBlockedPreventsActivation;
+
+function Init(AvailableAction InAction, int NewTargetIndex)
+{
+    SnapToTile = default.bSnapToTile;
+
+    super.Init(InAction, NewTargetIndex);
+}
 
 function Update(float DeltaTime)
 {
@@ -100,7 +109,7 @@ function name ValidateTargetLocations(const array<Vector> TargetLocations)
 
     if (RetCode == 'AA_Success')
     {
-        if (bBlocked)
+        if (default.bBlockedPreventsActivation && bBlocked)
             RetCode =  'AA_NotVisible';
     }
 
