@@ -92,7 +92,6 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
     local int                           NumHits;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
         EffectState = XComGameState_Effect(CallbackData);
@@ -110,8 +109,21 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
                 }
 
                 // If allowed, do nothing on movement
-                if (Effect.bDontResetOnMovement && AbilityState.GetMyTemplate().Hostility == eHostility_Movement)
+                if (AbilityState.GetMyTemplate().Hostility == eHostility_Movement)
                 {
+                    if (!Effect.bDontResetOnMovement)
+                    {
+                        SourceUnit.GetUnitValue(Effect.ShotsValueName, ShotsValue);
+                        if (ShotsValue.fValue > 0)
+                        {
+                            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("ZeroIn Reset");
+                            SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
+                            SourceUnit.ClearUnitValue(Effect.ShotsValueName);
+                            SourceUnit.ClearUnitValue(Effect.TargetValueName);
+                            SourceUnit.ClearUnitValue(Effect.LockedInShotsValueName);
+                            `TACTICALRULES.SubmitGameState(NewGameState);
+                        }
+                    }
                     return ELR_NoInterrupt;
                 }
 
@@ -141,17 +153,17 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
                                 NumHits = class'M31_Helpers'.static.GetNumHitsForAbility(AbilityState);
 
                                 SourceUnit.GetUnitValue(Effect.ShotsValueName, ShotsValue);
-                                SourceUnit.SetUnitFloatValue(Effect.ShotsValueName, ShotsValue.fValue + NumHits);
+                                SourceUnit.SetUnitFloatValue(Effect.ShotsValueName, ShotsValue.fValue + NumHits, eCleanup_BeginTactical);
 
                                 SourceUnit.GetUnitValue(Effect.TargetValueName, TargetValue);
                                 if (TargetValue.fValue == AbilityContext.InputContext.PrimaryTarget.ObjectID)
                                 {
                                     SourceUnit.GetUnitValue(Effect.LockedInShotsValueName, LockedInShotsValue);
-                                    SourceUnit.SetUnitFloatValue(Effect.LockedInShotsValueName, LockedInShotsValue.fValue + NumHits);
+                                    SourceUnit.SetUnitFloatValue(Effect.LockedInShotsValueName, LockedInShotsValue.fValue + NumHits, eCleanup_BeginTactical);
                                 }
                                 else
                                 {
-                                    SourceUnit.SetUnitFloatValue(Effect.TargetValueName, AbilityContext.InputContext.PrimaryTarget.ObjectID);
+                                    SourceUnit.SetUnitFloatValue(Effect.TargetValueName, AbilityContext.InputContext.PrimaryTarget.ObjectID, eCleanup_BeginTactical);
                                     SourceUnit.SetUnitFloatValue(Effect.LockedInShotsValueName, NumHits);
                                 }
 
@@ -160,8 +172,14 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
                                 `TACTICALRULES.SubmitGameState(NewGameState);
                             }
                         }
+                        return ELR_NoInterrupt;
                     }
-                    else if (AbilityState.IsAbilityInputTriggered())
+                }
+
+                if (AbilityState.IsAbilityInputTriggered())
+                {
+                    SourceUnit.GetUnitValue(Effect.ShotsValueName, ShotsValue);
+                    if (ShotsValue.fValue > 0)
                     {
                         NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("ZeroIn Reset");
                         SourceUnit = XComGameState_Unit(NewGameState.ModifyStateObject(SourceUnit.Class, SourceUnit.ObjectID));
@@ -170,6 +188,7 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
                         SourceUnit.ClearUnitValue(Effect.LockedInShotsValueName);
                         `TACTICALRULES.SubmitGameState(NewGameState);
                     }
+                    return ELR_NoInterrupt;
                 }
             }
         }
@@ -178,14 +197,12 @@ static function EventListenerReturn EffectEventListener_ZeroIn(Object EventData,
     return ELR_NoInterrupt;
 }
 
-
-
 defaultproperties
 {
     EffectName = M31_SK_ZeroIn
     DuplicateResponse = eDupe_Ignore
 
-    ShotsValueName = M31_ZeroIn_Shots
-    TargetValueName = M31_ZeroIn_Target
-    LockedInShotsValueName = M31_ZeroIn_LockedInShots
+    ShotsValueName = M31_SK_ZeroIn_Shots
+    TargetValueName = M31_SK_ZeroIn_Target
+    LockedInShotsValueName = M31_SK_ZeroIn_LockedInShots
 }
