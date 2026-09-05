@@ -44,7 +44,7 @@ static function X2AbilityTemplate EnergyShield()
     {
         Cooldown.CooldownModifiers.AddItem(class'X2Effect_PRPA_SB_EnergyShield'.default.EnergyShield_CooldownModifiers[i]);
     }
-    Cooldown.AddCooldownModifier(default.ImprovedShieldAbilityName, `GetConfigInt('M31_PRPA_SB_ImprovedShield_CooldownReduction'));
+    Cooldown.AddCooldownModifier(default.ImprovedShieldAbilityName, -1 * `GetConfigInt('M31_PRPA_SB_ImprovedShield_CooldownReduction'));
     Template.AbilityCooldown = Cooldown;
 
     AddCharges(Template, `GetConfigInt("M31_PRPA_SB_EnergyShield_Charges"));
