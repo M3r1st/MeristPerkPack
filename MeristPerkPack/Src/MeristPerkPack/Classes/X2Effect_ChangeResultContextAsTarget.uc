@@ -2,7 +2,7 @@
 //  FILE:   X2Effect_ChangeResultContextAsTarget.uc
 //  AUTHOR: Merist / Based on Mitzruti's MZ_Effect_InvertCounter
 //---------------------------------------------------------------------------------------
-class X2Effect_ChangeResultContextAsTarget extends X2Effect_Persistent;
+class X2Effect_ChangeResultContextAsTarget extends X2Effect_Persistent abstract;
 
 var EAbilityHitResult ChangeHitResults[EAbilityHitResult.EnumCount]<BoundEnum=EAbilityHitResult>;
 
@@ -19,7 +19,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     /// EventID: PostModifyNewAbilityContext
     /// EventData: XComGameStateContext_Ability NewContext
-    ///	EventSource: XComGameState_Ability AbilityState
+    /// EventSource: XComGameState_Ability AbilityState
     /// NewGameState: no
     EventMgr.RegisterForEvent(EffectObj, 'PostModifyNewAbilityContext', OnPostModifyNewAbilityContext, ELD_Immediate, EventPriority,,, EffectObj);
 }

@@ -2,7 +2,7 @@
 //  FILE:   X2Effect_ChangeResultContext.uc
 //  AUTHOR: Merist / Based on Mitzruti's MZ_Effect_InvertCounter
 //---------------------------------------------------------------------------------------
-class X2Effect_ChangeResultContext extends X2Effect_Persistent;
+class X2Effect_ChangeResultContext extends X2Effect_Persistent abstract;
 
 var EAbilityHitResult ChangeHitResults[EAbilityHitResult.EnumCount]<BoundEnum=EAbilityHitResult>;
 var bool bMatchSourceWeapon;
@@ -20,7 +20,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     /// EventID: PostModifyNewAbilityContext
     /// EventData: XComGameStateContext_Ability NewContext
-    ///	EventSource: XComGameState_Ability AbilityState
+    /// EventSource: XComGameState_Ability AbilityState
     /// NewGameState: no
     EventMgr.RegisterForEvent(EffectObj, 'PostModifyNewAbilityContext', OnPostModifyNewAbilityContext, ELD_Immediate, EventPriority,,, EffectObj);
 }
@@ -58,11 +58,14 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
     {
         if (Effect.IsAbilityRelevant(AbilityState, Attacker, EffectState))
         {
-            AbilityContext.ResultContext.HitResult = Effect.ChangeHitResults[AbilityContext.ResultContext.HitResult];
-
-            for (Index = 0; Index < AbilityContext.ResultContext.MultiTargetHitResults.Length; Index++)
+            if (Effect.IsEffectCurrentlyRelevant(EffectState, Attacker))
             {
-                AbilityContext.ResultContext.MultiTargetHitResults[Index] = Effect.ChangeHitResults[AbilityContext.ResultContext.MultiTargetHitResults[Index]];
+                AbilityContext.ResultContext.HitResult = Effect.ChangeHitResults[AbilityContext.ResultContext.HitResult];
+
+                for (Index = 0; Index < AbilityContext.ResultContext.MultiTargetHitResults.Length; Index++)
+                {
+                    AbilityContext.ResultContext.MultiTargetHitResults[Index] = Effect.ChangeHitResults[AbilityContext.ResultContext.MultiTargetHitResults[Index]];
+                }
             }
         }
     }
