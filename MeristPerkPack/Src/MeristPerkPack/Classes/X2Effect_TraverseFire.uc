@@ -116,23 +116,6 @@ function bool PostAbilityCostPaid(XComGameState_Effect EffectState, XComGameStat
     return false;
 }
 
-static function bool ValidateAbilityCost(XComGameState_Ability AbilityState, XComGameState_Unit AbilityOwner)
-{
-    local X2AbilityTemplate Template;
-    local X2AbilityCost Cost;
-    local X2AbilityCost_ActionPoints ActionPointCost;
-
-    Template = AbilityState.GetMyTemplate();
-
-    foreach Template.AbilityCosts(Cost)
-    {
-        ActionPointCost = X2AbilityCost_ActionPoints(Cost);
-        if (ActionPointCost != none && !ActionPointCost.bFreeCost && ActionPointCost.GetPointCost(AbilityState, AbilityOwner) > 0)
-            return false;
-    }
-    return true;
-}
-
 defaultproperties
 {
     EffectName = M31_TraverseFire
