@@ -24,13 +24,13 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
     SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
-    for (i = 0; i < default.ClearBindSourceEvents.Length; ++i )
+    for (i = 0; i < default.ClearBindSourceEvents.Length; i++)
     {
-        EventMgr.RegisterForEvent(EffectObj, RegisterAdditionalEventsLikeImpair[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, SourceUnit);
+        EventMgr.RegisterForEvent(EffectObj, ClearBindSourceEvents[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, SourceUnit);
     }
-    for (i = 0; i < default.ClearBindTargetEvents.Length; ++i )
+    for (i = 0; i < default.ClearBindTargetEvents.Length; i++)
     {
-        EventMgr.RegisterForEvent(EffectObj, RegisterAdditionalEventsLikeImpair[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, TargetUnit);
+        EventMgr.RegisterForEvent(EffectObj, ClearBindTargetEvents[i], EffectGameState.OnSourceBecameImpaired, ELD_OnStateSubmitted, 55, TargetUnit);
     }
 }
 
