@@ -1710,16 +1710,17 @@ static function string GetTagValueFromItemTech(string Tag, Object ParseObj, Obje
     {
         if (bSquash)
         {
-            for (i = 0; i < Array.Length; i++)
+            NewArray = Array;
+            for (i = NewArray.Length - 1; i > 0; i--)
             {
-                if (Index > i && Array[i] == Array[Index])
+                if (NewArray[i] == NewArray[i - 1])
                 {
-                    Index = i;
+                    NewArray.Remove(i, 1);
                 }
-                if (NewArray.Length == 0 || NewArray[NewArray.Length - 1] != Array[i])
-                {
-                    NewArray.AddItem(Array[i]);
-                }
+            }
+            if (0 <= Index && Index < Array.Length)
+            {
+                Index = NewArray.Find(Array[Index]);
             }
             Array = NewArray;
         }
