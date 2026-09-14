@@ -1146,17 +1146,42 @@ static function X2AbilityTemplate Entrench()
 
 static function Entrench_EffectAdded(X2Effect_Persistent PersistentEffect, const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState)
 {
-    local X2EventManager EventMgr;
-    local Object EffectObj;
-    local XComGameState_Unit UnitState;
-    local XComGameState_Effect EffectGameState;
+    local X2EventManager        EventMgr;
+    local XComGameState_Unit    TargetState;
+    local XComGameState_Effect  EffectState;
+    local Object                EffectObj;
 
-    UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-    EffectGameState = UnitState.GetUnitAffectedByEffectState(PersistentEffect.EffectName);
+    TargetState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+    if (TargetState == none)
+    {
+        TargetState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+    }
+    if (TargetState != none)
+    {
+        EffectState = TargetState.GetUnitAffectedByEffectState(PersistentEffect.EffectName);
 
-    EventMgr = `XEVENTMGR;
-    EffectObj = EffectGameState;
-    EventMgr.RegisterForEvent(EffectObj, 'ObjectMoved', EffectGameState.GenerateCover_ObjectMoved, ELD_OnStateSubmitted,, UnitState);
+        EventMgr = `XEVENTMGR;
+        EffectObj = EffectState;
+        EventMgr.RegisterForEvent(EffectObj, 'ObjectMoved', EffectEventListener_Entrench, ELD_OnStateSubmitted,, TargetState,, EffectState);
+    }
+}
+
+static function EventListenerReturn EffectEventListener_Entrench(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+    local XComGameStateContext_EffectRemoved    RemoveContext;
+    local XComGameState                         NewGameState;
+    local XComGameState_Effect                  EffectState;
+
+    EffectState = XComGameState_Effect(CallbackData);
+    if (EffectState != none && !EffectState.bRemoved)
+    {
+        RemoveContext = class'XComGameStateContext_EffectRemoved'.static.CreateEffectRemovedContext(EffectState);
+        NewGameState = `XCOMHISTORY.CreateNewGameState(true, RemoveContext);
+        EffectState.RemoveEffect(NewGameState, GameState);
+        `TACTICALRULES.SubmitGameState(NewGameState);
+    }
+
+    return ELR_NoInterrupt;
 }
 
 static function X2AbilityTemplate EntrenchTrigger()
