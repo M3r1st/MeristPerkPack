@@ -426,5 +426,7 @@
     <Content Include="Src\MeristPerkPack\Classes\X2GetOverHerePuck.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_GetOverHere.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_GetOverHereAlly.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_TemporaryItem.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\XGS_Effect_TemporaryItem.uc" />
   </ItemGroup>
 </Project>

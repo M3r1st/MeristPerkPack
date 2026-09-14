@@ -421,11 +421,17 @@ static function X2AbilityTemplate RattlePassive()
 
 static function X2AbilityTemplate Salamander()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_DamageImmunityByTypes    ImmunityEffect;
-    local XMBEffect_BonusRadius             RadiusEffect;
+    local X2AbilityTemplate                     Template;
+    local X2AbilityTrigger_UnitPostBeginPlay    Trigger;
+    local X2Effect_DamageImmunityByTypes        ImmunityEffect;
+    local XMBEffect_BonusRadius                 RadiusEffect;
 
     Template = Passive('M31_PA_Salamander', "img:///UILibrary_MPP.fireshield", false, true);
+
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
 
     ImmunityEffect = new class'X2Effect_DamageImmunityByTypes';
     ImmunityEffect.EffectName = 'M31_PA_Salamander_Immunity';
@@ -440,8 +446,8 @@ static function X2AbilityTemplate Salamander()
     RadiusEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(RadiusEffect);
 
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('Firebomb'));
-    
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'Firebomb'));
+
     return Template;
 }
 

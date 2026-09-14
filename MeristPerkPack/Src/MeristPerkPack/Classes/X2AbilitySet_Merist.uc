@@ -1006,15 +1006,21 @@ static function X2AbilityTemplate DuskbornTrigger()
 
 static function X2AbilityTemplate EMPBomber()
 {
-    local X2AbilityTemplate     Template;
-    local X2Effect_EMPBomber    NeedleEffect;
+    local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
+    local X2Effect_EMPBomber NeedleEffect;
 
     Template = Passive('M31_EMPBomber', "img:///UILibrary_MeristPerkIcons.UIPerk_EMPPlus", false, true);
-    
+
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
     NeedleEffect = new class'X2Effect_EMPBomber';
     NeedleEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(NeedleEffect);
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('EMPGrenade'));
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'EMPGrenade'));
 
     return Template;
 }
@@ -1281,12 +1287,18 @@ static function X2AbilityTemplate Frostbane()
 static function X2AbilityTemplate GenevaSuggestion()
 {
     local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
     
     Template = Passive('M31_GenevaSuggestion', "img:///KetarosPkg_Abilities.UIPerk_bomb", false, false);
 
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('AcidGrenade'));
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('GasGrenade'));
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('Firebomb'));
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'AcidGrenade'));
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'GasGrenade'));
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'Firebomb'));
 
     return Template;
 }
@@ -1627,14 +1639,18 @@ static function Meld_EffectRemoved(X2Effect_Persistent PersistentEffect, const o
 
 static function X2AbilityTemplate Minelayer2()
 {
-    local X2AbilityTemplate     Template;
-    local X2Effect_AddGrenade   Effect;
+    local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
 
     Template = Passive('M31_Minelayer2', "img:///UILibrary_MZChimeraIcons.Item_TeleportDisc", false, true);
 
-    Effect = class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('ProximityMine');
-    Effect.BaseCharges = 2;
-    Template.AddTargetEffect(Effect);
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'ProximityMine'));
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'ProximityMine'));
 
     return Template;
 }
@@ -2092,10 +2108,16 @@ static function X2AbilityTemplate Shadowstrike()
 static function X2AbilityTemplate ShockGrenadier()
 {
     local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
 
     Template = Passive('M31_ShockGrenadier', "img:///UILibrary_MeristPerkIcons.UIPerk_ShockBox", false, true);
 
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('EMPGrenade'));
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'EMPGrenade'));
 
     return Template;
 }
@@ -2301,10 +2323,16 @@ static function X2AbilityTemplate Skykeeper()
 static function X2AbilityTemplate SmokeGrenadier()
 {
     local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
 
     Template = Passive('M31_SmokeGrenadier', "img:///UILibrary_XPerkIconPack.UIPerk_smoke_box", false, true);
 
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('SmokeGrenade'));
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'SmokeGrenade'));
 
     return Template;
 }

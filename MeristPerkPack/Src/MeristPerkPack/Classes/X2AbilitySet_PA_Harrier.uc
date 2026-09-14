@@ -132,17 +132,17 @@ static function X2AbilityTemplate VileMix()
 
 static function X2AbilityTemplate BlasterMaster()
 {
-    local X2AbilityTemplate                 Template;
-    local X2Effect_AddGrenade               Effect;
+    local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
 
     Template = Passive('M31_PA_HarrierBlasterMaster', "img:///UILibrary_PerkIcons.UIPerk_muton_aliengrenade", false, true);
-        
-    Effect = new class'X2Effect_AddGrenade';
-    Effect.bAllowUpgrades = false;
-    Effect.DataName = 'MutonGrenade';
-    Effect.SkipAbilities.AddItem('SmallItemWeight');
-    Effect.BuildPersistentEffect(1, true, false);
-    Template.AddTargetEffect(Effect);
+
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'MutonGrenade', false));
 
     return Template;
 }

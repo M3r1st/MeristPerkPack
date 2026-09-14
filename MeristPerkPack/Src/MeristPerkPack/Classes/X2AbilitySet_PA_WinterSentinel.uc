@@ -655,10 +655,16 @@ static function X2AbilityTemplate WinterWarfare()
 static function X2AbilityTemplate WinterSoldier()
 {
     local X2AbilityTemplate Template;
+    local X2AbilityTrigger_UnitPostBeginPlay Trigger;
 
     Template = Passive('M31_PA_WS_WinterSoldier', "img:///UILibrary_DLC2Images.UIPerk_frostbomb", false, false);
 
-    Template.AddTargetEffect(class'X2Effect_AddGrenade'.static.CreateAddGrenadeEffect('Frostbomb'));
+    Template.AbilityTriggers.Length = 0;
+    Trigger = new class'X2AbilityTrigger_UnitPostBeginPlay';
+    Trigger.Priority -= 20; // delayed so that Full Kit happen first
+    Template.AbilityTriggers.AddItem(Trigger);
+
+    Template.AddTargetEffect(class'X2Effect_TemporaryItem'.static.CreateGrenadeEffect(Template, 'Frostbomb', false));
 
     return Template;
 }
