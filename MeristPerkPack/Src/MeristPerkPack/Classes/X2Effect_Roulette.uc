@@ -42,7 +42,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
     X2Effect_ApplyWeaponDamage WeaponDamageEffect,
     XComGameState NewGameState)
 {
-    local XCGS_Effect_Roulette RouletteState;
+    local XGS_Effect_Roulette RouletteState;
     local int RandRoll;
     local int CurrentWeight;
     local int i;
@@ -62,8 +62,8 @@ function float GetPostDefaultAttackingDamageModifier_CH(
         {
             if (CurrentDamage > 0)
             {
-                RouletteState = XCGS_Effect_Roulette(EffectState);
-                RouletteState = XCGS_Effect_Roulette(NewGameState.ModifyStateObject(RouletteState.Class, RouletteState.ObjectID));
+                RouletteState = XGS_Effect_Roulette(EffectState);
+                RouletteState = XGS_Effect_Roulette(NewGameState.ModifyStateObject(RouletteState.Class, RouletteState.ObjectID));
                 RandRoll = `SYNC_RAND(TotalWeight);
                 for (i = 0; i < Rolls.Length; i++)
                 {
@@ -89,7 +89,7 @@ function float GetPostDefaultAttackingDamageModifier_CH(
 
 static function Roulette_PostBuildVisualization(XComGameState VisualizeGameState)
 {
-    local XCGS_Effect_Roulette          EffectState;
+    local XGS_Effect_Roulette          EffectState;
     local VisualizationActionMetadata   BuildTrack;
     local XComGameStateHistory          History;
     local X2Action_PlaySoundAndFlyOver  FlyOverAction;
@@ -97,7 +97,7 @@ static function Roulette_PostBuildVisualization(XComGameState VisualizeGameState
     local EWidgetColor                  FlyoverColor;
 
     History = `XCOMHISTORY;
-    foreach VisualizeGameState.IterateByClassType(class'XCGS_Effect_Roulette', EffectState)
+    foreach VisualizeGameState.IterateByClassType(class'XGS_Effect_Roulette', EffectState)
     {
         if (EffectState.LastValue < 100)
         {
@@ -130,5 +130,5 @@ static function Roulette_PostBuildVisualization(XComGameState VisualizeGameState
 
 defaultproperties
 {
-    GameStateEffectClass = class'XCGS_Effect_Roulette'
+    GameStateEffectClass = class'XGS_Effect_Roulette'
 }

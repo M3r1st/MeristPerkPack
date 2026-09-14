@@ -12,7 +12,7 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
     // if (!bAllowWhileImpaired && SourceUnit.IsImpaired())
     if (!bAllowWhileImpaired && UnitIsImpairedSkipMC(SourceUnit, bAllowWhileImpairedMomentarily))
     {
-        `LOG("Source is impaired", class'XCGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
+        `LOG("Source is impaired", class'XGS_Effect_PersistentAura'.default.bLogRelevancy, EffectName);
         return false;
     }
 

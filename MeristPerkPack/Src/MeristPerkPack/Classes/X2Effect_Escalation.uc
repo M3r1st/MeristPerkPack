@@ -16,13 +16,13 @@ function GetToHitModifiers(
     bool bMelee, bool bFlanking, bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local XCGS_Effect_HackBreakdown     HackBreakdown;
+    local XGS_Effect_HackBreakdown      HackBreakdown;
     local ShotModifierInfo              CritMod;
 
     if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
         return;
 
-    HackBreakdown = XCGS_Effect_HackBreakdown(EffectState);
+    HackBreakdown = XGS_Effect_HackBreakdown(EffectState);
     if (HackBreakdown != none)
     {
         CritMod.ModType = eHit_Crit;
@@ -43,7 +43,7 @@ function int GetAttackingDamageModifier(
     optional XComGameState NewGameState) 
 {
     local X2AbilityTemplate             AbilityTemplate;
-    local XCGS_Effect_HackBreakdown     HackBreakdown;
+    local XGS_Effect_HackBreakdown      HackBreakdown;
     local int                           CritChance;
 
     if (bMatchSourceWeapon && AbilityState.SourceWeapon != EffectState.ApplyEffectParameters.ItemStateObjectRef)
@@ -57,7 +57,7 @@ function int GetAttackingDamageModifier(
         AbilityTemplate = AbilityState.GetMyTemplate();
         if (AbilityTemplate.AbilityToHitCalc != none)
         {
-            HackBreakdown = XCGS_Effect_HackBreakdown(EffectState);
+            HackBreakdown = XGS_Effect_HackBreakdown(EffectState);
             if (HackBreakdown == none)
                 return 0;
 
@@ -65,7 +65,7 @@ function int GetAttackingDamageModifier(
             CritChance = Max(0, CritChance - CritDamageBonusMinCrit);
             if (NewGameState != none)
             {
-                HackBreakdown = XCGS_Effect_HackBreakdown(NewGameState.ModifyStateObject(HackBreakdown.Class, HackBreakdown.ObjectID));
+                HackBreakdown = XGS_Effect_HackBreakdown(NewGameState.ModifyStateObject(HackBreakdown.Class, HackBreakdown.ObjectID));
                 HackBreakdown.Counter += 1;
             }
         }
@@ -84,5 +84,5 @@ defaultproperties
     EffectName = M31_Escalation
     DuplicateResponse = eDupe_Refresh
     bDisplayInSpecialDamageMessageUI = true
-    GameStateEffectClass = class'XCGS_Effect_HackBreakdown'
+    GameStateEffectClass = class'XGS_Effect_HackBreakdown'
 }

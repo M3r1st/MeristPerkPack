@@ -56,7 +56,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     XComGameState NewGameState)
 {
     local X2AbilityTemplate             AbilityTemplate;
-    local XCGS_Effect_WS_Maelstrom      MaelstromEffectState;
+    local XGS_Effect_WS_Maelstrom       MaelstromEffectState;
     local int FinalOverflow;
     local int DamageBonus;
 
@@ -73,7 +73,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     if (AbilityTemplate == none || X2AbilityToHitCalc_StandardAim(AbilityTemplate.AbilityToHitCalc) == none || WeaponDamageEffect.bIgnoreBaseDamage)
         return 0;
 
-    MaelstromEffectState = XCGS_Effect_WS_Maelstrom(EffectState);
+    MaelstromEffectState = XGS_Effect_WS_Maelstrom(EffectState);
     if (MaelstromEffectState == none)
         return 0;
 
@@ -93,5 +93,5 @@ defaultproperties
 {
     DuplicateResponse = eDupe_Ignore
     bDisplayInSpecialDamageMessageUI = true
-    GameStateEffectClass = class'XCGS_Effect_WS_Maelstrom'
+    GameStateEffectClass = class'XGS_Effect_WS_Maelstrom'
 }

@@ -36,7 +36,7 @@ static function EventListenerReturn OnOverrideFocus(Object EventData, Object Eve
 {
     local XComLWTuple               Tuple;
     local XComGameState_Unit        UnitState;
-    local XCGS_Effect_BloodThirst   EffectState;
+    local XGS_Effect_BloodThirst    EffectState;
     local X2Effect_PA_TaipanBloodThirst Effect;
     local X2AbilityTag              AbilityTag;
 
@@ -46,7 +46,7 @@ static function EventListenerReturn OnOverrideFocus(Object EventData, Object Eve
     `assert(Tuple.Id == 'OverrideUnitFocusUI');
 
     UnitState = XComGameState_Unit(EventSource);
-    EffectState = XCGS_Effect_BloodThirst(CallbackData);
+    EffectState = XGS_Effect_BloodThirst(CallbackData);
 
     if (UnitState != none && EffectState != none)
     {
@@ -105,7 +105,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     XComGameState NewGameState)
 {
     local XComGameState_Item        EffectSourceWeapon;
-    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
+    local XGS_Effect_BloodThirst    BloodThirstEffectState;
     local int                       DamageBonus;
 
     DamageBonus = super.GetPreDefaultAttackingDamageModifier_CH(EffectState, Attacker, TargetDamageable, AbilityState, AppliedData, CurrentDamage, WeaponDamageEffect, NewGameState);
@@ -125,7 +125,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
         {
             if (CurrentDamage > 0)
             {
-                BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
+                BloodThirstEffectState = XGS_Effect_BloodThirst(EffectState);
                 EffectSourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
                 if (BloodThirstEffectState != none)
                 {
@@ -150,13 +150,13 @@ function GetToHitModifiers(
     bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local XCGS_Effect_BloodThirst BloodThirstEffectState;
+    local XGS_Effect_BloodThirst BloodThirstEffectState;
     local ShotModifierInfo CritInfo;
     local int Count;
 
     if (HasBonusEffects(Attacker))
     {
-        BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
+        BloodThirstEffectState = XGS_Effect_BloodThirst(EffectState);
 
         if (BloodThirstEffectState != none)
         {
@@ -180,7 +180,7 @@ simulated function bool HasBonusEffects(XComGameState_Unit UnitState)
 static function string GetFriendlyDescOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameStateHistory          History;
-    local XCGS_Effect_BloodThirst       EffectState;
+    local XGS_Effect_BloodThirst        EffectState;
     local X2Effect_PA_TaipanBloodThirst Effect;
     local XComGameState_Unit            UnitState;
     local XComGameState_Item            SourceWeapon;
@@ -192,7 +192,7 @@ static function string GetFriendlyDescOutString(Object ParseObj, Object Strategy
 
     History = `XCOMHISTORY;
 
-    EffectState = XCGS_Effect_BloodThirst(ParseObj);
+    EffectState = XGS_Effect_BloodThirst(ParseObj);
 
     if (EffectState != none)
     {

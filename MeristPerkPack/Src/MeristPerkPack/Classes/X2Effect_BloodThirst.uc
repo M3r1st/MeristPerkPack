@@ -2,7 +2,7 @@
 //  FILE:    X2Effect_BloodThirst.uc
 //  AUTHOR:  Merist
 //  PURPOSE: Persistent effect that increases the user's melee damage for each melee attack they perform.
-//           Relies on XCGS_Effect_BloodThirst.
+//           Relies on XGS_Effect_BloodThirst.
 //---------------------------------------------------------------------------------------
 class X2Effect_BloodThirst extends X2Effect_Persistent;
 
@@ -46,7 +46,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 static function EventListenerReturn EffectEventListener_BloodThirst(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
     local XComGameStateContext_Ability  AbilityContext;
-    local XCGS_Effect_BloodThirst       EffectState;
+    local XGS_Effect_BloodThirst        EffectState;
     local X2Effect_BloodThirst          Effect;
     local XComGameState_Unit            SourceUnit;
     local XComGameState_Ability         AbilityState;
@@ -57,7 +57,7 @@ static function EventListenerReturn EffectEventListener_BloodThirst(Object Event
 
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
-        EffectState = XCGS_Effect_BloodThirst(CallbackData);
+        EffectState = XGS_Effect_BloodThirst(CallbackData);
         SourceUnit = XComGameState_Unit(EventSource);
         AbilityState = XComGameState_Ability(EventData);
         if (EffectState != none && SourceUnit != none && AbilityState != none)
@@ -71,7 +71,7 @@ static function EventListenerReturn EffectEventListener_BloodThirst(Object Event
                     if (Effect.IsAbilityRelevant(AbilityState, EffectState, SourceUnit, AbilityContext))
                     {
                         NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
-                        EffectState = XCGS_Effect_BloodThirst(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
+                        EffectState = XGS_Effect_BloodThirst(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
                         EffectState.AddStacks(, SourceUnit);
                         `TACTICALRULES.SubmitGameState(NewGameState);
                     }
@@ -85,13 +85,13 @@ static function EventListenerReturn EffectEventListener_BloodThirst(Object Event
 
 static function EventListenerReturn EffectEventListener_OnHarborWaveDealtDamage(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
 {
-    local XCGS_Effect_BloodThirst   EffectState, NewEffectState;
+    local XGS_Effect_BloodThirst    EffectState, NewEffectState;
     local X2Effect_BloodThirst      Effect;
     local XComGameState_Unit        SourceUnit;
     local XComGameState_Ability     AbilityState;
     local int                       MaxCountPerTurn;
 
-    EffectState = XCGS_Effect_BloodThirst(CallbackData);
+    EffectState = XGS_Effect_BloodThirst(CallbackData);
     SourceUnit = XComGameState_Unit(EventSource);
     AbilityState = XComGameState_Ability(EventData);
     if (EffectState != none && SourceUnit != none && AbilityState != none)
@@ -100,12 +100,12 @@ static function EventListenerReturn EffectEventListener_OnHarborWaveDealtDamage(
         if (Effect != none)
         {
             MaxCountPerTurn = Effect.GetMaxStackCountPerTurn(SourceUnit);
-            NewEffectState = XCGS_Effect_BloodThirst(NewGameState.GetGameStateForObjectID(EffectState.ObjectID));
+            NewEffectState = XGS_Effect_BloodThirst(NewGameState.GetGameStateForObjectID(EffectState.ObjectID));
             if (NewEffectState == none)
             {
                 if (MaxCountPerTurn <= 0 || EffectState.iStacksThisTurn < MaxCountPerTurn)
                 {
-                    NewEffectState = XCGS_Effect_BloodThirst(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
+                    NewEffectState = XGS_Effect_BloodThirst(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
                     NewEffectState.AddStacks(, SourceUnit);
                 }
             }
@@ -130,13 +130,13 @@ simulated function bool OnEffectTicked(
     bool FirstApplication,
     XComGameState_Player Player)
 {
-    local XCGS_Effect_BloodThirst BloodThirstEffectState;
+    local XGS_Effect_BloodThirst BloodThirstEffectState;
     local XComGameState_Unit UnitState;
     local bool bContinueTicking;
 
     bContinueTicking = super.OnEffectTicked(ApplyEffectParameters, kNewEffectState, NewGameState, FirstApplication, Player);
 
-    BloodThirstEffectState = XCGS_Effect_BloodThirst(kNewEffectState);
+    BloodThirstEffectState = XGS_Effect_BloodThirst(kNewEffectState);
     UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(BloodThirstEffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 
     if (BloodThirstEffectState != none && UnitState != none)
@@ -151,7 +151,7 @@ simulated function bool OnEffectTicked(
 
 function bool IsAbilityRelevant(
     XComGameState_Ability AbilityState,
-    XCGS_Effect_BloodThirst EffectState,
+    XGS_Effect_BloodThirst EffectState,
     XComGameState_Unit SourceUnit,
     XComGameStateContext_Ability AbilityContext)
 {
@@ -204,9 +204,9 @@ function bool IsAbilityRelevant(
 
 function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit)
 {
-    local XCGS_Effect_BloodThirst BloodThirstEffectState;
+    local XGS_Effect_BloodThirst BloodThirstEffectState;
 
-    BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectGameState);
+    BloodThirstEffectState = XGS_Effect_BloodThirst(EffectGameState);
 
     return BloodThirstEffectState != none && BloodThirstEffectState.GetTotalStacksRemaining() > 0;
 }
@@ -222,7 +222,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     XComGameState NewGameState)
 {
     local XComGameState_Item        EffectSourceWeapon;
-    local XCGS_Effect_BloodThirst   BloodThirstEffectState;
+    local XGS_Effect_BloodThirst    BloodThirstEffectState;
 
     if (AppliedData.EffectRef.ApplyOnTickIndex != INDEX_NONE)
         return 0;
@@ -240,7 +240,7 @@ function float GetPreDefaultAttackingDamageModifier_CH(
     {
         if (CurrentDamage > 0)
         {
-            BloodThirstEffectState = XCGS_Effect_BloodThirst(EffectState);
+            BloodThirstEffectState = XGS_Effect_BloodThirst(EffectState);
             EffectSourceWeapon = XComGameState_Item(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID));
             if (BloodThirstEffectState != none)
             {
@@ -275,7 +275,7 @@ simulated function int GetDamagePerStack(XComGameState_Unit SourceUnit, XComGame
 static function string GetFriendlyDescOutString(Object ParseObj, Object StrategyParseObj, XComGameState GameState)
 {
     local XComGameStateHistory      History;
-    local XCGS_Effect_BloodThirst   EffectState;
+    local XGS_Effect_BloodThirst    EffectState;
     local X2Effect_BloodThirst      Effect;
     local XComGameState_Unit        UnitState;
     local string    OutString;
@@ -285,7 +285,7 @@ static function string GetFriendlyDescOutString(Object ParseObj, Object Strategy
 
     History = `XCOMHISTORY;
 
-    EffectState = XCGS_Effect_BloodThirst(ParseObj);
+    EffectState = XGS_Effect_BloodThirst(ParseObj);
 
     if (EffectState != none)
     {
@@ -335,6 +335,6 @@ defaultproperties
 {
     EffectName = M31_BloodThirst
     DuplicateResponse = eDupe_Ignore
-    GameStateEffectClass = class'XCGS_Effect_BloodThirst'
+    GameStateEffectClass = class'XGS_Effect_BloodThirst'
     DamagePerStack = 1
 }

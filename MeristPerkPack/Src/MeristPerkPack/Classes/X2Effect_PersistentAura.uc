@@ -44,7 +44,7 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 
 defaultproperties
 {
-    GameStateEffectClass = class'XCGS_Effect_PersistentAura'
+    GameStateEffectClass = class'XGS_Effect_PersistentAura'
 
     DuplicateResponse = eDupe_Allow // Do not change
 

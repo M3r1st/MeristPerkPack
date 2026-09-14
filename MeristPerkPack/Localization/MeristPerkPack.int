@@ -155,7 +155,7 @@ strFriendlyDesc_Stacks              = "This unit gains +[X] aim and +[Y] critica
 strFriendlyName                     = "<Ability:M31_FriendlyName>"
 strFriendlyDesc                     = "This unit is enchanted. Its aim, crit, and dodge are increased."
 
-[XCGS_Effect_WS_Maelstrom]
+[XGS_Effect_WS_Maelstrom]
 ModInfoReason                       = "Overflow"
 
 ; ====================================

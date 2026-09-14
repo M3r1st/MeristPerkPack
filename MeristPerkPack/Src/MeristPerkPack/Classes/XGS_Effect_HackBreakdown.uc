@@ -1,4 +1,4 @@
-class XCGS_Effect_HackBreakdown extends XComGameState_Effect;
+class XGS_Effect_HackBreakdown extends XComGameState_Effect;
 
 var private ShotBreakdown HackedBreakdown;
 var int Counter;

@@ -1,4 +1,4 @@
-class XCGS_Effect_PersistentAura extends XComGameState_Effect config(Game);
+class XGS_Effect_PersistentAura extends XComGameState_Effect config(Game);
 
 var config bool bLog;
 var config bool bLogRelevancy;

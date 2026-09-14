@@ -1189,7 +1189,7 @@ static function X2AbilityTemplate BoltMaelstrom()
 
     // StandardAim = X2AbilityToHitCalc_StandardAim(Template.AbilityToHitCalc);
     StandardAim = new class'X2AbilityToHitCalc_StandardAim';
-    StandardAim.OverrideFinalHitChanceFns.AddItem(class'XCGS_Effect_WS_Maelstrom'.static.OverrideHitChance);
+    StandardAim.OverrideFinalHitChanceFns.AddItem(class'XGS_Effect_WS_Maelstrom'.static.OverrideHitChance);
     Template.AbilityToHitCalc = StandardAim;
     Template.AbilityToHitOwnerOnMissCalc = StandardAim;
 
@@ -1240,7 +1240,7 @@ static function X2AbilityTemplate BoltMaelstromLTTAttack()
     Template = BoltLeadTheTargetAttack(default.BoltMaelstromName, default.BoltMaelstromIcon);
 
     StandardAim = new class'X2AbilityToHitCalc_StandardAim';
-    StandardAim.OverrideFinalHitChanceFns.AddItem(class'XCGS_Effect_WS_Maelstrom'.static.OverrideHitChance);
+    StandardAim.OverrideFinalHitChanceFns.AddItem(class'XGS_Effect_WS_Maelstrom'.static.OverrideHitChance);
     Template.AbilityToHitCalc = StandardAim;
     Template.AbilityToHitOwnerOnMissCalc = StandardAim;
 

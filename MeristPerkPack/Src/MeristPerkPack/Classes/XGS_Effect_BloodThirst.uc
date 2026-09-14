@@ -1,9 +1,9 @@
 //---------------------------------------------------------------------------------------
-//  FILE:    XCGS_Effect_BloodThirst.uc
+//  FILE:    XGS_Effect_BloodThirst.uc
 //  AUTHOR:  Merist
 //  PURPOSE: Tracks the amount of stacks for X2Effect_BloodThirst.
 //---------------------------------------------------------------------------------------
-class XCGS_Effect_BloodThirst extends XComGameState_Effect;
+class XGS_Effect_BloodThirst extends XComGameState_Effect;
 
 var array<int> arrStacksRemaining;
 var int iStacksThisTurn;

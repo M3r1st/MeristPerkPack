@@ -24,7 +24,7 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
 static function EventListenerReturn EffectEventListener_TaipanVengeance(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
 {
-    local XCGS_Effect_PA_TaipanVengeance    EffectState;
+    local XGS_Effect_PA_TaipanVengeance     EffectState;
     local X2Effect_PA_TaipanVengeance       Effect;
     local XComGameStateContext_Ability      AbilityContext;
     local XComGameState_Ability             AbilityState;
@@ -45,7 +45,7 @@ static function EventListenerReturn EffectEventListener_TaipanVengeance(Object E
     if (AbilityContext == none || AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt)
         return ELR_NoInterrupt;
 
-    EffectState = XCGS_Effect_PA_TaipanVengeance(CallbackData);
+    EffectState = XGS_Effect_PA_TaipanVengeance(CallbackData);
     Effect = X2Effect_PA_TaipanVengeance(EffectState.GetX2Effect());
     AbilityState = XComGameState_Ability(EventData);
     AbilitySourceUnit = XComGameState_Unit(EventSource);
@@ -163,7 +163,7 @@ static function EventListenerReturn EffectEventListener_TaipanVengeance(Object E
         {
             NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState(string(GetFuncName()));
             
-            EffectState = XCGS_Effect_PA_TaipanVengeance(NewGameState.ModifyStateObject(class'XCGS_Effect_PA_TaipanVengeance', EffectState.ObjectID));
+            EffectState = XGS_Effect_PA_TaipanVengeance(NewGameState.ModifyStateObject(class'XGS_Effect_PA_TaipanVengeance', EffectState.ObjectID));
 
             if (bSelfTarget)
             {
@@ -202,13 +202,13 @@ function GetToHitModifiers(
     bool bIndirectFire,
     out array<ShotModifierInfo> ShotModifiers)
 {
-    local XCGS_Effect_PA_TaipanVengeance VengeanceEffectState;
+    local XGS_Effect_PA_TaipanVengeance VengeanceEffectState;
     local ShotModifierInfo AimInfo;
     local ShotModifierInfo CritInfo;
     local int OutAimBonus;
     local int OutCritBonus;
 
-    VengeanceEffectState = XCGS_Effect_PA_TaipanVengeance(EffectState);
+    VengeanceEffectState = XGS_Effect_PA_TaipanVengeance(EffectState);
 
     if (VengeanceEffectState != none)
     {
@@ -231,7 +231,7 @@ defaultproperties
 {
     EffectName = M31_PA_TaipanVengeance
     DuplicateResponse = eDupe_Ignore
-    GameStateEffectClass = class'XCGS_Effect_PA_TaipanVengeance'
+    GameStateEffectClass = class'XGS_Effect_PA_TaipanVengeance'
 
     bLog = false
 }

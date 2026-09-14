@@ -1,4 +1,4 @@
-class XCGS_Effect_WS_Maelstrom extends XComGameState_Effect;
+class XGS_Effect_WS_Maelstrom extends XComGameState_Effect;
 
 var private int FinalOverflow;
 

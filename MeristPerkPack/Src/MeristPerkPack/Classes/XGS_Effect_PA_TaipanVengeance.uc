@@ -1,4 +1,4 @@
-class XCGS_Effect_PA_TaipanVengeance extends XComGameState_Effect;
+class XGS_Effect_PA_TaipanVengeance extends XComGameState_Effect;
 
 struct ToHitBonusInfo
 {
@@ -54,6 +54,6 @@ function LogCurrentBonuses()
     local ToHitBonusInfo Info; 
     foreach arrToHitBonuses(Info)
     {
-        `LOG(Info.TargetObjectID $ " - " $ Info.AimBonus $ " - " $ Info.CritBonus, class'X2Effect_PA_TaipanVengeance'.default.bLog, 'XCGS_Effect_PA_TaipanVengeance');
+        `LOG(Info.TargetObjectID $ " - " $ Info.AimBonus $ " - " $ Info.CritBonus, class'X2Effect_PA_TaipanVengeance'.default.bLog, 'XGS_Effect_PA_TaipanVengeance');
     }
 }
