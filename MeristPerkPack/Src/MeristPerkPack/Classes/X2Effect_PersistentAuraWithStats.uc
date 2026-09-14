@@ -31,7 +31,6 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     If (SourceUnit.ObjectID != TargetUnit.ObjectID)
     {
-
         EventMgr.RegisterForEvent(EffectObj, 'MindControlled', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
         EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
         EventMgr.RegisterForEvent(EffectObj, 'UnitDied', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);

@@ -38,17 +38,14 @@ static function EventListenerReturn EffectEventListener_Assassin(Object EventDat
     History = `XCOMHISTORY;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
         SourceUnit = XComGameState_Unit(EventSource);
         AbilityState = XComGameState_Ability(EventData);
         EffectState = XComGameState_Effect(CallbackData);
-
         if (SourceUnit != none && AbilityState != none && EffectState != none)
         {
             Effect = X2Effect_Assassin(EffectState.GetX2Effect());
-
             if (Effect != none)
             {
                 if (!Effect.bMatchSourceWeapon || AbilityState.SourceWeapon.ObjectID == EffectState.ApplyEffectParameters.ItemStateObjectRef.ObjectID)
