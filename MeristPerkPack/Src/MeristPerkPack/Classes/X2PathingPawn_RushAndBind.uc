@@ -9,29 +9,11 @@ function bool SelectAttackTile(
     optional bool _Unsorted = false
 )
 {
-    local X2AbilityTarget_MovingMelee MeleeTarget;
-
-    MeleeTarget = X2AbilityTarget_MovingMelee(AbilityState.GetMyTemplate().AbilityTargetStyle);
-
-    if (MeleeTarget != none)
-    {
-        return MeleeTarget.SelectAttackTile(_UnitState, _TargetState, _MeleeAbilityTemplate, _SortedPossibleTiles, _IdealTile, _Unsorted);
-    }
-
     return class'X2AbilityTarget_RushAndBind'.static.SelectAttackTile(_UnitState, _TargetState, _MeleeAbilityTemplate, _SortedPossibleTiles, _IdealTile, _Unsorted);
 }
 
 function bool IsValidAttackTile(XComGameState_Unit _UnitState, const out TTile _SourceTile, const out TTile _TargetTile, X2ReachableTilesCache _TileCache)
 {
-    local X2AbilityTarget_MovingMelee MeleeTarget;
-
-    MeleeTarget = X2AbilityTarget_MovingMelee(AbilityState.GetMyTemplate().AbilityTargetStyle);
-
-    if (MeleeTarget != none)
-    {
-        return MeleeTarget.IsValidAttackTile(_UnitState, _SourceTile, _TargetTile, _TileCache);
-    }
-
     return class'X2AbilityTarget_RushAndBind'.static.IsValidAttackTile(_UnitState, _SourceTile, _TargetTile, _TileCache);
 }
 
