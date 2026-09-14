@@ -3,10 +3,7 @@
 //  AUTHOR:  Amineri (Pavonis Interactive)
 //  PURPOSE: Effect for adding temporary items to a unit
 //--------------------------------------------------------------------------------------- 
-
 class X2Effect_TemporaryItem extends X2Effect_Persistent config(GameData_SoldierSkills);
-
-// `include(LW_PerkPack_Integrated\LW_PerkPack.uci)
 
 struct ResearchConditional
 {
@@ -35,31 +32,17 @@ struct UpgradeInfo
     var name ResearchName;
     var name BaseItemName;
     var name ItemName;
+    var array<name> RDLC;
 };
 var config array<UpgradeInfo> Upgrades;
 var config array<name> GrenadeForceCheckAbilities;
 
-// Deprecated - now using OnEffectRemoved and UnitEndedTacticalPlay instead.
-/* 
-function RegisterForEvents(XComGameState_Effect EffectGameState)
-{
-    local Object EffectObj;
-    local XComGameState_Unit EffectTargetUnit;
-
-    EffectObj = EffectGameState;
-
-    EffectTargetUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-
-    //`XEVENTMGR.RegisterForEvent(EffectObj, 'TacticalGameEnd', OnTacticalGameEnd, ELD_OnStateSubmitted,,,, EffectTargetUnit);
-}
-*/
-
 // Start @Merist
 simulated protected function ApplyResearchUpgrades(out name ItemToAdd)
 {
-    local XComGameState_HeadquartersXCom    XComHQ;
-    local ResearchConditional               Conditional;
-    local UpgradeInfo                       Upgrade;
+    local XComGameState_HeadquartersXCom XComHQ;
+    local ResearchConditional Conditional;
+    local UpgradeInfo Upgrade;
 
     XComHQ = `XCOMHQ;
     if (XComHQ != none)
@@ -81,7 +64,10 @@ simulated protected function ApplyResearchUpgrades(out name ItemToAdd)
             {
                 if (Upgrade.BaseItemName == ItemToAdd && XComHQ.IsTechResearched(Upgrade.ResearchName))
                 {
-                    ItemToAdd = Upgrade.ItemName;
+                    if (class'X2DLCInfo_MeristPerkPack'.static.AreModsActive(Upgrade.RDLC))
+                    {
+                        ItemToAdd = Upgrade.ItemName;
+                    }
                 }
             }
         }
@@ -104,7 +90,6 @@ static function X2Effect CreateGrenadeEffect(X2AbilityTemplate Template, name It
 
     return Effect;
 }
-
 // End @Merist
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
@@ -149,7 +134,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 
     if (OldItemState == none && !bReplaceExistingItemOnly)
     {
-        //check and see if any of the alternative options are available to replace before adding a new item
+        // check and see if any of the alternative options are available to replace before adding a new item
         foreach AlternativeItemNames(AltItemName)
         {
             OldItemState = GetItem(UnitState, AltItemName);
@@ -184,7 +169,7 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
         // Create a new XCGS_Item instance
         NewItemState = AddNewItemToUnit(EquipmentTemplate, UnitState, InventorySlot, NewGameState);
 
-        if(bReplaceExistingItemOnly)
+        if (bReplaceExistingItemOnly)
         {
             //transfer ammo information over
             NewItemState.Ammo = OldItemState.Ammo;
@@ -230,52 +215,36 @@ simulated function XComGameState_Item AddNewItemToUnit(X2EquipmentTemplate Equip
     UnitState.bIgnoreItemEquipRestrictions = bIgnoreItemEquipRestrictions;
 
     // Add the temporary item to the unit's inventory, adding the new state object to the NewGameState container
-    if(!UnitState.AddItemToInventory(ItemState, InventorySlot, NewGameState))
+    if (!UnitState.AddItemToInventory(ItemState, InventorySlot, NewGameState))
         `REDSCREEN("TempItem : Failed to add Item" @ ItemState.GetMyTemplateName() @ "to inventory.");
 
     UnitState.bIgnoreItemEquipRestrictions = bCachedIgnoredItemEquipRestrictions;
 
     // Store it in a UnitValue too.
     UnitState.SetUnitFloatValue(GetItemUnitValueName_Static(EffectName), ItemState.ObjectID, eCleanup_BeginTacticalChain);
-    
+
     // At this point the item has been created and added to the unit's inventory, but any item (or additional) abilities have yet to be added
     EquipmentAbilities = GatherAbilitiesForItem(EquipmentTemplate);
 
-    //first, create any abilities that are missing
+    // First, create any abilities that are missing
     foreach EquipmentAbilities(AbilityName)
     {
-        // `PPTRACE("TempItem: Testing to add" @ AbilityName);
         AbilityRef = UnitState.FindAbility(AbilityName, ItemState.GetReference());
-        if(AbilityRef.ObjectID == 0)
+        if (AbilityRef.ObjectID == 0)
         {
-            // `PPTRACE("TempItem:" @ AbilityName @ "/Item combo not found, adding.");
             AddAbilityToUnit(AbilityName, UnitState, ItemState.GetReference(), NewGameState);
-        }
-        AbilityRef = UnitState.FindAbility(AbilityName, ItemState.GetReference());
-        if(AbilityRef.ObjectID > 0) {
-            // `PPTRACE("TempItem : Post AddAbilityToUnit -- Ability + Item combo found");
-        } else {
-            // `PPTRACE("TempItem : Post AddAbilityToUnit -- Ability + Item combo NOT found");
         }
     }
 
-    //special handling for LaunchGrenade and maybe some other stuff
+    // special handling for LaunchGrenade and maybe some other stuff
     foreach ForceCheckAbilities(AbilityName)
     {
-        // `PPTRACE("TempItem : Checking ability" @ AbilityName @ "on unit:" @ UnitState.GetFullName());
         AbilityRef = UnitState.FindAbility(AbilityName);
-        if(AbilityRef.ObjectID > 0)
+        if (AbilityRef.ObjectID > 0)
         {
             AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityRef.ObjectID));
-            // `PPTRACE("TempItem :" @ AbilityName @ "found, adding for new ammo type.");
-            if(AbilityState.SourceWeapon.ObjectID > 0)
+            if (AbilityState.SourceWeapon.ObjectID > 0)
             {
-                // TempItem = XComGameState_Item(History.GetGameStateForObjectID(AbilityState.SourceWeapon.ObjectID));
-                // `PPTRACE("TempItem : Adding" @ ItemState.GetMyTemplate().GetItemFriendlyName() @ "as ammo to" @ TempItem.GetMyTemplate().GetItemFriendlyName());
-
-                //AddAbilityToUnit(AbilityName, UnitState, ItemState.GetReference(), NewGameState, ItemState.GetReference());  // try and use AddToAbility helper to add item as weapon/ammo for launch grenade
-                //AddAbilityToUnit(AbilityName, UnitState, AbilityState.SourceWeapon, NewGameState, ItemState.GetReference());  // try and use AddToAbility helper to add launcher/ammo ability mapping
-
                 AbilityTemplate = AbilityManager.FindAbilityTemplate(AbilityName);
                 `TACTICALRULES.InitAbilityForUnit(AbilityTemplate, UnitState, NewGameState, AbilityState.SourceWeapon, ItemState.GetReference());
             }
@@ -291,15 +260,6 @@ simulated function XComGameState_Item AddNewItemToUnit(X2EquipmentTemplate Equip
                 AbilityTemplate = AbilityManager.FindAbilityTemplate(AbilityName);
                 `TACTICALRULES.InitAbilityForUnit(AbilityTemplate, UnitState, NewGameState, UnitState.GetSecondaryWeapon().GetReference(), ItemState.GetReference());
             }
-        }
-        AbilityRef = UnitState.FindAbility(AbilityName, ItemState.GetReference());
-        if (AbilityRef.ObjectID > 0)
-        {
-            // `PPTRACE("TempItem : Post AddAbilityToUnit -- Ability + Item combo found");
-        }
-        else
-        {
-            // `PPTRACE("TempItem : Post AddAbilityToUnit -- Ability + Item combo NOT found");
         }
     }
 
@@ -408,13 +368,10 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     local XGS_Effect_TemporaryItem EffectState;
     local XComGameState_Unit UnitState;
 
-    // `LWTrace("OnEffectRemoved called for TemporaryItems");
-
     EffectState = XGS_Effect_TemporaryItem(RemovedEffectState);
     UnitState = XComGameState_Unit(NewGameState.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     if (UnitState == none)
     {
-        // `LWTrace("X2Effect_TemporaryItem cleanup: Unit not found in passed gamestate, grabbing from History");
         UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.TargetStateObjectRef.ObjectID));
     }
 
@@ -423,49 +380,18 @@ simulated function OnEffectRemoved(const out EffectAppliedData ApplyEffectParame
     super.OnEffectRemoved(ApplyEffectParameters, NewGameState, bCleansed, RemovedEffectState);
 }
 
-// Deprecated function
-static function EventListenerReturn OnTacticalGameEnd(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
-{
-    local XComGameState             NewGameState;
-    local XGS_Effect_TemporaryItem  EffectState;
-    local XComGameState_Unit UnitState;
-
-    // `LWTrace("OnTacticalGameEnd called for TemporaryItems");
-    
-    EffectState = XGS_Effect_TemporaryItem(CallbackData);
-    UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComGameState_BaseObject(EventSource).ObjectID));
-    // `LWTrace("Effect State returned:" @EffectState);
-    // `LWTrace("Unit:" @UnitState.GetFullName());
-    NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Temporary Item Cleanup");
-    ClearTemporaryItems(EffectState, NewGameState, UnitState);
-
-    if (NewGameState.GetNumGameStateObjects() > 0)
-        `GAMERULES.SubmitGameState(NewGameState);
-    else
-        `XCOMHISTORY.CleanupPendingGameState(NewGameState);
-
-    return ELR_NoInterrupt;
-}
-
 // let's handle this function too so we can cover all possible things
 function UnitEndedTacticalPlay(XComGameState_Effect EffectState, XComGameState_Unit UnitState)
 {
     local XComGameState NewGameState;
     local XGS_Effect_TemporaryItem TemporaryEffectState;
 
-    // `LWTrace("UnitEndedTacticalPlay called on TemporaryItemEffect");
-    
     TemporaryEffectState = XGS_Effect_TemporaryItem(EffectState);
     NewGameState = UnitState.GetParentGameState();
 
     if (TemporaryEffectState != none)
     {
-        // `LWTrace("Effect state found, entering ClearTemporaryItems");
         ClearTemporaryItems(TemporaryEffectState, NewGameState, UnitState);
-    }
-    else
-    {
-        // `LWTrace("EffectState not found from UnitEndedTacticalPlay");
     }
 }
 
@@ -481,62 +407,42 @@ static function ClearTemporaryItems(XGS_Effect_TemporaryItem EffectState, XComGa
 
     History = `XCOMHISTORY;
 
-    // `LWTrace("ClearTemporaryItems called, TemporaryItems length:" @ EffectState.TemporaryItems.length);
-
     foreach EffectState.TemporaryItems(ItemRef)
     {
         bDontRemove = false;
-
-        // `LWTrace("Checking item" @ItemRef.ObjectId);
         if (ItemRef.ObjectID > 0)
         {
-            // `LWTrace("ItemRef Found");
             ItemState = XComGameState_Item(NewGameState.GetGameStateForObjectID(ItemRef.ObjectID));
 
-            if(ItemState == none)
+            if (ItemState == none)
             {
-                // `LWTrace("Grabbing ItemState from History instead");
                 ItemState = XComGameState_Item(History.GetGameStateForObjectID(ItemRef.ObjectID));
             }
 
             if (ItemState != none)
             {
-                // `LWTrace("ItemState Found in History");
-
                 // Hardcoding this handling here since this one always will fail to be removed.
-                if(ItemState.GetMyTemplateName() == 'EvacFlare')
+                if (ItemState.GetMyTemplateName() == 'EvacFlare')
                 {
                     continue;
                 }
 
                 UnitState = OriginalUnitState;
 
-                if(UnitState == none)
+                if (UnitState == none)
                 {
-                    // `LWTrace("UnitState not passed to ClearTemporaryItems; grabbing from History");
                     UnitState = XComGameState_Unit(History.GetGameStateForObjectID(ItemState.OwnerStateObject.ObjectID));
                 }
 
                 if (UnitState != none)
                 {
-                    // `LWTrace("Unit owner found, removing");
-
-                    if(UnitState.RemoveItemFromInventory(ItemState)) // Remove the item from the unit's inventory
-                    {
-                        // `LWTrace("Item removed from Unit");
-                    }
-                    else
+                    if (!UnitState.RemoveItemFromInventory(ItemState))
                     {
                         bDontRemove = true;
-                        // `LWTrace("Item not removed for some reason!");
                     }
                 }
-                else
-                {
-                    // `LWTrace("TemporaryItem: Owner not found");
-                }
 
-                if(!bDontRemove)
+                if (!bDontRemove)
                 {
                     // Remove the temporary item's gamestate object from history
                     NewGameState.RemoveStateObject(ItemRef.ObjectID);
@@ -546,15 +452,13 @@ static function ClearTemporaryItems(XGS_Effect_TemporaryItem EffectState, XComGa
     }
 
     // catch multi phase missions
-    if(EffectState.TemporaryItems.length == 0)
+    if (EffectState.TemporaryItems.Length == 0)
     {
         UnitState = XComGameState_Unit(History.GetGameStateForObjectID(OriginalUnitState.ObjectID));
 
         UnitState.GetUnitValue(GetItemUnitValueName_Static(EffectState.GetX2Effect().EffectName), ItemUnitValue);
 
-        // `LWTrace("Item found from UnitValue:" @ItemUnitValue.fValue);
-
-        if(ItemUnitValue.fValue > 0)
+        if (ItemUnitValue.fValue > 0)
         {
             ItemState = XComGameState_Item(History.GetGameStateForObjectID(ItemUnitValue.fValue));
             UnitState.RemoveItemFromInventory(ItemState);
@@ -587,9 +491,9 @@ static function bool SkipForDirectMissionTransfer(const out EffectAppliedData Ap
     return true;
 }
 
-static function name GetItemUnitValueName_Static(name AbilityName)
+static function name GetItemUnitValueName_Static(name DataName)
 {
-    return name(AbilityName $ default.UnitValueName);
+    return name(DataName $ default.UnitValueName);
 }
 
 defaultproperties
@@ -598,7 +502,7 @@ defaultproperties
     DuplicateResponse = eDupe_Ignore
     bInfiniteDuration = true
 
-    GameStateEffectClass=class'XGS_Effect_TemporaryItem'
+    GameStateEffectClass = class'XGS_Effect_TemporaryItem'
 
     UnitValueName = "_LWTemporaryItemEffectUnitValue"
 }
