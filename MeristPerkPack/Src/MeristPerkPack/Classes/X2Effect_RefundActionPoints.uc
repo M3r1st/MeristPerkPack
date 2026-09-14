@@ -10,7 +10,7 @@ var array<name> AllowedAbilities;
 // If `true`, PostAbilityCostPaid will be used to return the action point array to the previous state
 // If `false`, OnAbilityActivated will be used to add an action point
 var bool bRefundAll;
-// The of the action point to add if `bRefundAll = false`
+// The type of the action to add if `bRefundAll = false`
 var name ActionPointType;
 
 // Require the source weapon of the effect and the ability to match
