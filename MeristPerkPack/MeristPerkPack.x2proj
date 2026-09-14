@@ -422,5 +422,9 @@
     <Content Include="Src\MeristPerkPack\Classes\X2Condition_Rider_ConcussiveBlows.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Rider_ConcussiveBlows.uc" />
     <Content Include="Src\MeristPerkPack\Classes\X2Effect_Rider_ConcussiveBlowsBonus.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2Effect_GetOverHere_New.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2GetOverHerePuck.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_GetOverHere.uc" />
+    <Content Include="Src\MeristPerkPack\Classes\X2TargetingMethod_GetOverHereAlly.uc" />
   </ItemGroup>
 </Project>

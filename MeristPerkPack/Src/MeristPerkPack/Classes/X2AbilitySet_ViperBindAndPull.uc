@@ -163,6 +163,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
 static function X2AbilityTemplate GetOverHereAlly(name DataName)
 {
     local X2AbilityTemplate             Template;
+    local X2Condition_BindableTile      TileCondition;
     local X2Condition_UnitProperty      UnitPropertyCondition;
     local X2AbilityCooldown_Extended    Cooldown;
     local name                          AbilityName;
@@ -180,12 +181,15 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    Template.TargetingMethod = class'X2TargetingMethod_GetOverHere';
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
     AddSuppressedCondition(Template);
     // There must be a free tile around the source unit
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_BindableTile');
+    TileCondition = new class'X2Condition_BindableTile';
+    TileCondition.RequireVisible = true;
+    Template.AbilityShooterConditions.AddItem(TileCondition);
 
     // The target cannot be bound, carried, unconcious or frozen
     // The target must be humanoid
@@ -219,7 +223,7 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     AddActionPointCost(Template, eCost_Single);
 
     // Apply the effect that pulls the unit to the Viper
-    Template.AddTargetEffect(new class'X2Effect_GetOverHere');
+    Template.AddTargetEffect(new class'X2Effect_GetOverHere_New');
 
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = GetOverHereAlly_BuildVisualization;
@@ -255,7 +259,6 @@ static simulated function GetOverHereAlly_BuildVisualization(XComGameState Visua
 
     Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
     AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
-
 
     InteractingUnitRef = Context.InputContext.SourceObject;
     SourceMetadata = EmptyTrack;
