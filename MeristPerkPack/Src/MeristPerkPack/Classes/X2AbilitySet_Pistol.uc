@@ -16,6 +16,7 @@ static function array<X2DataTemplate> CreateTemplates()
     Templates.AddItem(ReflexShot());
         Templates.AddItem(ReflexShotAttack());
     Templates.AddItem(PistolRouletteShot());
+        Templates.AddItem(PistolRouletteShotDamage());
     Templates.AddItem(SleightOfHand());
     Templates.AddItem(Undertaker());
 
