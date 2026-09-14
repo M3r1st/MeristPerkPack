@@ -183,6 +183,8 @@ static function X2AbilityTemplate AdvancedOptics()
     Effect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(Effect);
 
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+
     return Template;
 }
 
@@ -2133,6 +2135,7 @@ static function X2AbilityTemplate ShotgunWedding()
     Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
     Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
     Template.BuildInterruptGameStateFn = TypicalAbility_BuildInterruptGameState;
+    Template.DamagePreviewFn = ShotgunWeddingDamagePreview;
 
     Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
 
@@ -2147,9 +2150,8 @@ static function X2AbilityTemplate ShotgunWedding()
 
     Template.bCrossClassEligible = false;
 
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
     Template.AdditionalAbilities.AddItem('M31_ShotgunWedding_Attack');
-
-    Template.DamagePreviewFn = ShotgunWeddingDamagePreview;
 
     return Template;
 }
@@ -2246,6 +2248,8 @@ static function X2AbilityTemplate ShotgunWeddingAttack()
 
     Template.bFragileDamageOnly = true;
 
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+
     return Template;
 }
 
@@ -2338,8 +2342,8 @@ static function X2AbilityTemplate SniperOverwatch()
 
     Template.AbilityConfirmSound = "Unreal2DSounds_OverWatch";
 
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
     Template.PostActivationEvents.AddItem('OverwatchUsed');
-
     Template.AdditionalAbilities.AddItem('M31_SniperOverwatch_Attack');
 
     return Template;
@@ -2411,6 +2415,8 @@ static function X2AbilityTemplate SniperOverwatchAttack()
     Template.bShowActivation = true;
     Template.bFrameEvenWhenUnitIsHidden = true;
 
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+
     return Template;
 }
 
@@ -2443,7 +2449,9 @@ static function X2AbilityTemplate SolidSnake()
     DodgeIgnoreEffect.DodgeReductionBonus = `GetConfigInt("M31_SolidSnake_DodgeIgnore");
     DodgeIgnoreEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(DodgeIgnoreEffect);
-    
+
+    Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
+
     return Template;
 }
 
