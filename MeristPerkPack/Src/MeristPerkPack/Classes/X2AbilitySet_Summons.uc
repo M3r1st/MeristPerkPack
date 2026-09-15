@@ -17,7 +17,7 @@ var privatewrite name GatewayReanimationRequiredEffect;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Templates;
+    // local array<X2DataTemplate> Templates;
 
     // Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_Summons_Animations', ""));
 
@@ -40,7 +40,7 @@ static function array<X2DataTemplate> CreateTemplates()
 
     // Templates.AddItem(KillTargetSummon());
 
-    return Templates;
+    // return Templates;
 }
 
 static function X2AbilityTemplate PsiReanimation(name DataName = 'M31_PsiReanimation')

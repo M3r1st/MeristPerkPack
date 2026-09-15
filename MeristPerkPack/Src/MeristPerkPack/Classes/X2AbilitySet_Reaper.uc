@@ -2,12 +2,12 @@ class X2AbilitySet_Reaper extends X2Ability_Extended config(GameData_SoldierSkil
 
 static function array<X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Templates;
+    // local array<X2DataTemplate> Templates;
 
     // Templates.AddItem(Aim());
     // Templates.AddItem(Tricks());
 
-    return Templates;
+    // return Templates;
 }
 
 // weak_EasyTarget

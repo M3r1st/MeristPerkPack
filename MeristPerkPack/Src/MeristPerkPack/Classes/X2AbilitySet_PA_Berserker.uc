@@ -6,14 +6,14 @@ var privatewrite name AftershockCallbackEffectName;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Templates;
+    // local array<X2DataTemplate> Templates;
 
     // Templates.AddItem(Smash());
     // Templates.AddItem(Bash());
 
     // Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_PA_BK_Anims', ""));
 
-    return Templates;
+    // return Templates;
 }
 
 static function X2AbilityTemplate Smash(name DataName = 'M31_PA_BK_Smash')

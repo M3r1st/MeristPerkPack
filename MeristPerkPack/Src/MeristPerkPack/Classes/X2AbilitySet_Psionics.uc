@@ -6,7 +6,7 @@ var localized string strNullGuardFriendlyDesc;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
-    local array<X2DataTemplate> Templates;
+    // local array<X2DataTemplate> Templates;
 
     // Templates.AddItem(class'M31_Helpers'.static.CreateAnimSetPassive('M31_Psi_Animations', ""));
 
@@ -30,7 +30,7 @@ static function array<X2DataTemplate> CreateTemplates()
     // Templates.AddItem(ArcMindspin());
     // Templates.AddItem(Domination());
 
-    return Templates;
+    // return Templates;
 }
 
 static function X2AbilityTemplate PsionicReaper()

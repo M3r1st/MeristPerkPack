@@ -1235,9 +1235,9 @@ static function bool GetPsiOutStrings(string InString, out string OutString, Obj
 
 static function bool GetBerserkerOutStrings(string InString, out string OutString, Object ParseObj, Object StrategyParseOb, XComGameState GameState)
 {
-    local XComGameState_Unit UnitState;
+    // local XComGameState_Unit UnitState;
 
-    UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
+    // UnitState = GetSourceUnitFromParseObj(ParseObj, StrategyParseOb, GameState);
     switch (InString)
     {
         // case "":
