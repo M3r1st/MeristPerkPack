@@ -46,7 +46,7 @@ function UpdateStats(XComGameState_Unit TargetUnit, XComGameState NewGameState)
     }
 }
 
-function bool ShouldUpdateStats(const out XComGameState_Unit TargetUnit, const out XComGameState NewGameState)
+function bool ShouldUpdateStats(const out XComGameState_Unit TargetUnit, const out XComGameState_Unit SourceUnit, const out XComGameState NewGameState)
 {
     // local XComGameStateHistory              History;
     local X2Effect_PersistentAuraWithStats  Effect;
@@ -67,7 +67,7 @@ function bool ShouldUpdateStats(const out XComGameState_Unit TargetUnit, const o
     if (!bRemoved)
     {
         // Effect is relevant...
-        if (Effect.IsEffectCurrentlyRelevant(self, TargetUnit))
+        if (Effect.IsEffectCurrentlyRelevantForUpdate(self, TargetUnit, SourceUnit))
         {
             `LOG("Effect is currently relevant", default.bLog, default.Class.Name);
             // ... and was relevant before; no changes needed

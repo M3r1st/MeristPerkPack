@@ -49,7 +49,7 @@ static function EventListenerReturn UpdateStats_OSS(Object EventData, Object Eve
 {
     local XComGameStateHistory          History;
     local XGS_Effect_PersistentAura     EffectState;
-    local XComGameState_Unit            TargetUnit;
+    local XComGameState_Unit            TargetUnit, SourceUnit;
     local XComGameState                 NewGameState;
 
     History = `XCOMHISTORY;
@@ -57,10 +57,23 @@ static function EventListenerReturn UpdateStats_OSS(Object EventData, Object Eve
     EffectState = XGS_Effect_PersistentAura(CallbackData);
     if (EffectState != none)
     {
-        TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-        if (TargetUnit != none)
+        SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+        if (SourceUnit == none)
         {
-            if (EffectState.ShouldUpdateStats(TargetUnit, GameState))
+            SourceUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+        }
+        TargetUnit = XComGameState_Unit(EventSource);
+        if (TargetUnit == none)
+        {
+            TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+        }
+        if (TargetUnit == none)
+        {
+            TargetUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+        }
+        if (TargetUnit != none && SourceUnit != none)
+        {
+            if (EffectState.ShouldUpdateStats(TargetUnit, SourceUnit, GameState))
             {
                 NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Update" $ EffectState.GetX2Effect().EffectName);
                 EffectState = XGS_Effect_PersistentAura(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
@@ -78,21 +91,22 @@ static function EventListenerReturn UpdateStats_Immediate(Object EventData, Obje
 {
     local XComGameStateHistory          History;
     local XGS_Effect_PersistentAura     EffectState;
-    local XComGameState_Unit            TargetUnit, OldTargetState;
+    local XComGameState_Unit            TargetUnit, OldTargetState, SourceUnit;
 
     if (NewGameState != none)
     {
         History = `XCOMHISTORY;
 
         EffectState = XGS_Effect_PersistentAura(CallbackData);
-        if (EffectState != none)
+        SourceUnit = XComGameState_Unit(EventSource);
+        if (EffectState != none && SourceUnit != none)
         {
             TargetUnit = XComGameState_Unit(NewGameState.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
             if (TargetUnit == none)
                 OldTargetState = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
             if (OldTargetState != none)
             {
-                if (EffectState.ShouldUpdateStats(OldTargetState, NewGameState))
+                if (EffectState.ShouldUpdateStats(OldTargetState, SourceUnit, NewGameState))
                 {
                     EffectState = XGS_Effect_PersistentAura(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
                     TargetUnit = XComGameState_Unit(NewGameState.ModifyStateObject(OldTargetState.Class, OldTargetState.ObjectID));
@@ -101,7 +115,7 @@ static function EventListenerReturn UpdateStats_Immediate(Object EventData, Obje
             }
             else if (TargetUnit != none)
             {
-                if (EffectState.ShouldUpdateStats(TargetUnit, NewGameState))
+                if (EffectState.ShouldUpdateStats(TargetUnit, SourceUnit, NewGameState))
                 {
                     EffectState = XGS_Effect_PersistentAura(NewGameState.ModifyStateObject(EffectState.Class, EffectState.ObjectID));
                     EffectState.UpdateStats(TargetUnit, NewGameState);
@@ -175,6 +189,11 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
 
     SourceUnit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 
+    `LOG("=====================================================", class'XGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
+    `LOG(GetFuncName(), class'XGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
+    `LOG("Source: " $ SourceUnit.GetFullName() $ " (" $ SourceUnit.ObjectID $ ")", class'XGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
+    `LOG("Target: " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", class'XGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
+
     if (SourceUnit == none || SourceUnit.IsDead() || TargetUnit == none || TargetUnit.IsDead())
     {
         `LOG("Source or target are dead or not found", class'XGS_Effect_PersistentAura'.default.bLogRelevancy, default.Class.Name);
@@ -231,11 +250,79 @@ function bool IsEffectCurrentlyRelevant(XComGameState_Effect EffectGameState, XC
     return true;
 }
 
+function bool IsEffectCurrentlyRelevantForUpdate(XComGameState_Effect EffectGameState, XComGameState_Unit TargetUnit, XComGameState_Unit SourceUnit)
+{
+    local XComGameStateHistory  History;
+    local XComGameState_Effect  EffectState;
+    local StateObjectReference  EffectRef;
+
+    `LOG("=====================================================", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+    `LOG(GetFuncName(), class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+    `LOG("Source: " $ SourceUnit.GetFullName() $ " (" $ SourceUnit.ObjectID $ ")", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+    `LOG("Target: " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+
+    if (SourceUnit == none || SourceUnit.IsDead() || TargetUnit == none || TargetUnit.IsDead())
+    {
+        `LOG("Source or target are dead or not found", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+        return false;
+    }
+
+    if (SourceUnit.ObjectID == TargetUnit.ObjectID)
+    {
+        `LOG("Source is the target", class'XGS_Effect_PersistentAura'.default.bLog, EffectName);
+        return bIncludeOwner;
+    }
+    else
+    {
+        if (!bIncludeFriendly && SourceUnit.IsFriendlyUnit(TargetUnit))
+        {
+            `LOG("Target is friendly", class'XGS_Effect_PersistentAura'.default.bLog, EffectName);
+            return false;
+        }
+        if (!bIncludeHostile && SourceUnit.IsEnemyUnit(TargetUnit))
+        {
+            `LOG("Target is hostile", class'XGS_Effect_PersistentAura'.default.bLog, EffectName);
+            return false;
+        }
+        if (Radius > 0 && !class'Helpers'.static.IsTileInRange(SourceUnit.TileLocation, TargetUnit.TileLocation, Radius * Radius))
+        {
+            `LOG("Target is not in range", class'XGS_Effect_PersistentAura'.default.bLog, EffectName);
+            return false;
+        }
+    }
+
+    if (IsUniqueModifier())
+    {
+        `LOG("IsUniqueModifier: true", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+        History = `XCOMHISTORY;
+
+        foreach TargetUnit.AffectedByEffects(EffectRef)
+        {
+            if (EffectRef.ObjectID != EffectGameState.ObjectID)
+            {
+                EffectState = XComGameState_Effect(History.GetGameStateForObjectID(EffectRef.ObjectID));
+                if (EffectState != none)
+                {
+                    if (EffectState.GetX2Effect().EffectName == EffectName && EffectState.StatChanges.Length > 0)
+                    {
+                        `LOG(TargetUnit.GetMyTemplateName() $ " is already affected by " $ EffectState.GetX2Effect().EffectName, class'XGS_Effect_PersistentAura'.default.bLogRelevancy, GetFuncName());
+                        `LOG(GetFuncName() $ ": false", class'XGS_Effect_PersistentAura'.default.bLog, default.Class.Name);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    return true;
+}
+
 defaultproperties
 {
     GameStateEffectClass = class'XGS_Effect_PersistentAura'
 
     DuplicateResponse = eDupe_Allow // Do not change
+    bCanBeRedirected = false
 
     bIncludeFriendly = true
     bIncludeHostile = false

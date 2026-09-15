@@ -37,16 +37,27 @@ static function EventListenerReturn UpdateStats(Object EventData, Object EventSo
         Effect = X2Effect_PersistentAuraWithStats_Source(EffectState.GetX2Effect());
         if (Effect != none)
         {
-            NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Aura update for " $ EffectState.ApplyEffectParameters.AbilityInputContext.AbilityTemplateName);
-            SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-            `XEVENTMGR.TriggerEvent(Effect.UpdateEventName, SourceUnit, SourceUnit, NewGameState);
-            if (NewGameState.GetNumGameStateObjects() > 0)
+            SourceUnit = XComGameState_Unit(EventSource);
+            if (SourceUnit == none)
             {
-                `TACTICALRULES.SubmitGameState(NewGameState);
+                SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
             }
-            else
+            if (SourceUnit == none)
             {
-                History.CleanupPendingGameState(NewGameState);
+                SourceUnit = XComGameState_Unit(GameState.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+            }
+            if (SourceUnit != none)
+            {
+                NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Aura update for " $ EffectState.ApplyEffectParameters.AbilityInputContext.AbilityTemplateName);
+                `XEVENTMGR.TriggerEvent(Effect.UpdateEventName, SourceUnit, SourceUnit, NewGameState);
+                if (NewGameState.GetNumGameStateObjects() > 0)
+                {
+                    `TACTICALRULES.SubmitGameState(NewGameState);
+                }
+                else
+                {
+                    History.CleanupPendingGameState(NewGameState);
+                }
             }
         }
     }
@@ -58,4 +69,5 @@ defaultproperties
 {
     EffectName = M31_PersistentAuraWithStats_Source
     DuplicateResponse = eDupe_Ignore
+    bCanBeRedirected = false
 }

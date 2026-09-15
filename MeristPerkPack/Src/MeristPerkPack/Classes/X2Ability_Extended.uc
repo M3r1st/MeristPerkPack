@@ -555,30 +555,26 @@ static function EventListenerReturn AbilityTriggerEventListener_BuffMe(Object Ev
     local XComGameStateContext_Ability  AbilityContext;
     local XComGameState_Ability         CallbackAbilityState;
     local XComGameState_Unit            TargetUnit;
-    local int                           VisualizeIndex;
 
     History = `XCOMHISTORY;
 
     AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-
     if (AbilityContext != none && AbilityContext.InterruptionStatus != eInterruptionStatus_Interrupt)
     {
         CallbackAbilityState = XComGameState_Ability(CallbackData);
         TargetUnit = XComGameState_Unit(EventSource);
-
-        VisualizeIndex = GameState.HistoryIndex;
 
         if (CallbackAbilityState.OwnerStateObject.ObjectID != TargetUnit.ObjectID)
         {
             if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
             {
                 `LOG("Single Target: " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", class'X2DLCInfo_MeristBuffMe'.default.bLog, GetFuncName());
-                CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+                CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false);
             }
         }
         else
         {
-            `LOG("SelfTarget for " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", true, GetFuncName());
+            `LOG("SelfTarget for " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", class'X2DLCInfo_MeristBuffMe'.default.bLog, GetFuncName());
             foreach History.IterateByClassType(class'XComGameState_Unit', TargetUnit,,, GameState.HistoryIndex)
             {
                 if (TargetUnit.bRemovedFromPlay)
@@ -588,7 +584,7 @@ static function EventListenerReturn AbilityTriggerEventListener_BuffMe(Object Ev
                 if (CallbackAbilityState.CanActivateAbilityForObserverEvent(TargetUnit) == 'AA_Success')
                 {
                     `LOG("Target: " $ TargetUnit.GetFullName() $ " (" $ TargetUnit.ObjectID $ ")", class'X2DLCInfo_MeristBuffMe'.default.bLog, GetFuncName());
-                    CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false, VisualizeIndex);
+                    CallbackAbilityState.AbilityTriggerAgainstSingleTarget(TargetUnit.GetReference(), false);
                 }
             }
         }

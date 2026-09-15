@@ -47,6 +47,7 @@ defaultproperties
     GameStateEffectClass = class'XGS_Effect_PersistentAura'
 
     DuplicateResponse = eDupe_Allow // Do not change
+    bCanBeRedirected = false
 
     bIncludeFriendly = true
     bIncludeHostile = false

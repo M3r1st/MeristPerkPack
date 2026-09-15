@@ -3292,6 +3292,7 @@ static function X2AbilityTemplate ZoneOfControl()
     Effect.AddPersistentStatChange(eStat_Mobility, -1 * `GetConfigInt("M31_ZoneOfControl_MobilityPenalty"));
     Effect.BuildPersistentEffect(1, true, false);
     Effect.SetDisplayInfo(ePerkBuff_Penalty, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
+    Effect.TargetConditions.AddItem(EffectCondition);
     Template.AddTargetEffect(Effect);
 
     Template.AdditionalAbilities.AddItem('M31_ZoneOfControl_Passive');
