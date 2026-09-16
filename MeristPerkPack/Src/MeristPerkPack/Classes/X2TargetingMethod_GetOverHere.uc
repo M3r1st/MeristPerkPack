@@ -157,11 +157,16 @@ function bool AllowMouseConfirm()
 
 static function bool IsTileValidForBind(const out TTile TileOption, const out XComGameState_Unit SourceUnitState, const out XComGameState_Unit TargetUnitState)
 {
+    local XComWorldData World;
     local array<Actor> TileActors;
     local Object PassToDelegate;
 
-    TileActors = `XWORLD.GetActorsOnTile(TileOption);
+    World = `XWORLD;
+    TileActors = World.GetActorsOnTile(TileOption);
     if (TileActors.Length > 0)
+        return false;
+
+    if (!World.IsFloorTile(TileOption) || !World.CanUnitsEnterTile(TileOption))
         return false;
 
     return class'X2Condition_BindableTile'.static.IsTileValidForBind(TileOption, SourceUnitState.TileLocation, PassToDelegate);

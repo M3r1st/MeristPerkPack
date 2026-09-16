@@ -72,6 +72,7 @@ static function bool RushAndBindWS_DamagePreview(XComGameState_Ability AbilitySt
 static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityName)
 {
     local X2AbilityTemplate                 Template;
+    local X2Condition_BindableTile          TileCondition;
     local X2Condition_UnitProperty          UnitPropertyCondition;
     local X2AbilityCooldown_Extended        Cooldown;
     local X2Effect_GrantActionPoints        ActionPointEffect;
@@ -91,12 +92,15 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
     Template.AbilityToHitCalc = default.SimpleStandardAim;
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+    Template.TargetingMethod = class'X2TargetingMethod_GetOverHere';
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
     AddSuppressedCondition(Template);
     // There must be a free tile around the source unit
-    Template.AbilityShooterConditions.AddItem(new class'X2Condition_BindableTile');
+    TileCondition = new class'X2Condition_BindableTile';
+    TileCondition.bOnlyForPull = false;
+    Template.AbilityShooterConditions.AddItem(TileCondition);
 
     // The target cannot be bound, carried, unconcious or frozen
     // The target must be humanoid
@@ -110,6 +114,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
     UnitPropertyCondition.WithinMinRange = `TILESTOUNITS(`GetConfigInt("M31_PA_GetOverHere_MinRange"));
     UnitPropertyCondition.RequireWithinRange = true;
     UnitPropertyCondition.WithinRange = `TILESTOUNITS(`GetConfigInt("M31_PA_GetOverHere_MaxRange")) + 1;
+    UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
@@ -125,10 +130,11 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
         }
     }
     Template.AbilityCooldown = Cooldown;
+    // This HAS to be non-turn-ending
     AddActionPointCost(Template, eCost_Single);
 
     // Apply the effect that pulls the unit to the Viper
-    Template.AddTargetEffect(new class'X2Effect_GetOverHere');
+    Template.AddTargetEffect(new class'X2Effect_GetOverHere_New');
 
     // The shooter gets an action point that can be used for bind
     ActionPointEffect = new class'X2Effect_GrantActionPoints';
@@ -181,14 +187,14 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     Template.AbilityToHitCalc = default.DeadEye;
     Template.AbilityTargetStyle = default.SimpleSingleTarget;
     Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
-    Template.TargetingMethod = class'X2TargetingMethod_GetOverHere';
+    Template.TargetingMethod = class'X2TargetingMethod_GetOverHereAlly';
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
     AddSuppressedCondition(Template);
     // There must be a free tile around the source unit
     TileCondition = new class'X2Condition_BindableTile';
-    TileCondition.RequireVisible = true;
+    TileCondition.bOnlyForPull = true;
     Template.AbilityShooterConditions.AddItem(TileCondition);
 
     // The target cannot be bound, carried, unconcious or frozen
@@ -205,6 +211,7 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
     UnitPropertyCondition.WithinMinRange = `TILESTOUNITS(`GetConfigInt("M31_PA_GetOverHereAlly_MinRange"));
     UnitPropertyCondition.RequireWithinRange = true;
     UnitPropertyCondition.WithinRange = `TILESTOUNITS(`GetConfigInt("M31_PA_GetOverHereAlly_MaxRange")) + 1;
+    UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityTargetConditions.AddItem(UnitPropertyCondition);
 
     Cooldown = new class'X2AbilityCooldown_Extended';
@@ -500,6 +507,7 @@ static function X2AbilityTemplate EndBind(name DataName)
 static function X2AbilityTemplate RushAndBind(name DataName, name BindAbilityName, name CrushAbilityName, optional name InputCrushAbilityName, bool bSentinel = false)
 {
     local X2AbilityTemplate             Template;
+    local X2Condition_BindableTile      TileCondition;
     local X2Effect_GrantActionPoints    ActionPointsEffect;
     local X2Effect_ImmediateAbilityActivation BindAbilityEffect;
 
@@ -530,7 +538,9 @@ static function X2AbilityTemplate RushAndBind(name DataName, name BindAbilityNam
 
     Template.AbilityTargetConditions.AddItem(default.MeleeVisibilityCondition);
     Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitOnlyProperty);
-    Template.AbilityTargetConditions.AddItem(new class'X2Condition_BindableTile');
+    TileCondition = new class'X2Condition_BindableTile';
+    TileCondition.bOnlyForPull = false;
+    Template.AbilityShooterConditions.AddItem(TileCondition);
     AddDefaultBindConditions(Template, bSentinel);
 
     AddCooldown(Template, (bSentinel ? `GetConfigInt("M31_PA_WS_RushAndBind_Cooldown") : `GetConfigInt("M31_PA_RushAndBind_Cooldown")));
