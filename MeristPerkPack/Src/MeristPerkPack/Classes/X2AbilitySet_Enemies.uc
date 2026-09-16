@@ -209,7 +209,7 @@ static function X2AbilityTemplate Lockjaw(name DataName, name AdditionalAbilityN
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;
@@ -302,7 +302,7 @@ static function X2AbilityTemplate AngryBite(name DataName, name AdditionalAbilit
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;

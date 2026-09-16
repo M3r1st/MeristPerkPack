@@ -96,7 +96,7 @@ static function X2AbilityTemplate GetOverHere(name DataName, name BindAbilityNam
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     // There must be a free tile around the source unit
     TileCondition = new class'X2Condition_BindableTile';
     TileCondition.bOnlyForPull = false;
@@ -191,7 +191,7 @@ static function X2AbilityTemplate GetOverHereAlly(name DataName)
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     // There must be a free tile around the source unit
     TileCondition = new class'X2Condition_BindableTile';
     TileCondition.bOnlyForPull = true;

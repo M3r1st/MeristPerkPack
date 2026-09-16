@@ -133,7 +133,7 @@ static function X2AbilityTemplate Pinions()
     Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     ExcludeEffects = new class'X2Condition_UnitEffects';
     ExcludeEffects.AddExcludeEffect(default.PinionsShooterEffectName, 'AA_DuplicateEffectIgnored');

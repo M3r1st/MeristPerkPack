@@ -406,7 +406,7 @@ static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName,
     Template.AbilityTargetConditions.AddItem(BladestormTargetCondition);
 }
 
-static function AddSuppressedCondition(out X2AbilityTemplate Template)
+static function AddShooterSuppressedExclusions(out X2AbilityTemplate Template)
 {
     local X2Condition_UnitEffects SuppressedCondition;
 

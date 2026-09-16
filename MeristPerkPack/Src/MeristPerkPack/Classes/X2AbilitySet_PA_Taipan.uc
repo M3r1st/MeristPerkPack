@@ -208,7 +208,7 @@ static function X2AbilityTemplate TaipanAmbush()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     // Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn'); // Allow to be usable during unit's own turn
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanAmbush_Counter', `GetConfigInt("M31_PA_TaipanAmbush_ActivationsPerTurn"));
 
     VisibilityCondition = new class'X2Condition_Visibility';
@@ -262,7 +262,7 @@ static function X2AbilityTemplate TaipanAmbush2()
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
     Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
@@ -332,7 +332,7 @@ static function X2AbilityTemplate TaipanReturnFire()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     // Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn'); // Allow to be usable during unit's own turn
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanReturnFire_Counter', `GetConfigInt("M31_PA_TaipanReturnFire_ActivationsPerTurn"));
 
     Template.AbilityTargetConditions.AddItem(default.GameplayVisibilityCondition);
@@ -432,7 +432,7 @@ static function X2AbilityTemplate TaipanWatchThemRun()
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
     Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
@@ -650,7 +650,7 @@ static function X2AbilityTemplate TaipanDeadlyBiteAttack()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanDeadlyBite_Counter', `GetConfigInt("M31_PA_TaipanDeadlyBite_ActivationsPerTurn"));
 
     VisibilityCondition = new class'X2Condition_Visibility';
@@ -726,7 +726,7 @@ static function X2AbilityTemplate TaipanDeadlyBiteChaserAttack()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_ItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_TaipanDeadlyBite_Counter', `GetConfigInt("M31_PA_TaipanDeadlyBite_ActivationsPerTurn"));
 
     VisibilityCondition = new class'X2Condition_Visibility';

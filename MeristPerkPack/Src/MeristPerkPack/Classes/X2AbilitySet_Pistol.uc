@@ -47,7 +47,7 @@ static function X2AbilityTemplate ClutchShot()
     Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
     Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     return Template;
 }
@@ -191,7 +191,7 @@ static function X2AbilityTemplate PistolAvengerAttack()
     Template.AddShooterEffectExclusions();
 
     AddBladestormMark(Template, 'M31_PistolAvenger_MarkTarget');
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PistolAvenger_Counter', `GetConfigInt("M31_PistolAvenger_ActivationsPerTurn"));
 
     SingleTarget = new class'X2AbilityTarget_Single';
@@ -240,7 +240,7 @@ static function X2AbilityTemplate PistolDetonationShot()
     InsanityEvent.ApplyChance = 100;
     Template.AddTargetEffect(InsanityEvent);
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.DamagePreviewFn = DetonationShot_DamagePreview;
 
@@ -295,7 +295,7 @@ static function X2AbilityTemplate PistolDisarmingShot()
     Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
     Template.AddTargetEffect(class'X2AbilitySet_Merist'.static.CreateDisarmingShotEffect(Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     return Template;
 }
@@ -318,7 +318,7 @@ static function X2AbilityTemplate PistolMaim()
     
     Template.AddTargetEffect(class'X2Effect_Immobilize'.static.CreateMaimedStatusEffect(, Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     return Template;
 }
@@ -375,7 +375,7 @@ static function X2AbilityTemplate ReflexShotAttack()
     Template.AddShooterEffectExclusions();
 
     AddBladestormMark(Template, 'M31_ReflexShot_MarkTarget');
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_ReflexShot_Counter', `GetConfigInt("M31_ReflexShot_ActivationsPerTurn"));
 
     SingleTarget = new class'X2AbilityTarget_Single';
@@ -414,7 +414,7 @@ static function X2AbilityTemplate PistolRouletteShot()
     Template.AddTargetEffect(new class'X2Effect_ApplyWeaponDamage');
     Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.DamagePreviewFn = PistolRouletteShot_DamagePreview;
 

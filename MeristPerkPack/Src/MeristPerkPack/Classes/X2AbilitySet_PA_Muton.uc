@@ -496,7 +496,7 @@ static function X2AbilityTemplate HunterWatchfulEye()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     // Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_HunterWatchfulEye_Activations', `GetConfigInt("M31_PA_HunterWatchfulEye_ActivationsPerTurn"));
 
     VisibilityCondition = new class'X2Condition_Visibility';
@@ -592,7 +592,7 @@ static function X2AbilityTemplate StayFrosty()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_PA_StayFrosty_Counter', `GetConfigInt("M31_PA_StayFrosty_ActivationsPerTurn"));
 
     VisibilityCondition = new class'X2Condition_Visibility';

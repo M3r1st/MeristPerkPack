@@ -65,7 +65,7 @@ static function X2AbilityTemplate Ambush()
     Template.AbilityTriggers.AddItem(Trigger);
 
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AddTargetEffect(new class'X2Effect_MeristReserveOverwatchPoints');
     Template.AddTargetEffect(class'X2Effect_MeristCoveringFire'.static.CreateCoveringFireEffect());
@@ -265,7 +265,7 @@ static function X2AbilityTemplate Lockjaw()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;
@@ -1016,7 +1016,7 @@ static function X2AbilityTemplate AngryBite()
     Template.AbilityShooterConditions.AddItem(UnitPropertyCondition);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_NotItsOwnTurn');
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     VisibilityCondition = new class'X2Condition_Visibility';
     VisibilityCondition.bRequireGameplayVisible = true;

@@ -213,7 +213,7 @@ static function X2AbilityTemplate AlphaStrike()
     AddCharges(Template, `GetConfigInt("M31_AlphaStrike_Charges"));
     AddActionPointCost(Template, eCost_DoubleConsumeAll);
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     Template.AddShooterEffectExclusions();
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -557,7 +557,7 @@ static function X2AbilityTemplate CallForFire()
     AddCooldown(Template, `GetConfigInt("M31_CallForFire_Cooldown"));
     AddActionPointCost(Template, eCost_SingleConsumeAll);
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     Template.AddShooterEffectExclusions();
 
     UnitPropertyCondition = new class'X2Condition_UnitProperty';
@@ -897,7 +897,7 @@ static function X2AbilityTemplate DisarmingShot()
     Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
     Template.AddTargetEffect(CreateDisarmingShotEffect(Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AdditionalAbilities.AddItem('M31_DisarmingShot_SnapShot');
 
@@ -947,7 +947,7 @@ static function X2AbilityTemplate DisarmingShotSnap()
     Template.AddTargetEffect(new class'X2Effect_DisarmWeapon');
     Template.AddTargetEffect(CreateDisarmingShotEffect(Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     
     AbilityCondition = new class'X2Condition_AbilityProperty';
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
@@ -1328,7 +1328,7 @@ static function X2AbilityTemplate Maim()
 
     Template.AddTargetEffect(class'X2Effect_Immobilize'.static.CreateMaimedStatusEffect(, Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AdditionalAbilities.AddItem('M31_Maim_SnapShot');
 
@@ -1361,7 +1361,7 @@ static function X2AbilityTemplate MaimSnap()
 
     Template.AddTargetEffect(class'X2Effect_Immobilize'.static.CreateMaimedStatusEffect(, Template));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     
     AbilityCondition = new class'X2Condition_AbilityProperty';
     AbilityCondition.OwnerHasSoldierAbilities.AddItem('SnapShot');
@@ -1386,7 +1386,7 @@ static function X2AbilityTemplate ManualOverride()
     AddActionPointCost(Template, eCost_Single);
     AddCooldown(Template, `GetConfigInt("M31_ManualOverride_Cooldown"));
 
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     Template.AbilityShooterConditions.AddItem(new class'X2Condition_ManualOverride');
 
     Effect = new class'X2Effect_ReduceCooldowns';
@@ -2032,7 +2032,7 @@ static function X2AbilityTemplate SawedOffSweeper()
     Template.bFragileDamageOnly = false;
 
     Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetOnlyProperty);
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
     Template.AddShooterEffectExclusions();
@@ -2388,7 +2388,7 @@ static function X2AbilityTemplate SniperOverwatch()
     Template.AddShooterEffect(MarkTilesEffect);
 
     Template.AddShooterEffectExclusions();
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     AddCooldown(Template, 1);
     AddActionPointCost(Template, eCost_OverwatchWeapon);
@@ -2443,7 +2443,7 @@ static function X2AbilityTemplate SniperOverwatchAttack()
     Template.AddShooterEffectExclusions();
 
     AddBladestormMark(Template, 'M31_SniperOverwatch_MarkTarget');
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
 
     SingleTarget = new class'X2AbilityTarget_Single';
     SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
@@ -3228,7 +3228,7 @@ static function X2AbilityTemplate WatchfulEyeAttack()
     Template.AbilityTargetConditions.AddItem(TargetEffectCondition);
 
     AddBladestormMark(Template, 'M31_WatchfulEye_MarkTarget');
-    AddSuppressedCondition(Template);
+    AddShooterSuppressedExclusions(Template);
     AddUnitValueCondition(Template, 'M31_WatchfulEye_Counter', `GetConfigInt("M31_WatchfulEye_AttacksPerTurn"));
 
     SingleTarget = new class'X2AbilityTarget_Single';
