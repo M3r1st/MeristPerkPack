@@ -5,6 +5,7 @@ var privatewrite name SniperOverwatchActionPoint;
 var config array<name> AdvancedOptics_AllowedEffects;
 var config array<name> Aim_AllowedAbilities;
 var config array<name> Blademaster_AdditionalAbilities;
+var config array<name> Bloodlet_SkipWeaponMatchForAbilities;
 var config array<name> BombAndRun_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedAbilities;
 var config array<name> ColdBlooded_AllowedEffects;
@@ -3450,6 +3451,7 @@ static function X2AbilityTemplate Bloodlet()
     WeaponEffect.EffectName = 'M31_Bloodlet';
     WeaponEffect.AttackName = 'M31_Bloodlet_Attack';
     WeaponEffect.AdditionalWeaponCategories = class'X2DLCInfo_MeristPerkPack'.default.PistolCategories;
+    WeaponEffect.SkipWeaponMatchForAbilities = default.Bloodlet_SkipWeaponMatchForAbilities;
     WeaponEffect.BuildPersistentEffect(1, true, false);
     Template.AddTargetEffect(WeaponEffect);
 

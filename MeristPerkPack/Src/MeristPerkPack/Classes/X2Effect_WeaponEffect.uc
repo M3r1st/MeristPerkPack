@@ -15,6 +15,7 @@ var bool bCountsAsWeaponEffect;
 // OR the category of the source weapon should match one of the additional categories
 var bool bMatchSourceWeapon;
 var array<name> AdditionalWeaponCategories;
+var array<name> SkipWeaponMatchForAbilities;
 
 var int EventPriority;
 
@@ -174,11 +175,19 @@ function XComGameState_Ability FindAttackAbilityState(
 
     History = `XCOMHISTORY;
 
-    if (bMatchSourceWeapon)
+    if (!bMatchSourceWeapon || SkipWeaponMatchForAbilities.Find(AbilityState.GetMyTemplateName()) != INDEX_NONE)
     {
-        SourceWeapon = AbilityState.GetSourceWeapon();
-        AttackAbilityRef = SourceUnit.FindAbility(AttackName, SourceWeapon.GetReference());
+        AttackAbilityRef = SourceUnit.FindAbility(AttackName);
         AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+    }
+    else
+    {
+        if (AbilityState.SourceWeapon.ObjectID > 0)
+        {
+            SourceWeapon = AbilityState.GetSourceWeapon();
+            AttackAbilityRef = SourceUnit.FindAbility(AttackName, SourceWeapon.GetReference());
+            AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
+        }
         if (AttackAbilityState == none)
         {
             if (AdditionalWeaponCategories.Find(SourceWeapon.GetWeaponCategory()) != INDEX_NONE)
@@ -188,11 +197,7 @@ function XComGameState_Ability FindAttackAbilityState(
             }
         }
     }
-    else
-    {
-        AttackAbilityRef = SourceUnit.FindAbility(AttackName);
-        AttackAbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AttackAbilityRef.ObjectID));
-    }
+
 
     return AttackAbilityState;
 }
