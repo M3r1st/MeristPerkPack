@@ -58,18 +58,16 @@ simulated function ApplyCooldown(XComGameState_Ability kAbility, XComGameState_B
     ApplyAdditionalCooldown(kAbility, AffectState, AffectWeapon, NewGameState);
 }
 
-simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState_BaseObject AffectState, XComGameState_Item AffectWeapon, XComGameState NewGameState)
+simulated function int GetBaseNumTurns(XComGameState_Ability kAbility, XComGameState_BaseObject AffectState, XComGameState_Item AffectWeapon, XComGameState NewGameState)
 {
     local XComGameState_Unit    SourceUnit;
     local XComGameState_Item    SourceItem;
-    local CooldownModifierInfo  CooldownModifier;
     local int                   Cooldown;
     local int                   Tech;
 
-    SourceUnit = XComGameState_Unit(AffectState);
-
     Cooldown = iNumTurns;
 
+    SourceUnit = XComGameState_Unit(AffectState);
     if (NumTurnsFromTech.Length > 0)
     {
         if (SpecificSlot != eInvSlot_Unknown)
@@ -85,6 +83,18 @@ simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState
         }
     }
 
+    return Cooldown;
+}
+
+simulated function int GetNumTurns(XComGameState_Ability kAbility, XComGameState_BaseObject AffectState, XComGameState_Item AffectWeapon, XComGameState NewGameState)
+{
+    local XComGameState_Unit    SourceUnit;
+    local CooldownModifierInfo  CooldownModifier;
+    local int                   Cooldown;
+
+    Cooldown = GetBaseNumTurns(kAbility, AffectState, AffectWeapon, NewGameState);
+
+    SourceUnit = XComGameState_Unit(AffectState);
     if (SourceUnit != none)
     {
         foreach CooldownModifiers(CooldownModifier)

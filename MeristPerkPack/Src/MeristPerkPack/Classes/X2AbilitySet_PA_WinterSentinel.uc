@@ -795,6 +795,7 @@ static function X2AbilityTemplate RebelYell()
     UnitPropertyCondition.TreatMindControlledSquadmateAsHostile = !`GetConfigBool("M31_PA_WS_RebelYell_bAppliesToMindControlled");
     UnitPropertyCondition.ExcludeRobotic = true;
     UnitPropertyCondition.ExcludeStunned = !`GetConfigBool("M31_PA_WS_RebelYell_bAppliesToStunned");
+    UnitPropertyCondition.FailOnNonUnits = true;
     Template.AbilityMultiTargetConditions.AddItem(UnitPropertyCondition);
 
     AddCooldown(Template, `GetConfigInt("M31_PA_WS_RebelYell_Cooldown"));

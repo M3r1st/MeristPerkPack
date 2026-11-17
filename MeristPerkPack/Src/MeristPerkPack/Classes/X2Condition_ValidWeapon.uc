@@ -109,7 +109,7 @@ function bool CanEverBeValid(XComGameState_Unit SourceUnit, bool bStrategyCheck)
         {
             return true;
         }
-        
+
         return false;
     }
 

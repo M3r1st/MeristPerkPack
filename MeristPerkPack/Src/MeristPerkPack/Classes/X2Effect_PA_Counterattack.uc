@@ -24,7 +24,7 @@ function GetToHitAsTargetModifiers(
             if (FindUsableCounterattackAbility(Target, Attacker) != none)
             {
                 Target.GetUnitValue(CountValueName, CountUnitValue);
-                DodgeBonus = Min(0, DodgeBase - DodgeReductionPerHit * int(CountUnitValue.fValue));
+                DodgeBonus = Max(0, DodgeBase - DodgeReductionPerHit * int(CountUnitValue.fValue));
 
                 ModInfo.ModType = eHit_Graze;
                 ModInfo.Reason = FriendlyName;

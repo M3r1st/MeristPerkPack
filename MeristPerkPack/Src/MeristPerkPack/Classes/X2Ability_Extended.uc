@@ -390,6 +390,7 @@ static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName,
         BladestormTargetEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
         BladestormTargetEffect.bUseSourcePlayerState = true;
         BladestormTargetEffect.SetupEffectOnShotContextResult(true, true);
+        BladestormTargetEffect.bCanBeRedirected = false;
         Template.AddTargetEffect(BladestormTargetEffect);
     }
     else
@@ -398,6 +399,7 @@ static function AddBladestormMark(out X2AbilityTemplate Template, name MarkName,
         BladestormTargetEffect.EffectName = MarkName;
         BladestormTargetEffect.BuildPersistentEffect(1, false, true, true, eGameRule_PlayerTurnEnd);
         BladestormTargetEffect.SetupEffectOnShotContextResult(true, true);
+        BladestormTargetEffect.bCanBeRedirected = false;
         Template.AddTargetEffect(BladestormTargetEffect);
     }
     

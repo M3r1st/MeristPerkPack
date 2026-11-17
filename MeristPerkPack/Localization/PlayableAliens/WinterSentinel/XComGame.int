@@ -106,8 +106,8 @@ LocLongDescription="Grants a Grenade-only slot and a free frost bomb."
 
 [M31_PA_WS_ChillingMist X2AbilityTemplate]
 LocFriendlyName="Chilling Mist"
-LocLongDescription="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
-LocHelpText="<Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
+LocLongDescription="Your <Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
+LocHelpText="Your <Ability:M31_BoundWeaponName> attacks and frost and bitterfrost grenades and bombs apply hypothermia."
 LocPromotionPopupText="<Bullet> Hypothermia is a status effect that deals 1/2/3/4 frost damage per turn for <Ability:M31_PA_WS_ChillingMist_Duration> turn(s). The damage scales with chill tier.<br><Bullet> Applies to most <Ability:M31_BoundWeaponName> attacks.<br><br><font color='#909497'>\"It's rather chilly here, isn't it?\"</font>"
 
 [M31_PA_WS_ChillingMist_Attack X2AbilityTemplate]

@@ -51,10 +51,7 @@ static function EventListenerReturn OnPostModifyNewAbilityContext(Object EventDa
                 {
                     if (FindUsableCounterattackAbility(Defender, Attacker) != none)
                     {
-                        if (AbilityContext.ResultContext.HitResult != Effect.ChangeHitResults[AbilityContext.ResultContext.HitResult])
-                        {
-                            AbilityContext.ResultContext.HitResult = Effect.ChangeHitResults[AbilityContext.ResultContext.HitResult];
-                        }
+                        AbilityContext.ResultContext.HitResult = Effect.ChangeHitResults[AbilityContext.ResultContext.HitResult];
                     }
                 }
             }

@@ -1,4 +1,4 @@
-class X2Effect_PersistentAuraWithStats extends X2Effect_ModifyStats abstract;
+class X2Effect_PersistentAuraWithStats extends X2Effect_PersistentStatChange abstract;
 
 var float Radius;
 var bool bIncludeOwner;
@@ -13,7 +13,7 @@ var name UnApplyFromStatsEventName;
 var name OnEffectRemovedEventName;
 var name UpdateEventName;
 
-var protected array<StatChange> m_aStatChanges;
+// var protected array<StatChange> m_aStatChanges;
 
 function RegisterForEvents(XComGameState_Effect EffectGameState)
 {
@@ -28,21 +28,23 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
     EffectObj = EffectGameState;
     SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
     TargetUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
-
-    If (SourceUnit.ObjectID != TargetUnit.ObjectID)
+    if (SourceUnit != none)
     {
-        EventMgr.RegisterForEvent(EffectObj, 'MindControlled', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
-        EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
-        EventMgr.RegisterForEvent(EffectObj, 'UnitDied', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
+        If (TargetUnit != none && SourceUnit.ObjectID != TargetUnit.ObjectID)
+        {
+            EventMgr.RegisterForEvent(EffectObj, 'MindControlled', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
+            EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
+            EventMgr.RegisterForEvent(EffectObj, 'UnitDied', UpdateStats_OSS, ELD_OnStateSubmitted, 20, TargetUnit,, EffectObj);
 
-        if (OnEffectRemovedEventName != '')
-            EventMgr.RegisterForEvent(EffectObj, OnEffectRemovedEventName, UpdateStats_OSS, ELD_OnStateSubmitted, 15, TargetUnit,, EffectObj);
+            if (OnEffectRemovedEventName != '')
+                EventMgr.RegisterForEvent(EffectObj, OnEffectRemovedEventName, UpdateStats_OSS, ELD_OnStateSubmitted, 15, TargetUnit,, EffectObj);
 
-        if (UnApplyFromStatsEventName != '')
-            EventMgr.RegisterForEvent(EffectObj, UnApplyFromStatsEventName, UpdateStats_OSS, ELD_OnStateSubmitted, 10, TargetUnit,, EffectObj);
+            if (UnApplyFromStatsEventName != '')
+                EventMgr.RegisterForEvent(EffectObj, UnApplyFromStatsEventName, UpdateStats_OSS, ELD_OnStateSubmitted, 10, TargetUnit,, EffectObj);
+        }
+
+        EventMgr.RegisterForEvent(EffectObj, UpdateEventName, UpdateStats_Immediate, ELD_Immediate, 20, SourceUnit,, EffectObj);
     }
-
-    EventMgr.RegisterForEvent(EffectObj, UpdateEventName, UpdateStats_Immediate, ELD_Immediate, 20, SourceUnit,, EffectObj);
 }
 
 static function EventListenerReturn UpdateStats_OSS(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)

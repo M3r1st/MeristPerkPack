@@ -152,12 +152,14 @@ static function X2AbilityTemplate NoGraze()
     local X2AbilityTemplate             Template;
     local X2Effect_ChangeResultContext Effect;
     
-    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_Concentration", false, true, false);
+    Template = Passive('M31_PA_NoGraze', "img:///UILibrary_MeristOtherPerkIcons.UIPerk_Concentration", false, false, false);
 
     Effect = new class'X2Effect_ChangeResultContext';
+    Effect.EffectName = 'M31_PA_NoGraze';
     Effect.bMatchSourceWeapon = true;
     Effect.ChangeHitResults[eHit_Graze] = eHit_Success;
     Effect.BuildPersistentEffect(1, true, false);
+    Effect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.GetMyHelpText(), Template.IconImage,,, Template.AbilitySourceName);
     Template.AddTargetEffect(Effect);
 
     Template.DefaultSourceItemSlot = eInvSlot_PrimaryWeapon;
@@ -577,39 +579,31 @@ static function HarrierShot_ModifyActivatedAbilityContext(XComGameStateContext C
     
     AbilityContext = XComGameStateContext_Ability(Context);
 
-    // `LOG("Running Modify Context FN: " @ AbilityContext.IsResultContextMiss() @ AbilityContext.ResultContext.HitResult,, 'Merist');
-
     if (AbilityContext.IsResultContextMiss())
     {
-
         AbilityState = XComGameState_Ability(History.GetGameStateForObjectID(AbilityContext.InputContext.AbilityRef.ObjectID));
 
         NewLocation = class'X2Ability'.static.FindOptimalMissLocation(AbilityContext, false);
-
-        // `LOG("This is a miss. Original location:" @ AbilityContext.InputContext.TargetLocations[0] @ AbilityContext.ResultContext.ProjectileHitLocations[0] @ ", new location:" @ NewLocation,, 'Merist');
 
         AbilityTemplate = AbilityState.GetMyTemplate();
 
         AbilityState.GatherAdditionalAbilityTargetsForLocation(NewLocation, Target);
         AbilityContext.InputContext.MultiTargets = Target.AdditionalTargets;
 
-        if (AbilityTemplate.AbilityToHitCalc != none)
-        {
-            // `LOG("Rolling ability hits for new targets",, 'Merist');
-            OldResultContext = AbilityContext.ResultContext;
-            Target.PrimaryTarget = AbilityContext.InputContext.PrimaryTarget;
-            Target.AdditionalTargets = AbilityContext.InputContext.MultiTargets;
-            AbilityTemplate.AbilityToHitCalc.RollForAbilityHit(AbilityState, Target, AbilityContext.ResultContext);
-            AbilityContext.ResultContext.HitResult = OldResultContext.HitResult;
-            AbilityContext.ResultContext.ArmorMitigation = OldResultContext.ArmorMitigation;
-            AbilityContext.ResultContext.CalculatedHitChance = OldResultContext.CalculatedHitChance;
-        }
+        OldResultContext = AbilityContext.ResultContext;
+        Target.PrimaryTarget = AbilityContext.InputContext.PrimaryTarget;
 
         AbilityContext.InputContext.TargetLocations.Length = 0;
         AbilityContext.InputContext.TargetLocations.AddItem(NewLocation);
 
         AbilityContext.ResultContext.ProjectileHitLocations.Length = 0;
         AbilityContext.ResultContext.ProjectileHitLocations.AddItem(NewLocation);
+
+        Target.AdditionalTargets = AbilityContext.InputContext.MultiTargets;
+        AbilityTemplate.AbilityToHitCalc.RollForAbilityHit(AbilityState, Target, AbilityContext.ResultContext);
+        AbilityContext.ResultContext.HitResult = OldResultContext.HitResult;
+        AbilityContext.ResultContext.ArmorMitigation = OldResultContext.ArmorMitigation;
+        AbilityContext.ResultContext.CalculatedHitChance = OldResultContext.CalculatedHitChance;
     }
 }
 

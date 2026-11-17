@@ -20,10 +20,24 @@ static function CHEventListenerTemplate CreateTacticalListeners()
     `CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'M31_TacticalListeners');
     Template.AddCHEvent('UnitBleedingOut', OnUnitBleedingOut, ELD_Immediate);
 
+    // Template.AddCHEvent('AbilityActivated', OnAbilityActivated, ELD_Immediate);
+
     Template.RegisterInTactical = true;
 
     return Template;
 }
+
+// static function EventListenerReturn OnAbilityActivated(Object EventData, Object EventSource, XComGameState NewGameState, Name EventID, Object CallbackData)
+// {
+//     local XComGameState_Unit SourceUnit;
+//     local XComGameState_Ability AbilityState;
+
+//     SourceUnit = XComGameState_Unit(EventSource);
+//     AbilityState = XComGameState_Ability(EventData);
+//     `LOG("AbilityActivated:" @ AbilityState.GetMyTemplateName() @ "for" @ SourceUnit.GetFullName() @ "-" @ SourceUnit.GetMyTemplateName());
+
+//     return ELR_NoInterrupt;
+// }
 
 static function CHEventListenerTemplate CreateStrategyListeners()
 {

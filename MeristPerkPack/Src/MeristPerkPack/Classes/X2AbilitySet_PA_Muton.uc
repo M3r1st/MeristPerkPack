@@ -1,4 +1,4 @@
-class X2AbilitySet_PA_Muton extends X2Ability_Extended;
+class X2AbilitySet_PA_Muton extends X2Ability_Extended config(GameData_SoldierSkills);
 
 var config array<name> ExcessiveForce_RifleCategories;
 var config array<name> ExcessiveForce_CannonCategories;

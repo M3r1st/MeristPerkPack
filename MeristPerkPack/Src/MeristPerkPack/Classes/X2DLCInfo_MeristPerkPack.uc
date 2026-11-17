@@ -327,43 +327,6 @@ static function AddEffectsToGrenades()
     local X2Effect_Persistent           DisorientedEffect;
     local X2Effect_Persistent           RobotocDisorientedEffect;
     local X2Effect_Stunned              StunnedEffect;
-
-    FriendCondition = new class'X2Condition_UnitProperty';
-    FriendCondition.ExcludeFriendlyToSource = false;
-    FriendCondition.ExcludeHostileToSource = true;
-
-    EnemyCondition = new class'X2Condition_UnitProperty';
-    EnemyCondition.ExcludeFriendlyToSource = true;
-    EnemyCondition.ExcludeHostileToSource = false;
-
-    OrganicCondition = new class'X2Condition_UnitProperty';
-    OrganicCondition.ExcludeRobotic = true;
-    OrganicCondition.ExcludeOrganic = false;
-    OrganicCondition.IncludeWeakAgainstTechLikeRobot = false;
-    OrganicCondition.ExcludeFriendlyToSource = false;
-
-    RobotCondition = new class'X2Condition_UnitProperty';
-    RobotCondition.ExcludeRobotic = false;
-    RobotCondition.ExcludeOrganic = true;
-    RobotCondition.IncludeWeakAgainstTechLikeRobot = true;
-    RobotCondition.ExcludeFriendlyToSource = false;
-
-    AbilityCondition = new class'X2Condition_AbilityProperty';
-    AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_ConcussiveGrenades');
-
-    DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(, , false);
-    DisorientedEffect.bRemoveWhenSourceDies = false;
-    DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
-
-    RobotocDisorientedEffect = class'M31_Helpers'.static.CreateRoboticDisorientedStatusEffect();
-    RobotocDisorientedEffect.bRemoveWhenSourceDies = false;
-    RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
-
-    StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(
-        `GetConfigInt("M31_ConcussiveGrenades_StunDuration"), `GetConfigInt("M31_ConcussiveGrenades_StunChance"), false);
-    StunnedEffect.bRemoveWhenSourceDies = false;
-    StunnedEffect.TargetConditions.AddItem(AbilityCondition);
-
     ItemManager = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
     ItemManager.GetTemplateNames(TemplateNames);
     foreach TemplateNames(TemplateName)
@@ -375,10 +338,47 @@ static function AddEffectsToGrenades()
             GrenadeTemplate = X2GrenadeTemplate(Template);
             if (GrenadeTemplate != none)
             {
+                FriendCondition = new class'X2Condition_UnitProperty';
+                FriendCondition.ExcludeFriendlyToSource = false;
+                FriendCondition.ExcludeHostileToSource = true;
+
+                EnemyCondition = new class'X2Condition_UnitProperty';
+                EnemyCondition.ExcludeFriendlyToSource = true;
+                EnemyCondition.ExcludeHostileToSource = false;
+
+                OrganicCondition = new class'X2Condition_UnitProperty';
+                OrganicCondition.ExcludeRobotic = true;
+                OrganicCondition.ExcludeOrganic = false;
+                OrganicCondition.IncludeWeakAgainstTechLikeRobot = false;
+                OrganicCondition.ExcludeFriendlyToSource = false;
+
+                RobotCondition = new class'X2Condition_UnitProperty';
+                RobotCondition.ExcludeRobotic = false;
+                RobotCondition.ExcludeOrganic = true;
+                RobotCondition.IncludeWeakAgainstTechLikeRobot = true;
+                RobotCondition.ExcludeFriendlyToSource = false;
+
+                AbilityCondition = new class'X2Condition_AbilityProperty';
+                AbilityCondition.OwnerHasSoldierAbilities.AddItem('M31_ConcussiveGrenades');
+
+                DisorientedEffect = class'X2StatusEffects'.static.CreateDisorientedStatusEffect(, , false);
+                DisorientedEffect.bRemoveWhenSourceDies = false;
+                DisorientedEffect.TargetConditions.AddItem(AbilityCondition);
+
+                RobotocDisorientedEffect = class'M31_Helpers'.static.CreateRoboticDisorientedStatusEffect();
+                RobotocDisorientedEffect.bRemoveWhenSourceDies = false;
+                RobotocDisorientedEffect.TargetConditions.AddItem(AbilityCondition);
+
+                StunnedEffect = class'X2StatusEffects'.static.CreateStunnedStatusEffect(
+                    `GetConfigInt("M31_ConcussiveGrenades_StunDuration"), `GetConfigInt("M31_ConcussiveGrenades_StunChance"), false);
+                StunnedEffect.bRemoveWhenSourceDies = false;
+                StunnedEffect.TargetConditions.AddItem(AbilityCondition);
+
                 if ((GrenadeTemplate.BaseDamage.Damage > 0 
                     && (GrenadeTemplate.ThrownGrenadeEffects.Length > 0 || GrenadeTemplate.LaunchedGrenadeEffects.Length > 0))
                     || default.AttackGrenades.find(TemplateName) != INDEX_NONE)
                 {
+
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(DisorientedEffect);
                     GrenadeTemplate.LaunchedGrenadeEffects.AddItem(DisorientedEffect);
                     GrenadeTemplate.ThrownGrenadeEffects.AddItem(RobotocDisorientedEffect);

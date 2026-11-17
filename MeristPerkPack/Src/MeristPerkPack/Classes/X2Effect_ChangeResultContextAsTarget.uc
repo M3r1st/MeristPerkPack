@@ -2,7 +2,7 @@
 //  FILE:   X2Effect_ChangeResultContextAsTarget.uc
 //  AUTHOR: Merist / Based on Mitzruti's MZ_Effect_InvertCounter
 //---------------------------------------------------------------------------------------
-class X2Effect_ChangeResultContextAsTarget extends X2Effect_Persistent abstract;
+class X2Effect_ChangeResultContextAsTarget extends X2Effect_Persistent;
 
 var EAbilityHitResult ChangeHitResults[EAbilityHitResult.EnumCount]<BoundEnum=EAbilityHitResult>;
 

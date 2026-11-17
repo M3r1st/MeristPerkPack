@@ -14,11 +14,13 @@ function RegisterForEvents(XComGameState_Effect EffectGameState)
 
     EffectObj = EffectGameState;
     SourceUnit = XComGameState_Unit(History.GetGameStateForObjectID(EffectGameState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
-
-    EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', UpdateStats, ELD_OnStateSubmitted, 20,,, EffectObj);
-    EventMgr.RegisterForEvent(EffectObj, 'MindControlled', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
-    EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
-    EventMgr.RegisterForEvent(EffectObj, 'UnitDied', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
+    if (SourceUnit != none)
+    {
+        EventMgr.RegisterForEvent(EffectObj, 'PlayerTurnBegun', UpdateStats, ELD_OnStateSubmitted, 20,,, EffectObj);
+        EventMgr.RegisterForEvent(EffectObj, 'MindControlled', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
+        EventMgr.RegisterForEvent(EffectObj, 'UnitMoveFinished', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
+        EventMgr.RegisterForEvent(EffectObj, 'UnitDied', UpdateStats, ELD_OnStateSubmitted, 20, SourceUnit,, EffectObj);
+    }
 }
 
 static function EventListenerReturn UpdateStats(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
